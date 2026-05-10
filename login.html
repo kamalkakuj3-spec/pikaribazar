@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>লগিন — পাইকারি বাজার</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root {
+    --primary: #6c2bd9;
+    --primary-dark: #4a1a9e;
+    --primary-light: #a259f7;
+    --accent: #f0c040;
+    --bg: #f5f3ff;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #666;
+    --error: #e74c3c;
+    --success: #2ecc71;
+    --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+    background: linear-gradient(135deg, #1a0a3e 0%, #6c2bd9 100%);
+    padding: 60px 20px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 220px; height: 220px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+}
+
+.header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 180px; height: 180px;
+    background: rgba(240,192,64,0.07);
+    border-radius: 50%;
+}
+
+.header-back {
+    position: absolute;
+    top: 50px; left: 20px;
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    z-index: 1;
+}
+
+/* Logo */
+.logo-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+    animation: logoIn 0.7s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes logoIn {
+    from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.logo-icon-wrap {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    margin-bottom: 14px;
+    animation: logoPop 4s ease-in-out infinite;
+}
+
+@keyframes logoPop {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.06); }
+}
+
+.header-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    position: relative;
+    z-index: 1;
+}
+
+/* ── FORM CONTAINER ── */
+.form-container {
+    padding: 24px 16px 120px;
+}
+
+/* ── 3D TILE CARD ── */
+.tile-card {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+    border: 1.5px solid rgba(108,43,217,0.08);
+    margin-bottom: 16px;
+    animation: tileIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tile-card:focus-within {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(108,43,217,0.2);
+}
+
+@keyframes tileIn {
+    from { transform: translateY(30px) scale(0.95); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.tile-card:nth-child(1) { animation-delay: 0.1s; }
+.tile-card:nth-child(2) { animation-delay: 0.2s; }
+
+/* ── INPUT FIELDS ── */
+.input-group {
+    margin-bottom: 16px;
+}
+
+.input-group:last-child { margin-bottom: 0; }
+
+.input-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.input-field {
+    width: 100%;
+    padding: 14px 14px 14px 44px;
+    border: 2px solid #e8e0ff;
+    border-radius: 14px;
+    font-size: 15px;
+    font-family: 'Hind Siliguri', sans-serif;
+    color: var(--text);
+    background: #faf8ff;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input-field:focus {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(108,43,217,0.08);
+}
+
+.input-field::placeholder { color: #bbb; }
+
+/* Password toggle */
+.pass-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+/* ── FORGOT PASSWORD ── */
+.forgot-wrap {
+    text-align: right;
+    margin-top: 8px;
+}
+
+.forgot-link {
+    font-size: 13px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* ── DIVIDER ── */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8e0ff;
+}
+
+/* ── ERROR/SUCCESS MSG ── */
+.msg-box {
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    animation: msgIn 0.3s ease;
+}
+
+@keyframes msgIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.msg-box.error {
+    background: #fdf0ef;
+    color: var(--error);
+    border: 1.5px solid #f5c6c2;
+}
+
+.msg-box.success {
+    background: #edfaf3;
+    color: var(--success);
+    border: 1.5px solid #b7ecd0;
+}
+
+.msg-box.show { display: flex; }
+
+/* ── SUBMIT BUTTON ── */
+.submit-wrap {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px 20px;
+    background: white;
+    border-top: 1px solid #f0ebff;
+    box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(108,43,217,0.4);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.submit-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 3px 10px rgba(108,43,217,0.3);
+}
+
+.submit-btn.loading {
+    background: #b39ddb;
+    pointer-events: none;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+
+.submit-btn.loading .spinner { display: block; }
+.submit-btn.loading .btn-text { display: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── REGISTER LINK ── */
+.register-link {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 14px;
+}
+
+.register-link a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ── INFO TILE ── */
+.info-tile {
+    background: linear-gradient(135deg, #f0ebff, #e8e0ff);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    border: 1.5px solid rgba(108,43,217,0.15);
+}
+
+.info-tile-icon { font-size: 24px; }
+
+.info-tile-text {
+    font-size: 13px;
+    color: var(--primary-dark);
+    line-height: 1.6;
+}
+
+.info-tile-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <a class="header-back" href="index.html">←</a>
+    <div class="logo-wrap">
+        <div class="logo-icon-wrap">🏪</div>
+    </div>
+    <div class="header-title">স্বাগতম!</div>
+    <div class="header-sub">আপনার একাউন্টে লগিন করুন</div>
+</div>
+
+<!-- FORM -->
+<div class="form-container">
+
+    <!-- Error/Success -->
+    <div class="msg-box error" id="errorMsg">
+        <span>⚠️</span>
+        <span id="errorText"></span>
+    </div>
+    <div class="msg-box success" id="successMsg">
+        <span>✅</span>
+        <span id="successText"></span>
+    </div>
+
+    <!-- Info -->
+    <div class="info-tile">
+        <div class="info-tile-icon">💡</div>
+        <div class="info-tile-text">
+            <div class="info-tile-title">দোকানদারদের জন্য</div>
+            নিবন্ধন করার পর Admin Approve করলে আপনার দোকান দেখা যাবে।
+        </div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="tile-card">
+
+        <div class="input-group">
+            <label class="input-label">Email</label>
+            <div class="input-wrap">
+                <span class="input-icon">✉️</span>
+                <input class="input-field" type="email" id="email" placeholder="example@gmail.com">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Password</label>
+            <div class="input-wrap">
+                <span class="input-icon">🔑</span>
+                <input class="input-field" type="password" id="password" placeholder="আপনার Password">
+                <span class="pass-toggle" onclick="togglePass()">👁️</span>
+            </div>
+            <div class="forgot-wrap">
+                <a class="forgot-link" onclick="forgotPassword()">Password ভুলে গেছেন?</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="register-link">
+        নতুন দোকানদার? <a href="register.html">নিবন্ধন করুন</a>
+    </div>
+
+</div>
+
+<!-- SUBMIT -->
+<div class="submit-wrap">
+    <button class="submit-btn" id="submitBtn" onclick="loginShop()">
+        <div class="spinner"></div>
+        <span class="btn-text">🔐 লগিন করুন</span>
+    </button>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
+    authDomain: "agls-5bd4c.firebaseapp.com",
+    databaseURL: "https://agls-5bd4c-default-rtdb.firebaseio.com/",
+    projectId: "agls-5bd4c",
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// ── Auto redirect if already logged in ──
+auth.onAuthStateChanged(user => {
+    if (user) {
+        window.location.href = 'dashboard.html';
+    }
+});
+
+// ── Password toggle ──
+function togglePass() {
+    const pass = document.getElementById('password');
+    pass.type = pass.type === 'password' ? 'text' : 'password';
+}
+
+// ── Messages ──
+function showError(msg) {
+    const box = document.getElementById('errorMsg');
+    document.getElementById('errorText').textContent = msg;
+    box.classList.add('show');
+    setTimeout(() => box.classList.remove('show'), 5000);
+}
+
+function showSuccess(msg) {
+    const box = document.getElementById('successMsg');
+    document.getElementById('successText').textContent = msg;
+    box.classList.add('show');
+}
+
+// ── Login ──
+async function loginShop() {
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!email)    return showError('Email দিন!');
+    if (!password) return showError('Password দিন!');
+
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading');
+
+    try {
+        await auth.signInWithEmailAndPassword(email, password);
+        showSuccess('লগিন সফল! Dashboard-এ যাচ্ছেন...');
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+
+    } catch (error) {
+        btn.classList.remove('loading');
+        if (error.code === 'auth/user-not-found') {
+            showError('এই Email দিয়ে কোনো একাউন্ট নেই!');
+        } else if (error.code === 'auth/wrong-password') {
+            showError('Password ভুল!');
+        } else if (error.code === 'auth/invalid-email') {
+            showError('সঠিক Email দিন!');
+        } else if (error.code === 'auth/too-many-requests') {
+            showError('অনেকবার চেষ্টা করেছেন! কিছুক্ষণ পর চেষ্টা করুন।');
+        } else {
+            showError('সমস্যা হয়েছে: ' + error.message);
+        }
+    }
+}
+
+// ── Forgot Password ──
+async function forgotPassword() {
+    const email = document.getElementById('email').value.trim();
+    if (!email) return showError('আগে Email দিন!');
+
+    try {
+        await auth.sendPasswordResetEmail(email);
+        showSuccess('Password reset email পাঠানো হয়েছে! Email চেক করুন।');
+    } catch (error) {
+        showError('সমস্যা হয়েছে! সঠিক Email দিন।');
+    }
+}
+</script>
+
+</body>
+</html>
