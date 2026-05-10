@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>দোকান প্রোফাইল — পাইকারি বাজার</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root {
+    --primary: #6c2bd9;
+    --primary-dark: #4a1a9e;
+    --primary-light: #a259f7;
+    --accent: #f0c040;
+    --bg: #f5f3ff;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #666;
+    --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ── LOADING ── */
+#loadingScreen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+}
+
+.loading-text { color: white; font-size: 16px; opacity: 0.8; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── BACK BUTTON ── */
+.back-btn {
+    position: fixed;
+    top: 16px; left: 16px;
+    width: 42px; height: 42px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    text-decoration: none;
+    color: var(--primary);
+}
+
+/* ── MAIN CONTENT ── */
+#mainContent { display: none; padding-bottom: 30px; }
+
+/* Profile Card */
+.profile-card {
+    background: white;
+    border-radius: 0 0 28px 28px;
+    padding-bottom: 20px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 16px;
+}
+
+/* Cover */
+.cover {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover-shop-name {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    display: inline-block;
+    background: linear-gradient(90deg, #f0c040 0%, #fff8dc 40%, #ffffff 50%, #fff8dc 60%, #f0c040 100%);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 3s linear infinite;
+    text-align: center;
+    padding: 0 20px;
+}
+
+@keyframes shimmer {
+    0%   { background-position: 200%; }
+    100% { background-position: -100%; }
+}
+
+.cover-address {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 8px;
+    text-align: center;
+}
+
+/* Avatar */
+.avatar-wrap {
+    margin-top: -45px;
+    margin-left: 20px;
+    display: inline-block;
+    z-index: 10;
+    position: relative;
+}
+
+.avatar {
+    width: 90px; height: 90px;
+    border-radius: 24px;
+    border: 4px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    animation: avatarPop 6s ease-in-out infinite;
+}
+
+@keyframes avatarPop {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.06); }
+}
+
+/* Info */
+.profile-info { padding: 12px 20px 0; }
+
+.shop-name-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.owner-name {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+}
+
+.address-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #f0ebff;
+    color: var(--primary);
+    padding: 5px 12px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 14px;
+}
+
+.divider { height: 1px; background: #f0ebff; margin: 0 20px 14px; }
+
+/* Description */
+.description-wrap { padding: 0 20px; margin-bottom: 16px; }
+
+.description-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.description-scroll-wrap {
+    overflow: hidden;
+    background: #faf8ff;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1.5px solid #e8e0ff;
+}
+
+.description-scroll-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scrollLeft 35s linear infinite;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+@keyframes scrollLeft {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Contact Grid */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+.contact-tile {
+    padding: 14px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: transform 0.2s;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+.contact-tile:active { transform: scale(0.96); }
+.contact-tile.call     { background: #f0ebff; color: var(--primary); }
+.contact-tile.whatsapp { background: #e8faf0; color: #25D366; }
+.contact-tile.facebook { background: #e8f0fe; color: #1877F2; }
+.contact-tile.youtube  { background: #fef0f0; color: #FF0000; }
+
+.contact-tile-icon { font-size: 24px; }
+.contact-tile-text { font-size: 13px; font-weight: 600; }
+
+/* ── INFO CARD ── */
+.info-section { padding: 0 16px; margin-bottom: 16px; }
+
+.info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: var(--card-shadow);
+    border: 1.5px solid rgba(108,43,217,0.06);
+    animation: tileIn 0.5s ease both;
+}
+
+@keyframes tileIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+.info-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #f0ebff;
+}
+
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f9f7ff;
+}
+
+.info-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.info-icon  { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+.info-label { font-size: 12px; color: var(--text-light); margin-bottom: 2px; }
+.info-value { font-size: 14px; color: var(--text); font-weight: 500; }
+
+/* ── NOT FOUND ── */
+#notFound {
+    display: none;
+    text-align: center;
+    padding: 80px 30px;
+}
+
+.notfound-icon  { font-size: 60px; margin-bottom: 16px; }
+.notfound-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.notfound-sub   { font-size: 14px; color: var(--text-light); margin-bottom: 24px; }
+
+.back-home-btn {
+    padding: 14px 30px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 99px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="index.html">←</a>
+
+<!-- LOADING -->
+<div id="loadingScreen">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">লোড হচ্ছে...</div>
+</div>
+
+<!-- NOT FOUND -->
+<div id="notFound">
+    <div class="notfound-icon">🏪</div>
+    <div class="notfound-title">দোকান পাওয়া যায়নি!</div>
+    <div class="notfound-sub">এই দোকানটি আর নেই অথবা এখনো Approved হয়নি।</div>
+    <a href="index.html" class="back-home-btn">🏠 হোমে যান</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent">
+
+    <div class="profile-card">
+
+        <!-- Cover -->
+        <div class="cover" id="coverBg">
+            <div>
+                <div class="cover-shop-name" id="coverShopName"></div>
+                <div class="cover-address" id="coverAddress"></div>
+            </div>
+        </div>
+
+        <!-- Avatar -->
+        <div class="avatar-wrap">
+            <div class="avatar" id="profileAvatar">?</div>
+        </div>
+
+        <!-- Info -->
+        <div class="profile-info">
+            <div class="shop-name-text" id="shopNameText"></div>
+            <div class="owner-name"     id="ownerNameText"></div>
+            <div class="address-badge">
+                <span>📍</span><span id="addressText"></span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Description -->
+        <div class="description-wrap" id="descriptionWrap" style="display:none">
+            <div class="description-title">📋 দোকান পরিচিতি</div>
+            <div class="description-scroll-wrap">
+                <span class="description-scroll-text" id="descriptionText"></span>
+            </div>
+        </div>
+
+        <!-- Contacts -->
+        <div class="contact-grid" id="contactGrid"></div>
+
+    </div>
+
+    <!-- Details -->
+    <div class="info-section">
+        <div class="info-card">
+            <div class="info-card-title">📋 দোকানের বিস্তারিত</div>
+
+            <div class="info-row">
+                <div class="info-icon">🏪</div>
+                <div>
+                    <div class="info-label">দোকানের নাম</div>
+                    <div class="info-value" id="detailShopName">—</div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-icon">👤</div>
+                <div>
+                    <div class="info-label">মালিকের নাম</div>
+                    <div class="info-value" id="detailOwnerName">—</div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-icon">🗺️</div>
+                <div>
+                    <div class="info-label">জেলা</div>
+                    <div class="info-value" id="detailDistrict">—</div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-icon">📌</div>
+                <div>
+                    <div class="info-label">এলাকা</div>
+                    <div class="info-value" id="detailArea">—</div>
+                </div>
+            </div>
+
+            <div class="info-row" id="detailAddressRow" style="display:none">
+                <div class="info-icon">🏠</div>
+                <div>
+                    <div class="info-label">পূর্ণ ঠিকানা</div>
+                    <div class="info-value" id="detailAddress">—</div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-icon">📱</div>
+                <div>
+                    <div class="info-label">মোবাইল</div>
+                    <div class="info-value" id="detailPhone">—</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
+    authDomain: "agls-5bd4c.firebaseapp.com",
+    databaseURL: "https://agls-5bd4c-default-rtdb.firebaseio.com/",
+    projectId: "agls-5bd4c",
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const gradients = [
+    'linear-gradient(135deg, #6c2bd9, #a259f7)',
+    'linear-gradient(135deg, #0f3460, #16213e)',
+    'linear-gradient(135deg, #1a6b3c, #2ecc71)',
+    'linear-gradient(135deg, #e74c3c, #c0392b)',
+    'linear-gradient(135deg, #f39c12, #e67e22)',
+    'linear-gradient(135deg, #1abc9c, #16a085)',
+    'linear-gradient(135deg, #2980b9, #1a5276)',
+];
+
+const urlParams = new URLSearchParams(window.location.search);
+const shopId    = urlParams.get('id');
+
+if (!shopId) {
+    showNotFound();
+} else {
+    loadShop();
+}
+
+async function loadShop() {
+    try {
+        const snap = await db.ref('shops/' + shopId).get();
+        document.getElementById('loadingScreen').style.display = 'none';
+
+        if (!snap.exists()) { showNotFound(); return; }
+
+        const shop = snap.val();
+        if (shop.status !== 'approved') { showNotFound(); return; }
+
+        const gradIndex = (shop.shopName || '').charCodeAt(0) % gradients.length;
+        const grad      = gradients[gradIndex];
+        const avatar    = (shop.shopName || '?').charAt(0);
+
+        // Cover
+        document.getElementById('coverBg').style.background      = grad;
+        document.getElementById('coverShopName').textContent      = shop.shopName || '';
+        document.getElementById('coverAddress').textContent       = `📍 ${shop.area || ''}, ${shop.district || ''}`;
+
+        // Avatar
+        const avatarEl = document.getElementById('profileAvatar');
+        avatarEl.textContent       = avatar;
+        avatarEl.style.background  = grad;
+
+        // Info
+        document.getElementById('shopNameText').textContent  = shop.shopName  || '';
+        document.getElementById('ownerNameText').textContent = shop.ownerName ? `👤 ${shop.ownerName}` : '';
+        document.getElementById('addressText').textContent   = `${shop.area || ''}, ${shop.district || ''}`;
+
+        // Description
+        if (shop.description) {
+            document.getElementById('descriptionWrap').style.display  = 'block';
+            document.getElementById('descriptionText').textContent    = shop.description;
+        }
+
+        // Contact
+        let html = '';
+        if (shop.phone)    html += `<a href="tel:${shop.phone}" class="contact-tile call"><span class="contact-tile-icon">📞</span><span class="contact-tile-text">Call করুন</span></a>`;
+        if (shop.whatsapp) html += `<a href="https://wa.me/88${shop.whatsapp}" class="contact-tile whatsapp"><span class="contact-tile-icon">💬</span><span class="contact-tile-text">WhatsApp</span></a>`;
+        if (shop.facebook) html += `<a href="${shop.facebook}" target="_blank" class="contact-tile facebook"><span class="contact-tile-icon">👍</span><span class="contact-tile-text">Facebook</span></a>`;
+        if (shop.youtube)  html += `<a href="${shop.youtube}" target="_blank" class="contact-tile youtube"><span class="contact-tile-icon">▶</span><span class="contact-tile-text">YouTube</span></a>`;
+        document.getElementById('contactGrid').innerHTML = html;
+
+        // Details
+        document.getElementById('detailShopName').textContent  = shop.shopName  || '—';
+        document.getElementById('detailOwnerName').textContent = shop.ownerName || '—';
+        document.getElementById('detailDistrict').textContent  = shop.district  || '—';
+        document.getElementById('detailArea').textContent      = shop.area      || '—';
+        document.getElementById('detailPhone').textContent     = shop.phone     || '—';
+
+        if (shop.address) {
+            document.getElementById('detailAddressRow').style.display = 'flex';
+            document.getElementById('detailAddress').textContent      = shop.address;
+        }
+
+        document.title = `${shop.shopName} — পাইকারি বাজার`;
+        document.getElementById('mainContent').style.display = 'block';
+
+    } catch (e) {
+        showNotFound();
+    }
+}
+
+function showNotFound() {
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('notFound').style.display      = 'block';
+}
+</script>
+
+</body>
+</html>
