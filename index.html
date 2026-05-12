@@ -581,6 +581,24 @@ body {
         </div>
     </div>
 
+    <!-- DIVISION FILTER -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">🗺️ বিভাগ অনুযায়ী খুঁজুন</div>
+        </div>
+        <div class="district-scroll" id="divisionFilter">
+            <div class="district-chip active" onclick="filterByDivision('')">সব বিভাগ</div>
+            <div class="district-chip" onclick="filterByDivision('ঢাকা')">ঢাকা</div>
+            <div class="district-chip" onclick="filterByDivision('চট্টগ্রাম')">চট্টগ্রাম</div>
+            <div class="district-chip" onclick="filterByDivision('রাজশাহী')">রাজশাহী</div>
+            <div class="district-chip" onclick="filterByDivision('খুলনা')">খুলনা</div>
+            <div class="district-chip" onclick="filterByDivision('বরিশাল')">বরিশাল</div>
+            <div class="district-chip" onclick="filterByDivision('সিলেট')">সিলেট</div>
+            <div class="district-chip" onclick="filterByDivision('রংপুর')">রংপুর</div>
+            <div class="district-chip" onclick="filterByDivision('ময়মনসিংহ')">ময়মনসিংহ</div>
+        </div>
+    </div>
+
     <!-- DISTRICT FILTER -->
     <div class="section">
         <div class="section-header">
@@ -654,6 +672,19 @@ const db   = firebase.database();
 
 let allShops = [];
 let currentDistrict = '';
+let currentDivision = '';
+
+// বিভাগ ও জেলার ম্যাপিং
+const divisionMap = {
+    'ঢাকা':       ['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
+    'চট্টগ্রাম':  ['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
+    'রাজশাহী':   ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
+    'খুলনা':     ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
+    'বরিশাল':   ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],
+    'সিলেট':    ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
+    'রংপুর':    ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],
+    'ময়মনসিংহ':['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা'],
+};
 
 // ══ Internet Check ══
 function checkInternet() {
@@ -730,11 +761,44 @@ function buildDistrictChips(districts) {
     });
 }
 
+// ══ Filter by Division ══
+function filterByDivision(division) {
+    currentDivision = division;
+    currentDistrict = '';
+
+    // Division chips active
+    document.querySelectorAll('#divisionFilter .district-chip').forEach(c => {
+        c.classList.toggle('active',
+            (division === '' && c.textContent === 'সব বিভাগ') ||
+            c.textContent === division
+        );
+    });
+
+    // District chips reset
+    document.querySelectorAll('#districtFilter .district-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === 'সব জেলা');
+    });
+
+    // Filter shops
+    const filtered = division
+        ? allShops.filter(s => divisionMap[division]?.includes(s.district))
+        : allShops;
+
+    renderShops(filtered);
+}
+
 // ══ Filter by District ══
 function filterByDistrict(district) {
     currentDistrict = district;
+    currentDivision = '';
 
-    document.querySelectorAll('.district-chip').forEach(c => {
+    // Division chips reset
+    document.querySelectorAll('#divisionFilter .district-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === 'সব বিভাগ');
+    });
+
+    // District chips active
+    document.querySelectorAll('#districtFilter .district-chip').forEach(c => {
         c.classList.toggle('active',
             (district === '' && c.textContent === 'সব জেলা') ||
             c.textContent === district
@@ -752,9 +816,13 @@ function filterByDistrict(district) {
 function filterShops() {
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
-    let filtered = currentDistrict
-        ? allShops.filter(s => s.district === currentDistrict)
-        : allShops;
+    let filtered = allShops;
+
+    if (currentDivision) {
+        filtered = filtered.filter(s => divisionMap[currentDivision]?.includes(s.district));
+    } else if (currentDistrict) {
+        filtered = filtered.filter(s => s.district === currentDistrict);
+    }
 
     if (q) {
         filtered = filtered.filter(s =>
@@ -838,4 +906,3 @@ function scrollToSearch() {
 
 </body>
 </html>
-
