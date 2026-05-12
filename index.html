@@ -359,6 +359,52 @@ body {
     border-color: #e0d9f7;
 }
 
+/* ── FAVORITE BUTTON ── */
+.fav-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+    border: none;
+}
+
+.fav-btn:active { transform: scale(0.85); }
+.fav-btn.active { background: #fff0f5; }
+
+/* ── FAVORITE PAGE ── */
+#favPage {
+    display: none;
+    padding: 16px 16px 80px;
+}
+
+.fav-header {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fav-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.fav-empty-icon  { font-size: 60px; margin-bottom: 16px; }
+.fav-empty-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.fav-empty-sub   { font-size: 14px; color: var(--text-light); }
+
 /* ── SHOP CARD ── */
 .shop-card {
     background: white;
@@ -581,6 +627,24 @@ body {
         </div>
     </div>
 
+    <!-- DIVISION FILTER -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">🗺️ বিভাগ অনুযায়ী খুঁজুন</div>
+        </div>
+        <div class="district-scroll" id="divisionFilter">
+            <div class="district-chip active" onclick="filterByDivision('')">সব বিভাগ</div>
+            <div class="district-chip" onclick="filterByDivision('ঢাকা')">ঢাকা</div>
+            <div class="district-chip" onclick="filterByDivision('চট্টগ্রাম')">চট্টগ্রাম</div>
+            <div class="district-chip" onclick="filterByDivision('রাজশাহী')">রাজশাহী</div>
+            <div class="district-chip" onclick="filterByDivision('খুলনা')">খুলনা</div>
+            <div class="district-chip" onclick="filterByDivision('বরিশাল')">বরিশাল</div>
+            <div class="district-chip" onclick="filterByDivision('সিলেট')">সিলেট</div>
+            <div class="district-chip" onclick="filterByDivision('রংপুর')">রংপুর</div>
+            <div class="district-chip" onclick="filterByDivision('ময়মনসিংহ')">ময়মনসিংহ</div>
+        </div>
+    </div>
+
     <!-- DISTRICT FILTER -->
     <div class="section">
         <div class="section-header">
@@ -617,11 +681,17 @@ body {
 
     </div>
 
+    <!-- FAVORITE PAGE -->
+    <div id="favPage">
+        <div class="fav-header">❤️ আমার পছন্দের দোকান</div>
+        <div id="favList"></div>
+    </div>
+
 </div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-    <a href="index.html" class="nav-item active">
+    <a href="#" class="nav-item active" onclick="showPage('home')">
         <span class="nav-icon">🏠</span>হোম
     </a>
     <a href="#" class="nav-item" onclick="scrollToSearch()">
@@ -629,6 +699,9 @@ body {
     </a>
     <a href="register.html" class="nav-item">
         <span class="nav-icon">🏪</span>দোকান
+    </a>
+    <a href="#" class="nav-item" onclick="showPage('fav')">
+        <span class="nav-icon">❤️</span>পছন্দ
     </a>
     <a href="login.html" class="nav-item" id="profileNav">
         <span class="nav-icon">👤</span>প্রোফাইল
@@ -654,6 +727,19 @@ const db   = firebase.database();
 
 let allShops = [];
 let currentDistrict = '';
+let currentDivision = '';
+
+// বিভাগ ও জেলার ম্যাপিং
+const divisionMap = {
+    'ঢাকা':       ['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
+    'চট্টগ্রাম':  ['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
+    'রাজশাহী':   ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
+    'খুলনা':     ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
+    'বরিশাল':   ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],
+    'সিলেট':    ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
+    'রংপুর':    ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],
+    'ময়মনসিংহ':['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা'],
+};
 
 // ══ Internet Check ══
 function checkInternet() {
@@ -730,11 +816,44 @@ function buildDistrictChips(districts) {
     });
 }
 
+// ══ Filter by Division ══
+function filterByDivision(division) {
+    currentDivision = division;
+    currentDistrict = '';
+
+    // Division chips active
+    document.querySelectorAll('#divisionFilter .district-chip').forEach(c => {
+        c.classList.toggle('active',
+            (division === '' && c.textContent === 'সব বিভাগ') ||
+            c.textContent === division
+        );
+    });
+
+    // District chips reset
+    document.querySelectorAll('#districtFilter .district-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === 'সব জেলা');
+    });
+
+    // Filter shops
+    const filtered = division
+        ? allShops.filter(s => divisionMap[division]?.includes(s.district))
+        : allShops;
+
+    renderShops(filtered);
+}
+
 // ══ Filter by District ══
 function filterByDistrict(district) {
     currentDistrict = district;
+    currentDivision = '';
 
-    document.querySelectorAll('.district-chip').forEach(c => {
+    // Division chips reset
+    document.querySelectorAll('#divisionFilter .district-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === 'সব বিভাগ');
+    });
+
+    // District chips active
+    document.querySelectorAll('#districtFilter .district-chip').forEach(c => {
         c.classList.toggle('active',
             (district === '' && c.textContent === 'সব জেলা') ||
             c.textContent === district
@@ -752,9 +871,13 @@ function filterByDistrict(district) {
 function filterShops() {
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
-    let filtered = currentDistrict
-        ? allShops.filter(s => s.district === currentDistrict)
-        : allShops;
+    let filtered = allShops;
+
+    if (currentDivision) {
+        filtered = filtered.filter(s => divisionMap[currentDivision]?.includes(s.district));
+    } else if (currentDistrict) {
+        filtered = filtered.filter(s => s.district === currentDistrict);
+    }
 
     if (q) {
         filtered = filtered.filter(s =>
@@ -778,7 +901,6 @@ function renderShops(shops) {
         return;
     }
 
-    // Random gradient colors
     const gradients = [
         'linear-gradient(135deg, #6c2bd9, #a259f7)',
         'linear-gradient(135deg, #0f3460, #16213e)',
@@ -790,13 +912,19 @@ function renderShops(shops) {
     ];
 
     list.innerHTML = shops.map((shop, i) => {
-        const grad = gradients[i % gradients.length];
-        const avatar = (shop.shopName || '?').charAt(0);
+        const grad    = gradients[i % gradients.length];
+        const avatar  = (shop.shopName || '?').charAt(0);
+        const isFav   = getFavs().includes(shop.id);
 
         return `
         <div class="shop-card" onclick="viewShop('${shop.id}')">
-            <div class="shop-card-banner" style="background: ${grad}">
+            <div class="shop-card-banner" style="background: ${grad}; position:relative;">
                 <span class="shop-banner-text">${shop.shopName || ''}</span>
+                <button class="fav-btn ${isFav ? 'active' : ''}"
+                    onclick="event.stopPropagation(); toggleFav('${shop.id}')"
+                    id="favBtn_${shop.id}">
+                    ${isFav ? '❤️' : '🤍'}
+                </button>
             </div>
             <div class="shop-avatar" style="background: ${grad}">${avatar}</div>
             <div class="shop-info">
@@ -811,6 +939,110 @@ function renderShops(shops) {
             </div>
         </div>`;
     }).join('');
+}
+
+// ══ Favorite Functions ══
+function getFavs() {
+    return JSON.parse(localStorage.getItem('favShops') || '[]');
+}
+
+function toggleFav(id) {
+    let favs = getFavs();
+    const btn = document.getElementById('favBtn_' + id);
+
+    if (favs.includes(id)) {
+        favs = favs.filter(f => f !== id);
+        if (btn) { btn.textContent = '🤍'; btn.classList.remove('active'); }
+    } else {
+        favs.push(id);
+        if (btn) { btn.textContent = '❤️'; btn.classList.add('active'); }
+    }
+
+    localStorage.setItem('favShops', JSON.stringify(favs));
+}
+
+// ══ Show Favorite Page ══
+function showFavPage() {
+    const favs    = getFavs();
+    const favList = document.getElementById('favList');
+
+    if (favs.length === 0) {
+        favList.innerHTML = `
+            <div class="fav-empty">
+                <div class="fav-empty-icon">🤍</div>
+                <div class="fav-empty-title">কোনো পছন্দের দোকান নেই</div>
+                <div class="fav-empty-sub">দোকানে ❤️ চাপলে এখানে দেখাবে</div>
+            </div>`;
+        return;
+    }
+
+    const gradients = [
+        'linear-gradient(135deg, #6c2bd9, #a259f7)',
+        'linear-gradient(135deg, #0f3460, #16213e)',
+        'linear-gradient(135deg, #1a6b3c, #2ecc71)',
+        'linear-gradient(135deg, #e74c3c, #c0392b)',
+        'linear-gradient(135deg, #f39c12, #e67e22)',
+        'linear-gradient(135deg, #1abc9c, #16a085)',
+        'linear-gradient(135deg, #2980b9, #1a5276)',
+    ];
+
+    const favShops = allShops.filter(s => favs.includes(s.id));
+
+    if (favShops.length === 0) {
+        favList.innerHTML = `
+            <div class="fav-empty">
+                <div class="fav-empty-icon">🤍</div>
+                <div class="fav-empty-title">কোনো পছন্দের দোকান নেই</div>
+                <div class="fav-empty-sub">দোকানে ❤️ চাপলে এখানে দেখাবে</div>
+            </div>`;
+        return;
+    }
+
+    favList.innerHTML = favShops.map((shop, i) => {
+        const grad   = gradients[i % gradients.length];
+        const avatar = (shop.shopName || '?').charAt(0);
+
+        return `
+        <div class="shop-card" onclick="viewShop('${shop.id}')">
+            <div class="shop-card-banner" style="background: ${grad}; position:relative;">
+                <span class="shop-banner-text">${shop.shopName || ''}</span>
+                <button class="fav-btn active"
+                    onclick="event.stopPropagation(); toggleFav('${shop.id}'); showFavPage()">
+                    ❤️
+                </button>
+            </div>
+            <div class="shop-avatar" style="background: ${grad}">${avatar}</div>
+            <div class="shop-info">
+                <div class="shop-name">${shop.shopName || ''}</div>
+                <div class="shop-address">📍 ${shop.area || ''}, ${shop.district || ''}</div>
+                <div class="shop-contact">
+                    ${shop.phone    ? `<a href="tel:${shop.phone}" class="contact-btn call" onclick="event.stopPropagation()">📞 Call</a>` : ''}
+                    ${shop.whatsapp ? `<a href="https://wa.me/88${shop.whatsapp}" class="contact-btn wa" onclick="event.stopPropagation()">💬 WhatsApp</a>` : ''}
+                    ${shop.facebook ? `<a href="${shop.facebook}" class="contact-btn fb" target="_blank" onclick="event.stopPropagation()">👍 Facebook</a>` : ''}
+                    ${shop.youtube  ? `<a href="${shop.youtube}" class="contact-btn yt" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>` : ''}
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ══ Page Switch ══
+function showPage(page) {
+    const homePage = document.getElementById('app');
+    const favPage  = document.getElementById('favPage');
+
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    if (page === 'fav') {
+        homePage.style.display = 'none';
+        favPage.style.display  = 'block';
+        showFavPage();
+        document.querySelectorAll('.nav-item')[3].classList.add('active');
+    } else {
+        homePage.style.display = 'block';
+        favPage.style.display  = 'none';
+        document.querySelectorAll('.nav-item')[0].classList.add('active');
+    }
 }
 
 // ══ Empty State ══
@@ -830,8 +1062,11 @@ function viewShop(id) {
 
 // ══ Scroll to Search ══
 function scrollToSearch() {
-    document.getElementById('searchInput').scrollIntoView({ behavior: 'smooth' });
-    document.getElementById('searchInput').focus();
+    showPage('home');
+    setTimeout(() => {
+        document.getElementById('searchInput').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('searchInput').focus();
+    }, 100);
 }
 
 </script>
