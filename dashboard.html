@@ -319,6 +319,49 @@ select.input-field { cursor: pointer; appearance: none; }
     pointer-events: none;
 }
 
+/* Category Button */
+.cat-select-btn {
+    width: 100%;
+    padding: 13px 16px;
+    border: 2px solid #e8e0ff;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: 'Hind Siliguri', sans-serif;
+    color: var(--text-light);
+    background: #faf8ff;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.cat-select-btn.selected {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #f0ebff;
+    font-weight: 600;
+}
+
+.cat-item {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    margin-bottom: 6px;
+    background: #faf8ff;
+    border: 1.5px solid #e8e0ff;
+    transition: all 0.2s;
+}
+
+.cat-item.selected {
+    background: #f0ebff;
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 600;
+}
+
 textarea.input-field {
     padding-top: 13px;
     resize: none;
@@ -500,53 +543,91 @@ textarea.input-field {
         </div>
     </div>
 
-    <!-- ২. ঠিকানা -->
+    <!-- ২. ঠিকানা — Step by Step -->
     <div class="tile-card">
         <div class="tile-header">
             <div class="tile-icon">📍</div>
             <div>
                 <div class="tile-title">দোকানের ঠিকানা</div>
-                <div class="tile-subtitle">আপনার অবস্থান</div>
+                <div class="tile-subtitle">বিভাগ → জেলা → এলাকা</div>
             </div>
         </div>
 
+        <!-- বিভাগ -->
         <div class="input-group">
-            <label class="input-label">জেলা *</label>
+            <label class="input-label">① বিভাগ *</label>
             <div class="input-wrap">
                 <span class="input-icon">🗺️</span>
-                <select class="input-field" id="district">
-                    <option value="">জেলা বাছাই করুন</option>
+                <select class="input-field" id="division" onchange="onDivisionChange()">
+                    <option value="">— বিভাগ বাছাই করুন —</option>
                     <option>ঢাকা</option>
                     <option>চট্টগ্রাম</option>
-                    <option>সিলেট</option>
                     <option>রাজশাহী</option>
                     <option>খুলনা</option>
                     <option>বরিশাল</option>
-                    <option>ময়মনসিংহ</option>
+                    <option>সিলেট</option>
                     <option>রংপুর</option>
-                    <option>কুমিল্লা</option>
-                    <option>নারায়ণগঞ্জ</option>
-                    <option>গাজীপুর</option>
-                    <option>অন্যান্য</option>
+                    <option>ময়মনসিংহ</option>
                 </select>
                 <span class="select-arrow">▼</span>
             </div>
         </div>
 
-        <div class="input-group">
-            <label class="input-label">এলাকা/থানা *</label>
+        <!-- জেলা -->
+        <div class="input-group" id="districtGroup" style="display:none">
+            <label class="input-label">② জেলা *</label>
             <div class="input-wrap">
                 <span class="input-icon">📌</span>
-                <input class="input-field" type="text" id="area" placeholder="এলাকা/থানা">
+                <select class="input-field" id="district" onchange="onDistrictChange()">
+                    <option value="">— জেলা বাছাই করুন —</option>
+                </select>
+                <span class="select-arrow">▼</span>
             </div>
         </div>
 
-        <div class="input-group">
+        <!-- এলাকা -->
+        <div class="input-group" id="areaGroup" style="display:none">
+            <label class="input-label">③ এলাকা/থানা *</label>
+            <div class="input-wrap">
+                <span class="input-icon">📌</span>
+                <input class="input-field" type="text" id="area" placeholder="যেমন: মিরপুর-১০">
+            </div>
+        </div>
+
+        <!-- পূর্ণ ঠিকানা -->
+        <div class="input-group" id="addressGroup" style="display:none">
             <label class="input-label">পূর্ণ ঠিকানা</label>
             <div class="input-wrap">
                 <span class="input-icon" style="top:18px">🏠</span>
                 <textarea class="input-field" id="address" placeholder="বিস্তারিত ঠিকানা" style="height:70px"></textarea>
             </div>
+        </div>
+    </div>
+
+    <!-- ক্যাটাগরি -->
+    <div class="tile-card" id="categorySection" style="display:none">
+        <div class="tile-header">
+            <div class="tile-icon">🗂️</div>
+            <div>
+                <div class="tile-title">ক্যাটাগরি</div>
+                <div class="tile-subtitle">আপনার পণ্যের ধরন বাছাই করুন</div>
+            </div>
+        </div>
+        <button type="button" class="cat-select-btn" id="catBtn" onclick="openCatPopup()">
+            <span id="catBtnText">🗂️ ক্যাটাগরি সিলেক্ট করুন</span>
+            <span>▼</span>
+        </button>
+        <input type="hidden" id="category">
+    </div>
+
+    <!-- Category Popup -->
+    <div id="catPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:flex-end;">
+        <div style="background:white; border-radius:24px 24px 0 0; padding:20px; width:100%; max-height:80vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1.5px solid #f0ebff;">
+                <span style="font-size:16px; font-weight:700; color:#1a1a2e;">🗂️ ক্যাটাগরি বাছাই করুন</span>
+                <button onclick="closeCatPopup()" style="background:#f0ebff; border:none; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer; color:#6c2bd9;">✕</button>
+            </div>
+            <div id="catList"></div>
         </div>
     </div>
 
@@ -597,6 +678,7 @@ textarea.input-field {
 
 <!-- SAVE BUTTON -->
 <div class="submit-wrap" id="saveWrap" style="display:none">
+    <a href="index.html" style="display:block; text-align:center; margin-bottom:10px; color:#6c2bd9; font-weight:600; font-size:14px; text-decoration:none;">🏠 হোম পেজে যান</a>
     <button class="submit-btn" id="saveBtn" onclick="saveShop()">
         <div class="spinner"></div>
         <span class="btn-text">💾 তথ্য সংরক্ষণ করুন</span>
@@ -662,15 +744,125 @@ auth.onAuthStateChanged(async user => {
         document.getElementById('shopName').value    = data.shopName    || '';
         document.getElementById('ownerName').value   = data.ownerName   || '';
         document.getElementById('description').value = data.description || '';
-        document.getElementById('district').value    = data.district    || '';
-        document.getElementById('area').value        = data.area        || '';
-        document.getElementById('address').value     = data.address     || '';
         document.getElementById('phone').value       = data.phone       || '';
         document.getElementById('whatsapp').value    = data.whatsapp    || '';
         document.getElementById('facebook').value    = data.facebook    || '';
         document.getElementById('youtube').value     = data.youtube     || '';
+        document.getElementById('area').value        = data.area        || '';
+        document.getElementById('address').value     = data.address     || '';
+
+        // বিভাগ সেট করুন
+        if (data.division) {
+            document.getElementById('division').value = data.division;
+            onDivisionChange();
+            // জেলা সেট করুন
+            if (data.district) {
+                setTimeout(() => {
+                    document.getElementById('district').value = data.district;
+                    onDistrictChange();
+                    // এলাকা ও ঠিকানা দেখান
+                    document.getElementById('area').value    = data.area    || '';
+                    document.getElementById('address').value = data.address || '';
+                    // ক্যাটাগরি সেট করুন
+                    if (data.category) {
+                        document.getElementById('category').value = data.category;
+                        document.getElementById('catBtnText').textContent = data.category;
+                        document.getElementById('catBtn').classList.add('selected');
+                    }
+                }, 100);
+            }
+        } else if (data.district) {
+            // পুরনো data যেখানে শুধু district আছে
+            document.getElementById('districtGroup').style.display  = 'block';
+            document.getElementById('areaGroup').style.display      = 'block';
+            document.getElementById('addressGroup').style.display   = 'block';
+            document.getElementById('categorySection').style.display = 'block';
+            // District manually add করুন
+            const opt = document.createElement('option');
+            opt.value = data.district;
+            opt.textContent = data.district;
+            document.getElementById('district').appendChild(opt);
+            document.getElementById('district').value = data.district;
+        }
     }
 });
+
+// ── Division/District/Category JS ──
+const divisionMap = {
+    'ঢাকা':       ['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
+    'চট্টগ্রাম':  ['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
+    'রাজশাহী':   ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
+    'খুলনা':     ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
+    'বরিশাল':   ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],
+    'সিলেট':    ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
+    'রংপুর':    ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],
+    'ময়মনসিংহ':['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা'],
+};
+
+function onDivisionChange() {
+    const div = document.getElementById('division').value;
+    const districtSelect = document.getElementById('district');
+    districtSelect.innerHTML = '<option value="">— জেলা বাছাই করুন —</option>';
+    document.getElementById('areaGroup').style.display       = 'none';
+    document.getElementById('addressGroup').style.display    = 'none';
+    document.getElementById('categorySection').style.display = 'none';
+
+    if (div && divisionMap[div]) {
+        divisionMap[div].forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d; opt.textContent = d;
+            districtSelect.appendChild(opt);
+        });
+        document.getElementById('districtGroup').style.display = 'block';
+    } else {
+        document.getElementById('districtGroup').style.display = 'none';
+    }
+}
+
+function onDistrictChange() {
+    const dist = document.getElementById('district').value;
+    if (dist) {
+        document.getElementById('areaGroup').style.display       = 'block';
+        document.getElementById('addressGroup').style.display    = 'block';
+        document.getElementById('categorySection').style.display = 'block';
+    } else {
+        document.getElementById('areaGroup').style.display       = 'none';
+        document.getElementById('addressGroup').style.display    = 'none';
+        document.getElementById('categorySection').style.display = 'none';
+    }
+}
+
+const categories = [
+    '👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স',
+    '🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য',
+    '🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার',
+    '🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য',
+    '🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা',
+    '🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী',
+    '📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ',
+    '🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য',
+];
+
+function openCatPopup() {
+    const current = document.getElementById('category').value;
+    const list = document.getElementById('catList');
+    list.innerHTML = categories.map(c => {
+        const val = c.replace(/^[\S]+ /, '');
+        return `<div class="cat-item ${current === val ? 'selected' : ''}" onclick="selectCat('${val}', '${c}')">${c}</div>`;
+    }).join('');
+    document.getElementById('catPopup').style.display = 'flex';
+}
+
+function selectCat(val, label) {
+    document.getElementById('category').value = val;
+    document.getElementById('catBtnText').textContent = label;
+    document.getElementById('catBtn').classList.add('selected');
+    closeCatPopup();
+}
+
+function closeCatPopup() {
+    document.getElementById('catPopup').style.display = 'none';
+}
 
 // ── Messages ──
 function showError(msg) {
@@ -696,12 +888,15 @@ async function saveShop() {
 
     const shopName  = document.getElementById('shopName').value.trim();
     const ownerName = document.getElementById('ownerName').value.trim();
+    const division  = document.getElementById('division').value;
     const district  = document.getElementById('district').value;
     const area      = document.getElementById('area').value.trim();
     const phone     = document.getElementById('phone').value.trim();
+    const category  = document.getElementById('category').value;
 
     if (!shopName)  return showError('দোকানের নাম দিন!');
     if (!ownerName) return showError('মালিকের নাম দিন!');
+    if (!division)  return showError('বিভাগ বাছাই করুন!');
     if (!district)  return showError('জেলা বাছাই করুন!');
     if (!area)      return showError('এলাকা দিন!');
     if (!phone)     return showError('মোবাইল নম্বর দিন!');
@@ -714,9 +909,11 @@ async function saveShop() {
             shopName,
             ownerName,
             description: document.getElementById('description').value.trim(),
+            division,
             district,
             area,
             address:  document.getElementById('address').value.trim(),
+            category,
             phone,
             whatsapp: document.getElementById('whatsapp').value.trim(),
             facebook: document.getElementById('facebook').value.trim(),
