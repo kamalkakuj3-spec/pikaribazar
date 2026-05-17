@@ -6,854 +6,380 @@
 <title>Admin Panel — পাইকারি বাজার</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
 :root {
-    --primary: #6c2bd9;
-    --primary-dark: #4a1a9e;
-    --primary-light: #a259f7;
-    --accent: #f0c040;
-    --bg: #f5f3ff;
-    --text: #1a1a2e;
-    --text-light: #666;
-    --success: #2ecc71;
-    --error: #e74c3c;
-    --warning: #f0c040;
-    --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
+    --primary:#6c2bd9; --primary-light:#a259f7;
+    --accent:#f0c040; --bg:#f5f3ff;
+    --text:#1a1a2e; --text-light:#666;
+    --success:#2ecc71; --error:#e74c3c; --warning:#f0c040;
+    --shadow:0 8px 32px rgba(108,43,217,0.15);
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Hind Siliguri',sans-serif; background:var(--bg); min-height:100vh; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* HEADER */
+.header { background:linear-gradient(135deg,#1a0a3e,#6c2bd9); padding:50px 20px 24px; position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.05); border-radius:50%; }
+.h-top { display:flex; align-items:center; justify-content:space-between; position:relative; z-index:1; }
+.h-logo { display:flex; align-items:center; gap:10px; }
+.h-logo-icon { width:38px; height:38px; background:var(--accent); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+.h-logo-text { font-size:16px; font-weight:700; color:white; }
+.h-sub { color:rgba(255,255,255,0.7); font-size:13px; margin-top:8px; position:relative; z-index:1; }
 
-body {
-    font-family: 'Hind Siliguri', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-}
+/* STATS */
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px; }
+.stat-tile { background:white; border-radius:18px; padding:18px; box-shadow:var(--shadow); text-align:center; border:1.5px solid rgba(108,43,217,0.06); animation:tileIn 0.5s ease both; }
+.stat-tile:nth-child(1){animation-delay:.1s} .stat-tile:nth-child(2){animation-delay:.2s}
+.stat-tile:nth-child(3){animation-delay:.3s} .stat-tile:nth-child(4){animation-delay:.4s}
+@keyframes tileIn { from{transform:translateY(20px) scale(0.95);opacity:0} to{transform:translateY(0) scale(1);opacity:1} }
+.stat-num   { font-size:28px; font-weight:700; margin-bottom:4px; }
+.stat-label { font-size:13px; color:var(--text-light); }
+.stat-tile.pending  .stat-num { color:var(--warning); }
+.stat-tile.approved .stat-num { color:var(--success); }
+.stat-tile.rejected .stat-num { color:var(--error); }
+.stat-tile.total    .stat-num { color:var(--primary); }
 
-/* ── LOGIN SCREEN ── */
-#loginScreen {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(160deg, #1a0a3e 0%, #6c2bd9 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 30px;
-}
+/* TABS */
+.tabs { display:flex; margin:0 16px 14px; background:white; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); overflow-x:auto; scrollbar-width:none; }
+.tabs::-webkit-scrollbar { display:none; }
+.tab { flex:1; min-width:70px; padding:13px 8px; text-align:center; font-size:12px; font-weight:600; cursor:pointer; color:var(--text-light); font-family:'Hind Siliguri',sans-serif; transition:all 0.2s; border-bottom:3px solid transparent; white-space:nowrap; }
+.tab.active { color:var(--primary); border-bottom-color:var(--primary); background:#faf8ff; }
+.tab-badge { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; background:var(--warning); color:#1a0a3e; border-radius:50%; font-size:10px; font-weight:700; margin-left:3px; }
 
-.login-logo {
-    width: 80px; height: 80px;
-    background: white;
-    border-radius: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    margin-bottom: 16px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    animation: logoPop 4s ease-in-out infinite;
-}
+/* SECTION */
+.section { padding:0 16px; }
 
-@keyframes logoPop {
-    0%, 100% { transform: scale(1); }
-    50%       { transform: scale(1.06); }
-}
+/* ADMIN CARD */
+.admin-card { background:white; border-radius:18px; padding:16px; box-shadow:var(--shadow); margin-bottom:12px; border:1.5px solid rgba(108,43,217,0.06); }
+.ac-top { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.ac-avatar { width:50px; height:50px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:white; flex-shrink:0; }
+.ac-name { font-size:15px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.ac-info { font-size:12px; color:var(--text-light); }
+.ac-row  { display:flex; align-items:center; gap:8px; padding:5px 0; font-size:13px; color:var(--text-light); border-bottom:1px solid #f9f7ff; }
+.ac-row:last-of-type { border-bottom:none; }
+.ac-row-icon { font-size:14px; width:20px; }
+.ac-row-val  { color:var(--text); font-weight:500; }
+.status-badge { padding:4px 12px; border-radius:99px; font-size:11px; font-weight:600; margin-left:auto; flex-shrink:0; }
+.status-badge.pending  { background:#fffbeb; color:#d97706; border:1px solid #fcd34d; }
+.status-badge.approved { background:#ecfdf5; color:#059669; border:1px solid #6ee7b7; }
+.status-badge.rejected { background:#fef2f2; color:#dc2626; border:1px solid #fca5a5; }
+.ac-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.ac-btn { flex:1; min-width:75px; padding:10px 6px; border:none; border-radius:12px; font-size:12px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px; transition:transform 0.15s; }
+.ac-btn:active { transform:scale(0.96); }
+.btn-approve { background:#ecfdf5; color:#059669; border:1.5px solid #6ee7b7; }
+.btn-reject  { background:#fef2f2; color:#dc2626; border:1.5px solid #fca5a5; }
+.btn-delete  { background:#fef2f2; color:#dc2626; border:1.5px solid #fca5a5; }
+.btn-view    { background:#f0ebff; color:var(--primary); border:1.5px solid #c4b5fd; }
 
-.login-title { font-size: 24px; font-weight: 700; color: white; margin-bottom: 6px; }
-.login-sub   { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 32px; }
+/* NOTICE */
+.notice-card { background:white; border-radius:18px; padding:20px; box-shadow:var(--shadow); margin:0 16px 16px; }
+.nc-title { font-size:15px; font-weight:700; color:var(--text); margin-bottom:14px; padding-bottom:10px; border-bottom:1.5px solid #f0ebff; }
+.nc-textarea { width:100%; padding:13px 16px; border:2px solid #e8e0ff; border-radius:12px; font-size:14px; font-family:'Hind Siliguri',sans-serif; color:var(--text); background:#faf8ff; outline:none; resize:none; height:100px; margin-bottom:12px; }
+.nc-textarea:focus { border-color:var(--primary); }
+.nc-btn { width:100%; padding:14px; background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; font-family:'Hind Siliguri',sans-serif; cursor:pointer; box-shadow:0 4px 15px rgba(108,43,217,0.3); }
 
-.login-card {
-    width: 100%;
-    max-width: 380px;
-    background: white;
-    border-radius: 24px;
-    padding: 24px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
+/* ════ SLIDER SECTION ════ */
+.slider-card { background:white; border-radius:18px; padding:20px; box-shadow:var(--shadow); margin:0 16px 16px; }
+.sl-title { font-size:15px; font-weight:700; color:var(--text); margin-bottom:14px; padding-bottom:10px; border-bottom:1.5px solid #f0ebff; }
 
-.login-input-wrap { position: relative; margin-bottom: 14px; }
+/* Existing slides list */
+.sl-item { background:#faf8ff; border-radius:14px; overflow:hidden; margin-bottom:12px; border:1.5px solid #e8e0ff; }
+.sl-item img { width:100%; height:130px; object-fit:cover; display:block; }
+.sl-item-info { padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.sl-item-link { font-size:12px; color:var(--text-light); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:220px; }
+.sl-del-btn { background:#fef2f2; color:#dc2626; border:1.5px solid #fca5a5; border-radius:8px; padding:6px 12px; font-size:12px; font-family:'Hind Siliguri',sans-serif; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.sl-empty { text-align:center; color:var(--text-light); padding:20px; font-size:14px; }
 
-.login-icon {
-    position: absolute;
-    left: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-}
+/* Add new slide form */
+.sl-add-box { background:linear-gradient(135deg,#f0ebff,#e8e0ff); border-radius:14px; padding:16px; margin-top:14px; border:1.5px solid rgba(108,43,217,0.15); }
+.sl-add-title { font-size:14px; font-weight:700; color:var(--primary-dark,#4a1a9e); margin-bottom:12px; }
+.sl-input { width:100%; padding:12px 14px; border:2px solid #e8e0ff; border-radius:10px; font-size:13px; font-family:'Hind Siliguri',sans-serif; color:var(--text); background:white; outline:none; margin-bottom:8px; transition:border-color 0.2s; }
+.sl-input:focus { border-color:var(--primary); }
+.sl-add-btn { width:100%; padding:13px; background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:white; border:none; border-radius:10px; font-size:14px; font-weight:700; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-top:4px; box-shadow:0 4px 14px rgba(108,43,217,0.3); }
 
-.login-input {
-    width: 100%;
-    padding: 14px 14px 14px 42px;
-    border: 2px solid #e8e0ff;
-    border-radius: 12px;
-    font-size: 15px;
-    font-family: 'Hind Siliguri', sans-serif;
-    color: var(--text);
-    background: #faf8ff;
-    outline: none;
-    transition: all 0.2s;
-}
+/* EMPTY */
+.empty-state { text-align:center; padding:40px 20px; color:var(--text-light); }
+.empty-icon  { font-size:48px; margin-bottom:12px; }
+.empty-title { font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px; }
 
-.login-input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(108,43,217,0.08);
-}
+/* TOAST */
+.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#1a1a2e; color:white; padding:12px 24px; border-radius:99px; font-size:14px; font-weight:500; z-index:9999; display:none; white-space:nowrap; box-shadow:0 8px 30px rgba(0,0,0,0.3); font-family:'Hind Siliguri',sans-serif; }
 
-.login-btn {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    font-family: 'Hind Siliguri', sans-serif;
-    cursor: pointer;
-    margin-top: 6px;
-    box-shadow: 0 6px 20px rgba(108,43,217,0.4);
-}
-
-.login-error {
-    color: var(--error);
-    font-size: 13px;
-    text-align: center;
-    margin-top: 10px;
-    display: none;
-}
-
-/* ── LOADING ── */
-#loadingScreen {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9998;
-}
-
-.loading-spinner {
-    width: 50px; height: 50px;
-    border: 4px solid rgba(255,255,255,0.2);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 16px;
-}
-
-.loading-text { color: white; font-size: 16px; opacity: 0.8; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── MAIN APP ── */
-#adminApp { display: none; padding-bottom: 80px; }
-
-/* Header */
-.header {
-    background: linear-gradient(135deg, #1a0a3e 0%, #6c2bd9 100%);
-    padding: 50px 20px 24px;
-    position: relative;
-    overflow: hidden;
-}
-
-.header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 200px; height: 200px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 50%;
-}
-
-.header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    z-index: 1;
-}
-
-.header-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.header-logo-icon {
-    width: 38px; height: 38px;
-    background: var(--accent);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-}
-
-.header-logo-text { font-size: 16px; font-weight: 700; color: white; }
-
-.logout-btn {
-    padding: 8px 16px;
-    background: rgba(255,255,255,0.15);
-    border: none;
-    border-radius: 99px;
-    color: white;
-    font-size: 13px;
-    font-family: 'Hind Siliguri', sans-serif;
-    cursor: pointer;
-}
-
-.header-subtitle {
-    color: rgba(255,255,255,0.7);
-    font-size: 13px;
-    margin-top: 8px;
-    position: relative;
-    z-index: 1;
-}
-
-/* ── STATS ── */
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 16px;
-}
-
-.stat-tile {
-    background: white;
-    border-radius: 18px;
-    padding: 18px;
-    box-shadow: var(--card-shadow);
-    text-align: center;
-    animation: tileIn 0.5s ease both;
-    border: 1.5px solid rgba(108,43,217,0.06);
-}
-
-.stat-tile:nth-child(1) { animation-delay: 0.1s; }
-.stat-tile:nth-child(2) { animation-delay: 0.2s; }
-.stat-tile:nth-child(3) { animation-delay: 0.3s; }
-.stat-tile:nth-child(4) { animation-delay: 0.4s; }
-
-@keyframes tileIn {
-    from { transform: translateY(20px) scale(0.95); opacity: 0; }
-    to   { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.stat-num   { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-.stat-label { font-size: 13px; color: var(--text-light); }
-
-.stat-tile.pending  .stat-num { color: var(--warning); }
-.stat-tile.approved .stat-num { color: var(--success); }
-.stat-tile.rejected .stat-num { color: var(--error); }
-.stat-tile.total    .stat-num { color: var(--primary); }
-
-/* ── TABS ── */
-.tabs {
-    display: flex;
-    gap: 0;
-    padding: 0 16px;
-    margin-bottom: 16px;
-    background: white;
-    border-radius: 16px;
-    margin: 0 16px 16px;
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-}
-
-.tab {
-    flex: 1;
-    padding: 14px 8px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    color: var(--text-light);
-    font-family: 'Hind Siliguri', sans-serif;
-    transition: all 0.2s;
-    border-bottom: 3px solid transparent;
-}
-
-.tab.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    background: #faf8ff;
-}
-
-.tab-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px; height: 18px;
-    background: var(--warning);
-    color: #1a0a3e;
-    border-radius: 50%;
-    font-size: 10px;
-    font-weight: 700;
-    margin-left: 4px;
-}
-
-/* ── SHOP CARDS ── */
-.section { padding: 0 16px; }
-
-.admin-card {
-    background: white;
-    border-radius: 20px;
-    padding: 16px;
-    box-shadow: var(--card-shadow);
-    margin-bottom: 14px;
-    border: 1.5px solid rgba(108,43,217,0.06);
-    animation: tileIn 0.4s ease both;
-}
-
-.admin-card-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.admin-avatar {
-    width: 50px; height: 50px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    font-weight: 700;
-    color: white;
-    flex-shrink: 0;
-}
-
-.admin-shop-name  { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-.admin-shop-info  { font-size: 12px; color: var(--text-light); }
-
-/* Status badge */
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 99px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-left: auto;
-    flex-shrink: 0;
-}
-
-.status-badge.pending  { background: #fffbeb; color: #d97706; border: 1px solid #fcd34d; }
-.status-badge.approved { background: #ecfdf5; color: #059669; border: 1px solid #6ee7b7; }
-.status-badge.rejected { background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; }
-
-/* Info rows */
-.admin-info-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 0;
-    font-size: 13px;
-    color: var(--text-light);
-    border-bottom: 1px solid #f9f7ff;
-}
-
-.admin-info-row:last-of-type { border-bottom: none; }
-.admin-info-icon { font-size: 14px; width: 20px; }
-.admin-info-val  { color: var(--text); font-weight: 500; }
-
-/* Action buttons */
-.action-btns {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-    flex-wrap: wrap;
-}
-
-.action-btn {
-    flex: 1;
-    min-width: 80px;
-    padding: 10px 8px;
-    border: none;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: 'Hind Siliguri', sans-serif;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    transition: transform 0.2s;
-}
-
-.action-btn:active { transform: scale(0.96); }
-
-.btn-approve { background: #ecfdf5; color: #059669; border: 1.5px solid #6ee7b7; }
-.btn-reject  { background: #fef2f2; color: #dc2626; border: 1.5px solid #fca5a5; }
-.btn-delete  { background: #fef2f2; color: #dc2626; border: 1.5px solid #fca5a5; }
-.btn-view    { background: #f0ebff; color: var(--primary); border: 1.5px solid #c4b5fd; }
-
-/* ── NOTICE SEND ── */
-.notice-card {
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: var(--card-shadow);
-    margin: 0 16px 16px;
-    border: 1.5px solid rgba(108,43,217,0.06);
-}
-
-.notice-card-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1.5px solid #f0ebff;
-}
-
-.notice-input {
-    width: 100%;
-    padding: 13px 16px;
-    border: 2px solid #e8e0ff;
-    border-radius: 12px;
-    font-size: 14px;
-    font-family: 'Hind Siliguri', sans-serif;
-    color: var(--text);
-    background: #faf8ff;
-    outline: none;
-    resize: none;
-    height: 100px;
-    margin-bottom: 12px;
-}
-
-.notice-input:focus { border-color: var(--primary); }
-
-.notice-send-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: 'Hind Siliguri', sans-serif;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(108,43,217,0.3);
-}
-
-/* ── EMPTY STATE ── */
-.empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-light);
-}
-
-.empty-icon  { font-size: 50px; margin-bottom: 12px; }
-.empty-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-
-/* ── TOAST ── */
-.toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%; transform: translateX(-50%);
-    background: #1a1a2e;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 99px;
-    font-size: 14px;
-    font-weight: 500;
-    z-index: 9999;
-    display: none;
-    white-space: nowrap;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    animation: toastIn 0.3s ease;
-}
-
-@keyframes toastIn {
-    from { transform: translateX(-50%) translateY(20px); opacity: 0; }
-    to   { transform: translateX(-50%) translateY(0); opacity: 1; }
-}
-
-/* ── BOTTOM NAV ── */
-.bottom-nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: white;
-    display: flex;
-    border-top: 1px solid #f0ebff;
-    box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
-    z-index: 100;
-}
-
-.nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 0 14px;
-    cursor: pointer;
-    font-size: 11px;
-    color: #aaa;
-    font-family: 'Hind Siliguri', sans-serif;
-    gap: 4px;
-}
-
-.nav-item.active { color: var(--primary); }
-.nav-icon { font-size: 22px; }
-
+/* BOTTOM NAV */
+.bottom-nav { position:fixed; bottom:0; left:0; right:0; background:white; display:flex; border-top:1px solid #f0ebff; box-shadow:0 -4px 20px rgba(108,43,217,0.1); z-index:100; overflow-x:auto; }
+.nav-item { flex:1; min-width:60px; display:flex; flex-direction:column; align-items:center; padding:10px 0 14px; cursor:pointer; font-size:10px; color:#aaa; font-family:'Hind Siliguri',sans-serif; gap:4px; white-space:nowrap; }
+.nav-item.active { color:var(--primary); }
+.nav-icon { font-size:20px; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen">
-    <div class="login-logo">🛡️</div>
-    <div class="login-title">Admin Panel</div>
-    <div class="login-sub">পাইকারি বাজার</div>
+<!-- HEADER -->
+<div class="header">
+    <div class="h-top">
+        <div class="h-logo">
+            <div class="h-logo-icon">🛡️</div>
+            <div class="h-logo-text">Admin Panel</div>
+        </div>
+        <a href="index.html" style="padding:8px 14px;background:rgba(255,255,255,0.15);border:none;border-radius:99px;color:white;font-size:13px;font-family:'Hind Siliguri',sans-serif;text-decoration:none;">🏠 হোম</a>
+    </div>
+    <div class="h-sub">পাইকারি বাজার — সব নিয়ন্ত্রণ এখানে</div>
+</div>
 
-    <div class="login-card">
-        <div class="login-input-wrap">
-            <span class="login-icon">✉️</span>
-            <input class="login-input" type="email" id="adminEmail" placeholder="Admin Email">
-        </div>
-        <div class="login-input-wrap">
-            <span class="login-icon">🔑</span>
-            <input class="login-input" type="password" id="adminPassword" placeholder="Password">
-        </div>
-        <button class="login-btn" onclick="adminLogin()">🔐 লগিন করুন</button>
-        <div class="login-error" id="loginError"></div>
+<!-- STATS -->
+<div class="stats-grid">
+    <div class="stat-tile total">
+        <div class="stat-num" id="statTotal">০</div>
+        <div class="stat-label">মোট দোকান</div>
+    </div>
+    <div class="stat-tile pending">
+        <div class="stat-num" id="statPending">০</div>
+        <div class="stat-label">⏳ পেন্ডিং</div>
+    </div>
+    <div class="stat-tile approved">
+        <div class="stat-num" id="statApproved">০</div>
+        <div class="stat-label">✅ Approved</div>
+    </div>
+    <div class="stat-tile rejected">
+        <div class="stat-num" id="statRejected">০</div>
+        <div class="stat-label">❌ Rejected</div>
     </div>
 </div>
 
-<!-- LOADING -->
-<div id="loadingScreen">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">লোড হচ্ছে...</div>
+<!-- TABS -->
+<div class="tabs">
+    <div class="tab active" id="tabPending"  onclick="switchTab('pending')">⏳ পেন্ডিং <span class="tab-badge" id="pendingBadge">0</span></div>
+    <div class="tab" id="tabApproved" onclick="switchTab('approved')">✅ Approved</div>
+    <div class="tab" id="tabRejected" onclick="switchTab('rejected')">❌ Rejected</div>
+    <div class="tab" id="tabNotice"   onclick="switchTab('notice')">📢 নোটিশ</div>
+    <div class="tab" id="tabSlider"   onclick="switchTab('slider')">🖼️ Slider</div>
 </div>
 
-<!-- ADMIN APP -->
-<div id="adminApp">
-
-    <!-- Header -->
-    <div class="header">
-        <div class="header-top">
-            <div class="header-logo">
-                <div class="header-logo-icon">🛡️</div>
-                <div class="header-logo-text">Admin Panel</div>
-            </div>
-            <button class="logout-btn" onclick="adminLogout()">🚪 লগআউট</button>
-        </div>
-        <div class="header-subtitle">পাইকারি বাজার — সব নিয়ন্ত্রণ এখানে</div>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-grid">
-        <div class="stat-tile total">
-            <div class="stat-num" id="statTotal">০</div>
-            <div class="stat-label">মোট দোকান</div>
-        </div>
-        <div class="stat-tile pending">
-            <div class="stat-num" id="statPending">০</div>
-            <div class="stat-label">⏳ পেন্ডিং</div>
-        </div>
-        <div class="stat-tile approved">
-            <div class="stat-num" id="statApproved">০</div>
-            <div class="stat-label">✅ Approved</div>
-        </div>
-        <div class="stat-tile rejected">
-            <div class="stat-num" id="statRejected">০</div>
-            <div class="stat-label">❌ Rejected</div>
-        </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('pending')" id="tabPending">
-            ⏳ পেন্ডিং
-            <span class="tab-badge" id="pendingBadge">0</span>
-        </div>
-        <div class="tab" onclick="switchTab('approved')" id="tabApproved">✅ Approved</div>
-        <div class="tab" onclick="switchTab('rejected')" id="tabRejected">❌ Rejected</div>
-        <div class="tab" onclick="switchTab('notice')" id="tabNotice">📢 নোটিশ</div>
-    </div>
-
-    <!-- Shop List -->
-    <div class="section" id="shopSection">
-        <div id="shopList"></div>
-    </div>
-
-    <!-- Notice Section -->
-    <div id="noticeSection" style="display:none">
-        <div class="notice-card">
-            <div class="notice-card-title">📢 সকলকে নোটিশ পাঠান</div>
-            <textarea class="notice-input" id="noticeText" placeholder="নোটিশ লিখুন..."></textarea>
-            <button class="notice-send-btn" onclick="sendNotice()">📤 নোটিশ পাঠান</button>
-        </div>
-    </div>
-
+<!-- SHOP SECTION -->
+<div class="section" id="shopSection">
+    <div id="shopList"></div>
 </div>
 
-<!-- Toast -->
+<!-- NOTICE SECTION -->
+<div id="noticeSection" style="display:none">
+    <div class="notice-card">
+        <div class="nc-title">📢 সকলকে নোটিশ পাঠান</div>
+        <textarea class="nc-textarea" id="noticeText" placeholder="নোটিশ লিখুন..."></textarea>
+        <button class="nc-btn" onclick="sendNotice()">📤 নোটিশ পাঠান</button>
+    </div>
+</div>
+
+<!-- SLIDER SECTION -->
+<div id="sliderSection" style="display:none">
+    <div class="slider-card">
+        <div class="sl-title">🖼️ Image Slider পরিচালনা</div>
+
+        <!-- Existing Slides -->
+        <div id="slideList"><div class="sl-empty">লোড হচ্ছে...</div></div>
+
+        <!-- Add New -->
+        <div class="sl-add-box">
+            <div class="sl-add-title">➕ নতুন Slide যোগ করুন</div>
+            <input class="sl-input" type="url" id="slideImg" placeholder="ছবির URL — https://example.com/image.jpg">
+            <input class="sl-input" type="url" id="slideLink" placeholder="লিংক (ঐচ্ছিক) — https://...">
+            <button class="sl-add-btn" onclick="addSlide()">➕ Slide যোগ করুন</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- Bottom Nav -->
-<div class="bottom-nav" id="bottomNav" style="display:none">
-    <div class="nav-item active" onclick="switchTab('pending')">
-        <span class="nav-icon">⏳</span>পেন্ডিং
-    </div>
-    <div class="nav-item" onclick="switchTab('approved')">
-        <span class="nav-icon">✅</span>Approved
-    </div>
-    <div class="nav-item" onclick="switchTab('rejected')">
-        <span class="nav-icon">❌</span>Rejected
-    </div>
-    <div class="nav-item" onclick="switchTab('notice')">
-        <span class="nav-icon">📢</span>নোটিশ
-    </div>
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('pending')"><span class="nav-icon">⏳</span>পেন্ডিং</div>
+    <div class="nav-item" onclick="switchTab('approved')"><span class="nav-icon">✅</span>Approved</div>
+    <div class="nav-item" onclick="switchTab('rejected')"><span class="nav-icon">❌</span>Rejected</div>
+    <div class="nav-item" onclick="switchTab('notice')"><span class="nav-icon">📢</span>নোটিশ</div>
+    <div class="nav-item" onclick="switchTab('slider')"><span class="nav-icon">🖼️</span>Slider</div>
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
 <script>
-const firebaseConfig = {
-    apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
-    authDomain: "agls-5bd4c.firebaseapp.com",
-    databaseURL: "https://agls-5bd4c-default-rtdb.firebaseio.com/",
-    projectId: "agls-5bd4c",
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.database();
-
-// ⚠️ শুধুমাত্র এই Email Admin হিসেবে কাজ করবে
-const ADMIN_EMAIL = "kamalkakuj3@gmail.com"; // আপনার admin email দিন
+firebase.initializeApp({
+    apiKey:"AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
+    authDomain:"agls-5bd4c.firebaseapp.com",
+    databaseURL:"https://agls-5bd4c-default-rtdb.firebaseio.com/",
+    projectId:"agls-5bd4c",
+});
+const db = firebase.database();
 
 let currentTab = 'pending';
 let allShops   = {};
 
-const gradients = [
-    'linear-gradient(135deg, #6c2bd9, #a259f7)',
-    'linear-gradient(135deg, #0f3460, #16213e)',
-    'linear-gradient(135deg, #1a6b3c, #2ecc71)',
-    'linear-gradient(135deg, #e74c3c, #c0392b)',
-    'linear-gradient(135deg, #f39c12, #e67e22)',
-    'linear-gradient(135deg, #1abc9c, #16a085)',
-];
+const grads = ['linear-gradient(135deg,#6c2bd9,#a259f7)','linear-gradient(135deg,#0f3460,#16213e)','linear-gradient(135deg,#1a6b3c,#2ecc71)','linear-gradient(135deg,#e74c3c,#c0392b)','linear-gradient(135deg,#f39c12,#e67e22)','linear-gradient(135deg,#1abc9c,#16a085)'];
 
-// ── Auth Check ──
-auth.onAuthStateChanged(user => {
-    if (user && user.email === ADMIN_EMAIL) {
-        document.getElementById('loginScreen').style.display  = 'none';
-        document.getElementById('loadingScreen').style.display = 'flex';
-        loadAllShops();
-    } else if (user) {
-        // Admin না হলে logout
-        auth.signOut();
-        showLoginError('আপনি Admin নন!');
+// ══ LOAD ALL SHOPS ══
+db.ref('shops').on('value', snap => {
+    allShops = {};
+    let total=0, pending=0, approved=0, rejected=0;
+    if (snap.exists()) {
+        snap.forEach(c => {
+            allShops[c.key] = c.val();
+            total++;
+            const st = c.val().status;
+            if (st==='pending')  pending++;
+            if (st==='approved') approved++;
+            if (st==='rejected') rejected++;
+        });
     }
+    document.getElementById('statTotal').textContent    = total;
+    document.getElementById('statPending').textContent  = pending;
+    document.getElementById('statApproved').textContent = approved;
+    document.getElementById('statRejected').textContent = rejected;
+    document.getElementById('pendingBadge').textContent = pending;
+    if (currentTab !== 'notice' && currentTab !== 'slider') renderShops(currentTab);
 });
 
-// ── Admin Login ──
-async function adminLogin() {
-    const email    = document.getElementById('adminEmail').value.trim();
-    const password = document.getElementById('adminPassword').value;
-
-    if (!email || !password) {
-        showLoginError('Email ও Password দিন!');
-        return;
-    }
-
-    try {
-        await auth.signInWithEmailAndPassword(email, password);
-    } catch (e) {
-        if (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
-            showLoginError('Email বা Password ভুল!');
-        } else {
-            showLoginError('সমস্যা হয়েছে!');
-        }
-    }
-}
-
-function showLoginError(msg) {
-    const el = document.getElementById('loginError');
-    el.textContent = '⚠️ ' + msg;
-    el.style.display = 'block';
-}
-
-// ── Logout ──
-async function adminLogout() {
-    await auth.signOut();
-    document.getElementById('adminApp').style.display    = 'none';
-    document.getElementById('bottomNav').style.display   = 'none';
-    document.getElementById('loginScreen').style.display = 'flex';
-}
-
-// ── Load All Shops ──
-function loadAllShops() {
-    db.ref('shops').on('value', snap => {
-        document.getElementById('loadingScreen').style.display = 'none';
-        document.getElementById('adminApp').style.display      = 'block';
-        document.getElementById('bottomNav').style.display     = 'flex';
-
-        allShops = {};
-        let total = 0, pending = 0, approved = 0, rejected = 0;
-
-        if (snap.exists()) {
-            snap.forEach(child => {
-                allShops[child.key] = child.val();
-                total++;
-                const s = child.val().status;
-                if (s === 'pending')  pending++;
-                if (s === 'approved') approved++;
-                if (s === 'rejected') rejected++;
-            });
-        }
-
-        // Stats
-        document.getElementById('statTotal').textContent    = total;
-        document.getElementById('statPending').textContent  = pending;
-        document.getElementById('statApproved').textContent = approved;
-        document.getElementById('statRejected').textContent = rejected;
-        document.getElementById('pendingBadge').textContent = pending;
-
-        renderShops(currentTab);
-    });
-}
-
-// ── Switch Tab ──
+// ══ SWITCH TAB ══
 function switchTab(tab) {
     currentTab = tab;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    const tabEl = document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));
+    if (tabEl) tabEl.classList.add('active');
 
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('shopSection').style.display   = ['pending','approved','rejected'].includes(tab) ? 'block' : 'none';
+    document.getElementById('noticeSection').style.display  = tab==='notice'  ? 'block' : 'none';
+    document.getElementById('sliderSection').style.display  = tab==='slider'  ? 'block' : 'none';
 
-    document.getElementById('shopSection').style.display  = tab === 'notice' ? 'none' : 'block';
-    document.getElementById('noticeSection').style.display = tab === 'notice' ? 'block' : 'none';
-
-    if (tab !== 'notice') {
-        document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
-        renderShops(tab);
-    } else {
-        document.getElementById('tabNotice').classList.add('active');
-    }
+    if (tab==='slider') loadSliderAdmin();
+    else if (tab!=='notice') renderShops(tab);
 }
 
-// ── Render Shops ──
+// ══ RENDER SHOPS ══
 function renderShops(status) {
     const list = document.getElementById('shopList');
+    const filtered = Object.entries(allShops).filter(([,s])=>s.status===status);
 
-    const filtered = Object.entries(allShops).filter(([, s]) => s.status === status);
-
-    if (filtered.length === 0) {
-        list.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">${status === 'pending' ? '⏳' : status === 'approved' ? '✅' : '❌'}</div>
-                <div class="empty-title">কোনো দোকান নেই</div>
-            </div>`;
+    if (!filtered.length) {
+        list.innerHTML=`<div class="empty-state"><div class="empty-icon">${status==='pending'?'⏳':status==='approved'?'✅':'❌'}</div><div class="empty-title">কোনো দোকান নেই</div></div>`;
         return;
     }
 
-    list.innerHTML = filtered.map(([id, shop], i) => {
-        const grad   = gradients[i % gradients.length];
-        const avatar = (shop.shopName || '?').charAt(0);
+    list.innerHTML = filtered.map(([id,shop],i) => {
+        const g = grads[i%grads.length];
+        const av = (shop.shopName||'?').charAt(0);
+        const statusLabel = shop.status==='pending'?'⏳ পেন্ডিং':shop.status==='approved'?'✅ Approved':'❌ Rejected';
 
-        const actionBtns = status === 'pending' ? `
-            <button class="action-btn btn-approve" onclick="updateStatus('${id}', 'approved')">✅ Approve</button>
-            <button class="action-btn btn-reject"  onclick="updateStatus('${id}', 'rejected')">❌ Reject</button>
-        ` : status === 'approved' ? `
-            <button class="action-btn btn-reject" onclick="updateStatus('${id}', 'rejected')">❌ Reject</button>
-            <button class="action-btn btn-delete" onclick="deleteShop('${id}', '${shop.shopName}')">🗑️ Delete</button>
-            <button class="action-btn btn-view"   onclick="viewShop('${id}')">👁️ দেখুন</button>
+        const actionBtns = status==='pending' ? `
+            <button class="ac-btn btn-approve" onclick="updateStatus('${id}','approved')">✅ Approve</button>
+            <button class="ac-btn btn-reject"  onclick="updateStatus('${id}','rejected')">❌ Reject</button>
+        ` : status==='approved' ? `
+            <button class="ac-btn btn-reject" onclick="updateStatus('${id}','rejected')">❌ Reject</button>
+            <button class="ac-btn btn-delete" onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button>
+            <button class="ac-btn btn-view"   onclick="window.open('profile.html?id=${id}','_blank')">👁️ দেখুন</button>
         ` : `
-            <button class="action-btn btn-approve" onclick="updateStatus('${id}', 'approved')">✅ Approve</button>
-            <button class="action-btn btn-delete"  onclick="deleteShop('${id}', '${shop.shopName}')">🗑️ Delete</button>
+            <button class="ac-btn btn-approve" onclick="updateStatus('${id}','approved')">✅ Approve</button>
+            <button class="ac-btn btn-delete"  onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button>
         `;
 
         return `
         <div class="admin-card">
-            <div class="admin-card-top">
-                <div class="admin-avatar" style="background:${grad}">${avatar}</div>
+            <div class="ac-top">
+                <div class="ac-avatar" style="background:${g}">${av}</div>
                 <div style="flex:1">
-                    <div class="admin-shop-name">${shop.shopName || '—'}</div>
-                    <div class="admin-shop-info">${shop.ownerName || ''}</div>
+                    <div class="ac-name">${shop.shopName||'—'}</div>
+                    <div class="ac-info">${shop.ownerName||''}</div>
                 </div>
-                <div class="status-badge ${shop.status}">
-                    ${shop.status === 'pending' ? '⏳ পেন্ডিং' : shop.status === 'approved' ? '✅ Approved' : '❌ Rejected'}
-                </div>
+                <div class="status-badge ${shop.status}">${statusLabel}</div>
             </div>
-
-            <div class="admin-info-row">
-                <span class="admin-info-icon">📍</span>
-                <span class="admin-info-val">${shop.area || ''}, ${shop.district || ''}</span>
-            </div>
-            <div class="admin-info-row">
-                <span class="admin-info-icon">📱</span>
-                <span class="admin-info-val">${shop.phone || '—'}</span>
-            </div>
-            <div class="admin-info-row">
-                <span class="admin-info-icon">✉️</span>
-                <span class="admin-info-val">${shop.email || '—'}</span>
-            </div>
-            ${shop.description ? `
-            <div class="admin-info-row">
-                <span class="admin-info-icon">📝</span>
-                <span class="admin-info-val" style="font-size:12px">${shop.description.substring(0, 60)}...</span>
-            </div>` : ''}
-
-            <div class="action-btns">${actionBtns}</div>
+            <div class="ac-row"><span class="ac-row-icon">📍</span><span class="ac-row-val">${shop.area||''}, ${shop.district||''}</span></div>
+            <div class="ac-row"><span class="ac-row-icon">📱</span><span class="ac-row-val">${shop.phone||'—'}</span></div>
+            <div class="ac-row"><span class="ac-row-icon">✉️</span><span class="ac-row-val">${shop.email||'—'}</span></div>
+            ${shop.category?`<div class="ac-row"><span class="ac-row-icon">🗂️</span><span class="ac-row-val">${shop.category}</span></div>`:''}
+            <div class="ac-actions">${actionBtns}</div>
         </div>`;
     }).join('');
 }
 
-// ── Update Status ──
+// ══ UPDATE STATUS ══
 async function updateStatus(id, status) {
     try {
-        await db.ref('shops/' + id).update({ status });
-        showToast(status === 'approved' ? '✅ Approved করা হয়েছে!' : '❌ Rejected করা হয়েছে!');
-    } catch (e) {
-        showToast('⚠️ সমস্যা হয়েছে!');
-    }
+        await db.ref('shops/'+id).update({status});
+        showToast(status==='approved'?'✅ Approved!':'❌ Rejected!');
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
 }
 
-// ── Delete Shop ──
+// ══ DELETE SHOP ══
 async function deleteShop(id, name) {
-    if (!confirm(`"${name}" দোকানটি Delete করবেন?`)) return;
+    if (!confirm(`"${name}" Delete করবেন?`)) return;
     try {
-        await db.ref('shops/' + id).remove();
-        showToast('🗑️ Delete করা হয়েছে!');
-    } catch (e) {
-        showToast('⚠️ সমস্যা হয়েছে!');
-    }
+        await db.ref('shops/'+id).remove();
+        showToast('🗑️ Delete হয়েছে!');
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
 }
 
-// ── View Shop ──
-function viewShop(id) {
-    window.open(`profile.html?id=${id}`, '_blank');
-}
-
-// ── Send Notice ──
+// ══ NOTICE ══
 async function sendNotice() {
     const msg = document.getElementById('noticeText').value.trim();
     if (!msg) { showToast('⚠️ নোটিশ লিখুন!'); return; }
-
     try {
         await db.ref('message').set(msg);
-        document.getElementById('noticeText').value = '';
+        document.getElementById('noticeText').value='';
         showToast('📢 নোটিশ পাঠানো হয়েছে!');
-    } catch (e) {
-        showToast('⚠️ সমস্যা হয়েছে!');
-    }
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
 }
 
-// ── Toast ──
+// ══ SLIDER ADMIN ══
+function loadSliderAdmin() {
+    db.ref('slider').on('value', snap => {
+        const list = document.getElementById('slideList');
+        if (!snap.exists()) {
+            list.innerHTML = '<div class="sl-empty">এখনো কোনো Slide নেই। নিচে যোগ করুন।</div>';
+            return;
+        }
+        let html = '';
+        snap.forEach(child => {
+            const s = child.val();
+            const key = child.key;
+            html += `
+            <div class="sl-item">
+                <img src="${s.image}" alt="slide"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div style="display:none;height:130px;background:linear-gradient(135deg,#6c2bd9,#a259f7);align-items:center;justify-content:center;font-size:36px;">🏪</div>
+                <div class="sl-item-info">
+                    <div class="sl-item-link">🔗 ${s.link||'কোনো লিংক নেই'}</div>
+                    <button class="sl-del-btn" onclick="deleteSlide('${key}')">🗑️ Delete</button>
+                </div>
+            </div>`;
+        });
+        list.innerHTML = html;
+    });
+}
+
+async function addSlide() {
+    const img  = document.getElementById('slideImg').value.trim();
+    const link = document.getElementById('slideLink').value.trim();
+    if (!img) { showToast('⚠️ ছবির URL দিন!'); return; }
+    try {
+        await db.ref('slider').push({image:img, link:link||''});
+        document.getElementById('slideImg').value  = '';
+        document.getElementById('slideLink').value = '';
+        showToast('✅ Slide যোগ হয়েছে!');
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+async function deleteSlide(key) {
+    if (!confirm('এই Slide Delete করবেন?')) return;
+    try {
+        await db.ref('slider/'+key).remove();
+        showToast('🗑️ Slide Delete হয়েছে!');
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+// ══ TOAST ══
 function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display='none', 3000);
 }
 </script>
-
 </body>
 </html>
