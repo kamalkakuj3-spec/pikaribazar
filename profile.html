@@ -210,7 +210,7 @@ body {
     100% { transform: translateX(-100%); }
 }
 
-/* Contact Grid */
+/* Contact Grid - শুধু Call, WhatsApp, Telegram (YouTube বাদ) */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -232,8 +232,7 @@ body {
 .contact-tile:active { transform: scale(0.96); }
 .contact-tile.call     { background: #f0ebff; color: var(--primary); }
 .contact-tile.whatsapp { background: #e8faf0; color: #25D366; }
-.contact-tile.facebook { background: #e8f0fe; color: #1877F2; }
-.contact-tile.youtube  { background: #fef0f0; color: #FF0000; }
+.contact-tile.telegram { background: #e8f0fe; color: #0088cc; }
 
 .contact-tile-icon { font-size: 24px; }
 .contact-tile-text { font-size: 13px; font-weight: 600; }
@@ -360,7 +359,7 @@ body {
             </div>
         </div>
 
-        <!-- Contacts -->
+        <!-- Contacts (Call, WhatsApp, Telegram - YouTube বাদ) -->
         <div class="contact-grid" id="contactGrid"></div>
 
     </div>
@@ -389,16 +388,24 @@ body {
             <div class="info-row">
                 <div class="info-icon">🗺️</div>
                 <div>
-                    <div class="info-label">জেলা</div>
-                    <div class="info-value" id="detailDistrict">—</div>
+                    <div class="info-label">বিভাগ</div>
+                    <div class="info-value" id="detailDivision">—</div>
                 </div>
             </div>
 
             <div class="info-row">
                 <div class="info-icon">📌</div>
                 <div>
-                    <div class="info-label">এলাকা</div>
-                    <div class="info-value" id="detailArea">—</div>
+                    <div class="info-label">জেলা</div>
+                    <div class="info-value" id="detailDistrict">—</div>
+                </div>
+            </div>
+
+            <div class="info-row" id="detailThanaRow">
+                <div class="info-icon">📍</div>
+                <div>
+                    <div class="info-label">থানা/উপজেলা</div>
+                    <div class="info-value" id="detailThana">—</div>
                 </div>
             </div>
 
@@ -474,7 +481,17 @@ async function loadShop() {
         // Cover
         document.getElementById('coverBg').style.background      = grad;
         document.getElementById('coverShopName').textContent      = shop.shopName || '';
-        document.getElementById('coverAddress').textContent       = `📍 ${shop.area || ''}, ${shop.district || ''}`;
+        
+        // ঠিকানা তৈরি (থানা থাকলে থানা দেখাবে, না থাকলে এলাকা)
+        let fullAddress = '';
+        if (shop.thana) {
+            fullAddress = `${shop.thana}, ${shop.district || ''}`;
+        } else if (shop.area) {
+            fullAddress = `${shop.area}, ${shop.district || ''}`;
+        } else {
+            fullAddress = shop.district || '';
+        }
+        document.getElementById('coverAddress').textContent = `📍 ${fullAddress}`;
 
         // Avatar
         const avatarEl = document.getElementById('profileAvatar');
@@ -484,7 +501,10 @@ async function loadShop() {
         // Info
         document.getElementById('shopNameText').textContent  = shop.shopName  || '';
         document.getElementById('ownerNameText').textContent = shop.ownerName ? `👤 ${shop.ownerName}` : '';
-        document.getElementById('addressText').textContent   = `${shop.area || ''}, ${shop.district || ''}`;
+        
+        // অ্যাড্রেস ব্যাজ (থানা থাকলে থানা, না থাকলে এলাকা)
+        const addressBadgeText = shop.thana ? `${shop.thana}, ${shop.district}` : (shop.area ? `${shop.area}, ${shop.district}` : shop.district);
+        document.getElementById('addressText').textContent   = addressBadgeText || '';
 
         // Description
         if (shop.description) {
@@ -492,30 +512,72 @@ async function loadShop() {
             document.getElementById('descriptionText').textContent    = shop.description;
         }
 
-        // Contact
-        let html = '';
-        if (shop.phone)    html += `<a href="tel:${shop.phone}" class="contact-tile call"><span class="contact-tile-icon">📞</span><span class="contact-tile-text">Call করুন</span></a>`;
-        if (shop.whatsapp) html += `<a href="https://wa.me/88${shop.whatsapp}" class="contact-tile whatsapp"><span class="contact-tile-icon">💬</span><span class="contact-tile-text">WhatsApp</span></a>`;
-        if (shop.facebook) html += `<a href="${shop.facebook}" target="_blank" class="contact-tile facebook"><span class="contact-tile-icon">👍</span><span class="contact-tile-text">Facebook</span></a>`;
-        if (shop.youtube)  html += `<a href="${shop.youtube}" target="_blank" class="contact-tile youtube"><span class="contact-tile-icon">▶</span><span class="contact-tile-text">YouTube</span></a>`;
-        document.getElementById('contactGrid').innerHTML = html;
+        // Contact Grid - Call, WhatsApp, Telegram (YouTube বাদ)
+        let contactHtml = '';
+        
+        // Call Button
+        if (shop.phone) {
+            contactHtml += `<a href="tel:${shop.phone}" class="contact-tile call">
+                <span class="contact-tile-icon">📞</span>
+                <span class="contact-tile-text">Call করুন</span>
+            </a>`;
+        }
+        
+        // WhatsApp Button (বাংলাদেশের নম্বর 88 দিয়ে)
+        if (shop.whatsapp) {
+            let waNumber = shop.whatsapp.replace(/[^0-9]/g, '');
+            if (!waNumber.startsWith('88')) {
+                waNumber = '88' + waNumber;
+            }
+            contactHtml += `<a href="https://wa.me/${waNumber}" target="_blank" class="contact-tile whatsapp">
+                <span class="contact-tile-icon">💬</span>
+                <span class="contact-tile-text">WhatsApp</span>
+            </a>`;
+        }
+        
+        // Telegram Button
+        if (shop.telegram) {
+            let tgNumber = shop.telegram.replace(/[^0-9]/g, '');
+            if (!tgNumber.startsWith('88')) {
+                tgNumber = '88' + tgNumber;
+            }
+            contactHtml += `<a href="https://t.me/+${tgNumber}" target="_blank" class="contact-tile telegram">
+                <span class="contact-tile-icon">📡</span>
+                <span class="contact-tile-text">Telegram</span>
+            </a>`;
+        }
+        
+        document.getElementById('contactGrid').innerHTML = contactHtml;
 
         // Details
-        document.getElementById('detailShopName').textContent  = shop.shopName  || '—';
-        document.getElementById('detailOwnerName').textContent = shop.ownerName || '—';
-        document.getElementById('detailDistrict').textContent  = shop.district  || '—';
-        document.getElementById('detailArea').textContent      = shop.area      || '—';
-        document.getElementById('detailPhone').textContent     = shop.phone     || '—';
-
+        document.getElementById('detailShopName').textContent   = shop.shopName   || '—';
+        document.getElementById('detailOwnerName').textContent  = shop.ownerName  || '—';
+        document.getElementById('detailDivision').textContent   = shop.division   || '—';
+        document.getElementById('detailDistrict').textContent   = shop.district   || '—';
+        document.getElementById('detailPhone').textContent      = shop.phone      || '—';
+        
+        // থানা দেখানো
+        if (shop.thana) {
+            document.getElementById('detailThanaRow').style.display = 'flex';
+            document.getElementById('detailThana').textContent = shop.thana;
+        } else if (shop.area) {
+            document.getElementById('detailThanaRow').style.display = 'flex';
+            document.getElementById('detailThana').textContent = shop.area;
+        } else {
+            document.getElementById('detailThanaRow').style.display = 'none';
+        }
+        
+        // পূর্ণ ঠিকানা
         if (shop.address) {
             document.getElementById('detailAddressRow').style.display = 'flex';
-            document.getElementById('detailAddress').textContent      = shop.address;
+            document.getElementById('detailAddress').textContent = shop.address;
         }
 
         document.title = `${shop.shopName} — পাইকারি বাজার`;
         document.getElementById('mainContent').style.display = 'block';
 
     } catch (e) {
+        console.error('Error loading shop:', e);
         showNotFound();
     }
 }
