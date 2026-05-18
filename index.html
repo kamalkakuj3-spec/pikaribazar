@@ -614,10 +614,18 @@ function applyFilters() {
 }
 
 function loadShops() {
-    db.ref('shops').orderByChild('status').equalTo('approved').on('value', snap => {
+    db.ref('shops').on('value', snap => {
         document.getElementById('skeleton').style.display='none';
         allShops=[];
-        if (snap.exists()) snap.forEach(c=>allShops.push({id:c.key,...c.val()}));
+        if (snap.exists()) {
+            snap.forEach(c => {
+                const shop = c.val();
+                // শুধু approved দোকান দেখাবে
+                if (shop.status === 'approved') {
+                    allShops.push({id:c.key,...shop});
+                }
+            });
+        }
         applyFilters();
     });
 }
