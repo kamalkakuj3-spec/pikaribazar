@@ -146,41 +146,94 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* SHOP SECTION */
-.section { padding:0 16px; margin-bottom:12px; }
-.sec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.sec-title { font-size:15px; font-weight:700; color:var(--text); }
-.sec-count { font-size:12px; color:var(--primary); font-weight:500; }
+/* SHOP VIDEO SECTION */
+.shop-section {
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+.section-title {
+    display: none;
+}
 
-/* SHOP CARD */
-.shop-card { background:white; border-radius:14px; overflow:hidden; box-shadow:var(--shadow); margin-bottom:10px; cursor:pointer; transition:transform 0.2s; border:1.5px solid rgba(108,43,217,0.06); }
-.shop-card:active { transform:scale(0.98); }
-.card-banner { height:70px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
-.card-banner-text { font-size:18px; font-weight:900; letter-spacing:2px; background:linear-gradient(90deg,#fff8dc,#fff,#fff8dc); background-size:200%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shimmer 3s linear infinite; padding:0 14px; text-align:center; }
-@keyframes shimmer { 0%{background-position:200%} 100%{background-position:-100%} }
-.card-avatar { width:44px; height:44px; border-radius:12px; border:3px solid white; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:white; margin:-22px 0 0 12px; position:relative; z-index:2; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
-.card-info { padding:6px 12px 12px; }
-.card-name    { font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px; }
-.card-address { font-size:11px; color:var(--text-light); margin-bottom:6px; }
-.card-btns  { display:flex; gap:5px; flex-wrap:wrap; }
-.c-btn { padding:4px 8px; border-radius:99px; font-size:10px; font-weight:600; border:none; cursor:pointer; font-family:'Hind Siliguri',sans-serif; text-decoration:none; display:inline-flex; align-items:center; gap:3px; }
-.c-call { background:#f0ebff; color:var(--primary); }
-.c-wa   { background:#e8faf0; color:#25D366; }
-.c-fb   { background:#e8f0fe; color:#1877F2; }
-.c-yt   { background:#fef0f0; color:#FF0000; }
+.shop-video-card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    animation: tileIn 0.4s ease both;
+}
+
+@keyframes tileIn {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.shop-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    background: #000;
+}
+
+.no-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+}
+
+.shop-video-info {
+    padding: 14px;
+}
+
+.shop-video-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.shop-video-name:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.shop-video-desc {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.shop-video-address {
+    font-size: 12px;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
 
 /* SKELETON */
-.skel-card { background:white; border-radius:14px; padding:12px; margin-bottom:10px; box-shadow:var(--shadow); }
-.skel { background:linear-gradient(90deg,#f0ebff 25%,#e8e0ff 50%,#f0ebff 75%); background-size:200% 100%; animation:skelAnim 1.5s infinite; border-radius:8px; }
+.skel-card { background:white; border-radius:18px; padding:12px; margin-bottom:20px; box-shadow:var(--shadow); }
+.skel { background:linear-gradient(90deg,#f0ebff 25%,#e8e0ff 50%,#f0ebff 75%); background-size:200% 100%; animation:skelAnim 1.5s infinite; border-radius:12px; }
 @keyframes skelAnim { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skel-video { height:200px; border-radius:16px; margin-bottom:12px; }
 
 /* EMPTY */
-.empty { text-align:center; padding:35px 20px; color:var(--text-light); }
-.empty-icon  { font-size:42px; margin-bottom:10px; }
-.empty-title { font-size:15px; font-weight:600; color:var(--text); margin-bottom:5px; }
-.empty-sub   { font-size:12px; }
+.empty { text-align:center; padding:50px 20px; color:var(--text-light); }
+.empty-icon  { font-size:50px; margin-bottom:12px; }
+.empty-title { font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px; }
+.empty-sub   { font-size:13px; }
 
-/* ========== নতুন Bottom Navigation স্টাইল (গোলাকার + ব্লার) ========== */
+/* BOTTOM NAV */
 .bottom-nav {
     position: fixed;
     bottom: 12px;
@@ -229,7 +282,6 @@ marquee {
 </head>
 <body>
 
-<!-- NO INTERNET -->
 <div id="noInternet">
     <div class="ni-icon">📵</div>
     <div class="ni-title">ইন্টারনেট নেই!</div>
@@ -237,7 +289,6 @@ marquee {
     <button class="ni-btn" onclick="checkNet()">🔄 আবার চেষ্টা করুন</button>
 </div>
 
-<!-- SPLASH -->
 <div id="splash">
     <div class="sp-logo">🏪</div>
     <div class="sp-title">পাইকারি বাজার</div>
@@ -245,17 +296,14 @@ marquee {
     <div class="sp-bar-wrap"><div class="sp-bar"></div></div>
 </div>
 
-<!-- APP -->
 <div id="app">
 
-    <!-- সার্চ বার -->
     <div class="search-section" id="searchSection">
         <div class="search-wrap">
             <input class="search-input" type="text" id="searchInput" placeholder="দোকানের নাম বা এলাকা খুঁজুন..." oninput="applyFilters()">
         </div>
     </div>
 
-    <!-- IMAGE SLIDER -->
     <div class="slider-section" id="sliderSection" style="display:none">
         <div class="slider-box">
             <div class="slider-track" id="sliderTrack"></div>
@@ -265,10 +313,8 @@ marquee {
         </div>
     </div>
 
-    <!-- MARQUEE SECTION -->
     <div id="marqueeSection"></div>
 
-    <!-- BANNER -->
     <a href="register.html" class="add-banner">
         <div class="ab-icon">🏪</div>
         <div>
@@ -278,7 +324,6 @@ marquee {
         <div class="ab-arrow">→</div>
     </a>
 
-    <!-- FILTERS -->
     <div class="filter-wrap">
         <button class="reset-btn" id="resetBtn" onclick="resetFilters()">🔄 ফিল্টার রিসেট করুন</button>
 
@@ -345,43 +390,22 @@ marquee {
         </div>
     </div>
 
-    <!-- SHOP LIST -->
-    <div class="section">
-        <div class="sec-header">
-            <div class="sec-title">🏪 দোকানের তালিকা</div>
-            <div class="sec-count" id="shopCount"></div>
-        </div>
+    <div class="shop-section">
         <div id="skeleton">
-            <div class="skel-card"><div class="skel" style="height:70px;border-radius:8px;margin-bottom:10px"></div><div class="skel" style="height:12px;width:55%;margin-bottom:6px"></div><div class="skel" style="height:10px;width:40%"></div></div>
-            <div class="skel-card"><div class="skel" style="height:70px;border-radius:8px;margin-bottom:10px"></div><div class="skel" style="height:12px;width:65%;margin-bottom:6px"></div><div class="skel" style="height:10px;width:45%"></div></div>
+            <div class="skel-card"><div class="skel skel-video"></div></div>
+            <div class="skel-card"><div class="skel skel-video"></div></div>
         </div>
         <div id="shopList"></div>
     </div>
 
 </div>
 
-<!-- নতুন Bottom Navigation (গোলাকার + ব্লার) -->
 <div class="bottom-nav">
-    <button class="nav-item active" onclick="navigateTo('home')">
-        <span class="icon">🏠</span>
-        হোম
-    </button>
-    <button class="nav-item" onclick="navigateTo('category')">
-        <span class="icon">📂</span>
-        ক্যাটাগরি
-    </button>
-    <button class="nav-item" onclick="navigateTo('searchFocus')">
-        <span class="icon">🔍</span>
-        খুঁজুন
-    </button>
-    <button class="nav-item" onclick="navigateTo('shop')">
-        <span class="icon">🏪</span>
-        দোকান
-    </button>
-    <button class="nav-item" onclick="navigateTo('profile')">
-        <span class="icon">👤</span>
-        প্রোফাইল
-    </button>
+    <button class="nav-item active" onclick="navigateTo('home')"><span class="icon">🏠</span>হোম</button>
+    <button class="nav-item" onclick="navigateTo('category')"><span class="icon">📂</span>ক্যাটাগরি</button>
+    <button class="nav-item" onclick="navigateTo('searchFocus')"><span class="icon">🔍</span>খুঁজুন</button>
+    <button class="nav-item" onclick="navigateTo('shop')"><span class="icon">🏪</span>দোকান</button>
+    <button class="nav-item" onclick="navigateTo('profile')"><span class="icon">👤</span>প্রোফাইল</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -397,60 +421,55 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const db   = firebase.database();
 
-// ========== নেভিগেশন ফাংশন ==========
 function navigateTo(page) {
-    // সক্রিয় নেভিগেশন পরিবর্তন
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     event.currentTarget.classList.add('active');
-    
-    // পেজ অনুযায়ী রিডাইরেক্ট বা অ্যাকশন
     switch(page) {
-        case 'home':
-            window.location.href = 'index.html';
-            break;
-        case 'category':
-            window.location.href = 'categories.html';
-            break;
+        case 'home': window.location.href = 'index.html'; break;
         case 'searchFocus':
-            // সার্চ বারে ফোকাস করা
-            const searchInput = document.getElementById('searchInput');
-            const searchSection = document.getElementById('searchSection');
-            if (searchInput) {
-                searchInput.focus();
-                if (searchSection) searchSection.classList.remove('hide');
-                setTimeout(() => {
-                    searchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-            }
+            document.getElementById('searchInput').focus();
+            document.getElementById('searchSection').classList.remove('hide');
+            setTimeout(() => document.getElementById('searchSection').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
             break;
-        case 'shop':
-            window.location.href = 'register.html';
-            break;
-        case 'profile':
-            window.location.href = 'login.html';
-            break;
-        default:
-            console.log('Navigate to:', page);
+        case 'shop': window.location.href = 'register.html'; break;
+        case 'profile': window.location.href = 'login.html'; break;
+        default: console.log('Navigate to:', page);
     }
 }
 
-// ========== স্ক্রোল কন্ট্রোল ==========
+function getYouTubeId(url) {
+    if (!url) return null;
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=)([^&]+)/,
+        /(?:youtu\.be\/)([^?]+)/,
+        /(?:youtube\.com\/embed\/)([^?]+)/
+    ];
+    for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) return match[1];
+    }
+    return null;
+}
+
+// viewShop ফাংশন - এটাই প্রোফাইলে নিয়ে যাবে
+function viewShop(shopId) {
+    if (shopId) {
+        window.location.href = `profile.html?id=${shopId}`;
+    } else {
+        console.error('Shop ID is missing');
+        alert('দোকানের আইডি পাওয়া যায়নি!');
+    }
+}
+
 let lastScrollTop = 0;
 const searchSection = document.getElementById('searchSection');
-
 window.addEventListener('scroll', function() {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > lastScrollTop && scrollTop > 80) {
-        searchSection.classList.add('hide');
-    } else {
-        searchSection.classList.remove('hide');
-    }
+    if (scrollTop > lastScrollTop && scrollTop > 80) searchSection.classList.add('hide');
+    else searchSection.classList.remove('hide');
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 
-// ========== MARQUEE ==========
 function loadMarquee() {
     db.ref('marquee').on('value', snap => {
         const container = document.getElementById('marqueeSection');
@@ -467,21 +486,17 @@ function loadMarquee() {
     });
 }
 
-// ========== SLIDER ==========
 let curSlide = 0, slTimer = null, slData = [];
-
 function loadSlider() {
     db.ref('slider').on('value', snap => {
         slData = [];
-        if (snap.exists()) {
-            snap.forEach(c => { if (c.val().image) slData.push(c.val()); });
-        }
+        if (snap.exists()) snap.forEach(c => { if (c.val().image) slData.push(c.val()); });
         const sec = document.getElementById('sliderSection');
         if (slData.length === 0) { sec.style.display = 'none'; return; }
         sec.style.display = 'block';
         const track = document.getElementById('sliderTrack');
-        const dots  = document.getElementById('sliderDots');
-        track.innerHTML = slData.map((s,i) => `<div class="slide-item" onclick="${s.link?`window.open('${s.link}','_blank')`:''}"><img src="${s.image}" onerror="this.outerHTML='<div class=slide-placeholder>🏪</div>'"></div>`).join('');
+        const dots = document.getElementById('sliderDots');
+        track.innerHTML = slData.map(s => `<div class="slide-item" onclick="${s.link?`window.open('${s.link}','_blank')`:''}"><img src="${s.image}" onerror="this.outerHTML='<div class=slide-placeholder>🏪</div>'"></div>`).join('');
         dots.innerHTML = slData.map((_,i) => `<div class="sl-dot${i===0?' active':''}" id="d${i}" onclick="goSlide(${i})"></div>`).join('');
         goSlide(0);
         if (slData.length > 1) {
@@ -490,32 +505,22 @@ function loadSlider() {
         }
     });
 }
-
 function goSlide(n) {
     curSlide = (n + slData.length) % slData.length;
     const track = document.getElementById('sliderTrack');
     if (track) track.style.transform = `translateX(-${curSlide*100}%)`;
-    slData.forEach((_,i) => {
-        const d = document.getElementById('d'+i);
-        if (d) { d.className = 'sl-dot' + (i===curSlide?' active':''); }
-    });
+    slData.forEach((_,i) => { const d = document.getElementById('d'+i); if (d) d.className = 'sl-dot' + (i===curSlide?' active':''); });
 }
-
 function prevSlide() { clearInterval(slTimer); goSlide(curSlide-1); slTimer=setInterval(()=>goSlide((curSlide+1)%slData.length),3500); }
 function nextSlide() { clearInterval(slTimer); goSlide(curSlide+1); slTimer=setInterval(()=>goSlide((curSlide+1)%slData.length),3500); }
 
-// ========== AUTH ==========
 auth.onAuthStateChanged(u => {
     if (u) {
-        // লগইন থাকলে প্রোফাইল বাটন dashboard এ নিয়ে যাবে
         const profileBtn = document.querySelector('.nav-item:last-child');
-        if (profileBtn) {
-            profileBtn.onclick = () => window.location.href = 'dashboard.html';
-        }
+        if (profileBtn) profileBtn.onclick = () => window.location.href = 'dashboard.html';
     }
 });
 
-// ========== INTERNET ==========
 function checkNet() {
     if (navigator.onLine) {
         document.getElementById('noInternet').style.display = 'none';
@@ -528,9 +533,8 @@ function checkNet() {
 }
 window.addEventListener('load', checkNet);
 window.addEventListener('offline', () => document.getElementById('noInternet').style.display='flex');
-window.addEventListener('online',  () => { document.getElementById('noInternet').style.display='none'; loadMarquee(); loadSlider(); loadShops(); });
+window.addEventListener('online', () => { document.getElementById('noInternet').style.display='none'; loadMarquee(); loadSlider(); loadShops(); });
 
-// ========== DIVISION MAP ==========
 const divMap = {
     'ঢাকা':['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
     'চট্টগ্রাম':['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
@@ -605,9 +609,9 @@ function resetFilters() {
 
 function applyFilters() {
     let list = allShops;
-    if (selDiv)  list = list.filter(s=>divMap[selDiv]?.includes(s.district));
+    if (selDiv) list = list.filter(s=>divMap[selDiv]?.includes(s.district));
     if (selDist) list = list.filter(s=>s.district===selDist);
-    if (selCat)  list = list.filter(s=>s.category===selCat);
+    if (selCat) list = list.filter(s=>s.category===selCat);
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
     if (q) list = list.filter(s=>(s.shopName||'').toLowerCase().includes(q)||(s.area||'').toLowerCase().includes(q)||(s.district||'').toLowerCase().includes(q));
     renderShops(list);
@@ -616,13 +620,12 @@ function applyFilters() {
 function loadShops() {
     db.ref('shops').on('value', snap => {
         document.getElementById('skeleton').style.display='none';
-        allShops=[];
+        allShops = [];
         if (snap.exists()) {
             snap.forEach(c => {
                 const shop = c.val();
-                // শুধু approved দোকান দেখাবে
                 if (shop.status === 'approved') {
-                    allShops.push({id:c.key,...shop});
+                    allShops.push({ id: c.key, ...shop });
                 }
             });
         }
@@ -630,16 +633,38 @@ function loadShops() {
     });
 }
 
-const grads=['linear-gradient(135deg,#6c2bd9,#a259f7)','linear-gradient(135deg,#0f3460,#16213e)','linear-gradient(135deg,#1a6b3c,#2ecc71)','linear-gradient(135deg,#e74c3c,#c0392b)','linear-gradient(135deg,#f39c12,#e67e22)','linear-gradient(135deg,#1abc9c,#16a085)','linear-gradient(135deg,#2980b9,#1a5276)'];
-
 function renderShops(shops) {
-    document.getElementById('shopCount').textContent=shops.length+'টি দোকান';
-    if (!shops.length) { document.getElementById('shopList').innerHTML=`<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার চেষ্টা করুন</div></div>`; return; }
-    document.getElementById('shopList').innerHTML = shops.map((s,i)=>{
-        const g=grads[i%grads.length], av=(s.shopName||'?').charAt(0);
-        return `<div class="shop-card" onclick="location.href='profile.html?id=${s.id}'"><div class="card-banner" style="background:${g}"><span class="card-banner-text">${s.shopName||''}</span></div><div class="card-avatar" style="background:${g}">${av}</div><div class="card-info"><div class="card-name">${s.shopName||''}</div><div class="card-address">📍 ${s.area||''}, ${s.district||''}</div><div class="card-btns">${s.phone?`<a href="tel:${s.phone}" class="c-btn c-call" onclick="event.stopPropagation()">📞 Call</a>`:''}${s.whatsapp?`<a href="https://wa.me/88${s.whatsapp}" class="c-btn c-wa" onclick="event.stopPropagation()">💬 WhatsApp</a>`:''}${s.facebook?`<a href="${s.facebook}" target="_blank" class="c-btn c-fb" onclick="event.stopPropagation()">👍 Facebook</a>`:''}${s.youtube?`<a href="${s.youtube}" target="_blank" class="c-btn c-yt" onclick="event.stopPropagation()">▶ YouTube</a>`:''}</div></div></div>`;
+    const list = document.getElementById('shopList');
+    if (shops.length === 0) {
+        list.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার চেষ্টা করুন</div></div>`;
+        return;
+    }
+    list.innerHTML = shops.map(shop => {
+        const youtubeId = getYouTubeId(shop.youtube);
+        const videoEmbed = youtubeId 
+            ? `<iframe class="shop-video" src="https://www.youtube.com/embed/${youtubeId}" frameborder="0" allowfullscreen></iframe>`
+            : `<div class="no-video">🎬 কোন ভিডিও নেই</div>`;
+        const description = shop.description || shop.category || 'পাইকারি দোকান';
+        return `
+        <div class="shop-video-card">
+            ${videoEmbed}
+            <div class="shop-video-info">
+                <h3 class="shop-video-name" onclick="viewShop('${shop.id}')">${shop.shopName || 'নাম নেই'}</h3>
+                <p class="shop-video-desc">${description}</p>
+                <p class="shop-video-address">📍 ${shop.area || ''}, ${shop.district || ''}</p>
+            </div>
+        </div>`;
     }).join('');
 }
+
+// viewShop ফাংশন - ডিফিনেশন (উপরে দেওয়া আছে, নিশ্চিত করার জন্য)
+window.viewShop = function(shopId) {
+    if (shopId) {
+        window.location.href = `profile.html?id=${shopId}`;
+    } else {
+        alert('দোকানের আইডি পাওয়া যায়নি!');
+    }
+};
 </script>
 </body>
 </html>
