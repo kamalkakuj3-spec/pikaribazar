@@ -245,6 +245,7 @@ body {
 }
 .google-icon {
     font-size: 20px;
+    font-weight: 700;
 }
 
 /* ── ERROR/SUCCESS MSG ── */
@@ -455,6 +456,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.database();
 
 // ── Google Provider ──
 const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -466,18 +468,18 @@ auth.onAuthStateChanged(user => {
     }
 });
 
-// ── Google Sign In ──
+// ── Google Sign In (প্রোফাইল চেক সহ) ──
 async function googleSignIn() {
     const btn = document.querySelector('.google-btn');
-    btn.innerHTML = '<div class="spinner" style="display:block; width:20px; height:20px;"></div> Loading...';
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<div class="spinner" style="display:block; width:20px; height:20px; margin:0 auto;"></div>';
     btn.disabled = true;
     
     try {
         const result = await auth.signInWithPopup(googleProvider);
         const user = result.user;
         
-        // Check if shop exists for this user
-        const db = firebase.database();
+        // চেক করুন এই ইউজারের দোকান আছে কিনা
         const shopSnap = await db.ref('shops/' + user.uid).get();
         
         if (!shopSnap.exists()) {
@@ -487,13 +489,14 @@ async function googleSignIn() {
                 window.location.href = 'register.html';
             }, 1500);
         } else {
+            // পুরানো ইউজার, হোম পেজে পাঠান
             showSuccess('Google লগিন সফল! হোম পেজে যাচ্ছেন...');
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1500);
         }
     } catch (error) {
-        btn.innerHTML = '<span class="google-icon">G</span> Continue with Google';
+        btn.innerHTML = originalHtml;
         btn.disabled = false;
         showError('Google লগিন ব্যর্থ: ' + error.message);
     }
@@ -531,11 +534,23 @@ async function loginShop() {
     btn.classList.add('loading');
 
     try {
-        await auth.signInWithEmailAndPassword(email, password);
-        showSuccess('লগিন সফল! হোম পেজে যাচ্ছেন...');
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1500);
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // চেক করুন এই ইউজারের দোকান আছে কিনা
+        const shopSnap = await db.ref('shops/' + user.uid).get();
+        
+        if (!shopSnap.exists()) {
+            showSuccess('লগিন সফল! এখন আপনার দোকান নিবন্ধন করুন...');
+            setTimeout(() => {
+                window.location.href = 'register.html';
+            }, 1500);
+        } else {
+            showSuccess('লগিন সফল! হোম পেজে যাচ্ছেন...');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
     } catch (error) {
         btn.classList.remove('loading');
         if (error.code === 'auth/user-not-found') {
