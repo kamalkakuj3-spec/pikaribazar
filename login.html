@@ -479,17 +479,27 @@ async function googleSignIn() {
         const result = await auth.signInWithPopup(googleProvider);
         const user = result.user;
         
-        // চেক করুন এই ইউজারের দোকান আছে কিনা
+        // চেক করুন এই ইউজারের দোকান সম্পূর্ণ প্রোফাইল আছে কিনা
         const shopSnap = await db.ref('shops/' + user.uid).get();
+        const shopData = shopSnap.val();
         
-        if (!shopSnap.exists()) {
-            // নতুন ইউজার, রেজিস্ট্রেশন পেজে পাঠান
-            showSuccess('Google লগিন সফল! এখন আপনার দোকান নিবন্ধন করুন...');
+        // প্রোফাইল সম্পূর্ণ কিনা চেক করুন (shopName, district, phone ইত্যাদি আছে কিনা)
+        const hasCompleteProfile = shopData && 
+                                   shopData.shopName && 
+                                   shopData.shopName.trim() !== '' &&
+                                   shopData.district && 
+                                   shopData.district.trim() !== '' &&
+                                   shopData.phone && 
+                                   shopData.phone.trim() !== '';
+        
+        if (!shopSnap.exists() || !hasCompleteProfile) {
+            // প্রোফাইল না থাকলে বা অসম্পূর্ণ থাকলে রেজিস্ট্রেশন পেজে পাঠান
+            showSuccess('Google লগিন সফল! এখন আপনার দোকানের তথ্য দিন...');
             setTimeout(() => {
                 window.location.href = 'register.html';
             }, 1500);
         } else {
-            // পুরানো ইউজার, হোম পেজে পাঠান
+            // সম্পূর্ণ প্রোফাইল থাকলে হোম পেজে পাঠান
             showSuccess('Google লগিন সফল! হোম পেজে যাচ্ছেন...');
             setTimeout(() => {
                 window.location.href = 'index.html';
@@ -522,7 +532,7 @@ function showSuccess(msg) {
     box.classList.add('show');
 }
 
-// ── Email Login ──
+// ── Email Login (প্রোফাইল চেক সহ) ──
 async function loginShop() {
     const email    = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
@@ -537,11 +547,20 @@ async function loginShop() {
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
         const user = userCredential.user;
         
-        // চেক করুন এই ইউজারের দোকান আছে কিনা
+        // চেক করুন এই ইউজারের দোকান সম্পূর্ণ প্রোফাইল আছে কিনা
         const shopSnap = await db.ref('shops/' + user.uid).get();
+        const shopData = shopSnap.val();
         
-        if (!shopSnap.exists()) {
-            showSuccess('লগিন সফল! এখন আপনার দোকান নিবন্ধন করুন...');
+        const hasCompleteProfile = shopData && 
+                                   shopData.shopName && 
+                                   shopData.shopName.trim() !== '' &&
+                                   shopData.district && 
+                                   shopData.district.trim() !== '' &&
+                                   shopData.phone && 
+                                   shopData.phone.trim() !== '';
+        
+        if (!shopSnap.exists() || !hasCompleteProfile) {
+            showSuccess('লগিন সফল! এখন আপনার দোকানের তথ্য দিন...');
             setTimeout(() => {
                 window.location.href = 'register.html';
             }, 1500);
