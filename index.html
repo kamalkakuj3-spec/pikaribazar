@@ -343,7 +343,7 @@ marquee {
     transform: translateX(5px);
 }
 
-/* BOTTOM NAV - উপরে-নিচে অর্ধেক */
+/* BOTTOM NAV */
 .bottom-nav {
     position: fixed;
     bottom: 8px;
@@ -532,7 +532,7 @@ marquee {
     </div>
 </div>
 
-<!-- নতুন নেভিগেশন বার -->
+<!-- নেভিগেশন বার -->
 <div class="bottom-nav">
     <div class="nav-item" onclick="navigateTo('favorite')">
         <span class="nav-icon">❤️</span>
@@ -569,6 +569,21 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const db   = firebase.database();
 
+// ========== লগইন চেক (পেজ লোড হলে) ==========
+auth.onAuthStateChanged(user => {
+    if (!user) {
+        // লগইন না থাকলে লগইন পেজে রিডাইরেক্ট
+        window.location.href = 'login.html';
+    } else {
+        // লগইন থাকলে কন্টেন্ট লোড করুন
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        loadNotice();
+        loadSlider();
+        loadShops();
+    }
+});
+
 // ========== নেভিগেশন ফাংশন ==========
 function navigateTo(page) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -583,7 +598,7 @@ function navigateTo(page) {
             setTimeout(() => document.getElementById('searchSection').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
             break;
         case 'profile':
-            window.location.href = 'login.html';
+            window.location.href = 'dashboard.html';
             break;
         case 'help':
             window.location.href = 'help.html';
@@ -614,14 +629,12 @@ function selectCategoryFromPopup(cat) {
     selectedDivision = '';
     selectedDistrict = '';
     selectedThana = '';
-    // ফিল্টার স্টেপ রিসেট
     document.getElementById('step2').classList.add('hidden');
     document.getElementById('step3').classList.add('hidden');
     document.getElementById('step4').classList.add('hidden');
     document.getElementById('resetBtn').style.display = 'block';
     document.getElementById('sel4').textContent = `✅ ${cat}`;
     document.getElementById('num4').className = 'fs-num done';
-    // ক্যাটাগরি চিপস আপডেট
     document.querySelectorAll('#step4 .f-chip').forEach(c => {
         c.classList.toggle('active', c.textContent.includes(cat));
     });
@@ -652,7 +665,7 @@ function viewShop(shopId) {
     else alert('দোকানের আইডি পাওয়া যায়নি!');
 }
 
-// ========== ফেভারিট ফাংশন (ইউজার ভিত্তিক) ==========
+// ========== ফেভারিট ফাংশন ==========
 function toggleFavorite(shopId, event) {
     event.stopPropagation();
     const user = auth.currentUser;
@@ -685,12 +698,7 @@ function setRating(shopId, rating, event) {
         rating: rating,
         updatedAt: Date.now()
     });
-    // লোকালি আপডেট
-    const shopIndex = allShops.findIndex(s => s.id === shopId);
-    if (shopIndex !== -1) {
-        // ইউজারের রেটিং ক্যালকুলেশন (গড়)
-        calculateAverageRating(shopId);
-    }
+    calculateAverageRating(shopId);
 }
 
 function calculateAverageRating(shopId) {
@@ -792,31 +800,17 @@ function goSlide(n) {
 function prevSlide() { clearInterval(slTimer); goSlide(curSlide-1); slTimer=setInterval(()=>goSlide((curSlide+1)%slData.length),3500); }
 function nextSlide() { clearInterval(slTimer); goSlide(curSlide+1); slTimer=setInterval(()=>goSlide((curSlide+1)%slData.length),3500); }
 
-// ========== AUTH ==========
-auth.onAuthStateChanged(u => {
-    if (u) {
-        // প্রোফাইল বাটন ড্যাশবোর্ডে নিয়ে যাবে
-        const profileBtn = document.querySelector('.nav-item:nth-child(4)');
-        if (profileBtn) {
-            profileBtn.onclick = () => window.location.href = 'dashboard.html';
-        }
-    }
-});
-
 // ========== INTERNET ==========
 function checkNet() {
     if (navigator.onLine) {
         document.getElementById('noInternet').style.display = 'none';
-        loadNotice();
-        loadSlider();
-        loadShops();
     } else {
         document.getElementById('noInternet').style.display = 'flex';
     }
 }
 window.addEventListener('load', checkNet);
 window.addEventListener('offline', () => document.getElementById('noInternet').style.display='flex');
-window.addEventListener('online', () => { document.getElementById('noInternet').style.display='none'; loadNotice(); loadSlider(); loadShops(); });
+window.addEventListener('online', () => { document.getElementById('noInternet').style.display='none'; });
 
 // ========== থানা ও জেলার ডাটাবেস ==========
 const thanaMap = {
