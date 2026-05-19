@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>সাহায্য - পাইকারি বাজার</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #6c2bd9;
+    --primary-dark: #4a1a9e;
+    --primary-light: #a259f7;
+    --accent: #f0c040;
+    --bg: #f5f3ff;
+    --text: #1a1a2e;
+    --text-light: #666;
+    --shadow: 0 4px 20px rgba(108,43,217,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 20px;
+    padding-bottom: 80px;
+}
+.help-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.help-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.help-header .icon {
+    font-size: 60px;
+    margin-bottom: 16px;
+}
+.help-header h1 {
+    font-size: 28px;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+.help-header p {
+    color: var(--text-light);
+    font-size: 14px;
+}
+.help-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+}
+.help-card h3 {
+    font-size: 18px;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.help-card p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+.help-card .contact-info {
+    background: #f0ebff;
+    padding: 12px;
+    border-radius: 16px;
+    margin-top: 12px;
+}
+.contact-info .item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.contact-info .item:last-child {
+    margin-bottom: 0;
+}
+.contact-info .item .emoji {
+    font-size: 18px;
+}
+.contact-info .item a {
+    color: var(--primary);
+    text-decoration: none;
+}
+.back-home {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+.faq-item {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+}
+.faq-question {
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.faq-answer {
+    display: none;
+    padding-top: 8px;
+    color: var(--text-light);
+    font-size: 13px;
+    line-height: 1.5;
+}
+.faq-item.open .faq-answer {
+    display: block;
+}
+</style>
+</head>
+<body>
+
+<div class="help-container">
+    <div class="help-header">
+        <div class="icon">❓</div>
+        <h1>সাহায্য সহায়তা</h1>
+        <p>আপনার যেকোনো প্রশ্নের উত্তর পেতে সাহায্য করুন</p>
+    </div>
+
+    <div class="help-card">
+        <h3>📞 যোগাযোগ করুন</h3>
+        <p>আমরা ২৪/৭ ঘন্টা আপনার জন্য উন্মুক্ত। যেকোনো সমস্যায় আমাদের সাথে যোগাযোগ করুন।</p>
+        <div class="contact-info">
+            <div class="item"><span class="emoji">📞</span> <span>হটলাইন: ০১৯XXXXXXXX</span></div>
+            <div class="item"><span class="emoji">✉️</span> <span>ইমেইল: <a href="mailto:support@paikaribazar.com">support@paikaribazar.com</a></span></div>
+            <div class="item"><span class="emoji">💬</span> <span>হোয়াটসঅ্যাপ: ০১৯XXXXXXXX</span></div>
+        </div>
+    </div>
+
+    <div class="help-card">
+        <h3>📌 প্রায়শই জিজ্ঞাসিত প্রশ্ন</h3>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🔹 কিভাবে একটি দোকান রেজিস্ট্রেশন করব?</span>
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                হোমপেজের "আপনার দোকান যোগ করুন" বাটনে ক্লিক করুন। এরপর প্রয়োজনীয় তথ্য পূরণ করে সাবমিট করুন। আমাদের টিম যাচাই করে অনুমোদন করবে।
+            </div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🔹 দোকানের তথ্য কিভাবে এডিট করব?</span>
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                লগইন করার পর ড্যাশবোর্ডে গিয়ে আপনার দোকানের প্রোফাইলে এডিট অপশন পাবেন।
+            </div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🔹 ভিডিও কিভাবে যোগ করব?</span>
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                দোকান রেজিস্ট্রেশনের সময় YouTube ভিডিও লিংক প্রদান করতে পারেন। শুধু ভিডিও আইডি বা সম্পূর্ণ লিংক দিন।
+            </div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🔹 পাসওয়ার্ড ভুলে গেলে কিভাবে রিসেট করব?</span>
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                লগইন পেজে "পাসওয়ার্ড ভুলে গেছেন?" লিংকে ক্লিক করুন। ইমেইল এড্রেস দিলে রিসেট লিংক পাঠানো হবে।
+            </div>
+        </div>
+    </div>
+
+    <div class="help-card">
+        <h3>📍 অফিসের ঠিকানা</h3>
+        <p>ঢাকা, বাংলাদেশ</p>
+        <p style="font-size: 12px; color: #999;">সোম-শুক্র: সকাল ১০টা - সন্ধ্যা ৭টা</p>
+    </div>
+
+    <a href="index.html" class="back-home">← হোমপেজে ফিরুন</a>
+</div>
+
+<script>
+function toggleFaq(element) {
+    element.classList.toggle('open');
+}
+
+// FAQ আইটেম সিলেক্ট করে নেওয়া
+document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+        // প্রশ্নের এলাকায় ক্লিক করলেই কাজ করবে, বাটনসহ সব জায়গায়
+        this.classList.toggle('open');
+    });
+});
+</script>
+
+</body>
+</html>
