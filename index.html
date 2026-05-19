@@ -22,7 +22,7 @@ body {
     background:var(--bg); 
     min-height:100vh; 
     overflow-x:hidden;
-    padding-bottom: 65px;
+    padding-bottom: 80px;
 }
 
 /* NO INTERNET */
@@ -46,7 +46,7 @@ body {
 @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
 
 /* APP */
-#app { display:none; animation:appShow 0.3s ease 2.5s forwards; background:var(--bg); }
+#app { opacity:0; animation:appShow 0.3s ease 2.5s forwards; background:var(--bg); }
 @keyframes appShow { to{opacity:1} }
 
 /* ========== সার্চ বার ========== */
@@ -80,7 +80,7 @@ body {
 }
 .search-input::placeholder { color: #aaa; }
 
-/* মার্কি বাটন (নোটিশ) */
+/* মার্কি বাটন */
 .marquee-container { 
     margin: 0 16px 16px;
     padding: 2px 12px;
@@ -189,14 +189,13 @@ marquee {
     background: transparent;
 }
 .shop-video-name {
-    font-size: 18px;
-    font-weight: 800;
+    font-size: 16px;
+    font-weight: 700;
     color: var(--primary);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     cursor: pointer;
     transition: color 0.2s;
     display: inline-block;
-    margin-left: 4px;
 }
 .shop-video-name:hover {
     color: var(--primary-dark);
@@ -207,7 +206,6 @@ marquee {
     color: var(--text-light);
     margin-bottom: 6px;
     line-height: 1.5;
-    margin-left: 4px;
 }
 .shop-video-address {
     font-size: 12px;
@@ -215,46 +213,6 @@ marquee {
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-left: 4px;
-}
-.shop-video-rating {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-    margin-left: 4px;
-}
-.stars {
-    display: flex;
-    gap: 4px;
-}
-.star {
-    font-size: 20px;
-    cursor: pointer;
-    color: #ddd;
-    transition: all 0.2s ease;
-}
-.star.active {
-    color: #f5b042;
-}
-.star:hover {
-    transform: scale(1.1);
-}
-.rating-count {
-    font-size: 12px;
-    color: var(--text-light);
-}
-.fav-btn {
-    background: transparent;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    padding: 4px;
-    transition: all 0.2s ease;
-    color: #ccc;
-}
-.fav-btn.active {
-    color: #e74c3c;
 }
 @keyframes tileIn {
     from { transform: translateY(15px); opacity: 0; }
@@ -273,126 +231,46 @@ marquee {
 .empty-title { font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px; }
 .empty-sub   { font-size:13px; }
 
-/* ক্যাটাগরি পপআপ */
-.category-popup-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 9999;
-    display: flex;
-    align-items: flex-end;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-.category-popup-overlay.show {
-    visibility: visible;
-    opacity: 1;
-}
-.category-popup {
-    background: white;
-    border-radius: 28px 28px 0 0;
-    padding: 20px;
-    width: 100%;
-    max-height: 80vh;
-    overflow-y: auto;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-}
-.category-popup-overlay.show .category-popup {
-    transform: translateY(0);
-}
-.category-popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1.5px solid #f0ebff;
-}
-.category-popup-header span {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1a1a2e;
-}
-.category-popup-close {
-    background: #f0ebff;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-    cursor: pointer;
-    color: #6c2bd9;
-}
-.category-item {
-    padding: 14px 16px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-family: 'Hind Siliguri', sans-serif;
-    cursor: pointer;
-    margin-bottom: 8px;
-    background: #faf8ff;
-    border: 1.5px solid #e8e0ff;
-    transition: all 0.2s ease;
-    text-align: center;
-}
-.category-item:hover {
-    background: #f0ebff;
-    border-color: var(--primary);
-    transform: translateX(5px);
-}
-
 /* BOTTOM NAV */
 .bottom-nav {
     position: fixed;
-    bottom: 8px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 20px);
+    width: calc(100% - 24px);
     max-width: 430px;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(15px);
-    border-radius: 28px;
+    border-radius: 24px;
     display: flex;
     justify-content: space-around;
-    padding: 3px 8px;
-    box-shadow: 0 12px 30px rgba(108,43,217,0.15);
+    padding: 10px 0;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
     z-index: 1000;
-    gap: 4px;
 }
 .nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 0;
+    text-align: center;
+    font-size: 11px;
+    color: #666;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 10px;
-    color: #aaa;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
     font-family: 'Hind Siliguri', sans-serif;
-    gap: 3px;
-    text-decoration: none;
-    border-radius: 20px;
-    transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+    flex: 1;
 }
-.nav-item:hover {
-    background: rgba(108,43,217,0.1);
-    transform: translateY(-2px);
+.nav-item .icon {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 4px;
 }
 .nav-item.active {
     color: var(--primary);
-    background: white;
-    box-shadow: 0 4px 12px rgba(108,43,217,0.15);
     transform: translateY(-2px);
 }
-.nav-icon {
-    font-size: 22px;
-    transition: all 0.2s ease;
-}
-.nav-item:active .nav-icon {
-    transform: scale(0.9);
+.nav-item:active {
+    transform: scale(0.95);
 }
 </style>
 </head>
@@ -440,6 +318,7 @@ marquee {
         <div class="ab-arrow">→</div>
     </a>
 
+    <!-- FILTERS -->
     <div class="filter-wrap">
         <button class="reset-btn" id="resetBtn" onclick="resetFilters()">🔄 ফিল্টার রিসেট করুন</button>
 
@@ -519,37 +398,12 @@ marquee {
 
 </div>
 
-<div id="categoryPopup" class="category-popup-overlay">
-    <div class="category-popup">
-        <div class="category-popup-header">
-            <span>📂 ক্যাটাগরি বাছাই করুন</span>
-            <button class="category-popup-close" onclick="closeCategoryPopup()">✕</button>
-        </div>
-        <div id="categoryPopupList"></div>
-    </div>
-</div>
-
 <div class="bottom-nav">
-    <div class="nav-item" onclick="navigateTo('favorite')">
-        <span class="nav-icon">❤️</span>
-        <span>পছন্দ</span>
-    </div>
-    <div class="nav-item" onclick="openCategoryPopup()">
-        <span class="nav-icon">📂</span>
-        <span>ক্যাটাগরি</span>
-    </div>
-    <div class="nav-item" onclick="navigateTo('searchFocus')">
-        <span class="nav-icon">🔍</span>
-        <span>খুঁজুন</span>
-    </div>
-    <div class="nav-item" onclick="navigateTo('profile')">
-        <span class="nav-icon">👤</span>
-        <span>প্রোফাইল</span>
-    </div>
-    <div class="nav-item" onclick="navigateTo('help')">
-        <span class="nav-icon">❓</span>
-        <span>সাহায্য</span>
-    </div>
+    <button class="nav-item active" onclick="navigateTo('home')"><span class="icon">🏠</span>হোম</button>
+    <button class="nav-item" onclick="navigateTo('category')"><span class="icon">📂</span>ক্যাটাগরি</button>
+    <button class="nav-item" onclick="navigateTo('searchFocus')"><span class="icon">🔍</span>খুঁজুন</button>
+    <button class="nav-item" onclick="navigateTo('shop')"><span class="icon">🏪</span>দোকান</button>
+    <button class="nav-item" onclick="navigateTo('profile')"><span class="icon">👤</span>প্রোফাইল</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -565,163 +419,112 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const db   = firebase.database();
 
-// ========== লগইন চেক ==========
-auth.onAuthStateChanged(user => {
-    if (!user) {
-        window.location.href = 'login.html';
-    } else {
-        document.getElementById('splash').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        loadNotice();
-        loadSlider();
-        loadShops();
-    }
-});
+// ========== ভিডিও অটো-পজ (স্ক্রিন থেকে বেরিয়ে গেলে) ==========
+let videoObservers = [];
+
+// সব ভিডিওর জন্য Observer সেটআপ
+function setupVideoAutoPause() {
+    // আগের সব observer disconnect করুন
+    videoObservers.forEach(observer => observer.disconnect());
+    videoObservers = [];
+    
+    const videoIframes = document.querySelectorAll('.shop-video');
+    
+    videoIframes.forEach(iframe => {
+        if (!iframe.src) return;
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // isIntersecting = false মানে ভিডিওটি স্ক্রিনের বাইরে
+                if (!entry.isIntersecting) {
+                    // ভিডিও পজ করার চেষ্টা
+                    try {
+                        // YouTube iframe কে পজ কমান্ড পাঠানো
+                        iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    } catch(e) {
+                        // কোনো error হলে ইগনোর
+                    }
+                }
+            });
+        }, { 
+            threshold: 0,  // 0% visible মানে সম্পূর্ণ বেরিয়ে গেলে
+            rootMargin: '0px'
+        });
+        
+        observer.observe(iframe);
+        videoObservers.push(observer);
+    });
+}
+
+// ভিডিও রেন্ডার করার পর Observer সেটআপ করুন
+function initVideoObservers() {
+    setTimeout(() => {
+        setupVideoAutoPause();
+    }, 300);
+}
+
+// ========== ইউটিউব API লোড ==========
+function loadYouTubeAPI() {
+    if (document.querySelector('script[src*="youtube.com/iframe_api"]')) return;
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
+loadYouTubeAPI();
+
+// YouTube API ready হলে
+window.onYouTubeIframeAPIReady = function() {
+    console.log('YouTube API ready');
+    setupVideoAutoPause();
+};
 
 // ========== নেভিগেশন ==========
 function navigateTo(page) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     event.currentTarget.classList.add('active');
     switch(page) {
-        case 'favorite': showFavorites(); break;
+        case 'home': window.location.href = 'index.html'; break;
         case 'searchFocus':
             document.getElementById('searchInput').focus();
             document.getElementById('searchSection').classList.remove('hide');
             setTimeout(() => document.getElementById('searchSection').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
             break;
-        case 'profile': window.location.href = 'dashboard.html'; break;
-        case 'help': window.location.href = 'help.html'; break;
+        case 'shop': window.location.href = 'register.html'; break;
+        case 'profile': window.location.href = 'login.html'; break;
+        default: console.log('Navigate to:', page);
     }
 }
 
-// ========== ক্যাটাগরি ==========
-const categories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
-
-function openCategoryPopup() {
-    document.getElementById('categoryPopupList').innerHTML = categories.map(cat => {
-        const val = cat.replace(/^[\S]+ /, '');
-        return `<div class="category-item" onclick="selectCategoryFromPopup('${val}')">${cat}</div>`;
-    }).join('');
-    document.getElementById('categoryPopup').classList.add('show');
-}
-function closeCategoryPopup() { document.getElementById('categoryPopup').classList.remove('show'); }
-function selectCategoryFromPopup(cat) {
-    selectedCategory = cat;
-    selectedDivision = selectedDistrict = selectedThana = '';
-    document.getElementById('step2').classList.add('hidden');
-    document.getElementById('step3').classList.add('hidden');
-    document.getElementById('step4').classList.add('hidden');
-    document.getElementById('resetBtn').style.display = 'block';
-    document.getElementById('sel4').textContent = `✅ ${cat}`;
-    document.getElementById('num4').className = 'fs-num done';
-    document.querySelectorAll('#step4 .f-chip').forEach(c => c.classList.toggle('active', c.textContent.includes(cat)));
-    closeCategoryPopup();
-    applyFilters();
+function viewShop(shopId) {
+    if (shopId) window.location.href = `profile.html?id=${shopId}`;
+    else alert('দোকানের আইডি পাওয়া যায়নি!');
 }
 
-function showFavorites() {
-    const user = auth.currentUser;
-    if (!user) { alert('দয়া করে লগইন করুন!'); window.location.href = 'login.html'; return; }
-    const favorites = JSON.parse(localStorage.getItem(`favorites_${user.uid}`) || '[]');
-    if (favorites.length === 0) { alert('আপনার কোনো পছন্দের দোকান নেই!'); return; }
-    renderShops(allShops.filter(shop => favorites.includes(shop.id)));
-    document.getElementById('resetBtn').style.display = 'block';
-    document.querySelectorAll('.filter-step').forEach(step => step.classList.add('hidden'));
-}
-
-function viewShop(shopId) { window.location.href = `profile.html?id=${shopId}`; }
-
-// ========== ফেভারিট ==========
-function toggleFavorite(shopId, event) {
-    event.stopPropagation();
-    const user = auth.currentUser;
-    if (!user) { alert('দয়া করে লগইন করুন!'); window.location.href = 'login.html'; return; }
-    const storageKey = `favorites_${user.uid}`;
-    let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    if (favorites.includes(shopId)) favorites = favorites.filter(id => id !== shopId);
-    else favorites.push(shopId);
-    localStorage.setItem(storageKey, JSON.stringify(favorites));
-    applyFilters();
-}
-
-// ========== রেটিং ফাংশন (১০০% কাজ করবে) ==========
-function setRating(shopId, rating, event) {
-    event.stopPropagation();
-    const user = auth.currentUser;
-    if (!user) {
-        alert('দয়া করে লগইন করুন!');
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    db.ref('ratings/' + shopId + '/' + user.uid).set({
-        rating: rating,
-        updatedAt: Date.now()
-    }).then(() => {
-        refreshAllRatings();
-    });
-}
-
-function refreshAllRatings() {
-    db.ref('ratings').once('value', snap => {
-        allShops.forEach(shop => { shop.userRating = 0; });
-        
-        if (snap.exists()) {
-            snap.forEach(ratingSnap => {
-                const shopId = ratingSnap.key;
-                let total = 0, count = 0;
-                ratingSnap.forEach(userRating => {
-                    total += userRating.val().rating;
-                    count++;
-                });
-                const avg = count > 0 ? total / count : 0;
-                const shopIndex = allShops.findIndex(s => s.id === shopId);
-                if (shopIndex !== -1) {
-                    allShops[shopIndex].userRating = Math.round(avg * 10) / 10;
-                }
-            });
-        }
-        
-        allShops.sort((a, b) => (b.userRating || 0) - (a.userRating || 0));
-        applyFilters();
-    });
-}
-
-// ========== ভিডিও অটো-পজ ==========
-let videoObservers = [];
-function setupVideoAutoPause() {
-    videoObservers.forEach(observer => observer.disconnect());
-    videoObservers = [];
-    document.querySelectorAll('.shop-video').forEach(iframe => {
-        if (!iframe.src) return;
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) {
-                    try { iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*'); } catch(e) {}
-                }
-            });
-        }, { threshold: 0, rootMargin: '0px' });
-        observer.observe(iframe);
-        videoObservers.push(observer);
-    });
-}
-function initVideoObservers() { setTimeout(() => setupVideoAutoPause(), 300); }
-
-// ========== স্ক্রোল ==========
+// ========== স্ক্রোল কন্ট্রোল ==========
 let lastScrollTop = 0;
+const searchSection = document.getElementById('searchSection');
 window.addEventListener('scroll', function() {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > lastScrollTop && scrollTop > 80) document.getElementById('searchSection').classList.add('hide');
-    else document.getElementById('searchSection').classList.remove('hide');
+    if (scrollTop > lastScrollTop && scrollTop > 80) searchSection.classList.add('hide');
+    else searchSection.classList.remove('hide');
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 
-// ========== নোটিশ ==========
-function loadNotice() {
-    db.ref('message').on('value', snap => {
+// ========== MARQUEE ==========
+function loadMarquee() {
+    db.ref('marquee').on('value', snap => {
         const container = document.getElementById('marqueeSection');
-        if (snap.exists() && snap.val()) container.innerHTML = `<div class="marquee-container"><marquee behavior="scroll" direction="left" scrollamount="4" onmouseover="this.stop()" onmouseout="this.start()">📢 ${snap.val()} 📢</marquee></div>`;
-        else container.innerHTML = `<div class="marquee-container marquee-disabled">🔇 কোনো নোটিশ নেই</div>`;
+        if (snap.exists()) {
+            const data = snap.val();
+            if (data.enabled === true && data.text && data.text.trim() !== '') {
+                container.innerHTML = `<div class="marquee-container"><marquee behavior="scroll" direction="left" scrollamount="4" onmouseover="this.stop()" onmouseout="this.start()">✨ ${data.text} ✨</marquee></div>`;
+            } else {
+                container.innerHTML = `<div class="marquee-container marquee-disabled">🔇 কোনো ঘোষণা নেই</div>`;
+            }
+        } else {
+            container.innerHTML = `<div class="marquee-container marquee-disabled">🔇 কোনো ঘোষণা নেই</div>`;
+        }
     });
 }
 
@@ -734,8 +537,10 @@ function loadSlider() {
         const sec = document.getElementById('sliderSection');
         if (slData.length === 0) { sec.style.display = 'none'; return; }
         sec.style.display = 'block';
-        document.getElementById('sliderTrack').innerHTML = slData.map(s => `<div class="slide-item" onclick="${s.link?`window.open('${s.link}','_blank')`:''}"><img src="${s.image}" onerror="this.outerHTML='<div class=slide-placeholder>🏪</div>'"></div>`).join('');
-        document.getElementById('sliderDots').innerHTML = slData.map((_,i) => `<div class="sl-dot${i===0?' active':''}" id="d${i}" onclick="goSlide(${i})"></div>`).join('');
+        const track = document.getElementById('sliderTrack');
+        const dots = document.getElementById('sliderDots');
+        track.innerHTML = slData.map(s => `<div class="slide-item" onclick="${s.link?`window.open('${s.link}','_blank')`:''}"><img src="${s.image}" onerror="this.outerHTML='<div class=slide-placeholder>🏪</div>'"></div>`).join('');
+        dots.innerHTML = slData.map((_,i) => `<div class="sl-dot${i===0?' active':''}" id="d${i}" onclick="goSlide(${i})"></div>`).join('');
         goSlide(0);
         if (slData.length > 1) {
             clearInterval(slTimer);
@@ -752,79 +557,149 @@ function goSlide(n) {
 function prevSlide() { clearInterval(slTimer); goSlide(curSlide-1); slTimer=setInterval(()=>goSlide((curSlide+1)%slData.length),3500); }
 function nextSlide() { clearInterval(slTimer); goSlide(curSlide+1); slTimer=setInterval(()=>goSlide((curSlide+1)%slData.length),3500); }
 
+// ========== AUTH ==========
+auth.onAuthStateChanged(u => {
+    if (u) {
+        const profileBtn = document.querySelector('.nav-item:last-child');
+        if (profileBtn) profileBtn.onclick = () => window.location.href = 'dashboard.html';
+    }
+});
+
 // ========== INTERNET ==========
 function checkNet() {
-    if (navigator.onLine) document.getElementById('noInternet').style.display = 'none';
-    else document.getElementById('noInternet').style.display = 'flex';
+    if (navigator.onLine) {
+        document.getElementById('noInternet').style.display = 'none';
+        loadMarquee();
+        loadSlider();
+        loadShops();
+    } else {
+        document.getElementById('noInternet').style.display = 'flex';
+    }
 }
 window.addEventListener('load', checkNet);
 window.addEventListener('offline', () => document.getElementById('noInternet').style.display='flex');
-window.addEventListener('online', () => document.getElementById('noInternet').style.display='none');
+window.addEventListener('online', () => { document.getElementById('noInternet').style.display='none'; loadMarquee(); loadSlider(); loadShops(); });
 
-// ========== জেলা ও থানা ম্যাপ ==========
+// ========== থানা ও জেলার ডাটাবেস ==========
 const thanaMap = {
-    'ঢাকা': ['আদাবর','উত্তরা','তেজগাঁও','ধামরাই','নবাবগঞ্জ','বাড্ডা','মিরপুর','মোহাম্মদপুর','যাত্রাবাড়ী','রামপুরা','লালবাগ','শাহবাগ','সাভার','সূত্রাপুর','হাজারীবাগ'],
-    'গাজীপুর': ['গাজীপুর সদর','কালিয়াকৈর','কাপাসিয়া','শ্রীপুর'],'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর','আড়াইহাজার','বন্দর','রূপগঞ্জ','সোনারগাঁও'],
-    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর','গজারিয়া','টংগিবাড়ী','লৌহজং','শ্রীনগর'],'মানিকগঞ্জ': ['মানিকগঞ্জ সদর','ঘিওর','দৌলতপুর','শিবালয়','সাটুরিয়া','হরিরামপুর'],
-    'নরসিংদী': ['নরসিংদী সদর','বেলাবো','পলাশ','মনোহরদী','রায়পুরা','শিবপুর'],'ফরিদপুর': ['ফরিদপুর সদর','আলফাডাঙ্গা','বোয়ালমারী','মধুখালী','নগরকান্দা','সদরপুর','চরভদ্রাসন','সালথা'],
-    'রাজবাড়ী': ['রাজবাড়ী সদর','গোয়ালন্দ','পাংশা','বালিয়াকান্দি','কালুখালী'],'গোপালগঞ্জ': ['গোপালগঞ্জ সদর','কাশিয়ানী','কোটালীপাড়া','টুঙ্গিপাড়া','মুকসুদপুর'],
-    'মাদারীপুর': ['মাদারীপুর সদর','কালকিনি','ডাসার','শিবচর','রাজৈর'],'শরীয়তপুর': ['শরীয়তপুর সদর','গোসাইরহাট','জাজিরা','নড়িয়া','ভেদরগঞ্জ','ডামুড্যা'],
-    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর','অট্টগ্রাম','ইটনা','করিমগঞ্জ','কটিয়াদী','তাড়াইল','পাকুন্দিয়া','বাজিতপুর','ভৈরব','মিঠামইন','হোসেনপুর','নিকলী','কুলিয়ারচর'],
-    'টাঙ্গাইল': ['টাঙ্গাইল সদর','বাসাইল','দেলদুয়ার','ঘাটাইল','গোপালপুর','কালিহাতী','মধুপুর','মির্জাপুর','নাগরপুর','সখিপুর','ধনবাড়ী'],
-    'চট্টগ্রাম': ['চট্টগ্রাম সদর','আনোয়ারা','বাঁশখালী','বোয়ালখালী','চন্দনাইশ','দোহাজারী','ফটিকছড়ি','হাটহাজারী','লোহাগাড়া','মিরসরাই','পটিয়া','রাঙ্গুনিয়া','রাউজান','সন্দ্বীপ','সাতকানিয়া','সীতাকুণ্ডা'],
-    'কক্সবাজার': ['কক্সবাজার সদর','চকরিয়া','কুতুবদিয়া','মহেশখালী','রামু','টেকনাফ','উখিয়া','পেকুয়া'],'কুমিল্লা': ['কুমিল্লা সদর','বরুড়া','ব্রাহ্মণপাড়া','বুড়িচং','চান্দিনা','চৌদ্দগ্রাম','দাউদকান্দি','দেবিদ্বার','হোমনা','লাকসাম','মনোহরগঞ্জ','মুরাদনগর','নাঙ্গলকোট','তিতাস'],
-    'চাঁদপুর': ['চাঁদপুর সদর','ফরিদগঞ্জ','হাইমচর','হাজীগঞ্জ','কচুয়া','মতলব উত্তর','মতলব দক্ষিণ','শাহরাস্তি'],'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর','আখাউড়া','বাঞ্ছারামপুর','বিজয়নগর','কসবা','নবীনগর','নাসিরনগর','সরাইল'],
-    'নোয়াখালী': ['নোয়াখালী সদর','বেগমগঞ্জ','চাটখিল','কবিরহাট','সেনবাগ','সোনাইমুড়ি','সুবর্ণচর','কোম্পানীগঞ্জ'],'ফেনী': ['ফেনী সদর','ছাগলনাইয়া','দাগনভূঁইয়া','পরশুরাম','সোনাগাজী'],
-    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর','রামগঞ্জ','রামগতি','রায়পুর'],'রাঙামাটি': ['রাঙামাটি সদর','বাঘাইছড়ি','বরকল','কাউখালী','বিলাইছড়ি','জুরাছড়ি','লংগদু','নানিয়ারচর','রাজস্থলী'],
-    'খাগড়াছড়ি': ['খাগড়াছড়ি সদর','দীঘিনালা','লক্ষ্মীছড়ি','মহালছড়ি','মাটিরাঙ্গা','পানছড়ি','রামগড়'],'বান্দরবান': ['বান্দরবান সদর','আলীকদম','থানচি','নাইক্ষ্যংছড়ি','রুমা','রোয়াংছড়ি','লামা'],
-    'রাজশাহী': ['রাজশাহী সদর','বাঘা','বাগমারা','চারঘাট','দুর্গাপুর','গোদাগাড়ী','মোহনপুর','পবা','পুঠিয়া','তানোর'],'নাটোর': ['নাটোর সদর','বাগাতিপাড়া','বড়াইগ্রাম','গুরুদাসপুর','লালপুর','নলডাঙ্গা','সিংড়া'],
-    'নওগাঁ': ['নওগাঁ সদর','আত্রাই','বাদলগাছী','ধামইরহাট','মহাদেবপুর','মান্দা','নিয়ামতপুর','পত্নীতলা','পোরশা','রাণীনগর','সাপাহার'],'চাঁপাইনবাবগঞ্জ': ['চাঁপাইনবাবগঞ্জ সদর','গোমস্তাপুর','নাচোল','ভোলাহাট','শিবগঞ্জ'],
-    'পাবনা': ['পাবনা সদর','আটঘরিয়া','বেড়া','ভাঙ্গুড়া','চাটমোহর','ফরিদপুর','ঈশ্বরদী','সাঁথিয়া','সুজানগর'],'সিরাজগঞ্জ': ['সিরাজগঞ্জ সদর','বেলকুচি','চৌহালী','কামারখন্দ','কাজীপুর','রায়গঞ্জ','শাহজাদপুর','তাড়াশ','উল্লাপাড়া'],
-    'বগুড়া': ['বগুড়া সদর','আদমদীঘি','ধুনট','দুপচাঁচিয়া','গাবতলী','কাহালু','নন্দীগ্রাম','সারিয়াকান্দি','শেরপুর','শিবগঞ্জ','সোনাতলা'],'জয়পুরহাট': ['জয়পুরহাট সদর','আক্কেলপুর','কালাই','ক্ষেতলাল','পাঁচবিবি'],
-    'খুলনা': ['খুলনা সদর','বটিয়াঘাটা','দাকোপ','ডুমুরিয়া','দিঘলিয়া','কয়রা','পাইকগাছা','রূপসা','তেরখাদা'],'বাগেরহাট': ['বাগেরহাট সদর','ফকিরহাট','কচুয়া','মোল্লাহাট','মোড়েলগঞ্জ','রামপাল','শরণখোলা','চিতলমারী','মোংলা'],
-    'সাতক্ষীরা': ['সাতক্ষীরা সদর','আশাশুনি','দেবহাটা','কালীগঞ্জ','কলারোয়া','শ্যামনগর','তালা'],'যশোর': ['যশোর সদর','অভয়নগর','বাঘারপাড়া','চৌগাছা','ঝিকরগাছা','কেশবপুর','মনিরামপুর','শার্শা'],
-    'মাগুরা': ['মাগুরা সদর','মহম্মদপুর','শালিখা','শ্রীপুর'],'নড়াইল': ['নড়াইল সদর','কালিয়া','লোহাগড়া'],'কুষ্টিয়া': ['কুষ্টিয়া সদর','ভেড়ামারা','দৌলতপুর','খোকসা','কুমারখালী','মিরপুর'],
-    'মেহেরপুর': ['মেহেরপুর সদর','গাংনী','মুজিবনগর'],'চুয়াডাঙ্গা': ['চুয়াডাঙ্গা সদর','আলমডাঙ্গা','দামুড়হুদা','জীবননগর'],'ঝিনাইদহ': ['ঝিনাইদহ সদর','হরিণাকুন্ডু','কালীগঞ্জ','কোটচাঁদপুর','মহেশপুর','শৈলকুপা'],
-    'বরিশাল': ['বরিশাল সদর','আগৈলঝাড়া','বাবুগঞ্জ','বাকেরগঞ্জ','বানারীপাড়া','গৌরনদী','হিজলা','মেহেন্দিগঞ্জ','মুলাদী','উজিরপুর'],'ভোলা': ['ভোলা সদর','বোরহানউদ্দিন','চরফ্যাশন','দৌলতখান','লালমোহন','মনপুরা','তজুমদ্দিন'],
-    'পটুয়াখালী': ['পটুয়াখালী সদর','বাউফল','দশমিনা','গলাচিপা','কলাপাড়া','মির্জাগঞ্জ','রাঙ্গাবালী','দুমকি'],'বরগুনা': ['বরগুনা সদর','আমতলী','বামনা','বেতাগী','পাথরঘাটা','তালতলী'],
-    'পিরোজপুর': ['পিরোজপুর সদর','ভান্ডারিয়া','কাউখালী','মঠবাড়িয়া','নাজিরপুর','নেছারাবাদ','ইন্দুরকানী'],'ঝালকাঠি': ['ঝালকাঠি সদর','কাঁঠালিয়া','নলছিটি','রাজাপুর'],
-    'সিলেট': ['সিলেট সদর','বালাগঞ্জ','বিয়ানীবাজার','বিশ্বনাথ','ফেঞ্চুগঞ্জ','গোলাপগঞ্জ','গোয়াইনঘাট','জৈন্তাপুর','কানাইঘাট','কোম্পানীগঞ্জ','জকিগঞ্জ','দক্ষিণ সুরমা','মোগলাবাজার'],
-    'মৌলভীবাজার': ['মৌলভীবাজার সদর','বড়লেখা','জুড়ী','কমলগঞ্জ','কুলাউড়া','রাজনগর','শ্রীমঙ্গল'],'হবিগঞ্জ': ['হবিগঞ্জ সদর','আজমিরীগঞ্জ','বাহুবল','বানিয়াচং','চুনারুঘাট','কালাউক','লাখাই','মাধবপুর','নবীগঞ্জ','শায়েস্তাগঞ্জ'],
-    'সুনামগঞ্জ': ['সুনামগঞ্জ সদর','বিশ্বম্ভরপুর','ছাতক','দোয়ারাবাজার','ধর্মপাশা','জগন্নাথপুর','জামালগঞ্জ','দিরাই','শাল্লা','তাহিরপুর'],'রংপুর': ['রংপুর সদর','বদরগঞ্জ','গঙ্গাচড়া','কাউনিয়া','মিঠাপুকুর','পীরগাছা','পীরগঞ্জ','তারাগঞ্জ'],
-    'গাইবান্ধা': ['গাইবান্ধা সদর','ফুলছড়ি','গোবিন্দগঞ্জ','পলাশবাড়ী','সাদুল্লাপুর','সাঘাটা','সুন্দরগঞ্জ'],'কুড়িগ্রাম': ['কুড়িগ্রাম সদর','ভূরুঙ্গামারী','চর রাজিবপুর','চিলমারী','নাগেশ্বরী','রৌমারী','উলিপুর','ফুলবাড়ী','রাজারহাট'],
-    'লালমনিরহাট': ['লালমনিরহাট সদর','আদিতমারী','কালীগঞ্জ','হাতীবান্ধা','পাটগ্রাম'],'নীলফামারী': ['নীলফামারী সদর','ডিমলা','ডোমার','জলঢাকা','কিশোরগঞ্জ','সৈয়দপুর'],
-    'দিনাজপুর': ['দিনাজপুর সদর','বিরামপুর','বীরগঞ্জ','বোচাগঞ্জ','চিরিরবন্দর','ফুলবাড়ী','ঘোড়াঘাট','হাকিমপুর','খানসামা','নবাবগঞ্জ','পার্বতীপুর','সেতাবগঞ্জ'],
-    'ঠাকুরগাঁও': ['ঠাকুরগাঁও সদর','বালিয়াডাঙ্গী','হরিপুর','পীরগঞ্জ','রাণীশংকৈল'],'পঞ্চগড়': ['পঞ্চগড় সদর','আটোয়ারী','বোদা','দেবীগঞ্জ','তেঁতুলিয়া'],
-    'ময়মনসিংহ': ['ময়মনসিংহ সদর','ভালুকা','ধোবাউড়া','ফুলবাড়িয়া','গফরগাঁও','গৌরীপুর','হালুয়াঘাট','ঈশ্বরগঞ্জ','মুক্তাগাছা','নান্দাইল','ফুলপুর','ত্রিশাল'],
-    'জামালপুর': ['জামালপুর সদর','বকশীগঞ্জ','দেওয়ানগঞ্জ','ইসলামপুর','মাদারগঞ্জ','মেলান্দহ','সরিষাবাড়ী'],'শেরপুর': ['শেরপুর সদর','ঝিনাইগাতী','নকলা','নালিতাবাড়ী','শ্রীবরদী'],
-    'নেত্রকোণা': ['নেত্রকোণা সদর','আটপাড়া','বারহাট্টা','দুর্গাপুর','কলমাকান্দা','কেন্দুয়া','খালিয়াজুরী','মদন','মোহনগঞ্জ','পূর্বধলা'],
+    'ঢাকা': ['আদাবর', 'উত্তরা', 'তেজগাঁও', 'ধামরাই', 'নবাবগঞ্জ', 'বাড্ডা', 'মিরপুর', 'মোহাম্মদপুর', 'যাত্রাবাড়ী', 'রামপুরা', 'লালবাগ', 'শাহবাগ', 'সাভার', 'সূত্রাপুর', 'হাজারীবাগ'],
+    'গাজীপুর': ['গাজীপুর সদর', 'কালিয়াকৈর', 'কাপাসিয়া', 'শ্রীপুর'],
+    'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর', 'আড়াইহাজার', 'বন্দর', 'রূপগঞ্জ', 'সোনারগাঁও'],
+    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর', 'গজারিয়া', 'টংগিবাড়ী', 'লৌহজং', 'শ্রীনগর'],
+    'মানিকগঞ্জ': ['মানিকগঞ্জ সদর', 'ঘিওর', 'দৌলতপুর', 'শিবালয়', 'সাটুরিয়া', 'হরিরামপুর'],
+    'নরসিংদী': ['নরসিংদী সদর', 'বেলাবো', 'পলাশ', 'মনোহরদী', 'রায়পুরা', 'শিবপুর'],
+    'ফরিদপুর': ['ফরিদপুর সদর', 'আলফাডাঙ্গা', 'বোয়ালমারী', 'মধুখালী', 'নগরকান্দা', 'সদরপুর', 'চরভদ্রাসন', 'সালথা'],
+    'রাজবাড়ী': ['রাজবাড়ী সদর', 'গোয়ালন্দ', 'পাংশা', 'বালিয়াকান্দি', 'কালুখালী'],
+    'গোপালগঞ্জ': ['গোপালগঞ্জ সদর', 'কাশিয়ানী', 'কোটালীপাড়া', 'টুঙ্গিপাড়া', 'মুকসুদপুর'],
+    'মাদারীপুর': ['মাদারীপুর সদর', 'কালকিনি', 'ডাসার', 'শিবচর', 'রাজৈর'],
+    'শরীয়তপুর': ['শরীয়তপুর সদর', 'গোসাইরহাট', 'জাজিরা', 'নড়িয়া', 'ভেদরগঞ্জ', 'ডামুড্যা'],
+    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর', 'অট্টগ্রাম', 'ইটনা', 'করিমগঞ্জ', 'কটিয়াদী', 'তাড়াইল', 'পাকুন্দিয়া', 'বাজিতপুর', 'ভৈরব', 'মিঠামইন', 'হোসেনপুর', 'নিকলী', 'কুলিয়ারচর'],
+    'টাঙ্গাইল': ['টাঙ্গাইল সদর', 'বাসাইল', 'দেলদুয়ার', 'ঘাটাইল', 'গোপালপুর', 'কালিহাতী', 'মধুপুর', 'মির্জাপুর', 'নাগরপুর', 'সখিপুর', 'ধনবাড়ী'],
+    'চট্টগ্রাম': ['চট্টগ্রাম সদর', 'আনোয়ারা', 'বাঁশখালী', 'বোয়ালখালী', 'চন্দনাইশ', 'দোহাজারী', 'ফটিকছড়ি', 'হাটহাজারী', 'লোহাগাড়া', 'মিরসরাই', 'পটিয়া', 'রাঙ্গুনিয়া', 'রাউজান', 'সন্দ্বীপ', 'সাতকানিয়া', 'সীতাকুণ্ডা'],
+    'কক্সবাজার': ['কক্সবাজার সদর', 'চকরিয়া', 'কুতুবদিয়া', 'মহেশখালী', 'রামু', 'টেকনাফ', 'উখিয়া', 'পেকুয়া'],
+    'কুমিল্লা': ['কুমিল্লা সদর', 'বরুড়া', 'ব্রাহ্মণপাড়া', 'বুড়িচং', 'চান্দিনা', 'চৌদ্দগ্রাম', 'দাউদকান্দি', 'দেবিদ্বার', 'হোমনা', 'লাকসাম', 'মনোহরগঞ্জ', 'মুরাদনগর', 'নাঙ্গলকোট', 'তিতাস'],
+    'চাঁদপুর': ['চাঁদপুর সদর', 'ফরিদগঞ্জ', 'হাইমচর', 'হাজীগঞ্জ', 'কচুয়া', 'মতলব উত্তর', 'মতলব দক্ষিণ', 'শাহরাস্তি'],
+    'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর', 'আখাউড়া', 'বাঞ্ছারামপুর', 'বিজয়নগর', 'কসবা', 'নবীনগর', 'নাসিরনগর', 'সরাইল'],
+    'নোয়াখালী': ['নোয়াখালী সদর', 'বেগমগঞ্জ', 'চাটখিল', 'কবিরহাট', 'সেনবাগ', 'সোনাইমুড়ি', 'সুবর্ণচর', 'কোম্পানীগঞ্জ'],
+    'ফেনী': ['ফেনী সদর', 'ছাগলনাইয়া', 'দাগনভূঁইয়া', 'পরশুরাম', 'সোনাগাজী'],
+    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর', 'রামগঞ্জ', 'রামগতি', 'রায়পুর'],
+    'রাঙামাটি': ['রাঙামাটি সদর', 'বাঘাইছড়ি', 'বরকল', 'কাউখালী', 'বিলাইছড়ি', 'জুরাছড়ি', 'লংগদু', 'নানিয়ারচর', 'রাজস্থলী'],
+    'খাগড়াছড়ি': ['খাগড়াছড়ি সদর', 'দীঘিনালা', 'লক্ষ্মীছড়ি', 'মহালছড়ি', 'মাটিরাঙ্গা', 'পানছড়ি', 'রামগড়'],
+    'বান্দরবান': ['বান্দরবান সদর', 'আলীকদম', 'থানচি', 'নাইক্ষ্যংছড়ি', 'রুমা', 'রোয়াংছড়ি', 'লামা'],
+    'রাজশাহী': ['রাজশাহী সদর', 'বাঘা', 'বাগমারা', 'চারঘাট', 'দুর্গাপুর', 'গোদাগাড়ী', 'মোহনপুর', 'পবা', 'পুঠিয়া', 'তানোর'],
+    'নাটোর': ['নাটোর সদর', 'বাগাতিপাড়া', 'বড়াইগ্রাম', 'গুরুদাসপুর', 'লালপুর', 'নলডাঙ্গা', 'সিংড়া'],
+    'নওগাঁ': ['নওগাঁ সদর', 'আত্রাই', 'বাদলগাছী', 'ধামইরহাট', 'মহাদেবপুর', 'মান্দা', 'নিয়ামতপুর', 'পত্নীতলা', 'পোরশা', 'রাণীনগর', 'সাপাহার'],
+    'চাঁপাইনবাবগঞ্জ': ['চাঁপাইনবাবগঞ্জ সদর', 'গোমস্তাপুর', 'নাচোল', 'ভোলাহাট', 'শিবগঞ্জ'],
+    'পাবনা': ['পাবনা সদর', 'আটঘরিয়া', 'বেড়া', 'ভাঙ্গুড়া', 'চাটমোহর', 'ফরিদপুর', 'ঈশ্বরদী', 'সাঁথিয়া', 'সুজানগর'],
+    'সিরাজগঞ্জ': ['সিরাজগঞ্জ সদর', 'বেলকুচি', 'চৌহালী', 'কামারখন্দ', 'কাজীপুর', 'রায়গঞ্জ', 'শাহজাদপুর', 'তাড়াশ', 'উল্লাপাড়া'],
+    'বগুড়া': ['বগুড়া সদর', 'আদমদীঘি', 'ধুনট', 'দুপচাঁচিয়া', 'গাবতলী', 'কাহালু', 'নন্দীগ্রাম', 'সারিয়াকান্দি', 'শেরপুর', 'শিবগঞ্জ', 'সোনাতলা'],
+    'জয়পুরহাট': ['জয়পুরহাট সদর', 'আক্কেলপুর', 'কালাই', 'ক্ষেতলাল', 'পাঁচবিবি'],
+    'খুলনা': ['খুলনা সদর', 'বটিয়াঘাটা', 'দাকোপ', 'ডুমুরিয়া', 'দিঘলিয়া', 'কয়রা', 'পাইকগাছা', 'রূপসা', 'তেরখাদা'],
+    'বাগেরহাট': ['বাগেরহাট সদর', 'ফকিরহাট', 'কচুয়া', 'মোল্লাহাট', 'মোড়েলগঞ্জ', 'রামপাল', 'শরণখোলা', 'চিতলমারী', 'মোংলা'],
+    'সাতক্ষীরা': ['সাতক্ষীরা সদর', 'আশাশুনি', 'দেবহাটা', 'কালীগঞ্জ', 'কলারোয়া', 'শ্যামনগর', 'তালা'],
+    'যশোর': ['যশোর সদর', 'অভয়নগর', 'বাঘারপাড়া', 'চৌগাছা', 'ঝিকরগাছা', 'কেশবপুর', 'মনিরামপুর', 'শার্শা'],
+    'মাগুরা': ['মাগুরা সদর', 'মহম্মদপুর', 'শালিখা', 'শ্রীপুর'],
+    'নড়াইল': ['নড়াইল সদর', 'কালিয়া', 'লোহাগড়া'],
+    'কুষ্টিয়া': ['কুষ্টিয়া সদর', 'ভেড়ামারা', 'দৌলতপুর', 'খোকসা', 'কুমারখালী', 'মিরপুর'],
+    'মেহেরপুর': ['মেহেরপুর সদর', 'গাংনী', 'মুজিবনগর'],
+    'চুয়াডাঙ্গা': ['চুয়াডাঙ্গা সদর', 'আলমডাঙ্গা', 'দামুড়হুদা', 'জীবননগর'],
+    'ঝিনাইদহ': ['ঝিনাইদহ সদর', 'হরিণাকুন্ডু', 'কালীগঞ্জ', 'কোটচাঁদপুর', 'মহেশপুর', 'শৈলকুপা'],
+    'বরিশাল': ['বরিশাল সদর', 'আগৈলঝাড়া', 'বাবুগঞ্জ', 'বাকেরগঞ্জ', 'বানারীপাড়া', 'গৌরনদী', 'হিজলা', 'মেহেন্দিগঞ্জ', 'মুলাদী', 'উজিরপুর'],
+    'ভোলা': ['ভোলা সদর', 'বোরহানউদ্দিন', 'চরফ্যাশন', 'দৌলতখান', 'লালমোহন', 'মনপুরা', 'তজুমদ্দিন'],
+    'পটুয়াখালী': ['পটুয়াখালী সদর', 'বাউফল', 'দশমিনা', 'গলাচিপা', 'কলাপাড়া', 'মির্জাগঞ্জ', 'রাঙ্গাবালী', 'দুমকি'],
+    'বরগুনা': ['বরগুনা সদর', 'আমতলী', 'বামনা', 'বেতাগী', 'পাথরঘাটা', 'তালতলী'],
+    'পিরোজপুর': ['পিরোজপুর সদর', 'ভান্ডারিয়া', 'কাউখালী', 'মঠবাড়িয়া', 'নাজিরপুর', 'নেছারাবাদ', 'ইন্দুরকানী'],
+    'ঝালকাঠি': ['ঝালকাঠি সদর', 'কাঁঠালিয়া', 'নলছিটি', 'রাজাপুর'],
+    'সিলেট': ['সিলেট সদর', 'বালাগঞ্জ', 'বিয়ানীবাজার', 'বিশ্বনাথ', 'ফেঞ্চুগঞ্জ', 'গোলাপগঞ্জ', 'গোয়াইনঘাট', 'জৈন্তাপুর', 'কানাইঘাট', 'কোম্পানীগঞ্জ', 'জকিগঞ্জ', 'দক্ষিণ সুরমা', 'মোগলাবাজার'],
+    'মৌলভীবাজার': ['মৌলভীবাজার সদর', 'বড়লেখা', 'জুড়ী', 'কমলগঞ্জ', 'কুলাউড়া', 'রাজনগর', 'শ্রীমঙ্গল'],
+    'হবিগঞ্জ': ['হবিগঞ্জ সদর', 'আজমিরীগঞ্জ', 'বাহুবল', 'বানিয়াচং', 'চুনারুঘাট', 'কালাউক', 'লাখাই', 'মাধবপুর', 'নবীগঞ্জ', 'শায়েস্তাগঞ্জ'],
+    'সুনামগঞ্জ': ['সুনামগঞ্জ সদর', 'বিশ্বম্ভরপুর', 'ছাতক', 'দোয়ারাবাজার', 'ধর্মপাশা', 'জগন্নাথপুর', 'জামালগঞ্জ', 'দিরাই', 'শাল্লা', 'তাহিরপুর'],
+    'রংপুর': ['রংপুর সদর', 'বদরগঞ্জ', 'গঙ্গাচড়া', 'কাউনিয়া', 'মিঠাপুকুর', 'পীরগাছা', 'পীরগঞ্জ', 'তারাগঞ্জ'],
+    'গাইবান্ধা': ['গাইবান্ধা সদর', 'ফুলছড়ি', 'গোবিন্দগঞ্জ', 'পলাশবাড়ী', 'সাদুল্লাপুর', 'সাঘাটা', 'সুন্দরগঞ্জ'],
+    'কুড়িগ্রাম': ['কুড়িগ্রাম সদর', 'ভূরুঙ্গামারী', 'চর রাজিবপুর', 'চিলমারী', 'নাগেশ্বরী', 'রৌমারী', 'উলিপুর', 'ফুলবাড়ী', 'রাজারহাট'],
+    'লালমনিরহাট': ['লালমনিরহাট সদর', 'আদিতমারী', 'কালীগঞ্জ', 'হাতীবান্ধা', 'পাটগ্রাম'],
+    'নীলফামারী': ['নীলফামারী সদর', 'ডিমলা', 'ডোমার', 'জলঢাকা', 'কিশোরগঞ্জ', 'সৈয়দপুর'],
+    'দিনাজপুর': ['দিনাজপুর সদর', 'বিরামপুর', 'বীরগঞ্জ', 'বোচাগঞ্জ', 'চিরিরবন্দর', 'ফুলবাড়ী', 'ঘোড়াঘাট', 'হাকিমপুর', 'খানসামা', 'নবাবগঞ্জ', 'পার্বতীপুর', 'সেতাবগঞ্জ'],
+    'ঠাকুরগাঁও': ['ঠাকুরগাঁও সদর', 'বালিয়াডাঙ্গী', 'হরিপুর', 'পীরগঞ্জ', 'রাণীশংকৈল'],
+    'পঞ্চগড়': ['পঞ্চগড় সদর', 'আটোয়ারী', 'বোদা', 'দেবীগঞ্জ', 'তেঁতুলিয়া'],
+    'ময়মনসিংহ': ['ময়মনসিংহ সদর', 'ভালুকা', 'ধোবাউড়া', 'ফুলবাড়িয়া', 'গফরগাঁও', 'গৌরীপুর', 'হালুয়াঘাট', 'ঈশ্বরগঞ্জ', 'মুক্তাগাছা', 'নান্দাইল', 'ফুলপুর', 'ত্রিশাল'],
+    'জামালপুর': ['জামালপুর সদর', 'বকশীগঞ্জ', 'দেওয়ানগঞ্জ', 'ইসলামপুর', 'মাদারগঞ্জ', 'মেলান্দহ', 'সরিষাবাড়ী'],
+    'শেরপুর': ['শেরপুর সদর', 'ঝিনাইগাতী', 'নকলা', 'নালিতাবাড়ী', 'শ্রীবরদী'],
+    'নেত্রকোণা': ['নেত্রকোণা সদর', 'আটপাড়া', 'বারহাট্টা', 'দুর্গাপুর', 'কলমাকান্দা', 'কেন্দুয়া', 'খালিয়াজুরী', 'মদন', 'মোহনগঞ্জ', 'পূর্বধলা'],
 };
+
 const divisionMap = {
     'ঢাকা': ['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
     'চট্টগ্রাম': ['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
-    'রাজশাহী': ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],'খুলনা': ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
-    'বরিশাল': ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],'সিলেট': ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
-    'রংপুর': ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],'ময়মনসিংহ': ['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা'],
+    'রাজশাহী': ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
+    'খুলনা': ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
+    'বরিশাল': ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],
+    'সিলেট': ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
+    'রংপুর': ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],
+    'ময়মনসিংহ': ['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা'],
 };
 
 // ========== ফিল্টার ভেরিয়েবল ==========
-let allShops = [], selectedDivision = '', selectedDistrict = '', selectedThana = '', selectedCategory = '';
+let allShops = [];
+let selectedDivision = '';
+let selectedDistrict = '';
+let selectedThana = '';
+let selectedCategory = '';
 
+// ========== ফিল্টার ফাংশন ==========
 function selectDivision(div) {
-    selectedDivision = div; selectedDistrict = selectedThana = selectedCategory = '';
-    document.querySelectorAll('#step1 .f-chip').forEach(c => c.classList.toggle('active', c.textContent === (div || 'সব বিভাগ')));
+    selectedDivision = div;
+    selectedDistrict = '';
+    selectedThana = '';
+    selectedCategory = '';
+    
+    document.querySelectorAll('#step1 .f-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === (div || 'সব বিভাগ'));
+    });
     document.getElementById('sel1').textContent = div ? `✅ ${div}` : '';
     document.getElementById('num1').className = div ? 'fs-num done' : 'fs-num';
     document.getElementById('resetBtn').style.display = div ? 'block' : 'none';
+    
     if (div) {
-        const container = document.getElementById('districtChips');
-        container.innerHTML = `<div class="f-chip active" onclick="selectDistrict('')">সব জেলা</div>`;
-        (divisionMap[div] || []).forEach(d => { const chip = document.createElement('div'); chip.className = 'f-chip'; chip.textContent = d; chip.onclick = () => selectDistrict(d); container.appendChild(chip); });
+        const districts = divisionMap[div] || [];
+        const districtContainer = document.getElementById('districtChips');
+        districtContainer.innerHTML = `<div class="f-chip active" onclick="selectDistrict('')">সব জেলা</div>`;
+        districts.forEach(d => {
+            const chip = document.createElement('div');
+            chip.className = 'f-chip';
+            chip.textContent = d;
+            chip.onclick = () => selectDistrict(d);
+            districtContainer.appendChild(chip);
+        });
         document.getElementById('step2').classList.remove('hidden');
         document.getElementById('step3').classList.add('hidden');
         document.getElementById('step4').classList.add('hidden');
-        document.getElementById('sel2').textContent = document.getElementById('sel3').textContent = document.getElementById('sel4').textContent = '';
-        document.getElementById('num2').className = document.getElementById('num3').className = document.getElementById('num4').className = 'fs-num';
+        document.getElementById('sel2').textContent = '';
+        document.getElementById('sel3').textContent = '';
+        document.getElementById('sel4').textContent = '';
+        document.getElementById('num2').className = 'fs-num';
+        document.getElementById('num3').className = 'fs-num';
+        document.getElementById('num4').className = 'fs-num';
     } else {
         document.getElementById('step2').classList.add('hidden');
         document.getElementById('step3').classList.add('hidden');
@@ -832,15 +707,29 @@ function selectDivision(div) {
     }
     applyFilters();
 }
+
 function selectDistrict(dist) {
-    selectedDistrict = dist; selectedThana = selectedCategory = '';
-    document.querySelectorAll('#districtChips .f-chip').forEach(c => c.classList.toggle('active', c.textContent === (dist || 'সব জেলা')));
+    selectedDistrict = dist;
+    selectedThana = '';
+    selectedCategory = '';
+    
+    document.querySelectorAll('#districtChips .f-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === (dist || 'সব জেলা'));
+    });
     document.getElementById('sel2').textContent = dist ? `✅ ${dist}` : '';
     document.getElementById('num2').className = dist ? 'fs-num done' : 'fs-num';
+    
     if (dist) {
-        const container = document.getElementById('thanaChips');
-        container.innerHTML = `<div class="f-chip active" onclick="selectThana('')">সব থানা</div>`;
-        (thanaMap[dist] || []).forEach(t => { const chip = document.createElement('div'); chip.className = 'f-chip'; chip.textContent = t; chip.onclick = () => selectThana(t); container.appendChild(chip); });
+        const thanas = thanaMap[dist] || [];
+        const thanaContainer = document.getElementById('thanaChips');
+        thanaContainer.innerHTML = `<div class="f-chip active" onclick="selectThana('')">সব থানা</div>`;
+        thanas.forEach(t => {
+            const chip = document.createElement('div');
+            chip.className = 'f-chip';
+            chip.textContent = t;
+            chip.onclick = () => selectThana(t);
+            thanaContainer.appendChild(chip);
+        });
         document.getElementById('step3').classList.remove('hidden');
         document.getElementById('step4').classList.add('hidden');
         document.getElementById('sel3').textContent = '';
@@ -853,74 +742,150 @@ function selectDistrict(dist) {
     }
     applyFilters();
 }
+
 function selectThana(thana) {
-    selectedThana = thana; selectedCategory = '';
-    document.querySelectorAll('#thanaChips .f-chip').forEach(c => c.classList.toggle('active', c.textContent === (thana || 'সব থানা')));
+    selectedThana = thana;
+    selectedCategory = '';
+    
+    document.querySelectorAll('#thanaChips .f-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === (thana || 'সব থানা'));
+    });
     document.getElementById('sel3').textContent = thana ? `✅ ${thana}` : '';
     document.getElementById('num3').className = thana ? 'fs-num done' : 'fs-num';
+    
     if (thana) {
         document.getElementById('step4').classList.remove('hidden');
         document.getElementById('sel4').textContent = '';
         document.getElementById('num4').className = 'fs-num';
-        document.querySelectorAll('#step4 .f-chip').forEach(c => c.classList.toggle('active', c.textContent === 'সব'));
-    } else document.getElementById('step4').classList.add('hidden');
+        document.querySelectorAll('#step4 .f-chip').forEach(c => {
+            c.classList.toggle('active', c.textContent === 'সব');
+        });
+    } else {
+        document.getElementById('step4').classList.add('hidden');
+    }
     applyFilters();
 }
+
 function selectCategory(cat) {
     selectedCategory = cat;
-    document.querySelectorAll('#step4 .f-chip').forEach(c => c.classList.toggle('active', (cat === '' && c.textContent === 'সব') || (cat !== '' && c.textContent.includes(cat))));
+    document.querySelectorAll('#step4 .f-chip').forEach(c => {
+        c.classList.toggle('active', (cat === '' && c.textContent === 'সব') || (cat !== '' && c.textContent.includes(cat)));
+    });
     document.getElementById('sel4').textContent = cat ? `✅ ${cat}` : '';
     document.getElementById('num4').className = cat ? 'fs-num done' : 'fs-num';
     applyFilters();
 }
+
 function resetFilters() {
     selectedDivision = selectedDistrict = selectedThana = selectedCategory = '';
     document.getElementById('step2').classList.add('hidden');
     document.getElementById('step3').classList.add('hidden');
     document.getElementById('step4').classList.add('hidden');
     document.getElementById('resetBtn').style.display = 'none';
-    document.getElementById('sel1').textContent = document.getElementById('sel2').textContent = document.getElementById('sel3').textContent = document.getElementById('sel4').textContent = '';
+    document.getElementById('sel1').textContent = '';
+    document.getElementById('sel2').textContent = '';
+    document.getElementById('sel3').textContent = '';
+    document.getElementById('sel4').textContent = '';
     document.getElementById('num1').className = 'fs-num';
     document.getElementById('searchInput').value = '';
-    document.querySelectorAll('#step1 .f-chip').forEach(c => c.classList.toggle('active', c.textContent === 'সব বিভাগ'));
+    document.querySelectorAll('#step1 .f-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent === 'সব বিভাগ');
+    });
     applyFilters();
-    loadShops();
 }
+
 function applyFilters() {
     let filtered = allShops;
-    if (selectedDivision) filtered = filtered.filter(shop => divisionMap[selectedDivision]?.includes(shop.district));
-    if (selectedDistrict) filtered = filtered.filter(shop => shop.district === selectedDistrict);
-    if (selectedThana) filtered = filtered.filter(shop => shop.thana === selectedThana);
-    if (selectedCategory) filtered = filtered.filter(shop => shop.category === selectedCategory);
-    const q = document.getElementById('searchInput').value.trim().toLowerCase();
-    if (q) filtered = filtered.filter(s => (s.shopName || '').toLowerCase().includes(q) || (s.area || '').toLowerCase().includes(q) || (s.district || '').toLowerCase().includes(q) || (s.thana || '').toLowerCase().includes(q));
+    
+    if (selectedDivision) {
+        const districtsInDivision = divisionMap[selectedDivision] || [];
+        filtered = filtered.filter(shop => districtsInDivision.includes(shop.district));
+    }
+    if (selectedDistrict) {
+        filtered = filtered.filter(shop => shop.district === selectedDistrict);
+    }
+    if (selectedThana) {
+        filtered = filtered.filter(shop => shop.thana === selectedThana);
+    }
+    if (selectedCategory) {
+        filtered = filtered.filter(shop => shop.category === selectedCategory);
+    }
+    
+    const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+    if (searchQuery) {
+        filtered = filtered.filter(shop =>
+            (shop.shopName || '').toLowerCase().includes(searchQuery) ||
+            (shop.area || '').toLowerCase().includes(searchQuery) ||
+            (shop.district || '').toLowerCase().includes(searchQuery) ||
+            (shop.thana || '').toLowerCase().includes(searchQuery)
+        );
+    }
+    
     renderShops(filtered);
 }
+
+// ========== LOAD SHOPS ==========
 function loadShops() {
     db.ref('shops').on('value', snap => {
+        document.getElementById('skeleton')?.remove();
         allShops = [];
-        if (snap.exists()) snap.forEach(c => { const shop = c.val(); if (shop.status === 'approved') allShops.push({ id: c.key, ...shop }); });
-        refreshAllRatings();
+        if (snap.exists()) {
+            snap.forEach(c => {
+                const shop = c.val();
+                if (shop.status === 'approved') {
+                    allShops.push({ id: c.key, ...shop });
+                }
+            });
+        }
+        applyFilters();
     });
 }
+
+// ========== RENDER SHOPS (ভিডিও অটো-পজ সহ) ==========
 function renderShops(shops) {
-    const container = document.getElementById('shopList'), user = auth.currentUser, favorites = user ? JSON.parse(localStorage.getItem(`favorites_${user.uid}`) || '[]') : [];
-    if (!shops.length) { container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার চেষ্টা করুন</div></div>`; return; }
+    const container = document.getElementById('shopList');
+    if (shops.length === 0) {
+        container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার চেষ্টা করুন</div></div>`;
+        return;
+    }
+    
     container.innerHTML = shops.map(shop => {
         let videoId = null;
-        if (shop.youtubeVideoId) videoId = shop.youtubeVideoId;
-        else if (shop.youtube) {
-            const patterns = [/(?:youtube\.com\/watch\?v=)([^&]+)/, /(?:youtu\.be\/)([^?]+)/, /(?:youtube\.com\/embed\/)([^?]+)/];
-            for (let p of patterns) { const m = shop.youtube.match(p); if (m) { videoId = m[1]; break; } }
+        if (shop.youtubeVideoId) {
+            videoId = shop.youtubeVideoId;
+        } else if (shop.youtube) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=)([^&]+)/,
+                /(?:youtu\.be\/)([^?]+)/,
+                /(?:youtube\.com\/embed\/)([^?]+)/
+            ];
+            for (let pattern of patterns) {
+                const match = shop.youtube.match(pattern);
+                if (match) { videoId = match[1]; break; }
+            }
         }
-        const videoEmbed = videoId ? `<iframe class="shop-video" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>` : `<div class="no-video">🎬 কোন ভিডিও নেই</div>`;
-        const desc = shop.description || shop.category || 'পাইকারি দোকান';
-        const addr = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
-        const rating = shop.userRating || 0;
-        let stars = '';
-        for (let i = 1; i <= 5; i++) stars += `<span class="star ${i <= rating ? 'active' : ''}" onclick="setRating('${shop.id}', ${i}, event)">★</span>`;
-        return `<div class="shop-video-card"><div class="video-player-card">${videoEmbed}</div><div class="shop-video-info"><div style="display:flex;justify-content:space-between;align-items:center"><h3 class="shop-video-name" onclick="viewShop('${shop.id}')">${shop.shopName || 'নাম নেই'}</h3><button class="fav-btn ${favorites.includes(shop.id) ? 'active' : ''}" onclick="toggleFavorite('${shop.id}', event)">❤️</button></div><p class="shop-video-desc">${desc}</p><p class="shop-video-address">📍 ${addr}</p><div class="shop-video-rating"><div class="stars">${stars}</div><span class="rating-count">(${rating} ★)</span></div></div></div>`;
+        
+        const videoEmbed = videoId 
+            ? `<iframe class="shop-video" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>`
+            : `<div class="no-video">🎬 কোন ভিডিও নেই</div>`;
+        
+        const description = shop.description || shop.category || 'পাইকারি দোকান';
+        const addressText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
+        
+        return `
+        <div class="shop-video-card">
+            <div class="video-player-card">
+                ${videoEmbed}
+            </div>
+            <div class="shop-video-info">
+                <h3 class="shop-video-name" onclick="viewShop('${shop.id}')">${shop.shopName || 'নাম নেই'}</h3>
+                <p class="shop-video-desc">${description}</p>
+                <p class="shop-video-address">📍 ${addressText}</p>
+            </div>
+        </div>`;
     }).join('');
+    
+    // ভিডিও অটো-পজ সেটআপ
     initVideoObservers();
 }
 </script>
