@@ -22,7 +22,7 @@ body {
     background:var(--bg); 
     min-height:100vh; 
     overflow-x:hidden;
-    padding-bottom: 70px;
+    padding-bottom: 65px;
 }
 
 /* NO INTERNET */
@@ -251,6 +251,7 @@ marquee {
     cursor: pointer;
     padding: 4px;
     transition: all 0.2s ease;
+    color: #ccc;
 }
 .fav-btn.active {
     color: #e74c3c;
@@ -272,10 +273,80 @@ marquee {
 .empty-title { font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px; }
 .empty-sub   { font-size:13px; }
 
-/* BOTTOM NAV - আপডেটেড (উপরে-নিচে কম) */
+/* ক্যাটাগরি পপআপ */
+.category-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: flex-end;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+.category-popup-overlay.show {
+    visibility: visible;
+    opacity: 1;
+}
+.category-popup {
+    background: white;
+    border-radius: 28px 28px 0 0;
+    padding: 20px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+.category-popup-overlay.show .category-popup {
+    transform: translateY(0);
+}
+.category-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid #f0ebff;
+}
+.category-popup-header span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+.category-popup-close {
+    background: #f0ebff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #6c2bd9;
+}
+.category-item {
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    margin-bottom: 8px;
+    background: #faf8ff;
+    border: 1.5px solid #e8e0ff;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+.category-item:hover {
+    background: #f0ebff;
+    border-color: var(--primary);
+    transform: translateX(5px);
+}
+
+/* BOTTOM NAV - উপরে-নিচে অর্ধেক */
 .bottom-nav {
     position: fixed;
-    bottom: 10px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 20px);
@@ -285,7 +356,7 @@ marquee {
     border-radius: 28px;
     display: flex;
     justify-content: space-around;
-    padding: 6px 8px;
+    padding: 3px 8px;
     box-shadow: 0 12px 30px rgba(108,43,217,0.15);
     z-index: 1000;
     gap: 4px;
@@ -301,7 +372,7 @@ marquee {
     font-size: 10px;
     color: #aaa;
     font-family: 'Hind Siliguri', sans-serif;
-    gap: 4px;
+    gap: 3px;
     text-decoration: none;
     border-radius: 20px;
     transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -450,13 +521,24 @@ marquee {
 
 </div>
 
-<!-- নতুন নেভিগেশন বার (ক্যাটাগরি আইকন + ফেবারিট) -->
+<!-- ক্যাটাগরি পপআপ -->
+<div id="categoryPopup" class="category-popup-overlay">
+    <div class="category-popup">
+        <div class="category-popup-header">
+            <span>📂 ক্যাটাগরি বাছাই করুন</span>
+            <button class="category-popup-close" onclick="closeCategoryPopup()">✕</button>
+        </div>
+        <div id="categoryPopupList"></div>
+    </div>
+</div>
+
+<!-- নতুন নেভিগেশন বার -->
 <div class="bottom-nav">
     <div class="nav-item" onclick="navigateTo('favorite')">
         <span class="nav-icon">❤️</span>
         <span>পছন্দ</span>
     </div>
-    <div class="nav-item" onclick="navigateTo('category')">
+    <div class="nav-item" onclick="openCategoryPopup()">
         <span class="nav-icon">📂</span>
         <span>ক্যাটাগরি</span>
     </div>
@@ -464,9 +546,9 @@ marquee {
         <span class="nav-icon">🔍</span>
         <span>খুঁজুন</span>
     </div>
-    <div class="nav-item" onclick="navigateTo('shop')">
-        <span class="nav-icon">🏪</span>
-        <span>দোকান</span>
+    <div class="nav-item" onclick="navigateTo('profile')">
+        <span class="nav-icon">👤</span>
+        <span>প্রোফাইল</span>
     </div>
     <div class="nav-item" onclick="navigateTo('help')">
         <span class="nav-icon">❓</span>
@@ -492,22 +574,13 @@ function navigateTo(page) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     event.currentTarget.classList.add('active');
     switch(page) {
-        case 'home':
-            window.location.href = 'index.html';
-            break;
         case 'favorite':
             showFavorites();
-            break;
-        case 'category':
-            window.location.href = 'categories.html';
             break;
         case 'searchFocus':
             document.getElementById('searchInput').focus();
             document.getElementById('searchSection').classList.remove('hide');
             setTimeout(() => document.getElementById('searchSection').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-            break;
-        case 'shop':
-            window.location.href = 'register.html';
             break;
         case 'profile':
             window.location.href = 'login.html';
@@ -520,8 +593,50 @@ function navigateTo(page) {
     }
 }
 
+// ========== ক্যাটাগরি পপআপ ==========
+const categories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
+
+function openCategoryPopup() {
+    const listContainer = document.getElementById('categoryPopupList');
+    listContainer.innerHTML = categories.map(cat => {
+        const val = cat.replace(/^[\S]+ /, '');
+        return `<div class="category-item" onclick="selectCategoryFromPopup('${val}')">${cat}</div>`;
+    }).join('');
+    document.getElementById('categoryPopup').classList.add('show');
+}
+
+function closeCategoryPopup() {
+    document.getElementById('categoryPopup').classList.remove('show');
+}
+
+function selectCategoryFromPopup(cat) {
+    selectedCategory = cat;
+    selectedDivision = '';
+    selectedDistrict = '';
+    selectedThana = '';
+    // ফিল্টার স্টেপ রিসেট
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step3').classList.add('hidden');
+    document.getElementById('step4').classList.add('hidden');
+    document.getElementById('resetBtn').style.display = 'block';
+    document.getElementById('sel4').textContent = `✅ ${cat}`;
+    document.getElementById('num4').className = 'fs-num done';
+    // ক্যাটাগরি চিপস আপডেট
+    document.querySelectorAll('#step4 .f-chip').forEach(c => {
+        c.classList.toggle('active', c.textContent.includes(cat));
+    });
+    closeCategoryPopup();
+    applyFilters();
+}
+
 function showFavorites() {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const user = auth.currentUser;
+    if (!user) {
+        alert('দয়া করে লগইন করুন!');
+        window.location.href = 'login.html';
+        return;
+    }
+    const favorites = JSON.parse(localStorage.getItem(`favorites_${user.uid}`) || '[]');
     if (favorites.length === 0) {
         alert('আপনার কোনো পছন্দের দোকান নেই!');
         return;
@@ -537,34 +652,65 @@ function viewShop(shopId) {
     else alert('দোকানের আইডি পাওয়া যায়নি!');
 }
 
-// ========== ফেভারিট ফাংশন ==========
+// ========== ফেভারিট ফাংশন (ইউজার ভিত্তিক) ==========
 function toggleFavorite(shopId, event) {
     event.stopPropagation();
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const user = auth.currentUser;
+    if (!user) {
+        alert('দয়া করে লগইন করুন!');
+        window.location.href = 'login.html';
+        return;
+    }
+    const storageKey = `favorites_${user.uid}`;
+    let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
     if (favorites.includes(shopId)) {
         favorites = favorites.filter(id => id !== shopId);
     } else {
         favorites.push(shopId);
     }
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    renderShops(allShops); // রি-রেন্ডার
+    localStorage.setItem(storageKey, JSON.stringify(favorites));
+    renderShops(allShops);
 }
 
 // ========== রেটিং ফাংশন ==========
 function setRating(shopId, rating, event) {
     event.stopPropagation();
-    db.ref('ratings/' + shopId).set({
+    const user = auth.currentUser;
+    if (!user) {
+        alert('দয়া করে লগইন করুন!');
+        window.location.href = 'login.html';
+        return;
+    }
+    db.ref('ratings/' + shopId + '/' + user.uid).set({
         rating: rating,
         updatedAt: Date.now()
     });
     // লোকালি আপডেট
     const shopIndex = allShops.findIndex(s => s.id === shopId);
     if (shopIndex !== -1) {
-        allShops[shopIndex].userRating = rating;
-        // রেটিং অনুযায়ী সাজানো
-        allShops.sort((a, b) => (b.userRating || 0) - (a.userRating || 0));
-        renderShops(allShops);
+        // ইউজারের রেটিং ক্যালকুলেশন (গড়)
+        calculateAverageRating(shopId);
     }
+}
+
+function calculateAverageRating(shopId) {
+    db.ref('ratings/' + shopId).once('value', snap => {
+        let total = 0;
+        let count = 0;
+        if (snap.exists()) {
+            snap.forEach(child => {
+                total += child.val().rating;
+                count++;
+            });
+        }
+        const avg = count > 0 ? total / count : 0;
+        const shopIndex = allShops.findIndex(s => s.id === shopId);
+        if (shopIndex !== -1) {
+            allShops[shopIndex].userRating = Math.round(avg * 10) / 10;
+            allShops.sort((a, b) => (b.userRating || 0) - (a.userRating || 0));
+            applyFilters();
+        }
+    });
 }
 
 // ========== ভিডিও অটো-পজ ==========
@@ -649,8 +795,11 @@ function nextSlide() { clearInterval(slTimer); goSlide(curSlide+1); slTimer=setI
 // ========== AUTH ==========
 auth.onAuthStateChanged(u => {
     if (u) {
-        const profileBtn = document.querySelector('.nav-item:last-child');
-        if (profileBtn) profileBtn.onclick = () => window.location.href = 'dashboard.html';
+        // প্রোফাইল বাটন ড্যাশবোর্ডে নিয়ে যাবে
+        const profileBtn = document.querySelector('.nav-item:nth-child(4)');
+        if (profileBtn) {
+            profileBtn.onclick = () => window.location.href = 'dashboard.html';
+        }
     }
 });
 
@@ -881,7 +1030,7 @@ function resetFilters() {
         c.classList.toggle('active', c.textContent === 'সব বিভাগ');
     });
     applyFilters();
-    loadShops(); // রিফ্রেশ
+    loadShops();
 }
 
 function applyFilters() {
@@ -917,7 +1066,8 @@ function applyFilters() {
 // ========== LOAD SHOPS ==========
 function loadShops() {
     db.ref('shops').on('value', snap => {
-        document.getElementById('skeleton')?.remove();
+        const skeleton = document.getElementById('skeleton');
+        if (skeleton) skeleton.style.display = 'none';
         allShops = [];
         if (snap.exists()) {
             snap.forEach(c => {
@@ -927,7 +1077,6 @@ function loadShops() {
                 }
             });
         }
-        // রেটিং লোড করুন
         loadRatings();
     });
 }
@@ -937,14 +1086,19 @@ function loadRatings() {
         if (snap.exists()) {
             snap.forEach(ratingSnap => {
                 const shopId = ratingSnap.key;
-                const ratingData = ratingSnap.val();
+                let total = 0;
+                let count = 0;
+                ratingSnap.forEach(userRating => {
+                    total += userRating.val().rating;
+                    count++;
+                });
+                const avg = count > 0 ? total / count : 0;
                 const shopIndex = allShops.findIndex(s => s.id === shopId);
                 if (shopIndex !== -1) {
-                    allShops[shopIndex].userRating = ratingData.rating;
+                    allShops[shopIndex].userRating = Math.round(avg * 10) / 10;
                 }
             });
         }
-        // রেটিং অনুযায়ী সাজানো (সবচেয়ে বেশি রেটিং উপরে)
         allShops.sort((a, b) => (b.userRating || 0) - (a.userRating || 0));
         applyFilters();
     });
@@ -953,7 +1107,8 @@ function loadRatings() {
 // ========== RENDER SHOPS ==========
 function renderShops(shops) {
     const container = document.getElementById('shopList');
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const user = auth.currentUser;
+    const favorites = user ? JSON.parse(localStorage.getItem(`favorites_${user.uid}`) || '[]') : [];
     
     if (shops.length === 0) {
         container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার চেষ্টা করুন</div></div>`;
@@ -985,7 +1140,6 @@ function renderShops(shops) {
         const rating = shop.userRating || 0;
         const isFav = favorites.includes(shop.id);
         
-        // স্টার HTML তৈরি
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
             starsHtml += `<span class="star ${i <= rating ? 'active' : ''}" onclick="setRating('${shop.id}', ${i}, event)">★</span>`;
