@@ -49,10 +49,9 @@ body {
 .loading-text { color: white; font-size: 16px; opacity: 0.8; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* হেডার সম্পূর্ণ বাদ দেওয়া হয়েছে - স্ক্রিনশটের মার্ক করা অংশ */
-
+/* হেডার সম্পূর্ণ বাদ দেওয়া হয়েছে - লগআউট, প্রোফাইল প্রিভিউ, স্ট্যাটাস ব্যাজ সবই সরানো হয়েছে */
 .content { 
-    padding: 20px 16px 100px; 
+    padding: 20px 16px 120px; 
 }
 
 .shop-preview-card {
@@ -93,7 +92,7 @@ body {
 }
 .card-shop-address i { color: var(--primary); margin-top: 2px; }
 
-/* status badge টি শুধু কার্ডের ভিতরে ছোট আকারে দেখানো হবে */
+/* ছোট স্ট্যাটাস ব্যাজ - কার্ডের ভিতরে */
 .small-status-badge {
     display: inline-flex;
     align-items: center;
@@ -102,7 +101,7 @@ body {
     border-radius: 99px;
     font-size: 11px;
     font-weight: 600;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 .small-status-badge.approved { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
 .small-status-badge.pending { background: rgba(240,192,64,0.15); color: #f0c040; border: 1px solid rgba(240,192,64,0.3); }
@@ -310,13 +309,66 @@ select.input-field { cursor: pointer; appearance: none; }
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* সেভ বাটন সেকশন - ফিরিয়ে আনা হয়েছে */
+.submit-wrap {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px 20px;
+    background: white;
+    border-top: 1px solid #f0ebff;
+    box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
+    z-index: 100;
+}
+.home-btn {
+    display: block;
+    text-align: center;
+    background-color: #2ecc71;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 40px;
+    margin-bottom: 12px;
+    text-decoration: none;
+}
+.home-btn i { margin-right: 6px; }
+.home-btn:hover { background-color: #27ae60; transform: scale(0.98); }
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.submit-btn.loading { background: #b39ddb; pointer-events: none; }
+.spinner {
+    width: 20px; height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+.submit-btn.loading .spinner { display: block; }
+.submit-btn.loading .btn-text { display: none; }
 </style>
 </head>
 <body>
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">লোড হচ্ছে...</div></div>
 
-<!-- হেডার সম্পূর্ণ বাদ দেওয়া হয়েছে - লগআউট, প্রোফাইল প্রিভিউ, স্ট্যাটাস ব্যাজ সবই সরানো হয়েছে -->
+<!-- হেডার সম্পূর্ণ বাদ দেওয়া হয়েছে -->
 
 <div class="content" id="mainContent" style="display:none">
     <!-- 3D প্রিভিউ কার্ড (এতে ছোট স্ট্যাটাস ব্যাজ থাকবে) -->
@@ -387,8 +439,11 @@ select.input-field { cursor: pointer; appearance: none; }
     </div>
 </div>
 
-<!-- সেভ বাটন সরানো হয়েছে - স্ক্রিনশটের মার্ক করা অংশ -->
-<!-- submit-wrap সম্পূর্ণ বাদ -->
+<!-- সেভ বাটন সেকশন - ফিরিয়ে আনা হয়েছে -->
+<div class="submit-wrap" id="saveWrap" style="display:none">
+    <a href="index.html" class="home-btn"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</a>
+    <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 তথ্য সংরক্ষণ করুন</span></button>
+</div>
 
 <div id="multiCatPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:flex-end;">
     <div style="background:white; border-radius:24px 24px 0 0; padding:20px; width:100%; max-height:80vh; overflow-y:auto;">
@@ -462,12 +517,12 @@ let firstApprovalFlagShown=false;
 function showConfettiAndToast(){ canvasConfetti({particleCount:150,spread:70,origin:{y:0.6},startVelocity:20,colors:['#6c2bd9','#f0c040','#2ecc71']}); let end=Date.now()+2000; const frame=()=>{ canvasConfetti({particleCount:3,angle:60,spread:55,origin:{x:0,y:0.7},startVelocity:25}); canvasConfetti({particleCount:3,angle:120,spread:55,origin:{x:1,y:0.7},startVelocity:25}); if(Date.now()<end) requestAnimationFrame(frame);}; frame(); const toastDiv=document.createElement('div'); toastDiv.className='toast-congrats'; toastDiv.innerHTML='<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv); setTimeout(()=>toastDiv.remove(),4500); localStorage.setItem('congratsShown_'+auth.currentUser?.uid,'true');}
 function showFloatyToast(msg,isError=false){ let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000);}
 
-auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; if(data){ document.getElementById('previewCardShopName').innerHTML=`<i class="fas fa-store"></i> ${data.shopName||'দোকানের নাম'}`; const addrLine=`${data.thana||data.upazila||''}, ${data.district||''}`; document.getElementById('previewCardAddress').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${data.area||addrLine||'ঠিকানা নেই'}`; const cardBadge=document.getElementById('cardStatusBadge'); if(data.status==='approved'){ cardBadge.className='small-status-badge approved'; cardBadge.innerHTML='✅ Approved'; const alreadyShown=localStorage.getItem('congratsShown_'+user.uid); if(!alreadyShown && !firstApprovalFlagShown){ firstApprovalFlagShown=true; showConfettiAndToast();}} else if(data.status==='rejected'){ cardBadge.className='small-status-badge rejected'; cardBadge.innerHTML='❌ Rejected';} else { cardBadge.className='small-status-badge pending'; cardBadge.innerHTML='⏳ পেন্ডিং';}
+auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; document.getElementById('saveWrap').style.display='block'; if(data){ document.getElementById('previewCardShopName').innerHTML=`<i class="fas fa-store"></i> ${data.shopName||'দোকানের নাম'}`; const addrLine=`${data.thana||data.upazila||''}, ${data.district||''}`; document.getElementById('previewCardAddress').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${data.area||addrLine||'ঠিকানা নেই'}`; const cardBadge=document.getElementById('cardStatusBadge'); if(data.status==='approved'){ cardBadge.className='small-status-badge approved'; cardBadge.innerHTML='✅ Approved'; const alreadyShown=localStorage.getItem('congratsShown_'+user.uid); if(!alreadyShown && !firstApprovalFlagShown){ firstApprovalFlagShown=true; showConfettiAndToast();}} else if(data.status==='rejected'){ cardBadge.className='small-status-badge rejected'; cardBadge.innerHTML='❌ Rejected';} else { cardBadge.className='small-status-badge pending'; cardBadge.innerHTML='⏳ পেন্ডিং';}
 document.getElementById('shopName').value=data.shopName||''; document.getElementById('ownerName').value=data.ownerName||''; document.getElementById('description').value=data.description||''; document.getElementById('phone').value=data.phone||''; document.getElementById('whatsapp').value=data.whatsapp||''; document.getElementById('telegram').value=data.telegram||''; document.getElementById('youtube').value=data.youtube||''; document.getElementById('area').value=data.area||'';
 if(data.division){ document.getElementById('division').value=data.division; onDivisionChange(); setTimeout(()=>{ if(data.district){ document.getElementById('district').value=data.district; onDistrictChange(); setTimeout(()=>{ if(data.thana) document.getElementById('thana').value=data.thana; else if(data.upazila) document.getElementById('thana').value=data.upazila; if(document.getElementById('thana').value){ document.getElementById('areaGroup').style.display='block'; document.getElementById('categorySection').style.display='block';}},100);}},50);}
 if(data.categories){ let cats=typeof data.categories==='string'?data.categories.split(',').map(s=>s.trim()):(Array.isArray(data.categories)?data.categories:[]); selectedCategories=cats.filter(c=>c); renderChips();} else if(data.category && !data.categories){ selectedCategories=[data.category]; renderChips();} else renderChips();} else renderChips();});
 
-async function saveShopData(){ const user=auth.currentUser; if(!user) return; const shopName=document.getElementById('shopName').value.trim(); const ownerName=document.getElementById('ownerName').value.trim(); const division=document.getElementById('division').value; const district=document.getElementById('district').value; const thana=document.getElementById('thana').value; const area=document.getElementById('area').value.trim(); const phone=document.getElementById('phone').value.trim(); if(!shopName) return showFloatyToast('দোকানের নাম দিন!',true); if(!ownerName) return showFloatyToast('মালিকের নাম দিন!',true); if(!division) return showFloatyToast('বিভাগ বাছাই করুন!',true); if(!district) return showFloatyToast('জেলা বাছাই করুন!',true); if(!thana) return showFloatyToast('থানা/উপজেলা নির্বাচন করুন!',true); if(!area) return showFloatyToast('এলাকা/বিস্তারিত ঠিকানা দিন!',true); if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!',true); try{ await db.ref('shops/'+user.uid).update({ shopName, ownerName, description:document.getElementById('description').value.trim(), division, district, thana, upazila:thana, area, categories:selectedCategories.join(','), phone, whatsapp:document.getElementById('whatsapp').value.trim(), telegram:document.getElementById('telegram').value.trim(), youtube:document.getElementById('youtube').value.trim(), updatedAt:Date.now()}); document.getElementById('previewCardShopName').innerHTML=`<i class="fas fa-store"></i> ${shopName}`; document.getElementById('previewCardAddress').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${area}`; showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!');} catch(e){ showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।',true);}}
+async function saveShopData(){ const user=auth.currentUser; if(!user) return; const shopName=document.getElementById('shopName').value.trim(); const ownerName=document.getElementById('ownerName').value.trim(); const division=document.getElementById('division').value; const district=document.getElementById('district').value; const thana=document.getElementById('thana').value; const area=document.getElementById('area').value.trim(); const phone=document.getElementById('phone').value.trim(); if(!shopName) return showFloatyToast('দোকানের নাম দিন!',true); if(!ownerName) return showFloatyToast('মালিকের নাম দিন!',true); if(!division) return showFloatyToast('বিভাগ বাছাই করুন!',true); if(!district) return showFloatyToast('জেলা বাছাই করুন!',true); if(!thana) return showFloatyToast('থানা/উপজেলা নির্বাচন করুন!',true); if(!area) return showFloatyToast('এলাকা/বিস্তারিত ঠিকানা দিন!',true); if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!',true); const btn=document.getElementById('saveBtn'); btn.classList.add('loading'); try{ await db.ref('shops/'+user.uid).update({ shopName, ownerName, description:document.getElementById('description').value.trim(), division, district, thana, upazila:thana, area, categories:selectedCategories.join(','), phone, whatsapp:document.getElementById('whatsapp').value.trim(), telegram:document.getElementById('telegram').value.trim(), youtube:document.getElementById('youtube').value.trim(), updatedAt:Date.now()}); document.getElementById('previewCardShopName').innerHTML=`<i class="fas fa-store"></i> ${shopName}`; document.getElementById('previewCardAddress').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${area}`; showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!'); btn.classList.remove('loading');} catch(e){ btn.classList.remove('loading'); showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।',true);}}
 function viewProfile(){ if(auth.currentUser) window.location.href=`profile.html?id=${auth.currentUser.uid}`;}
 </script>
 </body>
