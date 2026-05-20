@@ -54,14 +54,14 @@ body {
     padding: 20px 16px 120px; 
 }
 
-/* 3D কার্ড - সাদা কালার */
+/* 3D কার্ড - সেভ বাটনের কালার (বেগুনি গ্রেডিয়েন্ট) */
 .shop-preview-card {
-    background: white;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border-radius: 28px;
-    padding: 24px 20px;
+    padding: 30px 20px;
     margin-bottom: 24px;
-    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
-    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 20px 35px -12px rgba(108,43,217,0.4);
+    border: none;
     transform-style: preserve-3d;
     transition: transform 0.3s ease, box-shadow 0.3s;
     animation: floatCard 3s infinite ease-in-out;
@@ -69,86 +69,108 @@ body {
 }
 @keyframes floatCard {
     0% { transform: translateY(0px) rotateX(2deg); }
-    50% { transform: translateY(-6px) rotateX(4deg); }
+    50% { transform: translateY(-8px) rotateX(4deg); }
     100% { transform: translateY(0px) rotateX(2deg); }
 }
+
+/* দোকানের নাম - অ্যানিমেশন ভিউ */
 .card-shop-name {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 800;
     color: white;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     display: inline-block;
-    padding: 8px 20px;
-    border-radius: 50px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 12px rgba(108,43,217,0.3);
+    padding: 10px 24px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 60px;
+    backdrop-filter: blur(5px);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    animation: glowPulse 2s ease-in-out infinite, textPop 0.5s ease-out;
 }
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(255,255,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
+@keyframes textPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 .card-shop-address {
     font-size: 14px;
-    color: var(--text);
+    color: rgba(255,255,255,0.9);
     margin-top: 6px;
-    padding: 8px 12px;
-    background: #f8f6ff;
+    padding: 8px 16px;
+    background: rgba(0,0,0,0.15);
     border-radius: 30px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     max-width: 90%;
     margin-left: auto;
     margin-right: auto;
+    backdrop-filter: blur(4px);
 }
 .card-shop-address i { 
-    color: var(--primary); 
+    color: white; 
     font-size: 13px;
 }
 
-/* সিলেক্টেড ক্যাটাগরি দেখানোর জন্য - দোকানের নামের নিচে - সবসময় দৃশ্যমান */
+/* সিলেক্টেড ক্যাটাগরি - দোকানের নামের নিচে */
 .selected-categories-display {
-    margin: 15px auto 0;
-    padding: 8px 12px;
-    background: #f0ebff;
-    border-radius: 30px;
+    margin: 18px auto 0;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 40px;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
     max-width: 95%;
-    min-height: 40px;
+    min-height: 45px;
+    backdrop-filter: blur(4px);
 }
 .selected-cat-tag-mini {
     background: white;
     color: var(--primary);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 500;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    animation: tagFadeIn 0.3s ease-out;
 }
-/* কোন ক্যাটাগরি না থাকলে */
+@keyframes tagFadeIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
 .no-categories-msg {
-    color: #999;
-    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
     padding: 4px 0;
 }
 
-/* ছোট স্ট্যাটাস ব্যাজ - সাদা */
+/* ছোট স্ট্যাটাস ব্যাজ */
 .small-status-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
-    padding: 6px 18px;
+    padding: 6px 20px;
     border-radius: 99px;
     font-size: 12px;
     font-weight: 600;
-    margin-top: 15px;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-top: 18px;
+    background: rgba(255,255,255,0.25);
+    color: white;
+    backdrop-filter: blur(4px);
 }
-.small-status-badge.approved { background: #2ecc71; color: white; border: none; }
-.small-status-badge.pending { background: #f0c040; color: white; border: none; }
-.small-status-badge.rejected { background: #e74c3c; color: white; border: none; }
+.small-status-badge.approved { background: rgba(46,204,113,0.8); color: white; }
+.small-status-badge.pending { background: rgba(240,192,64,0.8); color: white; }
+.small-status-badge.rejected { background: rgba(231,76,60,0.8); color: white; }
 
 .toast-congrats {
     position: fixed;
@@ -329,7 +351,6 @@ select.input-field { cursor: pointer; appearance: none; }
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
 }
 /* সমস্ত চোখের আইকন সরানো হয়েছে */
 .view-profile-btn i { display: none; }
@@ -425,30 +446,25 @@ select.input-field { cursor: pointer; appearance: none; }
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">লোড হচ্ছে...</div></div>
 
-<!-- হেডার সম্পূর্ণ বাদ দেওয়া হয়েছে -->
-
 <div class="content" id="mainContent" style="display:none">
-    <!-- 3D প্রিভিউ কার্ড - সব লেখা সেন্টার বরাবর -->
+    <!-- 3D প্রিভিউ কার্ড - সেভ বাটনের কালার (বেগুনি) -->
     <div class="shop-preview-card" id="shopPreviewCard">
         <div class="card-shop-name" id="previewCardShopName">দোকানের নাম</div>
         <div class="card-shop-address">
             <i class="fas fa-map-marker-alt"></i> 
             <span id="previewCardAddress">ঠিকানা প্রদর্শিত হবে</span>
         </div>
-        <!-- সিলেক্টেড ক্যাটাগরি প্রদর্শন - দোকানের নামের নিচে -->
+        <!-- সিলেক্টেড ক্যাটাগরি - দোকানের নামের নিচে -->
         <div id="selectedCategoriesDisplay" class="selected-categories-display">
             <span class="no-categories-msg">কোন ক্যাটাগরি নির্বাচন করা হয়নি</span>
         </div>
         <div id="cardStatusBadge" class="small-status-badge pending">⏳ পেন্ডিং</div>
     </div>
 
-    <!-- প্রোফাইল দেখুন বাটন - সব চোখের আইকন বাদ -->
     <button class="view-profile-btn" onclick="viewProfile()"> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
     
-    <!-- প্রোফাইল এডিট টগল বাটন -->
     <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
-    <!-- এডিট ফর্ম -->
     <div id="editFormContainer">
         <div class="tile-card">
             <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
@@ -503,7 +519,6 @@ select.input-field { cursor: pointer; appearance: none; }
     </div>
 </div>
 
-<!-- সেভ বাটন সেকশন -->
 <div class="submit-wrap" id="saveWrap" style="display:none">
     <a href="index.html" class="home-btn"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</a>
     <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 সেভ করুন</span></button>
@@ -662,7 +677,6 @@ auth.onAuthStateChanged(async user=>{
         document.getElementById('youtube').value = data.youtube || ''; 
         document.getElementById('area').value = data.area || '';
         
-        // ক্যাটাগরি লোড করুন
         if(data.categories){ 
             let cats = typeof data.categories === 'string' ? data.categories.split(',').map(s => s.trim()) : (Array.isArray(data.categories) ? data.categories : []); 
             selectedCategories = cats.filter(c => c); 
@@ -726,8 +740,8 @@ async function saveShopData(){
             youtube:document.getElementById('youtube').value.trim(), 
             updatedAt:Date.now()
         }); 
-        document.getElementById('previewCardShopName').innerHTML=`${shopName}`; 
-        document.getElementById('previewCardAddress').innerHTML=`${area}`; 
+        document.getElementById('previewCardShopName').innerHTML = `${shopName}`; 
+        document.getElementById('previewCardAddress').innerHTML = `${area}`; 
         updatePreviewCategories(); 
         showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!'); 
         btn.classList.remove('loading'); 
