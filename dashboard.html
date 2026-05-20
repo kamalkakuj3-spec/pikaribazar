@@ -108,7 +108,10 @@ body {
 .status-badge.approved { background: rgba(46,204,113,0.2); color: var(--success); border: 1px solid rgba(46,204,113,0.4); }
 .status-badge.rejected { background: rgba(231,76,60,0.2); color: var(--error); border: 1px solid rgba(231,76,60,0.4); }
 
-.content { padding: 20px 16px 100px; }
+/* কন্টেন্ট padding-bottom বাড়ানো হয়েছে যাতে ফিক্সড বাটনের সাথে ওভারল্যাপ না হয় */
+.content { 
+    padding: 20px 16px 180px; 
+}
 
 .shop-preview-card {
     background: white;
@@ -332,7 +335,7 @@ select.input-field { cursor: pointer; appearance: none; }
     background: white;
     border-top: 1px solid #f0ebff;
     box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
-    transition: transform 0.3s ease;
+    z-index: 100;
 }
 .home-btn {
     display: block;
@@ -398,10 +401,11 @@ select.input-field { cursor: pointer; appearance: none; }
 }
 .edit-toggle-btn i { color: white; }
 
-/* Edit form hidden by default */
+/* এডিট ফর্ম ডিফল্ট লুকানো */
 #editFormContainer {
     display: none;
     transition: all 0.3s ease;
+    margin-bottom: 20px;
 }
 #editFormContainer.show {
     display: block;
@@ -534,7 +538,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// District & Thana Maps (full)
+// District & Thana Maps
 const districtMap = {
     'ঢাকা': ['ঢাকা', 'গাজীপুর', 'নারায়ণগঞ্জ', 'মুন্সীগঞ্জ', 'মানিকগঞ্জ', 'নরসিংদী', 'ফরিদপুর', 'রাজবাড়ী', 'গোপালগঞ্জ', 'মাদারীপুর', 'শরীয়তপুর', 'কিশোরগঞ্জ', 'টাঙ্গাইল'],
     'চট্টগ্রাম': ['চট্টগ্রাম', 'কক্সবাজার', 'কুমিল্লা', 'চাঁদপুর', 'ব্রাহ্মণবাড়িয়া', 'নোয়াখালী', 'ফেনী', 'লক্ষ্মীপুর', 'রাঙামাটি', 'খাগড়াছড়ি', 'বান্দরবান'],
@@ -568,11 +572,10 @@ const thanaMap = {
     'ময়মনসিংহ': ['ময়মনসিংহ সদর','ভালুকা','ধোবাউড়া','ফুলবাড়িয়া','গফরগাঁও','গৌরীপুর','হালুয়াঘাট','ঈশ্বরগঞ্জ','মুক্তাগাছা','নান্দাইল','ফুলপুর','ত্রিশাল']
 };
 
-function onDivisionChange() { /* same as before */ const div=document.getElementById('division').value; const dSel=document.getElementById('district'); dSel.innerHTML='<option value="">— জেলা বাছাই করুন —</option>'; document.getElementById('districtGroup').style.display='none'; document.getElementById('thanaGroup').style.display='none'; document.getElementById('areaGroup').style.display='none'; document.getElementById('categorySection').style.display='none'; if(div && districtMap[div]){ districtMap[div].forEach(d=>{ let opt=new Option(d,d); dSel.add(opt);}); document.getElementById('districtGroup').style.display='block';} }
+function onDivisionChange() { const div=document.getElementById('division').value; const dSel=document.getElementById('district'); dSel.innerHTML='<option value="">— জেলা বাছাই করুন —</option>'; document.getElementById('districtGroup').style.display='none'; document.getElementById('thanaGroup').style.display='none'; document.getElementById('areaGroup').style.display='none'; document.getElementById('categorySection').style.display='none'; if(div && districtMap[div]){ districtMap[div].forEach(d=>{ let opt=new Option(d,d); dSel.add(opt);}); document.getElementById('districtGroup').style.display='block';} }
 function onDistrictChange() { const dist=document.getElementById('district').value; const tSel=document.getElementById('thana'); tSel.innerHTML='<option value="">— থানা বাছাই করুন —</option>'; document.getElementById('thanaGroup').style.display='none'; document.getElementById('areaGroup').style.display='none'; document.getElementById('categorySection').style.display='none'; if(dist && thanaMap[dist]){ thanaMap[dist].forEach(t=>{ let opt=new Option(t,t); tSel.add(opt);}); document.getElementById('thanaGroup').style.display='block';} }
 function onThanaChange() { const thana=document.getElementById('thana').value; if(thana){ document.getElementById('areaGroup').style.display='block'; document.getElementById('categorySection').style.display='block';} else{ document.getElementById('areaGroup').style.display='none'; document.getElementById('categorySection').style.display='none';} }
 
-// Categories
 const allCategories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
 let selectedCategories = [];
 function renderChips() { const container=document.getElementById('selectedChipsContainer'); container.innerHTML=''; selectedCategories.forEach(cat=>{ const chip=document.createElement('div'); chip.className='cat-chip'; chip.innerHTML=`${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g,"\\'")}')"></i>`; container.appendChild(chip);}); document.getElementById('categoriesHidden').value=selectedCategories.join(','); }
@@ -580,7 +583,14 @@ function removeCategory(cat){ selectedCategories=selectedCategories.filter(c=>c!
 function openMultiCategoryPopup(){ const listDiv=document.getElementById('multiCatList'); listDiv.innerHTML=''; allCategories.forEach(cat=>{ const isSelected=selectedCategories.includes(cat); const div=document.createElement('div'); div.className=`cat-item-multi ${isSelected?'selected':''}`; div.innerHTML=`${cat} ${isSelected?'<i class="fas fa-check-circle"></i>':''}`; div.onclick=()=>{ if(selectedCategories.includes(cat)) selectedCategories=selectedCategories.filter(c=>c!==cat); else selectedCategories.push(cat); renderChips(); openMultiCategoryPopup();}; listDiv.appendChild(div);}); document.getElementById('multiCatPopup').style.display='flex';}
 function closeMultiCatPopup(){ document.getElementById('multiCatPopup').style.display='none'; renderChips();}
 
-function toggleEditForm(){ const formDiv=document.getElementById('editFormContainer'); formDiv.classList.toggle('show'); }
+function toggleEditForm(){ 
+    const formDiv=document.getElementById('editFormContainer'); 
+    formDiv.classList.toggle('show'); 
+    if(formDiv.classList.contains('show')){
+        setTimeout(()=>{ document.getElementById('editToggleBtn').scrollIntoView({ behavior:'smooth', block:'center' }); }, 100);
+    }
+}
+
 let firstApprovalFlagShown=false;
 function showConfettiAndToast(){ canvasConfetti({particleCount:150,spread:70,origin:{y:0.6},startVelocity:20,colors:['#6c2bd9','#f0c040','#2ecc71']}); let end=Date.now()+2000; const frame=()=>{ canvasConfetti({particleCount:3,angle:60,spread:55,origin:{x:0,y:0.7},startVelocity:25}); canvasConfetti({particleCount:3,angle:120,spread:55,origin:{x:1,y:0.7},startVelocity:25}); if(Date.now()<end) requestAnimationFrame(frame);}; frame(); const toastDiv=document.createElement('div'); toastDiv.className='toast-congrats'; toastDiv.innerHTML='<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv); setTimeout(()=>toastDiv.remove(),4500); localStorage.setItem('congratsShown_'+auth.currentUser?.uid,'true');}
 function showFloatyToast(msg,isError=false){ let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000);}
