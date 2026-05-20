@@ -76,7 +76,7 @@ body {
 }
 
 .content { 
-    padding: 20px 16px 120px; 
+    padding: 20px 16px 100px; 
 }
 
 .shop-preview-card {
@@ -344,6 +344,86 @@ select.input-field { cursor: pointer; appearance: none; }
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* তিনটি বাটন - ট্রান্সফরমার কালার */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 24px 0 30px;
+}
+.action-btn {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    overflow: hidden;
+}
+.action-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+.action-btn:hover::before {
+    width: 200px;
+    height: 200px;
+}
+.action-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+}
+.action-btn:active {
+    transform: translateY(2px) scale(0.98);
+}
+
+/* বাটন ১ - প্রোফাইল ভিউ */
+.btn-profile {
+    background: linear-gradient(135deg, #6c2bd9, #a259f7);
+    color: white;
+    box-shadow: 0 4px 15px rgba(108,43,217,0.3);
+}
+.btn-profile:hover {
+    background: linear-gradient(135deg, #5a1bc9, #9147e7);
+    box-shadow: 0 8px 25px rgba(108,43,217,0.4);
+}
+
+/* বাটন ২ - এডিট প্রোফাইল */
+.btn-edit {
+    background: linear-gradient(135deg, #f0c040, #f5b042);
+    color: #1a0a3e;
+    box-shadow: 0 4px 15px rgba(240,192,64,0.3);
+}
+.btn-edit:hover {
+    background: linear-gradient(135deg, #e0b030, #e5a032);
+    box-shadow: 0 8px 25px rgba(240,192,64,0.4);
+}
+
+/* বাটন ৩ - হোম পেজে যান */
+.btn-home {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+}
+.btn-home:hover {
+    background: linear-gradient(135deg, #27ae60, #1e8c50);
+    box-shadow: 0 8px 25px rgba(46,204,113,0.4);
+}
+
 .submit-wrap {
     position: fixed;
     bottom: 0;
@@ -355,70 +435,10 @@ select.input-field { cursor: pointer; appearance: none; }
     box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
     z-index: 100;
 }
-.home-btn {
-    display: block;
-    text-align: center;
-    background-color: #2ecc71;
-    color: white;
-    font-weight: 700;
-    font-size: 16px;
-    padding: 12px 16px;
-    border-radius: 40px;
-    margin-bottom: 12px;
-    text-decoration: none;
-}
-.home-btn i { margin-right: 6px; }
-.home-btn:hover { background-color: #27ae60; transform: scale(0.98); }
 
-/* লগআউট বাটন - ইউনিক ডিজাইন ও অ্যানিমেশন */
-.logout-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
-    border: none;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    position: relative;
-    overflow: hidden;
-}
-.logout-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255,255,255,0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-.logout-btn:hover::before {
-    width: 300px;
-    height: 300px;
-}
-.logout-btn:hover {
-    background: linear-gradient(135deg, #c0392b, #a93226);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(231,76,60,0.4);
-}
-.logout-btn:active {
-    transform: translateY(2px) scale(0.98);
-}
-.logout-btn i {
-    transition: transform 0.3s ease;
-}
-.logout-btn:hover i {
-    transform: translateX(3px);
+/* পুরানো বাটন লুকানো */
+.view-profile-btn, .edit-toggle-btn {
+    display: none;
 }
 
 .submit-btn {
@@ -460,8 +480,18 @@ select.input-field { cursor: pointer; appearance: none; }
         <div id="cardStatusBadge" class="small-status-badge pending">⏳ পেন্ডিং</div>
     </div>
 
-    <button class="view-profile-btn" id="viewProfileBtn" onclick="viewProfile()"><i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
-    <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
+    <!-- তিনটি বাটন - ট্রান্সফরমার কালার -->
+    <div class="action-buttons">
+        <button class="action-btn btn-profile" onclick="viewProfile()">
+            <i class="fas fa-user-circle"></i> আপনার প্রোফাইল দেখুন
+        </button>
+        <button class="action-btn btn-edit" onclick="toggleEditForm()">
+            <i class="fas fa-edit"></i> প্রোফাইল এডিট করুন
+        </button>
+        <button class="action-btn btn-home" onclick="goHome()">
+            <i class="fas fa-home"></i> হোম পেজে যান
+        </button>
+    </div>
 
     <div id="editFormContainer">
         <div class="tile-card">
@@ -520,7 +550,6 @@ select.input-field { cursor: pointer; appearance: none; }
 <div class="submit-wrap" id="saveWrap" style="display:none">
     <a href="index.html" class="home-btn"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</a>
     <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 সেভ করুন</span></button>
-    <!-- লগআউট বাটন - ইউনিক ডিজাইন ও অ্যানিমেশন -->
     <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
 </div>
 
@@ -676,6 +705,10 @@ function closeMultiCatPopup(){ document.getElementById('multiCatPopup').style.di
 
 function toggleEditForm(){ const formDiv=document.getElementById('editFormContainer'); formDiv.classList.toggle('show'); if(formDiv.classList.contains('show')){ setTimeout(()=>{ document.getElementById('editToggleBtn').scrollIntoView({ behavior:'smooth', block:'center' }); }, 100); } }
 
+function goHome() {
+    window.location.href = 'index.html';
+}
+
 let firstApprovalFlagShown=false;
 function showConfettiAndToast(){ canvasConfetti({particleCount:150,spread:70,origin:{y:0.6},startVelocity:20,colors:['#6c2bd9','#f0c040','#2ecc71']}); let end=Date.now()+2000; const frame=()=>{ canvasConfetti({particleCount:3,angle:60,spread:55,origin:{x:0,y:0.7},startVelocity:25}); canvasConfetti({particleCount:3,angle:120,spread:55,origin:{x:1,y:0.7},startVelocity:25}); if(Date.now()<end) requestAnimationFrame(frame);}; frame(); const toastDiv=document.createElement('div'); toastDiv.className='toast-congrats'; toastDiv.innerHTML='<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv); setTimeout(()=>toastDiv.remove(),4500); localStorage.setItem('congratsShown_'+auth.currentUser?.uid,'true');}
 function showFloatyToast(msg,isError=false){ let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000);}
@@ -685,7 +718,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if(viewBtn) viewBtn.innerHTML = '<i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)';
 });
 
-// ========== প্রোফাইল ফাংশন ==========
 function viewProfile() {
     const user = auth.currentUser;
     if (user) {
@@ -695,7 +727,6 @@ function viewProfile() {
     }
 }
 
-// ========== লগআউট ফাংশন ==========
 function logout() {
     auth.signOut().then(() => {
         showFloatyToast('✅ সফলভাবে লগআউট হয়েছে!');
@@ -706,7 +737,6 @@ function logout() {
         showFloatyToast('লগআউট করতে সমস্যা হয়েছে!', true);
     });
 }
-// ==================================
 
 auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; document.getElementById('saveWrap').style.display='block'; if(data){ 
     document.getElementById('previewCardShopName').innerHTML = `${data.shopName || 'দোকানের নাম'}`;
