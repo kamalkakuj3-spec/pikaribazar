@@ -49,94 +49,91 @@ body {
 .loading-text { color: white; font-size: 16px; opacity: 0.8; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* হেডার সম্পূর্ণ বাদ দেওয়া হয়েছে */
 .content { 
     padding: 20px 16px 120px; 
 }
 
-/* 3D কার্ড - সাইজ ছোট */
+/* 3D কার্ড - সাইজ অর্ধেক করা হয়েছে (উপরে ও নিচে কমিয়ে) */
 .shop-preview-card {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border-radius: 24px;
-    padding: 20px 16px;
+    padding: 16px 16px;
     margin-bottom: 24px;
     box-shadow: 0 15px 25px -10px rgba(108,43,217,0.4);
     border: none;
-    text-align: center;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s;
     animation: floatCard 3s infinite ease-in-out;
+    text-align: center;
 }
 @keyframes floatCard {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-4px); }
-    100% { transform: translateY(0px); }
+    0% { transform: translateY(0px) rotateX(1deg); }
+    50% { transform: translateY(-4px) rotateX(2deg); }
+    100% { transform: translateY(0px) rotateX(1deg); }
 }
 
-/* দোকানের নাম - রঙিন অ্যানিমেশন ইফেক্ট */
+/* দোকানের নাম - ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড, অ্যানিমেশন */
 .card-shop-name {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     display: inline-block;
-    padding: 8px 20px;
+    padding: 6px 16px;
+    background: transparent;
+    backdrop-filter: none;
     margin-bottom: 12px;
-    letter-spacing: 1px;
-    background: linear-gradient(135deg, #FFD700, #FFA500, #FF6347, #FFD700);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradientShift 3s ease infinite, textPop 0.5s ease-out;
-    text-shadow: none;
-}
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    letter-spacing: 0.5px;
+    animation: textPop 0.5s ease-out;
 }
 @keyframes textPop {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* ঠিকানা - বড় সাইজ */
+/* ঠিকানা - ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড */
 .card-shop-address {
-    font-size: 15px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.95);
-    margin: 8px auto;
-    padding: 6px 12px;
-    background: rgba(0,0,0,0.15);
-    border-radius: 40px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+    margin-top: 4px;
+    padding: 5px 12px;
+    background: transparent;
+    border-radius: 30px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
 }
 .card-shop-address i { 
-    color: #FFD700; 
-    font-size: 13px;
+    color: white; 
+    font-size: 11px;
 }
 
-/* সিলেক্টেড ক্যাটাগরি - দোকানের নামের ঠিক নিচে, বড় সাইজ */
+/* সিলেক্টেড ক্যাটাগরি - দোকানের নামের নিচে (এখন অবশ্যই নিচে যাবে) */
 .selected-categories-display {
-    margin: 12px auto 0;
-    padding: 8px 12px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50px;
+    margin: 10px auto 0;
+    padding: 6px 10px;
+    background: transparent;
+    border-radius: 30px;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 6px;
     justify-content: center;
     max-width: 100%;
-    min-height: 45px;
+    min-height: 35px;
 }
 .selected-cat-tag-mini {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    color: #4a1a9e;
-    padding: 6px 16px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    background: rgba(255,255,255,0.25);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 500;
+    backdrop-filter: blur(2px);
     animation: tagFadeIn 0.3s ease-out;
 }
 @keyframes tagFadeIn {
@@ -144,30 +141,29 @@ body {
     to { transform: scale(1); opacity: 1; }
 }
 .no-categories-msg {
-    color: rgba(255,255,255,0.8);
-    font-size: 13px;
-    padding: 5px 0;
-    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    font-size: 11px;
+    padding: 2px 0;
 }
 
-/* স্ট্যাটাস ব্যাজ */
+/* স্ট্যাটাস ব্যাজ - ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড */
 .small-status-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 6px 18px;
+    gap: 4px;
+    padding: 4px 14px;
     border-radius: 99px;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
-    margin-top: 12px;
+    margin-top: 10px;
     background: rgba(255,255,255,0.2);
     color: white;
     backdrop-filter: blur(2px);
 }
-.small-status-badge.approved { background: rgba(46,204,113,0.7); color: white; }
-.small-status-badge.pending { background: rgba(240,192,64,0.7); color: white; }
-.small-status-badge.rejected { background: rgba(231,76,60,0.7); color: white; }
+.small-status-badge.approved { background: rgba(46,204,113,0.5); color: white; }
+.small-status-badge.pending { background: rgba(240,192,64,0.5); color: white; }
+.small-status-badge.rejected { background: rgba(231,76,60,0.5); color: white; }
 
 .toast-congrats {
     position: fixed;
@@ -441,13 +437,14 @@ select.input-field { cursor: pointer; appearance: none; }
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">লোড হচ্ছে...</div></div>
 
 <div class="content" id="mainContent" style="display:none">
+    <!-- 3D প্রিভিউ কার্ড - সাইজ অর্ধেক, ট্রান্সপারেন্ট ব্যাকগ্রাউন্ডের উপাদান -->
     <div class="shop-preview-card" id="shopPreviewCard">
         <div class="card-shop-name" id="previewCardShopName">দোকানের নাম</div>
         <div class="card-shop-address">
             <i class="fas fa-map-marker-alt"></i> 
             <span id="previewCardAddress">ঠিকানা প্রদর্শিত হবে</span>
         </div>
-        <!-- ক্যাটাগরি - দোকানের নামের ঠিক নিচে -->
+        <!-- সিলেক্টেড ক্যাটাগরি - দোকানের নামের ঠিক নিচে -->
         <div id="selectedCategoriesDisplay" class="selected-categories-display">
             <span class="no-categories-msg">কোন ক্যাটাগরি নির্বাচন করা হয়নি</span>
         </div>
