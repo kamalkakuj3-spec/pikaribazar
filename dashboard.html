@@ -332,6 +332,7 @@ select.input-field { cursor: pointer; appearance: none; }
     background: white;
     border-top: 1px solid #f0ebff;
     box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
+    transition: transform 0.3s ease;
 }
 .home-btn {
     display: block;
@@ -374,7 +375,7 @@ select.input-field { cursor: pointer; appearance: none; }
 .submit-btn.loading .spinner { display: block; }
 .submit-btn.loading .btn-text { display: none; }
 
-.view-profile-btn {
+.view-profile-btn, .edit-toggle-btn {
     width: 100%;
     padding: 14px;
     background: #f0ebff;
@@ -384,11 +385,31 @@ select.input-field { cursor: pointer; appearance: none; }
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+}
+.edit-toggle-btn {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    color: white;
+    margin-bottom: 20px;
+}
+.edit-toggle-btn i { color: white; }
+
+/* Edit form hidden by default */
+#editFormContainer {
+    display: none;
+    transition: all 0.3s ease;
+}
+#editFormContainer.show {
+    display: block;
+    animation: slideDown 0.4s ease;
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
@@ -421,83 +442,68 @@ select.input-field { cursor: pointer; appearance: none; }
         <div class="notice-text"><div class="notice-title">Approval পেন্ডিং</div>আপনার দোকান Admin-এর কাছে Approval-এর জন্য অপেক্ষায় আছে।</div>
     </div>
 
+    <!-- প্রোফাইল দেখুন বাটন -->
     <button class="view-profile-btn" onclick="viewProfile()"><i class="fas fa-eye"></i> আমার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
+    
+    <!-- প্রোফাইল এডিট টগল বাটন -->
+    <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
-    <div class="tile-card">
-        <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
-        <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
-        <div class="input-group"><label class="input-label">মালিকের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div></div>
-        <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
-    </div>
+    <!-- এডিট ফর্ম (সবকিছু লুকানো থাকবে, টগল বাটনে ক্লিক করলে দেখাবে) -->
+    <div id="editFormContainer">
+        <!-- দোকানের তথ্য -->
+        <div class="tile-card">
+            <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
+            <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
+            <div class="input-group"><label class="input-label">মালিকের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div></div>
+            <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
+        </div>
 
-    <!-- ঠিকানা: বিভাগ → জেলা → থানা/উপজেলা (পূর্ণাঙ্গ তালিকা সহ) -->
-    <div class="tile-card">
-        <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → থানা/উপজেলা</div></div></div>
-        
-        <div class="input-group">
-            <label class="input-label">① বিভাগ *</label>
-            <div class="input-wrap">
-                <span class="input-icon">🗺️</span>
-                <select class="input-field" id="division" onchange="onDivisionChange()">
-                    <option value="">— বিভাগ বাছাই করুন —</option>
-                    <option value="ঢাকা">ঢাকা</option>
-                    <option value="চট্টগ্রাম">চট্টগ্রাম</option>
-                    <option value="রাজশাহী">রাজশাহী</option>
-                    <option value="খুলনা">খুলনা</option>
-                    <option value="বরিশাল">বরিশাল</option>
-                    <option value="সিলেট">সিলেট</option>
-                    <option value="রংপুর">রংপুর</option>
-                    <option value="ময়মনসিংহ">ময়মনসিংহ</option>
-                </select>
-                <span class="select-arrow">▼</span>
+        <!-- ঠিকানা -->
+        <div class="tile-card">
+            <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → থানা/উপজেলা</div></div></div>
+            <div class="input-group">
+                <label class="input-label">① বিভাগ *</label>
+                <div class="input-wrap">
+                    <span class="input-icon">🗺️</span>
+                    <select class="input-field" id="division" onchange="onDivisionChange()">
+                        <option value="">— বিভাগ বাছাই করুন —</option>
+                        <option value="ঢাকা">ঢাকা</option><option value="চট্টগ্রাম">চট্টগ্রাম</option><option value="রাজশাহী">রাজশাহী</option>
+                        <option value="খুলনা">খুলনা</option><option value="বরিশাল">বরিশাল</option><option value="সিলেট">সিলেট</option>
+                        <option value="রংপুর">রংপুর</option><option value="ময়মনসিংহ">ময়মনসিংহ</option>
+                    </select>
+                    <span class="select-arrow">▼</span>
+                </div>
+            </div>
+            <div class="input-group" id="districtGroup" style="display:none">
+                <label class="input-label">② জেলা *</label>
+                <div class="input-wrap"><span class="input-icon">📌</span><select class="input-field" id="district" onchange="onDistrictChange()"><option value="">— জেলা বাছাই করুন —</option></select><span class="select-arrow">▼</span></div>
+            </div>
+            <div class="input-group" id="thanaGroup" style="display:none">
+                <label class="input-label">③ থানা/উপজেলা *</label>
+                <div class="input-wrap"><span class="input-icon">🏘️</span><select class="input-field" id="thana" onchange="onThanaChange()"><option value="">— থানা বাছাই করুন —</option></select><span class="select-arrow">▼</span></div>
+            </div>
+            <div class="input-group" id="areaGroup" style="display:none">
+                <label class="input-label">④ এলাকা/বিস্তারিত ঠিকানা *</label>
+                <div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="বাড়ির নম্বর, রোড, সেক্টর ইত্যাদি..." style="height:70px"></textarea></div>
             </div>
         </div>
 
-        <div class="input-group" id="districtGroup" style="display:none">
-            <label class="input-label">② জেলা *</label>
-            <div class="input-wrap">
-                <span class="input-icon">📌</span>
-                <select class="input-field" id="district" onchange="onDistrictChange()">
-                    <option value="">— জেলা বাছাই করুন —</option>
-                </select>
-                <span class="select-arrow">▼</span>
-            </div>
+        <!-- ক্যাটাগরি -->
+        <div class="tile-card" id="categorySection" style="display:none">
+            <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন</div></div></div>
+            <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
+            <button type="button" class="cat-select-btn" onclick="openMultiCategoryPopup()"><span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span><span>▼</span></button>
+            <input type="hidden" id="categoriesHidden" value="">
         </div>
 
-        <div class="input-group" id="thanaGroup" style="display:none">
-            <label class="input-label">③ থানা/উপজেলা *</label>
-            <div class="input-wrap">
-                <span class="input-icon">🏘️</span>
-                <select class="input-field" id="thana" onchange="onThanaChange()">
-                    <option value="">— থানা বাছাই করুন —</option>
-                </select>
-                <span class="select-arrow">▼</span>
-            </div>
+        <!-- যোগাযোগ -->
+        <div class="tile-card">
+            <div class="tile-header"><div class="tile-icon">📞</div><div><div class="tile-title">যোগাযোগের তথ্য</div><div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div></div></div>
+            <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
+            <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
+            <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
+            <div class="input-group"><label class="input-label">YouTube চ্যানেল লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
         </div>
-
-        <div class="input-group" id="areaGroup" style="display:none">
-            <label class="input-label">④ এলাকা/বিস্তারিত ঠিকানা *</label>
-            <div class="input-wrap">
-                <span class="input-icon" style="top:18px">🏠</span>
-                <textarea class="input-field" id="area" placeholder="বাড়ির নম্বর, রোড, সেক্টর ইত্যাদি..." style="height:70px"></textarea>
-            </div>
-        </div>
-    </div>
-
-    <!-- ক্যাটাগরি মাল্টি সিলেক্ট -->
-    <div class="tile-card" id="categorySection" style="display:none">
-        <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন</div></div></div>
-        <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
-        <button type="button" class="cat-select-btn" id="multiCatBtn" onclick="openMultiCategoryPopup()"><span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span><span>▼</span></button>
-        <input type="hidden" id="categoriesHidden" value="">
-    </div>
-
-    <div class="tile-card">
-        <div class="tile-header"><div class="tile-icon">📞</div><div><div class="tile-title">যোগাযোগের তথ্য</div><div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div></div></div>
-        <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
-        <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
-        <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
-        <div class="input-group"><label class="input-label">YouTube চ্যানেল লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
     </div>
 </div>
 
@@ -528,7 +534,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// ========== জেলা ও থানার ডাটা (পূর্ণাঙ্গ তালিকা) ==========
+// District & Thana Maps (full)
 const districtMap = {
     'ঢাকা': ['ঢাকা', 'গাজীপুর', 'নারায়ণগঞ্জ', 'মুন্সীগঞ্জ', 'মানিকগঞ্জ', 'নরসিংদী', 'ফরিদপুর', 'রাজবাড়ী', 'গোপালগঞ্জ', 'মাদারীপুর', 'শরীয়তপুর', 'কিশোরগঞ্জ', 'টাঙ্গাইল'],
     'চট্টগ্রাম': ['চট্টগ্রাম', 'কক্সবাজার', 'কুমিল্লা', 'চাঁদপুর', 'ব্রাহ্মণবাড়িয়া', 'নোয়াখালী', 'ফেনী', 'লক্ষ্মীপুর', 'রাঙামাটি', 'খাগড়াছড়ি', 'বান্দরবান'],
@@ -539,242 +545,54 @@ const districtMap = {
     'রংপুর': ['রংপুর', 'গাইবান্ধা', 'কুড়িগ্রাম', 'লালমনিরহাট', 'নীলফামারী', 'দিনাজপুর', 'ঠাকুরগাঁও', 'পঞ্চগড়'],
     'ময়মনসিংহ': ['ময়মনসিংহ', 'জামালপুর', 'শেরপুর', 'নেত্রকোণা']
 };
-
 const thanaMap = {
-    'ঢাকা': ['আদাবর', 'উত্তরা', 'তেজগাঁও', 'ধামরাই', 'নবাবগঞ্জ', 'বাড্ডা', 'মিরপুর', 'মোহাম্মদপুর', 'যাত্রাবাড়ী', 'রামপুরা', 'লালবাগ', 'শাহবাগ', 'সাভার', 'সূত্রাপুর', 'হাজারীবাগ'],
-    'গাজীপুর': ['গাজীপুর সদর', 'কালিয়াকৈর', 'কাপাসিয়া', 'শ্রীপুর'],
-    'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর', 'আড়াইহাজার', 'বন্দর', 'রূপগঞ্জ', 'সোনারগাঁও'],
-    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর', 'গজারিয়া', 'টংগিবাড়ী', 'লৌহজং', 'শ্রীনগর'],
-    'মানিকগঞ্জ': ['মানিকগঞ্জ সদর', 'ঘিওর', 'দৌলতপুর', 'শিবালয়', 'সাটুরিয়া', 'হরিরামপুর'],
-    'নরসিংদী': ['নরসিংদী সদর', 'বেলাবো', 'পলাশ', 'মনোহরদী', 'রায়পুরা', 'শিবপুর'],
-    'ফরিদপুর': ['ফরিদপুর সদর', 'আলফাডাঙ্গা', 'বোয়ালমারী', 'মধুখালী', 'নগরকান্দা', 'সদরপুর', 'চরভদ্রাসন', 'সালথা'],
-    'রাজবাড়ী': ['রাজবাড়ী সদর', 'গোয়ালন্দ', 'পাংশা', 'বালিয়াকান্দি', 'কালুখালী'],
-    'গোপালগঞ্জ': ['গোপালগঞ্জ সদর', 'কাশিয়ানী', 'কোটালীপাড়া', 'টুঙ্গিপাড়া', 'মুকসুদপুর'],
-    'মাদারীপুর': ['মাদারীপুর সদর', 'কালকিনি', 'ডাসার', 'শিবচর', 'রাজৈর'],
-    'শরীয়তপুর': ['শরীয়তপুর সদর', 'গোসাইরহাট', 'জাজিরা', 'নড়িয়া', 'ভেদরগঞ্জ', 'ডামুড্যা'],
-    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর', 'অট্টগ্রাম', 'ইটনা', 'করিমগঞ্জ', 'কটিয়াদী', 'তাড়াইল', 'পাকুন্দিয়া', 'বাজিতপুর', 'ভৈরব', 'মিঠামইন', 'হোসেনপুর', 'নিকলী', 'কুলিয়ারচর'],
-    'টাঙ্গাইল': ['টাঙ্গাইল সদর', 'বাসাইল', 'দেলদুয়ার', 'ঘাটাইল', 'গোপালপুর', 'কালিহাতী', 'মধুপুর', 'মির্জাপুর', 'নাগরপুর', 'সখিপুর', 'ধনবাড়ী'],
-    'চট্টগ্রাম': ['চট্টগ্রাম সদর', 'আনোয়ারা', 'বাঁশখালী', 'বোয়ালখালী', 'চন্দনাইশ', 'দোহাজারী', 'ফটিকছড়ি', 'হাটহাজারী', 'লোহাগাড়া', 'মিরসরাই', 'পটিয়া', 'রাঙ্গুনিয়া', 'রাউজান', 'সন্দ্বীপ', 'সাতকানিয়া', 'সীতাকুণ্ডা'],
-    'কক্সবাজার': ['কক্সবাজার সদর', 'চকরিয়া', 'কুতুবদিয়া', 'মহেশখালী', 'রামু', 'টেকনাফ', 'উখিয়া', 'পেকুয়া'],
-    'কুমিল্লা': ['কুমিল্লা সদর', 'বরুড়া', 'ব্রাহ্মণপাড়া', 'বুড়িচং', 'চান্দিনা', 'চৌদ্দগ্রাম', 'দাউদকান্দি', 'দেবিদ্বার', 'হোমনা', 'লাকসাম', 'মনোহরগঞ্জ', 'মুরাদনগর', 'নাঙ্গলকোট', 'তিতাস'],
-    'চাঁদপুর': ['চাঁদপুর সদর', 'ফরিদগঞ্জ', 'হাইমচর', 'হাজীগঞ্জ', 'কচুয়া', 'মতলব উত্তর', 'মতলব দক্ষিণ', 'শাহরাস্তি'],
-    'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর', 'আখাউড়া', 'বাঞ্ছারামপুর', 'বিজয়নগর', 'কসবা', 'নবীনগর', 'নাসিরনগর', 'সরাইল'],
-    'নোয়াখালী': ['নোয়াখালী সদর', 'বেগমগঞ্জ', 'চাটখিল', 'কবিরহাট', 'সেনবাগ', 'সোনাইমুড়ি', 'সুবর্ণচর', 'কোম্পানীগঞ্জ'],
-    'ফেনী': ['ফেনী সদর', 'ছাগলনাইয়া', 'দাগনভূঁইয়া', 'পরশুরাম', 'সোনাগাজী'],
-    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর', 'রামগঞ্জ', 'রামগতি', 'রায়পুর'],
-    'রাজশাহী': ['রাজশাহী সদর', 'বাঘা', 'বাগমারা', 'চারঘাট', 'দুর্গাপুর', 'গোদাগাড়ী', 'মোহনপুর', 'পবা', 'পুঠিয়া', 'তানোর'],
-    'নাটোর': ['নাটোর সদর', 'বাগাতিপাড়া', 'বড়াইগ্রাম', 'গুরুদাসপুর', 'লালপুর', 'নলডাঙ্গা', 'সিংড়া'],
-    'নওগাঁ': ['নওগাঁ সদর', 'আত্রাই', 'বাদলগাছী', 'ধামইরহাট', 'মহাদেবপুর', 'মান্দা', 'নিয়ামতপুর', 'পত্নীতলা', 'পোরশা', 'রাণীনগর', 'সাপাহার'],
-    'খুলনা': ['খুলনা সদর', 'বটিয়াঘাটা', 'দাকোপ', 'ডুমুরিয়া', 'দিঘলিয়া', 'কয়রা', 'পাইকগাছা', 'রূপসা', 'তেরখাদা'],
-    'বাগেরহাট': ['বাগেরহাট সদর', 'ফকিরহাট', 'কচুয়া', 'মোল্লাহাট', 'মোড়েলগঞ্জ', 'রামপাল', 'শরণখোলা', 'চিতলমারী', 'মোংলা'],
-    'সাতক্ষীরা': ['সাতক্ষীরা সদর', 'আশাশুনি', 'দেবহাটা', 'কালীগঞ্জ', 'কলারোয়া', 'শ্যামনগর', 'তালা'],
-    'যশোর': ['যশোর সদর', 'অভয়নগর', 'বাঘারপাড়া', 'চৌগাছা', 'ঝিকরগাছা', 'কেশবপুর', 'মনিরামপুর', 'শার্শা'],
-    'সিলেট': ['সিলেট সদর', 'বালাগঞ্জ', 'বিয়ানীবাজার', 'বিশ্বনাথ', 'ফেঞ্চুগঞ্জ', 'গোলাপগঞ্জ', 'গোয়াইনঘাট', 'জৈন্তাপুর', 'কানাইঘাট', 'কোম্পানীগঞ্জ', 'জকিগঞ্জ', 'দক্ষিণ সুরমা', 'মোগলাবাজার'],
-    'মৌলভীবাজার': ['মৌলভীবাজার সদর', 'বড়লেখা', 'জুড়ী', 'কমলগঞ্জ', 'কুলাউড়া', 'রাজনগর', 'শ্রীমঙ্গল'],
-    'হবিগঞ্জ': ['হবিগঞ্জ সদর', 'আজমিরীগঞ্জ', 'বাহুবল', 'বানিয়াচং', 'চুনারুঘাট', 'কালাউক', 'লাখাই', 'মাধবপুর', 'নবীগঞ্জ', 'শায়েস্তাগঞ্জ'],
-    'রংপুর': ['রংপুর সদর', 'বদরগঞ্জ', 'গঙ্গাচড়া', 'কাউনিয়া', 'মিঠাপুকুর', 'পীরগাছা', 'পীরগঞ্জ', 'তারাগঞ্জ'],
-    'দিনাজপুর': ['দিনাজপুর সদর', 'বিরামপুর', 'বীরগঞ্জ', 'বোচাগঞ্জ', 'চিরিরবন্দর', 'ফুলবাড়ী', 'ঘোড়াঘাট', 'হাকিমপুর', 'খানসামা', 'নবাবগঞ্জ', 'পার্বতীপুর', 'সেতাবগঞ্জ'],
-    'ময়মনসিংহ': ['ময়মনসিংহ সদর', 'ভালুকা', 'ধোবাউড়া', 'ফুলবাড়িয়া', 'গফরগাঁও', 'গৌরীপুর', 'হালুয়াঘাট', 'ঈশ্বরগঞ্জ', 'মুক্তাগাছা', 'নান্দাইল', 'ফুলপুর', 'ত্রিশাল']
+    'ঢাকা': ['আদাবর','উত্তরা','তেজগাঁও','ধামরাই','নবাবগঞ্জ','বাড্ডা','মিরপুর','মোহাম্মদপুর','যাত্রাবাড়ী','রামপুরা','লালবাগ','শাহবাগ','সাভার','সূত্রাপুর','হাজারীবাগ'],
+    'গাজীপুর': ['গাজীপুর সদর','কালিয়াকৈর','কাপাসিয়া','শ্রীপুর'], 'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর','আড়াইহাজার','বন্দর','রূপগঞ্জ','সোনারগাঁও'],
+    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর','গজারিয়া','টংগিবাড়ী','লৌহজং','শ্রীনগর'], 'মানিকগঞ্জ': ['মানিকগঞ্জ সদর','ঘিওর','দৌলতপুর','শিবালয়','সাটুরিয়া','হরিরামপুর'],
+    'নরসিংদী': ['নরসিংদী সদর','বেলাবো','পলাশ','মনোহরদী','রায়পুরা','শিবপুর'], 'ফরিদপুর': ['ফরিদপুর সদর','আলফাডাঙ্গা','বোয়ালমারী','মধুখালী','নগরকান্দা','সদরপুর','চরভদ্রাসন','সালথা'],
+    'রাজবাড়ী': ['রাজবাড়ী সদর','গোয়ালন্দ','পাংশা','বালিয়াকান্দি','কালুখালী'], 'গোপালগঞ্জ': ['গোপালগঞ্জ সদর','কাশিয়ানী','কোটালীপাড়া','টুঙ্গিপাড়া','মুকসুদপুর'],
+    'মাদারীপুর': ['মাদারীপুর সদর','কালকিনি','ডাসার','শিবচর','রাজৈর'], 'শরীয়তপুর': ['শরীয়তপুর সদর','গোসাইরহাট','জাজিরা','নড়িয়া','ভেদরগঞ্জ','ডামুড্যা'],
+    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর','অট্টগ্রাম','ইটনা','করিমগঞ্জ','কটিয়াদী','তাড়াইল','পাকুন্দিয়া','বাজিতপুর','ভৈরব','মিঠামইন','হোসেনপুর','নিকলী','কুলিয়ারচর'],
+    'টাঙ্গাইল': ['টাঙ্গাইল সদর','বাসাইল','দেলদুয়ার','ঘাটাইল','গোপালপুর','কালিহাতী','মধুপুর','মির্জাপুর','নাগরপুর','সখিপুর','ধনবাড়ী'],
+    'চট্টগ্রাম': ['চট্টগ্রাম সদর','আনোয়ারা','বাঁশখালী','বোয়ালখালী','চন্দনাইশ','দোহাজারী','ফটিকছড়ি','হাটহাজারী','লোহাগাড়া','মিরসরাই','পটিয়া','রাঙ্গুনিয়া','রাউজান','সন্দ্বীপ','সাতকানিয়া','সীতাকুণ্ডা'],
+    'কক্সবাজার': ['কক্সবাজার সদর','চকরিয়া','কুতুবদিয়া','মহেশখালী','রামু','টেকনাফ','উখিয়া','পেকুয়া'], 'কুমিল্লা': ['কুমিল্লা সদর','বরুড়া','ব্রাহ্মণপাড়া','বুড়িচং','চান্দিনা','চৌদ্দগ্রাম','দাউদকান্দি','দেবিদ্বার','হোমনা','লাকসাম','মনোহরগঞ্জ','মুরাদনগর','নাঙ্গলকোট','তিতাস'],
+    'চাঁদপুর': ['চাঁদপুর সদর','ফরিদগঞ্জ','হাইমচর','হাজীগঞ্জ','কচুয়া','মতলব উত্তর','মতলব দক্ষিণ','শাহরাস্তি'], 'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর','আখাউড়া','বাঞ্ছারামপুর','বিজয়নগর','কসবা','নবীনগর','নাসিরনগর','সরাইল'],
+    'নোয়াখালী': ['নোয়াখালী সদর','বেগমগঞ্জ','চাটখিল','কবিরহাট','সেনবাগ','সোনাইমুড়ি','সুবর্ণচর','কোম্পানীগঞ্জ'], 'ফেনী': ['ফেনী সদর','ছাগলনাইয়া','দাগনভূঁইয়া','পরশুরাম','সোনাগাজী'],
+    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর','রামগঞ্জ','রামগতি','রায়পুর'], 'রাজশাহী': ['রাজশাহী সদর','বাঘা','বাগমারা','চারঘাট','দুর্গাপুর','গোদাগাড়ী','মোহনপুর','পবা','পুঠিয়া','তানোর'],
+    'নাটোর': ['নাটোর সদর','বাগাতিপাড়া','বড়াইগ্রাম','গুরুদাসপুর','লালপুর','নলডাঙ্গা','সিংড়া'], 'নওগাঁ': ['নওগাঁ সদর','আত্রাই','বাদলগাছী','ধামইরহাট','মহাদেবপুর','মান্দা','নিয়ামতপুর','পত্নীতলা','পোরশা','রাণীনগর','সাপাহার'],
+    'খুলনা': ['খুলনা সদর','বটিয়াঘাটা','দাকোপ','ডুমুরিয়া','দিঘলিয়া','কয়রা','পাইকগাছা','রূপসা','তেরখাদা'], 'বাগেরহাট': ['বাগেরহাট সদর','ফকিরহাট','কচুয়া','মোল্লাহাট','মোড়েলগঞ্জ','রামপাল','শরণখোলা','চিতলমারী','মোংলা'],
+    'সাতক্ষীরা': ['সাতক্ষীরা সদর','আশাশুনি','দেবহাটা','কালীগঞ্জ','কলারোয়া','শ্যামনগর','তালা'], 'যশোর': ['যশোর সদর','অভয়নগর','বাঘারপাড়া','চৌগাছা','ঝিকরগাছা','কেশবপুর','মনিরামপুর','শার্শা'],
+    'সিলেট': ['সিলেট সদর','বালাগঞ্জ','বিয়ানীবাজার','বিশ্বনাথ','ফেঞ্চুগঞ্জ','গোলাপগঞ্জ','গোয়াইনঘাট','জৈন্তাপুর','কানাইঘাট','কোম্পানীগঞ্জ','জকিগঞ্জ','দক্ষিণ সুরমা','মোগলাবাজার'],
+    'মৌলভীবাজার': ['মৌলভীবাজার সদর','বড়লেখা','জুড়ী','কমলগঞ্জ','কুলাউড়া','রাজনগর','শ্রীমঙ্গল'], 'হবিগঞ্জ': ['হবিগঞ্জ সদর','আজমিরীগঞ্জ','বাহুবল','বানিয়াচং','চুনারুঘাট','কালাউক','লাখাই','মাধবপুর','নবীগঞ্জ','শায়েস্তাগঞ্জ'],
+    'রংপুর': ['রংপুর সদর','বদরগঞ্জ','গঙ্গাচড়া','কাউনিয়া','মিঠাপুকুর','পীরগাছা','পীরগঞ্জ','তারাগঞ্জ'], 'দিনাজপুর': ['দিনাজপুর সদর','বিরামপুর','বীরগঞ্জ','বোচাগঞ্জ','চিরিরবন্দর','ফুলবাড়ী','ঘোড়াঘাট','হাকিমপুর','খানসামা','নবাবগঞ্জ','পার্বতীপুর','সেতাবগঞ্জ'],
+    'ময়মনসিংহ': ['ময়মনসিংহ সদর','ভালুকা','ধোবাউড়া','ফুলবাড়িয়া','গফরগাঁও','গৌরীপুর','হালুয়াঘাট','ঈশ্বরগঞ্জ','মুক্তাগাছা','নান্দাইল','ফুলপুর','ত্রিশাল']
 };
 
-function onDivisionChange() {
-    const div = document.getElementById('division').value;
-    const districtSelect = document.getElementById('district');
-    districtSelect.innerHTML = '<option value="">— জেলা বাছাই করুন —</option>';
-    document.getElementById('districtGroup').style.display = 'none';
-    document.getElementById('thanaGroup').style.display = 'none';
-    document.getElementById('areaGroup').style.display = 'none';
-    document.getElementById('categorySection').style.display = 'none';
-    if (div && districtMap[div]) {
-        districtMap[div].forEach(d => {
-            const opt = document.createElement('option');
-            opt.value = d;
-            opt.textContent = d;
-            districtSelect.appendChild(opt);
-        });
-        document.getElementById('districtGroup').style.display = 'block';
-    }
-}
+function onDivisionChange() { /* same as before */ const div=document.getElementById('division').value; const dSel=document.getElementById('district'); dSel.innerHTML='<option value="">— জেলা বাছাই করুন —</option>'; document.getElementById('districtGroup').style.display='none'; document.getElementById('thanaGroup').style.display='none'; document.getElementById('areaGroup').style.display='none'; document.getElementById('categorySection').style.display='none'; if(div && districtMap[div]){ districtMap[div].forEach(d=>{ let opt=new Option(d,d); dSel.add(opt);}); document.getElementById('districtGroup').style.display='block';} }
+function onDistrictChange() { const dist=document.getElementById('district').value; const tSel=document.getElementById('thana'); tSel.innerHTML='<option value="">— থানা বাছাই করুন —</option>'; document.getElementById('thanaGroup').style.display='none'; document.getElementById('areaGroup').style.display='none'; document.getElementById('categorySection').style.display='none'; if(dist && thanaMap[dist]){ thanaMap[dist].forEach(t=>{ let opt=new Option(t,t); tSel.add(opt);}); document.getElementById('thanaGroup').style.display='block';} }
+function onThanaChange() { const thana=document.getElementById('thana').value; if(thana){ document.getElementById('areaGroup').style.display='block'; document.getElementById('categorySection').style.display='block';} else{ document.getElementById('areaGroup').style.display='none'; document.getElementById('categorySection').style.display='none';} }
 
-function onDistrictChange() {
-    const district = document.getElementById('district').value;
-    const thanaSelect = document.getElementById('thana');
-    thanaSelect.innerHTML = '<option value="">— থানা বাছাই করুন —</option>';
-    document.getElementById('thanaGroup').style.display = 'none';
-    document.getElementById('areaGroup').style.display = 'none';
-    document.getElementById('categorySection').style.display = 'none';
-    if (district && thanaMap[district]) {
-        thanaMap[district].forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            thanaSelect.appendChild(opt);
-        });
-        document.getElementById('thanaGroup').style.display = 'block';
-    }
-}
-
-function onThanaChange() {
-    const thana = document.getElementById('thana').value;
-    if (thana) {
-        document.getElementById('areaGroup').style.display = 'block';
-        document.getElementById('categorySection').style.display = 'block';
-    } else {
-        document.getElementById('areaGroup').style.display = 'none';
-        document.getElementById('categorySection').style.display = 'none';
-    }
-}
-
-// ক্যাটাগরি
+// Categories
 const allCategories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
 let selectedCategories = [];
+function renderChips() { const container=document.getElementById('selectedChipsContainer'); container.innerHTML=''; selectedCategories.forEach(cat=>{ const chip=document.createElement('div'); chip.className='cat-chip'; chip.innerHTML=`${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g,"\\'")}')"></i>`; container.appendChild(chip);}); document.getElementById('categoriesHidden').value=selectedCategories.join(','); }
+function removeCategory(cat){ selectedCategories=selectedCategories.filter(c=>c!==cat); renderChips();}
+function openMultiCategoryPopup(){ const listDiv=document.getElementById('multiCatList'); listDiv.innerHTML=''; allCategories.forEach(cat=>{ const isSelected=selectedCategories.includes(cat); const div=document.createElement('div'); div.className=`cat-item-multi ${isSelected?'selected':''}`; div.innerHTML=`${cat} ${isSelected?'<i class="fas fa-check-circle"></i>':''}`; div.onclick=()=>{ if(selectedCategories.includes(cat)) selectedCategories=selectedCategories.filter(c=>c!==cat); else selectedCategories.push(cat); renderChips(); openMultiCategoryPopup();}; listDiv.appendChild(div);}); document.getElementById('multiCatPopup').style.display='flex';}
+function closeMultiCatPopup(){ document.getElementById('multiCatPopup').style.display='none'; renderChips();}
 
-function renderChips() {
-    const container = document.getElementById('selectedChipsContainer');
-    container.innerHTML = '';
-    selectedCategories.forEach(cat => {
-        const chip = document.createElement('div');
-        chip.className = 'cat-chip';
-        chip.innerHTML = `${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g, "\\'")}')"></i>`;
-        container.appendChild(chip);
-    });
-    document.getElementById('categoriesHidden').value = selectedCategories.join(',');
-}
-function removeCategory(cat) { selectedCategories = selectedCategories.filter(c => c !== cat); renderChips(); }
-function openMultiCategoryPopup() {
-    const listDiv = document.getElementById('multiCatList');
-    listDiv.innerHTML = '';
-    allCategories.forEach(cat => {
-        const isSelected = selectedCategories.includes(cat);
-        const div = document.createElement('div');
-        div.className = `cat-item-multi ${isSelected ? 'selected' : ''}`;
-        div.innerHTML = `${cat} ${isSelected ? '<i class="fas fa-check-circle"></i>' : ''}`;
-        div.onclick = () => {
-            if(selectedCategories.includes(cat)) selectedCategories = selectedCategories.filter(c => c !== cat);
-            else selectedCategories.push(cat);
-            renderChips();
-            openMultiCategoryPopup();
-        };
-        listDiv.appendChild(div);
-    });
-    document.getElementById('multiCatPopup').style.display = 'flex';
-}
-function closeMultiCatPopup() { document.getElementById('multiCatPopup').style.display = 'none'; renderChips(); }
+function toggleEditForm(){ const formDiv=document.getElementById('editFormContainer'); formDiv.classList.toggle('show'); }
+let firstApprovalFlagShown=false;
+function showConfettiAndToast(){ canvasConfetti({particleCount:150,spread:70,origin:{y:0.6},startVelocity:20,colors:['#6c2bd9','#f0c040','#2ecc71']}); let end=Date.now()+2000; const frame=()=>{ canvasConfetti({particleCount:3,angle:60,spread:55,origin:{x:0,y:0.7},startVelocity:25}); canvasConfetti({particleCount:3,angle:120,spread:55,origin:{x:1,y:0.7},startVelocity:25}); if(Date.now()<end) requestAnimationFrame(frame);}; frame(); const toastDiv=document.createElement('div'); toastDiv.className='toast-congrats'; toastDiv.innerHTML='<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv); setTimeout(()=>toastDiv.remove(),4500); localStorage.setItem('congratsShown_'+auth.currentUser?.uid,'true');}
+function showFloatyToast(msg,isError=false){ let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000);}
 
-let firstApprovalFlagShown = false;
-function showConfettiAndToast() {
-    canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, startVelocity: 20, colors: ['#6c2bd9', '#f0c040', '#2ecc71'] });
-    let end = Date.now() + 2000;
-    const frame = () => { canvasConfetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, startVelocity: 25 }); canvasConfetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, startVelocity: 25 }); if(Date.now() < end) requestAnimationFrame(frame); };
-    frame();
-    const toastDiv = document.createElement('div'); toastDiv.className = 'toast-congrats'; toastDiv.innerHTML = '<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv);
-    setTimeout(() => toastDiv.remove(), 4500);
-    localStorage.setItem('congratsShown_'+auth.currentUser?.uid, 'true');
-}
-function showFloatyToast(msg, isError = false) {
-    let toast = document.createElement('div'); toast.className = 'custom-toast' + (isError ? ' error' : ''); toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 4000);
-}
+auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainHeader').style.display='block'; document.getElementById('mainContent').style.display='block'; document.getElementById('saveWrap').style.display='block'; if(data){ document.getElementById('previewAvatar').textContent=data.shopName?data.shopName.charAt(0):'?'; document.getElementById('previewName').textContent=data.shopName||''; document.getElementById('previewCardShopName').innerHTML=`<i class="fas fa-store"></i> ${data.shopName||'দোকানের নাম'}`; const addrLine=`${data.thana||data.upazila||''}, ${data.district||''}`; document.getElementById('previewAddress').textContent=`📍 ${addrLine}`; document.getElementById('previewCardAddress').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${data.area||addrLine||'ঠিকানা নেই'}`; const badge=document.getElementById('statusBadge'), notice=document.getElementById('noticeTile'); if(data.status==='approved'){ badge.className='status-badge approved'; badge.textContent='✅ Approved'; notice.className='notice-tile approved'; notice.innerHTML='<div class="notice-icon">🎉</div><div class="notice-text"><div class="notice-title">অভিনন্দন!</div>আপনার দোকান Approved এবং তালিকায় যুক্ত।</div>'; const alreadyShown=localStorage.getItem('congratsShown_'+user.uid); if(!alreadyShown && !firstApprovalFlagShown){ firstApprovalFlagShown=true; showConfettiAndToast();}} else if(data.status==='rejected'){ badge.className='status-badge rejected'; badge.textContent='❌ Rejected'; notice.className='notice-tile rejected'; notice.innerHTML='<div class="notice-icon">❌</div><div class="notice-text"><div class="notice-title">দুঃখিত!</div>আপনার দোকান Reject হয়েছে। সঠিক তথ্য দিন।</div>';}
+document.getElementById('shopName').value=data.shopName||''; document.getElementById('ownerName').value=data.ownerName||''; document.getElementById('description').value=data.description||''; document.getElementById('phone').value=data.phone||''; document.getElementById('whatsapp').value=data.whatsapp||''; document.getElementById('telegram').value=data.telegram||''; document.getElementById('youtube').value=data.youtube||''; document.getElementById('area').value=data.area||'';
+if(data.division){ document.getElementById('division').value=data.division; onDivisionChange(); setTimeout(()=>{ if(data.district){ document.getElementById('district').value=data.district; onDistrictChange(); setTimeout(()=>{ if(data.thana) document.getElementById('thana').value=data.thana; else if(data.upazila) document.getElementById('thana').value=data.upazila; if(document.getElementById('thana').value){ document.getElementById('areaGroup').style.display='block'; document.getElementById('categorySection').style.display='block';}},100);}},50);}
+if(data.categories){ let cats=typeof data.categories==='string'?data.categories.split(',').map(s=>s.trim()):(Array.isArray(data.categories)?data.categories:[]); selectedCategories=cats.filter(c=>c); renderChips();} else if(data.category && !data.categories){ selectedCategories=[data.category]; renderChips();} else renderChips();} else renderChips();});
 
-auth.onAuthStateChanged(async user => {
-    if(!user) { window.location.href = 'login.html'; return; }
-    const snap = await db.ref('shops/' + user.uid).get();
-    const data = snap.val();
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainHeader').style.display = 'block';
-    document.getElementById('mainContent').style.display = 'block';
-    document.getElementById('saveWrap').style.display = 'block';
-    if(data) {
-        document.getElementById('previewAvatar').textContent = data.shopName ? data.shopName.charAt(0) : '?';
-        document.getElementById('previewName').textContent = data.shopName || '';
-        document.getElementById('previewCardShopName').innerHTML = `<i class="fas fa-store"></i> ${data.shopName || 'দোকানের নাম'}`;
-        const addrLine = `${data.thana || data.upazila || ''}, ${data.district || ''}`;
-        document.getElementById('previewAddress').textContent = `📍 ${addrLine}`;
-        document.getElementById('previewCardAddress').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${data.area || addrLine || 'ঠিকানা নেই'}`;
-        const badge = document.getElementById('statusBadge'), notice = document.getElementById('noticeTile');
-        if(data.status === 'approved') {
-            badge.className = 'status-badge approved'; badge.textContent = '✅ Approved';
-            notice.className = 'notice-tile approved'; notice.innerHTML = '<div class="notice-icon">🎉</div><div class="notice-text"><div class="notice-title">অভিনন্দন!</div>আপনার দোকান Approved এবং তালিকায় যুক্ত।</div>';
-            const alreadyShown = localStorage.getItem('congratsShown_'+user.uid);
-            if(!alreadyShown && !firstApprovalFlagShown) { firstApprovalFlagShown = true; showConfettiAndToast(); }
-        } else if(data.status === 'rejected') {
-            badge.className = 'status-badge rejected'; badge.textContent = '❌ Rejected';
-            notice.className = 'notice-tile rejected'; notice.innerHTML = '<div class="notice-icon">❌</div><div class="notice-text"><div class="notice-title">দুঃখিত!</div>আপনার দোকান Reject হয়েছে। সঠিক তথ্য দিন।</div>';
-        }
-        document.getElementById('shopName').value = data.shopName || '';
-        document.getElementById('ownerName').value = data.ownerName || '';
-        document.getElementById('description').value = data.description || '';
-        document.getElementById('phone').value = data.phone || '';
-        document.getElementById('whatsapp').value = data.whatsapp || '';
-        document.getElementById('telegram').value = data.telegram || '';
-        document.getElementById('youtube').value = data.youtube || '';
-        document.getElementById('area').value = data.area || '';
-        
-        if(data.division) {
-            document.getElementById('division').value = data.division;
-            onDivisionChange();
-            setTimeout(() => {
-                if(data.district) {
-                    document.getElementById('district').value = data.district;
-                    onDistrictChange();
-                    setTimeout(() => {
-                        if(data.thana) document.getElementById('thana').value = data.thana;
-                        else if(data.upazila) document.getElementById('thana').value = data.upazila;
-                        if(document.getElementById('thana').value) {
-                            document.getElementById('areaGroup').style.display = 'block';
-                            document.getElementById('categorySection').style.display = 'block';
-                        }
-                    }, 100);
-                }
-            }, 50);
-        }
-        if(data.categories) { 
-            let cats = typeof data.categories === 'string' ? data.categories.split(',').map(s=>s.trim()) : (Array.isArray(data.categories) ? data.categories : []); 
-            selectedCategories = cats.filter(c=>c); renderChips(); 
-        } else if(data.category && !data.categories) { selectedCategories = [data.category]; renderChips(); }
-        else renderChips();
-    } else renderChips();
-});
-
-async function saveShopData() {
-    const user = auth.currentUser; if(!user) return;
-    const shopName = document.getElementById('shopName').value.trim();
-    const ownerName = document.getElementById('ownerName').value.trim();
-    const division = document.getElementById('division').value;
-    const district = document.getElementById('district').value;
-    const thana = document.getElementById('thana').value;
-    const area = document.getElementById('area').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    if(!shopName) return showFloatyToast('দোকানের নাম দিন!', true);
-    if(!ownerName) return showFloatyToast('মালিকের নাম দিন!', true);
-    if(!division) return showFloatyToast('বিভাগ বাছাই করুন!', true);
-    if(!district) return showFloatyToast('জেলা বাছাই করুন!', true);
-    if(!thana) return showFloatyToast('থানা/উপজেলা নির্বাচন করুন!', true);
-    if(!area) return showFloatyToast('এলাকা/বিস্তারিত ঠিকানা দিন!', true);
-    if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!', true);
-    const btn = document.getElementById('saveBtn'); btn.classList.add('loading');
-    try {
-        await db.ref('shops/' + user.uid).update({
-            shopName, ownerName, description: document.getElementById('description').value.trim(),
-            division, district, thana, upazila: thana, area,
-            categories: selectedCategories.join(','),
-            phone, whatsapp: document.getElementById('whatsapp').value.trim(),
-            telegram: document.getElementById('telegram').value.trim(),
-            youtube: document.getElementById('youtube').value.trim(),
-            avatar: shopName.charAt(0), updatedAt: Date.now()
-        });
-        document.getElementById('previewAvatar').textContent = shopName.charAt(0);
-        document.getElementById('previewName').textContent = shopName;
-        document.getElementById('previewCardShopName').innerHTML = `<i class="fas fa-store"></i> ${shopName}`;
-        document.getElementById('previewAddress').textContent = `📍 ${thana}, ${district}`;
-        document.getElementById('previewCardAddress').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${area}`;
-        showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!');
-        btn.classList.remove('loading');
-    } catch(e) { btn.classList.remove('loading'); showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।', true); }
-}
-function logoutShop() { auth.signOut(); window.location.href = 'index.html'; }
-function viewProfile() { if(auth.currentUser) window.location.href = `profile.html?id=${auth.currentUser.uid}`; }
+async function saveShopData(){ const user=auth.currentUser; if(!user) return; const shopName=document.getElementById('shopName').value.trim(); const ownerName=document.getElementById('ownerName').value.trim(); const division=document.getElementById('division').value; const district=document.getElementById('district').value; const thana=document.getElementById('thana').value; const area=document.getElementById('area').value.trim(); const phone=document.getElementById('phone').value.trim(); if(!shopName) return showFloatyToast('দোকানের নাম দিন!',true); if(!ownerName) return showFloatyToast('মালিকের নাম দিন!',true); if(!division) return showFloatyToast('বিভাগ বাছাই করুন!',true); if(!district) return showFloatyToast('জেলা বাছাই করুন!',true); if(!thana) return showFloatyToast('থানা/উপজেলা নির্বাচন করুন!',true); if(!area) return showFloatyToast('এলাকা/বিস্তারিত ঠিকানা দিন!',true); if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!',true); const btn=document.getElementById('saveBtn'); btn.classList.add('loading'); try{ await db.ref('shops/'+user.uid).update({ shopName, ownerName, description:document.getElementById('description').value.trim(), division, district, thana, upazila:thana, area, categories:selectedCategories.join(','), phone, whatsapp:document.getElementById('whatsapp').value.trim(), telegram:document.getElementById('telegram').value.trim(), youtube:document.getElementById('youtube').value.trim(), avatar:shopName.charAt(0), updatedAt:Date.now()}); document.getElementById('previewAvatar').textContent=shopName.charAt(0); document.getElementById('previewName').textContent=shopName; document.getElementById('previewCardShopName').innerHTML=`<i class="fas fa-store"></i> ${shopName}`; document.getElementById('previewAddress').textContent=`📍 ${thana}, ${district}`; document.getElementById('previewCardAddress').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${area}`; showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!'); btn.classList.remove('loading');} catch(e){ btn.classList.remove('loading'); showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।',true);}}
+function logoutShop(){ auth.signOut(); window.location.href='index.html';}
+function viewProfile(){ if(auth.currentUser) window.location.href=`profile.html?id=${auth.currentUser.uid}`;}
 </script>
 </body>
 </html>
