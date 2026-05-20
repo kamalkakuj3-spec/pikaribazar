@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>ড্যাশবোর্ড — পাইকারি বাজার</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- canvas confetti library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
 <style>
 
 :root {
@@ -18,10 +21,8 @@
     --text-light: #666;
     --error: #e74c3c;
     --success: #2ecc71;
-    --success-dark: #27ae60;
     --warning: #f0c040;
-    --card-shadow: 0 20px 35px -10px rgba(108,43,217,0.25);
-    --card-shadow-hover: 0 25px 40px -12px rgba(108,43,217,0.35);
+    --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -63,33 +64,12 @@ body {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── HEADER (3D Premium) ── */
+/* ── HEADER ── */
 .header {
     background: linear-gradient(135deg, #1a0a3e 0%, #6c2bd9 100%);
     padding: 50px 20px 30px;
     position: relative;
     overflow: hidden;
-    transform-style: preserve-3d;
-}
-
-.header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 200px; height: 200px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 50%;
-    transform: translateZ(-10px);
-}
-
-.header::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; left: -40px;
-    width: 150px; height: 150px;
-    background: rgba(240,192,64,0.08);
-    border-radius: 50%;
-    transform: translateZ(-10px);
 }
 
 .header-top {
@@ -115,53 +95,38 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .header-logo-text {
     font-size: 16px;
     font-weight: 700;
     color: white;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .logout-btn {
-    padding: 8px 20px;
+    padding: 8px 16px;
     background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
+    border: none;
     border-radius: 99px;
     color: white;
     font-size: 13px;
     font-family: 'Hind Siliguri', sans-serif;
     cursor: pointer;
     font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.logout-btn:hover {
-    background: rgba(255,255,255,0.25);
-    transform: translateY(-2px);
-}
-
-.logout-btn:active {
-    transform: translateY(1px);
-}
-
-/* ── PROFILE PREVIEW (3D) ── */
+/* ── PROFILE PREVIEW ── */
 .profile-preview {
     position: relative;
     z-index: 1;
     display: flex;
     align-items: center;
     gap: 14px;
-    transform-style: preserve-3d;
 }
 
 .preview-avatar {
     width: 60px; height: 60px;
-    border-radius: 18px;
+    border-radius: 16px;
     background: linear-gradient(135deg, var(--accent), #f7931e);
     display: flex;
     align-items: center;
@@ -170,7 +135,6 @@ body {
     font-weight: 700;
     color: white;
     border: 3px solid rgba(255,255,255,0.3);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     animation: avatarPop 5s ease-in-out infinite;
 }
 
@@ -186,12 +150,11 @@ body {
     font-weight: 700;
     color: white;
     margin-bottom: 4px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .preview-address {
     font-size: 13px;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255,255,255,0.7);
 }
 
 /* Status badge */
@@ -204,7 +167,6 @@ body {
     align-items: center;
     gap: 5px;
     margin-top: 6px;
-    backdrop-filter: blur(10px);
 }
 
 .status-badge.pending  { background: rgba(240,192,64,0.2); color: var(--accent); border: 1px solid rgba(240,192,64,0.4); }
@@ -216,31 +178,46 @@ body {
     padding: 20px 16px 100px;
 }
 
-/* ── STATUS NOTICE (3D) ── */
+/* ── STATUS NOTICE (always visible but different style) */
 .notice-tile {
-    border-radius: 20px;
-    padding: 18px;
+    border-radius: 18px;
+    padding: 16px;
     display: flex;
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 20px;
     animation: tileIn 0.5s ease both;
-    transform: translateZ(0);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.notice-tile:hover {
-    transform: translateY(-3px);
+.notice-tile.pending  { background: #fffbeb; border: 1.5px solid #f0c040; }
+.notice-tile.approved { background: #edfaf3; border: 1.5px solid #2ecc71; }
+.notice-tile.rejected { background: #fdf0ef; border: 1.5px solid #e74c3c; }
+
+/* TOAST MESSAGE (hides after first approved view) */
+.toast-congrats {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    right: 20px;
+    background: #2ecc71ee;
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    z-index: 10000;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    animation: slideUpFade 0.4s ease forwards;
 }
 
-.notice-tile.pending  { background: linear-gradient(135deg, #fffbeb, #fff6e0); border: 1.5px solid #f0c040; box-shadow: 0 10px 25px -8px rgba(240,192,64,0.3); }
-.notice-tile.approved { background: linear-gradient(135deg, #edfaf3, #e0f5e8); border: 1.5px solid #2ecc71; box-shadow: 0 10px 25px -8px rgba(46,204,113,0.3); }
-.notice-tile.rejected { background: linear-gradient(135deg, #fdf0ef, #fde8e6); border: 1.5px solid #e74c3c; box-shadow: 0 10px 25px -8px rgba(231,76,60,0.3); }
-
-.notice-icon { font-size: 28px; }
-
-.notice-text { font-size: 13px; line-height: 1.7; }
-.notice-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
+.toast-congrats i { font-size: 24px; }
+@keyframes slideUpFade {
+    from { transform: translateY(100px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
 
 /* ── SECTION TITLE ── */
 .section-title {
@@ -256,27 +233,18 @@ body {
 /* ── 3D TILE CARDS ── */
 .tile-card {
     background: white;
-    border-radius: 24px;
-    padding: 20px;
+    border-radius: 20px;
+    padding: 18px;
     box-shadow: var(--card-shadow);
-    border: 1px solid rgba(108,43,217,0.1);
-    margin-bottom: 20px;
+    border: 1.5px solid rgba(108,43,217,0.08);
+    margin-bottom: 16px;
     animation: tileIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
-    transform: translateY(0);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.tile-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--card-shadow-hover);
-}
-
-.tile-card:nth-child(1) { animation-delay: 0.05s; }
-.tile-card:nth-child(2) { animation-delay: 0.1s; }
-.tile-card:nth-child(3) { animation-delay: 0.15s; }
-.tile-card:nth-child(4) { animation-delay: 0.2s; }
-.tile-card:nth-child(5) { animation-delay: 0.25s; }
-.tile-card:nth-child(6) { animation-delay: 0.3s; }
+.tile-card:nth-child(1) { animation-delay: 0.1s; }
+.tile-card:nth-child(2) { animation-delay: 0.2s; }
+.tile-card:nth-child(3) { animation-delay: 0.3s; }
+.tile-card:nth-child(4) { animation-delay: 0.4s; }
 
 @keyframes tileIn {
     from { transform: translateY(30px) scale(0.95); opacity: 0; }
@@ -286,72 +254,35 @@ body {
 .tile-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 2px solid #f0ebff;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid #f0ebff;
 }
 
 .tile-icon {
-    width: 42px; height: 42px;
-    border-radius: 14px;
+    width: 38px; height: 38px;
+    border-radius: 12px;
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    box-shadow: 0 6px 15px rgba(108,43,217,0.3);
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(108,43,217,0.3);
 }
 
-.tile-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.tile-title { font-size: 15px; font-weight: 700; color: var(--text); }
 .tile-subtitle { font-size: 12px; color: var(--text-light); }
 
-/* ── HOME BUTTON (3D সবুজ কার্ড) ── */
-.home-btn-card {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    border-radius: 24px;
-    padding: 18px 24px;
-    margin-bottom: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 15px 30px -10px rgba(46,204,113,0.4);
-    transform: translateY(0);
-}
-
-.home-btn-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px -12px rgba(46,204,113,0.5);
-}
-
-.home-btn-card:active {
-    transform: translateY(2px);
-}
-
-.home-btn-text {
-    font-size: 18px;
-    font-weight: 700;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    letter-spacing: 1px;
-}
-
-.home-btn-icon {
-    font-size: 24px;
-}
-
-/* ── INPUT FIELDS (3D Premium) ── */
-.input-group { margin-bottom: 16px; }
+/* ── INPUT FIELDS ── */
+.input-group { margin-bottom: 14px; }
 .input-group:last-child { margin-bottom: 0; }
 
 .input-label {
     font-size: 13px;
     font-weight: 600;
     color: var(--text);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     display: block;
 }
 
@@ -367,118 +298,143 @@ body {
 
 .input-field {
     width: 100%;
-    padding: 14px 14px 14px 44px;
+    padding: 13px 14px 13px 42px;
     border: 2px solid #e8e0ff;
-    border-radius: 14px;
+    border-radius: 12px;
     font-size: 14px;
     font-family: 'Hind Siliguri', sans-serif;
     color: var(--text);
     background: #faf8ff;
     outline: none;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
 }
 
 .input-field:focus {
     border-color: var(--primary);
     background: white;
-    box-shadow: 0 0 0 4px rgba(108,43,217,0.1);
-    transform: translateY(-2px);
-}
-
-.input-field::placeholder { color: #bbb; }
-
-select.input-field { cursor: pointer; appearance: none; }
-.select-arrow {
-    position: absolute;
-    right: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    color: var(--primary);
-    pointer-events: none;
+    box-shadow: 0 0 0 4px rgba(108,43,217,0.08);
 }
 
 textarea.input-field {
-    padding-top: 14px;
+    padding-top: 13px;
     resize: none;
     height: 90px;
     line-height: 1.6;
 }
 
-/* Category Button */
+/* category multi-select chip */
+.cat-chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+.cat-chip {
+    background: #f0ebff;
+    border-radius: 40px;
+    padding: 6px 14px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #4a1a9e;
+    font-weight: 500;
+}
+.cat-chip i {
+    cursor: pointer;
+    font-size: 12px;
+    color: #6c2bd9;
+}
 .cat-select-btn {
     width: 100%;
-    padding: 14px 16px;
-    border: 2px solid #e8e0ff;
-    border-radius: 14px;
-    font-size: 14px;
-    font-family: 'Hind Siliguri', sans-serif;
-    color: var(--text-light);
+    padding: 12px 16px;
+    border: 2px dashed #cbbff5;
+    border-radius: 12px;
     background: #faf8ff;
-    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: all 0.3s ease;
-}
-
-.cat-select-btn.selected {
-    border-color: var(--primary);
     color: var(--primary);
-    background: #f0ebff;
-    font-weight: 600;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(108,43,217,0.2);
-}
-
-.cat-item {
-    padding: 14px 16px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-family: 'Hind Siliguri', sans-serif;
+    font-weight: 500;
     cursor: pointer;
-    margin-bottom: 8px;
-    background: #faf8ff;
-    border: 1.5px solid #e8e0ff;
-    transition: all 0.2s ease;
+    transition: 0.2s;
 }
-
-.cat-item.selected {
+.cat-select-btn:hover {
     background: #f0ebff;
     border-color: var(--primary);
-    color: var(--primary);
+}
+
+/* popup multiple categories */
+.cat-popup-list {
+    max-height: 60vh;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+    gap: 8px;
+}
+.cat-item-multi {
+    padding: 12px 12px;
+    background: #faf8ff;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1.5px solid #e8e0ff;
+    cursor: pointer;
+    transition: 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cat-item-multi.selected {
+    background: #6c2bd9;
+    color: white;
+    border-color: #6c2bd9;
+}
+.cat-item-multi i.fa-check-circle {
+    margin-left: auto;
+    font-size: 14px;
+}
+.cat-popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 18px;
+}
+.popup-btn {
+    padding: 10px 16px;
+    border-radius: 40px;
+    border: none;
     font-weight: 600;
-    transform: translateX(5px);
+    cursor: pointer;
+}
+
+/* address step */
+.step-group {
+    transition: all 0.2s;
 }
 
 /* ── MSG BOX ── */
 .msg-box {
-    padding: 14px 18px;
-    border-radius: 16px;
+    padding: 14px 16px;
+    border-radius: 14px;
     font-size: 14px;
     margin-bottom: 16px;
     display: none;
     align-items: center;
-    gap: 12px;
-    animation: msgIn 0.3s ease;
+    gap: 10px;
 }
-
-@keyframes msgIn {
-    from { transform: scale(0.95); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-}
-
 .msg-box.error   { background: #fdf0ef; color: var(--error); border: 1.5px solid #f5c6c2; }
 .msg-box.success { background: #edfaf3; color: var(--success); border: 1.5px solid #b7ecd0; }
 .msg-box.show    { display: flex; }
 
-/* ── SAVE BUTTON (3D Premium) ── */
+/* ── SAVE BUTTON ── */
 .submit-wrap {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    padding: 16px 20px 20px;
+    padding: 16px 20px;
     background: white;
     border-top: 1px solid #f0ebff;
-    box-shadow: 0 -8px 30px rgba(108,43,217,0.12);
+    box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
 }
 
 .submit-btn {
@@ -487,32 +443,23 @@ textarea.input-field {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     color: white;
     border: none;
-    border-radius: 18px;
+    border-radius: 14px;
     font-size: 17px;
     font-weight: 700;
-    font-family: 'Hind Siliguri', sans-serif;
     cursor: pointer;
-    box-shadow: 0 10px 25px -5px rgba(108,43,217,0.5);
-    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(108,43,217,0.4);
+    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-.submit-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px -8px rgba(108,43,217,0.6);
-}
-
-.submit-btn:active {
-    transform: translateY(1px);
-}
-
+.submit-btn:active { transform: scale(0.97); }
 .submit-btn.loading { background: #b39ddb; pointer-events: none; }
 
 .spinner {
-    width: 22px; height: 22px;
+    width: 20px; height: 20px;
     border: 3px solid rgba(255,255,255,0.3);
     border-top-color: white;
     border-radius: 50%;
@@ -523,47 +470,31 @@ textarea.input-field {
 .submit-btn.loading .spinner { display: block; }
 .submit-btn.loading .btn-text { display: none; }
 
-/* ── VIEW PROFILE BTN (3D) ── */
 .view-profile-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #f0ebff, #e8e0ff);
+    background: #f0ebff;
     color: var(--primary);
     border: none;
-    border-radius: 18px;
+    border-radius: 14px;
     font-size: 15px;
     font-weight: 600;
-    font-family: 'Hind Siliguri', sans-serif;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(108,43,217,0.15);
+    gap: 8px;
 }
-
-.view-profile-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(108,43,217,0.25);
-}
-
-.view-profile-btn:active {
-    transform: translateY(1px);
-}
-
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loadingScreen">
     <div class="loading-spinner"></div>
     <div class="loading-text">লোড হচ্ছে...</div>
 </div>
 
-<!-- HEADER -->
 <div class="header" id="mainHeader" style="display:none">
     <div class="header-top">
         <div class="header-logo">
@@ -572,7 +503,6 @@ textarea.input-field {
         </div>
         <button class="logout-btn" onclick="logoutShop()">🚪 লগআউট</button>
     </div>
-
     <div class="profile-preview">
         <div class="preview-avatar" id="previewAvatar">?</div>
         <div class="preview-info">
@@ -583,526 +513,313 @@ textarea.input-field {
     </div>
 </div>
 
-<!-- CONTENT -->
 <div class="content" id="mainContent" style="display:none">
+    <div class="msg-box error" id="errorMsg"><span>⚠️</span><span id="errorText"></span></div>
+    <div class="msg-box success" id="successMsg"><span>✅</span><span id="successText"></span></div>
 
-    <!-- Messages -->
-    <div class="msg-box error" id="errorMsg">
-        <span>⚠️</span><span id="errorText"></span>
-    </div>
-    <div class="msg-box success" id="successMsg">
-        <span>✅</span><span id="successText"></span>
-    </div>
-
-    <!-- HOME BUTTON (3D সবুজ কার্ড) -->
-    <div class="home-btn-card" onclick="goToHome()">
-        <div class="home-btn-text">
-            <span class="home-btn-icon">🏠</span>
-            হোম পেজে যান
-        </div>
-    </div>
-
-    <!-- Status Notice -->
     <div class="notice-tile pending" id="noticeTile">
         <div class="notice-icon">⏳</div>
         <div class="notice-text">
             <div class="notice-title">Approval পেন্ডিং</div>
-            আপনার দোকান Admin-এর কাছে Approval-এর জন্য অপেক্ষায় আছে। Approve হলে দোকান তালিকায় দেখা যাবে।
+            আপনার দোকান Admin-এর কাছে Approval-এর জন্য অপেক্ষায় আছে।
         </div>
     </div>
 
-    <!-- View Profile -->
-    <button class="view-profile-btn" onclick="viewProfile()">
-        👁️ আমার প্রোফাইল দেখুন
-    </button>
+    <button class="view-profile-btn" onclick="viewProfile()">👁️ আমার প্রোফাইল দেখুন</button>
 
-    <!-- ১. দোকানের তথ্য -->
+    <!-- দোকানের তথ্য -->
     <div class="tile-card">
-        <div class="tile-header">
-            <div class="tile-icon">🏪</div>
-            <div>
-                <div class="tile-title">দোকানের তথ্য</div>
-                <div class="tile-subtitle">পরিবর্তন করতে এডিট করুন</div>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label class="input-label">দোকানের নাম *</label>
-            <div class="input-wrap">
-                <span class="input-icon">🏷️</span>
-                <input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম">
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label class="input-label">মালিকের নাম *</label>
-            <div class="input-wrap">
-                <span class="input-icon">👤</span>
-                <input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম">
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label class="input-label">দোকান পরিচিতি</label>
-            <div class="input-wrap">
-                <span class="input-icon" style="top:18px">📝</span>
-                <textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea>
-            </div>
-        </div>
+        <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
+        <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
+        <div class="input-group"><label class="input-label">মালিকের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div></div>
+        <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
     </div>
 
-    <!-- ২. ঠিকানা — Step by Step (বিভাগ → জেলা → থানা) -->
+    <!-- ঠিকানা বিভাগ-জেলা-এলাকা (stepped) -->
     <div class="tile-card">
-        <div class="tile-header">
-            <div class="tile-icon">📍</div>
-            <div>
-                <div class="tile-title">দোকানের ঠিকানা</div>
-                <div class="tile-subtitle">বিভাগ → জেলা → থানা/উপজেলা</div>
-            </div>
-        </div>
-
-        <!-- বিভাগ -->
-        <div class="input-group">
-            <label class="input-label">① বিভাগ *</label>
-            <div class="input-wrap">
-                <span class="input-icon">🗺️</span>
-                <select class="input-field" id="division" onchange="onDivisionChange()">
-                    <option value="">— বিভাগ বাছাই করুন —</option>
-                    <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option>
-                    <option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option>
-                    <option>রংপুর</option><option>ময়মনসিংহ</option>
-                </select>
-                <span class="select-arrow">▼</span>
-            </div>
-        </div>
-
-        <!-- জেলা -->
-        <div class="input-group" id="districtGroup" style="display:none">
-            <label class="input-label">② জেলা *</label>
-            <div class="input-wrap">
-                <span class="input-icon">📌</span>
-                <select class="input-field" id="district" onchange="onDistrictChange()">
-                    <option value="">— জেলা বাছাই করুন —</option>
-                </select>
-                <span class="select-arrow">▼</span>
-            </div>
-        </div>
-
-        <!-- থানা/উপজেলা -->
-        <div class="input-group" id="thanaGroup" style="display:none">
-            <label class="input-label">③ থানা/উপজেলা *</label>
-            <div class="input-wrap">
-                <span class="input-icon">📍</span>
-                <select class="input-field" id="thana">
-                    <option value="">— থানা বাছাই করুন —</option>
-                </select>
-                <span class="select-arrow">▼</span>
-            </div>
-        </div>
-
-        <!-- পূর্ণ ঠিকানা -->
-        <div class="input-group" id="addressGroup" style="display:none">
-            <label class="input-label">পূর্ণ ঠিকানা</label>
-            <div class="input-wrap">
-                <span class="input-icon" style="top:18px">🏠</span>
-                <textarea class="input-field" id="address" placeholder="বিস্তারিত ঠিকানা" style="height:70px"></textarea>
-            </div>
-        </div>
+        <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা/থানা</div></div></div>
+        <div class="input-group"><label class="input-label">বিভাগ *</label><div class="input-wrap"><span class="input-icon">🗺️</span><select class="input-field" id="division" onchange="loadDistricts()"><option value="">— বিভাগ বাছাই করুন —</option><option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option><option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option><option>রংপুর</option><option>ময়মনসিংহ</option></select><span class="select-arrow">▼</span></div></div>
+        <div class="input-group" id="districtGroup" style="display:none"><label class="input-label">জেলা *</label><div class="input-wrap"><span class="input-icon">📌</span><select class="input-field" id="district" onchange="loadUpazilas()"><option value="">— জেলা বাছাই করুন —</option></select><span class="select-arrow">▼</span></div></div>
+        <div class="input-group" id="upazilaGroup" style="display:none"><label class="input-label">উপজেলা/থানা *</label><div class="input-wrap"><span class="input-icon">📍</span><select class="input-field" id="upazila"><option value="">— নির্বাচন করুন —</option></select><span class="select-arrow">▼</span></div></div>
+        <div class="input-group"><label class="input-label">বিস্তারিত ঠিকানা (রাস্তা, বাড়ি)</label><div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="address" placeholder="বাড়ি নং, রাস্তা, ওয়ার্ড"></textarea></div></div>
     </div>
 
-    <!-- ক্যাটাগরি -->
-    <div class="tile-card" id="categorySection" style="display:none">
-        <div class="tile-header">
-            <div class="tile-icon">🗂️</div>
-            <div>
-                <div class="tile-title">ক্যাটাগরি</div>
-                <div class="tile-subtitle">আপনার পণ্যের ধরন বাছাই করুন</div>
-            </div>
-        </div>
-        <button type="button" class="cat-select-btn" id="catBtn" onclick="openCatPopup()">
-            <span id="catBtnText">🗂️ ক্যাটাগরি সিলেক্ট করুন</span>
+    <!-- ক্যাটাগরি মাল্টি সিলেক্ট -->
+    <div class="tile-card">
+        <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন</div></div></div>
+        <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
+        <button type="button" class="cat-select-btn" id="multiCatBtn" onclick="openMultiCategoryPopup()">
+            <span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span>
             <span>▼</span>
         </button>
-        <input type="hidden" id="category">
+        <input type="hidden" id="categoriesHidden" value="">
     </div>
 
-    <!-- Category Popup -->
-    <div id="catPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:flex-end;">
-        <div style="background:white; border-radius:28px 28px 0 0; padding:20px; width:100%; max-height:80vh; overflow-y:auto;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1.5px solid #f0ebff;">
-                <span style="font-size:16px; font-weight:700; color:#1a1a2e;">🗂️ ক্যাটাগরি বাছাই করুন</span>
-                <button onclick="closeCatPopup()" style="background:#f0ebff; border:none; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer; color:#6c2bd9;">✕</button>
-            </div>
-            <div id="catList"></div>
-        </div>
-    </div>
-
-    <!-- ৩. যোগাযোগ (WhatsApp + Telegram, Facebook বাদ) -->
+    <!-- যোগাযোগ -->
     <div class="tile-card">
-        <div class="tile-header">
-            <div class="tile-icon">📞</div>
-            <div>
-                <div class="tile-title">যোগাযোগের তথ্য</div>
-                <div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label class="input-label">মোবাইল নম্বর *</label>
-            <div class="input-wrap">
-                <span class="input-icon">📱</span>
-                <input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX">
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label class="input-label">WhatsApp নম্বর</label>
-            <div class="input-wrap">
-                <span class="input-icon">💬</span>
-                <input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX">
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label class="input-label">টেলিগ্রাম নম্বর</label>
-            <div class="input-wrap">
-                <span class="input-icon">📡</span>
-                <input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX">
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label class="input-label">YouTube চ্যানেল লিংক</label>
-            <div class="input-wrap">
-                <span class="input-icon">▶️</span>
-                <input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/...">
-            </div>
-        </div>
+        <div class="tile-header"><div class="tile-icon">📞</div><div><div class="tile-title">যোগাযোগের তথ্য</div><div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div></div></div>
+        <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
+        <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
+        <div class="input-group"><label class="input-label">Facebook পেজ লিংক</label><div class="input-wrap"><span class="input-icon">👍</span><input class="input-field" type="url" id="facebook" placeholder="https://facebook.com/..."></div></div>
+        <div class="input-group"><label class="input-label">YouTube চ্যানেল লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
     </div>
-
 </div>
 
-<!-- SAVE BUTTON -->
 <div class="submit-wrap" id="saveWrap" style="display:none">
-    <button class="submit-btn" id="saveBtn" onclick="saveShop()">
-        <div class="spinner"></div>
-        <span class="btn-text">💾 তথ্য সংরক্ষণ করুন</span>
-    </button>
+    <a href="index.html" style="display:block; text-align:center; margin-bottom:10px; color:#6c2bd9; font-weight:600; font-size:14px; text-decoration:none;">🏠 হোম পেজে যান</a>
+    <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 তথ্য সংরক্ষণ করুন</span></button>
 </div>
 
-<!-- Firebase -->
+<!-- Category Popup (multiple) -->
+<div id="multiCatPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:flex-end;">
+    <div style="background:white; border-radius:24px 24px 0 0; padding:20px; width:100%; max-height:80vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:16px;"><span style="font-weight:700;">🗂️ একাধিক ক্যাটাগরি বাছাই করুন</span><button onclick="closeMultiCatPopup()" style="background:#f0ebff; border:none; border-radius:30px; padding:6px 12px;">✕ বন্ধ</button></div>
+        <div id="multiCatList" class="cat-popup-list"></div>
+        <div class="cat-popup-actions"><button class="popup-btn" style="background:#e0d6ff;" onclick="closeMultiCatPopup()">সেভ করুন</button></div>
+    </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
+// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
     authDomain: "agls-5bd4c.firebaseapp.com",
     databaseURL: "https://agls-5bd4c-default-rtdb.firebaseio.com/",
     projectId: "agls-5bd4c",
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const db   = firebase.database();
+const db = firebase.database();
 
-// ========== বাংলাদেশের জেলা ও থানার ডাটাবেস ==========
-const thanaMap = {
-    'ঢাকা': ['আদাবর', 'উত্তরা', 'তেজগাঁও', 'ধামরাই', 'নবাবগঞ্জ', 'বাড্ডা', 'মিরপুর', 'মোহাম্মদপুর', 'যাত্রাবাড়ী', 'রামপুরা', 'লালবাগ', 'শাহবাগ', 'সাভার', 'সূত্রাপুর', 'হাজারীবাগ'],
-    'গাজীপুর': ['গাজীপুর সদর', 'কালিয়াকৈর', 'কাপাসিয়া', 'শ্রীপুর'],
-    'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর', 'আড়াইহাজার', 'বন্দর', 'রূপগঞ্জ', 'সোনারগাঁও'],
-    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর', 'গজারিয়া', 'টংগিবাড়ী', 'লৌহজং', 'শ্রীনগর'],
-    'মানিকগঞ্জ': ['মানিকগঞ্জ সদর', 'ঘিওর', 'দৌলতপুর', 'শিবালয়', 'সাটুরিয়া', 'হরিরামপুর'],
-    'নরসিংদী': ['নরসিংদী সদর', 'বেলাবো', 'পলাশ', 'মনোহরদী', 'রায়পুরা', 'শিবপুর'],
-    'ফরিদপুর': ['ফরিদপুর সদর', 'আলফাডাঙ্গা', 'বোয়ালমারী', 'মধুখালী', 'নগরকান্দা', 'সদরপুর', 'চরভদ্রাসন', 'সালথা'],
-    'রাজবাড়ী': ['রাজবাড়ী সদর', 'গোয়ালন্দ', 'পাংশা', 'বালিয়াকান্দি', 'কালুখালী'],
-    'গোপালগঞ্জ': ['গোপালগঞ্জ সদর', 'কাশিয়ানী', 'কোটালীপাড়া', 'টুঙ্গিপাড়া', 'মুকসুদপুর'],
-    'মাদারীপুর': ['মাদারীপুর সদর', 'কালকিনি', 'ডাসার', 'শিবচর', 'রাজৈর'],
-    'শরীয়তপুর': ['শরীয়তপুর সদর', 'গোসাইরহাট', 'জাজিরা', 'নড়িয়া', 'ভেদরগঞ্জ', 'ডামুড্যা'],
-    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর', 'অট্টগ্রাম', 'ইটনা', 'করিমগঞ্জ', 'কটিয়াদী', 'তাড়াইল', 'পাকুন্দিয়া', 'বাজিতপুর', 'ভৈরব', 'মিঠামইন', 'হোসেনপুর', 'নিকলী', 'কুলিয়ারচর'],
-    'টাঙ্গাইল': ['টাঙ্গাইল সদর', 'বাসাইল', 'দেলদুয়ার', 'ঘাটাইল', 'গোপালপুর', 'কালিহাতী', 'মধুপুর', 'মির্জাপুর', 'নাগরপুর', 'সখিপুর', 'ধনবাড়ী'],
-    'চট্টগ্রাম': ['চট্টগ্রাম সদর', 'আনোয়ারা', 'বাঁশখালী', 'বোয়ালখালী', 'চন্দনাইশ', 'দোহাজারী', 'ফটিকছড়ি', 'হাটহাজারী', 'লোহাগাড়া', 'মিরসরাই', 'পটিয়া', 'রাঙ্গুনিয়া', 'রাউজান', 'সন্দ্বীপ', 'সাতকানিয়া', 'সীতাকুণ্ডা'],
-    'কক্সবাজার': ['কক্সবাজার সদর', 'চকরিয়া', 'কুতুবদিয়া', 'মহেশখালী', 'রামু', 'টেকনাফ', 'উখিয়া', 'পেকুয়া'],
-    'কুমিল্লা': ['কুমিল্লা সদর', 'বরুড়া', 'ব্রাহ্মণপাড়া', 'বুড়িচং', 'চান্দিনা', 'চৌদ্দগ্রাম', 'দাউদকান্দি', 'দেবিদ্বার', 'হোমনা', 'লাকসাম', 'মনোহরগঞ্জ', 'মুরাদনগর', 'নাঙ্গলকোট', 'তিতাস'],
-    'চাঁদপুর': ['চাঁদপুর সদর', 'ফরিদগঞ্জ', 'হাইমচর', 'হাজীগঞ্জ', 'কচুয়া', 'মতলব উত্তর', 'মতলব দক্ষিণ', 'শাহরাস্তি'],
-    'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর', 'আখাউড়া', 'বাঞ্ছারামপুর', 'বিজয়নগর', 'কসবা', 'নবীনগর', 'নাসিরনগর', 'সরাইল'],
-    'নোয়াখালী': ['নোয়াখালী সদর', 'বেগমগঞ্জ', 'চাটখিল', 'কবিরহাট', 'সেনবাগ', 'সোনাইমুড়ি', 'সুবর্ণচর', 'কোম্পানীগঞ্জ'],
-    'ফেনী': ['ফেনী সদর', 'ছাগলনাইয়া', 'দাগনভূঁইয়া', 'পরশুরাম', 'সোনাগাজী'],
-    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর', 'রামগঞ্জ', 'রামগতি', 'রায়পুর'],
-    'রাঙামাটি': ['রাঙামাটি সদর', 'বাঘাইছড়ি', 'বরকল', 'কাউখালী', 'বিলাইছড়ি', 'জুরাছড়ি', 'লংগদু', 'নানিয়ারচর', 'রাজস্থলী'],
-    'খাগড়াছড়ি': ['খাগড়াছড়ি সদর', 'দীঘিনালা', 'লক্ষ্মীছড়ি', 'মহালছড়ি', 'মাটিরাঙ্গা', 'পানছড়ি', 'রামগড়'],
-    'বান্দরবান': ['বান্দরবান সদর', 'আলীকদম', 'থানচি', 'নাইক্ষ্যংছড়ি', 'রুমা', 'রোয়াংছড়ি', 'লামা'],
-    'রাজশাহী': ['রাজশাহী সদর', 'বাঘা', 'বাগমারা', 'চারঘাট', 'দুর্গাপুর', 'গোদাগাড়ী', 'মোহনপুর', 'পবা', 'পুঠিয়া', 'তানোর'],
-    'নাটোর': ['নাটোর সদর', 'বাগাতিপাড়া', 'বড়াইগ্রাম', 'গুরুদাসপুর', 'লালপুর', 'নলডাঙ্গা', 'সিংড়া'],
-    'নওগাঁ': ['নওগাঁ সদর', 'আত্রাই', 'বাদলগাছী', 'ধামইরহাট', 'মহাদেবপুর', 'মান্দা', 'নিয়ামতপুর', 'পত্নীতলা', 'পোরশা', 'রাণীনগর', 'সাপাহার'],
-    'চাঁপাইনবাবগঞ্জ': ['চাঁপাইনবাবগঞ্জ সদর', 'গোমস্তাপুর', 'নাচোল', 'ভোলাহাট', 'শিবগঞ্জ'],
-    'পাবনা': ['পাবনা সদর', 'আটঘরিয়া', 'বেড়া', 'ভাঙ্গুড়া', 'চাটমোহর', 'ফরিদপুর', 'ঈশ্বরদী', 'সাঁথিয়া', 'সুজানগর'],
-    'সিরাজগঞ্জ': ['সিরাজগঞ্জ সদর', 'বেলকুচি', 'চৌহালী', 'কামারখন্দ', 'কাজীপুর', 'রায়গঞ্জ', 'শাহজাদপুর', 'তাড়াশ', 'উল্লাপাড়া'],
-    'বগুড়া': ['বগুড়া সদর', 'আদমদীঘি', 'ধুনট', 'দুপচাঁচিয়া', 'গাবতলী', 'কাহালু', 'নন্দীগ্রাম', 'সারিয়াকান্দি', 'শেরপুর', 'শিবগঞ্জ', 'সোনাতলা'],
-    'জয়পুরহাট': ['জয়পুরহাট সদর', 'আক্কেলপুর', 'কালাই', 'ক্ষেতলাল', 'পাঁচবিবি'],
-    'খুলনা': ['খুলনা সদর', 'বটিয়াঘাটা', 'দাকোপ', 'ডুমুরিয়া', 'দিঘলিয়া', 'কয়রা', 'পাইকগাছা', 'রূপসা', 'তেরখাদা'],
-    'বাগেরহাট': ['বাগেরহাট সদর', 'ফকিরহাট', 'কচুয়া', 'মোল্লাহাট', 'মোড়েলগঞ্জ', 'রামপাল', 'শরণখোলা', 'চিতলমারী', 'মোংলা'],
-    'সাতক্ষীরা': ['সাতক্ষীরা সদর', 'আশাশুনি', 'দেবহাটা', 'কালীগঞ্জ', 'কলারোয়া', 'শ্যামনগর', 'তালা'],
-    'যশোর': ['যশোর সদর', 'অভয়নগর', 'বাঘারপাড়া', 'চৌগাছা', 'ঝিকরগাছা', 'কেশবপুর', 'মনিরামপুর', 'শার্শা'],
-    'মাগুরা': ['মাগুরা সদর', 'মহম্মদপুর', 'শালিখা', 'শ্রীপুর'],
-    'নড়াইল': ['নড়াইল সদর', 'কালিয়া', 'লোহাগড়া'],
-    'কুষ্টিয়া': ['কুষ্টিয়া সদর', 'ভেড়ামারা', 'দৌলতপুর', 'খোকসা', 'কুমারখালী', 'মিরপুর'],
-    'মেহেরপুর': ['মেহেরপুর সদর', 'গাংনী', 'মুজিবনগর'],
-    'চুয়াডাঙ্গা': ['চুয়াডাঙ্গা সদর', 'আলমডাঙ্গা', 'দামুড়হুদা', 'জীবননগর'],
-    'ঝিনাইদহ': ['ঝিনাইদহ সদর', 'হরিণাকুন্ডু', 'কালীগঞ্জ', 'কোটচাঁদপুর', 'মহেশপুর', 'শৈলকুপা'],
-    'বরিশাল': ['বরিশাল সদর', 'আগৈলঝাড়া', 'বাবুগঞ্জ', 'বাকেরগঞ্জ', 'বানারীপাড়া', 'গৌরনদী', 'হিজলা', 'মেহেন্দিগঞ্জ', 'মুলাদী', 'উজিরপুর'],
-    'ভোলা': ['ভোলা সদর', 'বোরহানউদ্দিন', 'চরফ্যাশন', 'দৌলতখান', 'লালমোহন', 'মনপুরা', 'তজুমদ্দিন'],
-    'পটুয়াখালী': ['পটুয়াখালী সদর', 'বাউফল', 'দশমিনা', 'গলাচিপা', 'কলাপাড়া', 'মির্জাগঞ্জ', 'রাঙ্গাবালী', 'দুমকি'],
-    'বরগুনা': ['বরগুনা সদর', 'আমতলী', 'বামনা', 'বেতাগী', 'পাথরঘাটা', 'তালতলী'],
-    'পিরোজপুর': ['পিরোজপুর সদর', 'ভান্ডারিয়া', 'কাউখালী', 'মঠবাড়িয়া', 'নাজিরপুর', 'নেছারাবাদ', 'ইন্দুরকানী'],
-    'ঝালকাঠি': ['ঝালকাঠি সদর', 'কাঁঠালিয়া', 'নলছিটি', 'রাজাপুর'],
-    'সিলেট': ['সিলেট সদর', 'বালাগঞ্জ', 'বিয়ানীবাজার', 'বিশ্বনাথ', 'ফেঞ্চুগঞ্জ', 'গোলাপগঞ্জ', 'গোয়াইনঘাট', 'জৈন্তাপুর', 'কানাইঘাট', 'কোম্পানীগঞ্জ', 'জকিগঞ্জ', 'দক্ষিণ সুরমা', 'মোগলাবাজার'],
-    'মৌলভীবাজার': ['মৌলভীবাজার সদর', 'বড়লেখা', 'জুড়ী', 'কমলগঞ্জ', 'কুলাউড়া', 'রাজনগর', 'শ্রীমঙ্গল'],
-    'হবিগঞ্জ': ['হবিগঞ্জ সদর', 'আজমিরীগঞ্জ', 'বাহুবল', 'বানিয়াচং', 'চুনারুঘাট', 'কালাউক', 'লাখাই', 'মাধবপুর', 'নবীগঞ্জ', 'শায়েস্তাগঞ্জ'],
-    'সুনামগঞ্জ': ['সুনামগঞ্জ সদর', 'বিশ্বম্ভরপুর', 'ছাতক', 'দোয়ারাবাজার', 'ধর্মপাশা', 'জগন্নাথপুর', 'জামালগঞ্জ', 'দিরাই', 'শাল্লা', 'তাহিরপুর'],
-    'রংপুর': ['রংপুর সদর', 'বদরগঞ্জ', 'গঙ্গাচড়া', 'কাউনিয়া', 'মিঠাপুকুর', 'পীরগাছা', 'পীরগঞ্জ', 'তারাগঞ্জ'],
-    'গাইবান্ধা': ['গাইবান্ধা সদর', 'ফুলছড়ি', 'গোবিন্দগঞ্জ', 'পলাশবাড়ী', 'সাদুল্লাপুর', 'সাঘাটা', 'সুন্দরগঞ্জ'],
-    'কুড়িগ্রাম': ['কুড়িগ্রাম সদর', 'ভূরুঙ্গামারী', 'চর রাজিবপুর', 'চিলমারী', 'নাগেশ্বরী', 'রৌমারী', 'উলিপুর', 'ফুলবাড়ী', 'রাজারহাট'],
-    'লালমনিরহাট': ['লালমনিরহাট সদর', 'আদিতমারী', 'কালীগঞ্জ', 'হাতীবান্ধা', 'পাটগ্রাম'],
-    'নীলফামারী': ['নীলফামারী সদর', 'ডিমলা', 'ডোমার', 'জলঢাকা', 'কিশোরগঞ্জ', 'সৈয়দপুর'],
-    'দিনাজপুর': ['দিনাজপুর সদর', 'বিরামপুর', 'বীরগঞ্জ', 'বোচাগঞ্জ', 'চিরিরবন্দর', 'ফুলবাড়ী', 'ঘোড়াঘাট', 'হাকিমপুর', 'খানসামা', 'নবাবগঞ্জ', 'পার্বতীপুর', 'সেতাবগঞ্জ'],
-    'ঠাকুরগাঁও': ['ঠাকুরগাঁও সদর', 'বালিয়াডাঙ্গী', 'হরিপুর', 'পীরগঞ্জ', 'রাণীশংকৈল'],
-    'পঞ্চগড়': ['পঞ্চগড় সদর', 'আটোয়ারী', 'বোদা', 'দেবীগঞ্জ', 'তেঁতুলিয়া'],
-    'ময়মনসিংহ': ['ময়মনসিংহ সদর', 'ভালুকা', 'ধোবাউড়া', 'ফুলবাড়িয়া', 'গফরগাঁও', 'গৌরীপুর', 'হালুয়াঘাট', 'ঈশ্বরগঞ্জ', 'মুক্তাগাছা', 'নান্দাইল', 'ফুলপুর', 'ত্রিশাল'],
-    'জামালপুর': ['জামালপুর সদর', 'বকশীগঞ্জ', 'দেওয়ানগঞ্জ', 'ইসলামপুর', 'মাদারগঞ্জ', 'মেলান্দহ', 'সরিষাবাড়ী'],
-    'শেরপুর': ['শেরপুর সদর', 'ঝিনাইগাতী', 'নকলা', 'নালিতাবাড়ী', 'শ্রীবরদী'],
-    'নেত্রকোণা': ['নেত্রকোণা সদর', 'আটপাড়া', 'বারহাট্টা', 'দুর্গাপুর', 'কলমাকান্দা', 'কেন্দুয়া', 'খালিয়াজুরী', 'মদন', 'মোহনগঞ্জ', 'পূর্বধলা'],
+// District & Upazila static map
+const districtMap = {
+    'ঢাকা': ['ঢাকা', 'গাজীপুর', 'নারায়ণগঞ্জ', 'মুন্সীগঞ্জ', 'মানিকগঞ্জ', 'নরসিংদী', 'ফরিদপুর', 'রাজবাড়ী', 'গোপালগঞ্জ', 'মাদারীপুর', 'শরীয়তপুর', 'কিশোরগঞ্জ', 'টাঙ্গাইল'],
+    'চট্টগ্রাম': ['চট্টগ্রাম', 'কক্সবাজার', 'কুমিল্লা', 'চাঁদপুর', 'ব্রাহ্মণবাড়িয়া', 'নোয়াখালী', 'ফেনী', 'লক্ষ্মীপুর', 'রাঙামাটি', 'খাগড়াছড়ি', 'বান্দরবান'],
+    'রাজশাহী': ['রাজশাহী', 'নাটোর', 'নওগাঁ', 'চাঁপাইনবাবগঞ্জ', 'পাবনা', 'সিরাজগঞ্জ', 'বগুড়া', 'জয়পুরহাট'],
+    'খুলনা': ['খুলনা', 'বাগেরহাট', 'সাতক্ষীরা', 'যশোর', 'মাগুরা', 'নড়াইল', 'কুষ্টিয়া', 'মেহেরপুর', 'চুয়াডাঙ্গা', 'ঝিনাইদহ'],
+    'বরিশাল': ['বরিশাল', 'ভোলা', 'পটুয়াখালী', 'বরগুনা', 'পিরোজপুর', 'ঝালকাঠি'],
+    'সিলেট': ['সিলেট', 'মৌলভীবাজার', 'হবিগঞ্জ', 'সুনামগঞ্জ'],
+    'রংপুর': ['রংপুর', 'গাইবান্ধা', 'কুড়িগ্রাম', 'লালমনিরহাট', 'নীলফামারী', 'দিনাজপুর', 'ঠাকুরগাঁও', 'পঞ্চগড়'],
+    'ময়মনসিংহ': ['ময়মনসিংহ', 'জামালপুর', 'শেরপুর', 'নেত্রকোণা'],
 };
-
-const divisionMap = {
-    'ঢাকা': ['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
-    'চট্টগ্রাম': ['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
-    'রাজশাহী': ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
-    'খুলনা': ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
-    'বরিশাল': ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],
-    'সিলেট': ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
-    'রংপুর': ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],
-    'ময়মনসিংহ': ['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা'],
-};
-
-// ── Functions ──
-function goToHome() {
-    window.location.href = 'index.html';
-}
-
-function onDivisionChange() {
+const upazilaDummy = ['সদর', 'মডেল থানা', 'পৌরসভা', 'উপজেলা সদর']; // generic for demo, but user can type but we use select for consistency. We'll make free text? better as text
+// Better: upazila free text for flexibility
+function loadDistricts() {
     const div = document.getElementById('division').value;
-    const districtSelect = document.getElementById('district');
-    districtSelect.innerHTML = '<option value="">— জেলা বাছাই করুন —</option>';
-    document.getElementById('thanaGroup').style.display = 'none';
-    document.getElementById('addressGroup').style.display = 'none';
-    document.getElementById('categorySection').style.display = 'none';
-    document.getElementById('thana').innerHTML = '<option value="">— থানা বাছাই করুন —</option>';
-    
-    if (div && divisionMap[div]) {
-        divisionMap[div].forEach(d => {
-            const opt = document.createElement('option');
-            opt.value = d;
-            opt.textContent = d;
-            districtSelect.appendChild(opt);
-        });
+    const districtSel = document.getElementById('district');
+    districtSel.innerHTML = '<option value="">— জেলা বাছাই করুন —</option>';
+    document.getElementById('districtGroup').style.display = 'none';
+    document.getElementById('upazilaGroup').style.display = 'none';
+    if(div && districtMap[div]) {
+        districtMap[div].forEach(d => { let opt = new Option(d, d); districtSel.add(opt); });
         document.getElementById('districtGroup').style.display = 'block';
-    } else {
-        document.getElementById('districtGroup').style.display = 'none';
     }
 }
-
-function onDistrictChange() {
-    const dist = document.getElementById('district').value;
-    const thanaSelect = document.getElementById('thana');
-    thanaSelect.innerHTML = '<option value="">— থানা বাছাই করুন —</option>';
-    
-    if (dist && thanaMap[dist]) {
-        thanaMap[dist].forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            thanaSelect.appendChild(opt);
-        });
-        document.getElementById('thanaGroup').style.display = 'block';
-        document.getElementById('addressGroup').style.display = 'block';
-        document.getElementById('categorySection').style.display = 'block';
+function loadUpazilas() {
+    const districtVal = document.getElementById('district').value;
+    const upazilaSelect = document.getElementById('upazila');
+    upazilaSelect.innerHTML = '<option value="">— উপজেলা/থানা লিখুন —</option>';
+    if(districtVal) {
+        // Instead of dummy, allow manual input but we change to text input for better ux
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.placeholder = 'উপজেলা / থানা লিখুন';
+        inp.id = 'upazilaText';
+        inp.className = 'input-field';
+        inp.style.paddingLeft = '42px';
+        document.getElementById('upazilaGroup').innerHTML = `<label class="input-label">উপজেলা/থানা *</label><div class="input-wrap"><span class="input-icon">🏘️</span>${inp.outerHTML}</div>`;
+        document.getElementById('upazilaGroup').style.display = 'block';
     } else {
-        document.getElementById('thanaGroup').style.display = 'none';
-        document.getElementById('addressGroup').style.display = 'none';
-        document.getElementById('categorySection').style.display = 'none';
+        document.getElementById('upazilaGroup').style.display = 'none';
     }
 }
+// override upazilaGroup default
+window.loadUpazilas = loadUpazilas;
 
-const categories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
+// multi-category feature
+const allCategories = [
+    '👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'
+];
+let selectedCategories = [];
 
-function openCatPopup() {
-    const current = document.getElementById('category').value;
-    const list = document.getElementById('catList');
-    list.innerHTML = categories.map(c => {
-        const val = c.replace(/^[\S]+ /, '');
-        return `<div class="cat-item ${current === val ? 'selected' : ''}" onclick="selectCat('${val}', '${c}')">${c}</div>`;
-    }).join('');
-    document.getElementById('catPopup').style.display = 'flex';
+function renderChips() {
+    const container = document.getElementById('selectedChipsContainer');
+    container.innerHTML = '';
+    selectedCategories.forEach(cat => {
+        const chip = document.createElement('div');
+        chip.className = 'cat-chip';
+        chip.innerHTML = `${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g, "\\'")}')"></i>`;
+        container.appendChild(chip);
+    });
+    document.getElementById('categoriesHidden').value = selectedCategories.join(',');
+}
+function removeCategory(cat) {
+    selectedCategories = selectedCategories.filter(c => c !== cat);
+    renderChips();
+}
+function openMultiCategoryPopup() {
+    const popup = document.getElementById('multiCatPopup');
+    const listDiv = document.getElementById('multiCatList');
+    listDiv.innerHTML = '';
+    allCategories.forEach(cat => {
+        const isSelected = selectedCategories.includes(cat);
+        const div = document.createElement('div');
+        div.className = `cat-item-multi ${isSelected ? 'selected' : ''}`;
+        div.innerHTML = `${cat} ${isSelected ? '<i class="fas fa-check-circle"></i>' : ''}`;
+        div.onclick = () => {
+            if(selectedCategories.includes(cat)) {
+                selectedCategories = selectedCategories.filter(c => c !== cat);
+            } else {
+                selectedCategories.push(cat);
+            }
+            renderChips();
+            openMultiCategoryPopup(); // refresh popup
+        };
+        listDiv.appendChild(div);
+    });
+    popup.style.display = 'flex';
+}
+function closeMultiCatPopup() { document.getElementById('multiCatPopup').style.display = 'none'; renderChips(); }
+
+let firstApprovalFlagShown = false;
+function showConfettiAndToast() {
+    canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, startVelocity: 20, colors: ['#6c2bd9', '#f0c040', '#2ecc71'] });
+    let duration = 2000;
+    let end = Date.now() + duration;
+    let frame = () => {
+        canvasConfetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, startVelocity: 25 });
+        canvasConfetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, startVelocity: 25 });
+        if(Date.now() < end) requestAnimationFrame(frame);
+    };
+    frame();
+    const toastDiv = document.createElement('div');
+    toastDiv.className = 'toast-congrats';
+    toastDiv.innerHTML = '<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে এবং তালিকায় যুক্ত হয়েছে 🎉';
+    document.body.appendChild(toastDiv);
+    setTimeout(() => { if(toastDiv) toastDiv.remove(); }, 4500);
+    localStorage.setItem('congratsShown_'+auth.currentUser?.uid, 'true');
 }
 
-function selectCat(val, label) {
-    document.getElementById('category').value = val;
-    document.getElementById('catBtnText').textContent = label;
-    document.getElementById('catBtn').classList.add('selected');
-    closeCatPopup();
-}
-
-function closeCatPopup() {
-    document.getElementById('catPopup').style.display = 'none';
-}
-
-// ── Auth Check ──
+// fetch and handle shop status
 auth.onAuthStateChanged(async user => {
-    if (!user) {
-        window.location.href = 'login.html';
-        return;
-    }
-
+    if(!user) { window.location.href = 'login.html'; return; }
     const snap = await db.ref('shops/' + user.uid).get();
     const data = snap.val();
-
     document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainHeader').style.display    = 'block';
-    document.getElementById('mainContent').style.display   = 'block';
-    document.getElementById('saveWrap').style.display      = 'block';
-
-    if (data) {
+    document.getElementById('mainHeader').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('saveWrap').style.display = 'block';
+    if(data) {
         document.getElementById('previewAvatar').textContent = data.shopName ? data.shopName.charAt(0) : '?';
-        document.getElementById('previewName').textContent   = data.shopName || '';
-        
-        let addressPreview = '';
-        if (data.thana) addressPreview = `${data.thana}, ${data.district || ''}`;
-        else if (data.area) addressPreview = `${data.area}, ${data.district || ''}`;
-        else addressPreview = data.district || '';
-        document.getElementById('previewAddress').textContent = `📍 ${addressPreview}`;
-
+        document.getElementById('previewName').textContent = data.shopName || '';
+        document.getElementById('previewAddress').textContent = `📍 ${data.upazila || data.area || ''}, ${data.district || ''}`;
         const badge = document.getElementById('statusBadge');
         const notice = document.getElementById('noticeTile');
-        if (data.status === 'approved') {
+        if(data.status === 'approved') {
             badge.className = 'status-badge approved';
             badge.textContent = '✅ Approved';
             notice.className = 'notice-tile approved';
-            notice.innerHTML = '<div class="notice-icon">🎉</div><div class="notice-text"><div class="notice-title">অভিনন্দন!</div>আপনার দোকান Approved হয়েছে এবং তালিকায় দেখা যাচ্ছে।</div>';
-        } else if (data.status === 'rejected') {
+            notice.innerHTML = '<div class="notice-icon">🎉</div><div class="notice-text"><div class="notice-title">অভিনন্দন!</div>আপনার দোকান Approved এবং তালিকায় যুক্ত।</div>';
+            const alreadyShown = localStorage.getItem('congratsShown_'+user.uid);
+            if(!alreadyShown && !firstApprovalFlagShown) {
+                firstApprovalFlagShown = true;
+                showConfettiAndToast();
+            }
+        } else if(data.status === 'rejected') {
             badge.className = 'status-badge rejected';
             badge.textContent = '❌ Rejected';
             notice.className = 'notice-tile rejected';
-            notice.innerHTML = '<div class="notice-icon">❌</div><div class="notice-text"><div class="notice-title">দুঃখিত!</div>আপনার দোকান Reject হয়েছে। তথ্য ঠিক করে আবার চেষ্টা করুন।</div>';
+            notice.innerHTML = '<div class="notice-icon">❌</div><div class="notice-text"><div class="notice-title">দুঃখিত!</div>আপনার দোকান Reject হয়েছে। সঠিক তথ্য দিন।</div>';
         }
-
-        document.getElementById('shopName').value      = data.shopName    || '';
-        document.getElementById('ownerName').value     = data.ownerName   || '';
-        document.getElementById('description').value   = data.description || '';
-        document.getElementById('phone').value         = data.phone       || '';
-        document.getElementById('whatsapp').value      = data.whatsapp    || '';
-        document.getElementById('telegram').value      = data.telegram    || '';
-        document.getElementById('youtube').value       = data.youtube     || '';
-        document.getElementById('address').value       = data.address     || '';
-
-        if (data.division) {
+        // fill data
+        document.getElementById('shopName').value = data.shopName || '';
+        document.getElementById('ownerName').value = data.ownerName || '';
+        document.getElementById('description').value = data.description || '';
+        document.getElementById('phone').value = data.phone || '';
+        document.getElementById('whatsapp').value = data.whatsapp || '';
+        document.getElementById('facebook').value = data.facebook || '';
+        document.getElementById('youtube').value = data.youtube || '';
+        document.getElementById('address').value = data.address || '';
+        if(data.division) {
             document.getElementById('division').value = data.division;
-            onDivisionChange();
-            if (data.district) {
-                setTimeout(() => {
+            loadDistricts();
+            setTimeout(() => {
+                if(data.district) {
                     document.getElementById('district').value = data.district;
-                    onDistrictChange();
-                    if (data.thana) {
-                        setTimeout(() => {
-                            document.getElementById('thana').value = data.thana;
-                        }, 100);
-                    }
-                    if (data.category) {
-                        document.getElementById('category').value = data.category;
-                        document.getElementById('catBtnText').textContent = categories.find(c => c.includes(data.category)) || data.category;
-                        document.getElementById('catBtn').classList.add('selected');
-                    }
-                }, 100);
-            }
+                    loadUpazilas();
+                    setTimeout(() => {
+                        if(data.upazila) {
+                            const upazilaInput = document.getElementById('upazilaText');
+                            if(upazilaInput) upazilaInput.value = data.upazila;
+                        } else if(data.area) {
+                            const upazilaInput = document.getElementById('upazilaText');
+                            if(upazilaInput) upazilaInput.value = data.area;
+                        }
+                    }, 100);
+                }
+            }, 50);
         }
+        if(data.categories) {
+            let cats = [];
+            if(typeof data.categories === 'string') cats = data.categories.split(',').map(s=>s.trim());
+            else if(Array.isArray(data.categories)) cats = data.categories;
+            selectedCategories = cats.filter(c => c);
+            renderChips();
+        } else if(data.category && !data.categories) {
+            selectedCategories = [data.category];
+            renderChips();
+        } else renderChips();
+    } else {
+        renderChips();
     }
 });
 
-function showError(msg) {
-    const box = document.getElementById('errorMsg');
-    document.getElementById('errorText').textContent = msg;
-    box.classList.add('show');
-    setTimeout(() => box.classList.remove('show'), 5000);
-}
-
-function showSuccess(msg) {
-    const box = document.getElementById('successMsg');
-    document.getElementById('successText').textContent = msg;
-    box.classList.add('show');
-    setTimeout(() => box.classList.remove('show'), 4000);
-}
-
-async function saveShop() {
+async function saveShopData() {
     const user = auth.currentUser;
-    if (!user) return;
-
-    const shopName   = document.getElementById('shopName').value.trim();
-    const ownerName  = document.getElementById('ownerName').value.trim();
-    const division   = document.getElementById('division').value;
-    const district   = document.getElementById('district').value;
-    const thana      = document.getElementById('thana').value;
-    const phone      = document.getElementById('phone').value.trim();
-    const category   = document.getElementById('category').value;
-
-    if (!shopName)  return showError('দোকানের নাম দিন!');
-    if (!ownerName) return showError('মালিকের নাম দিন!');
-    if (!division)  return showError('বিভাগ বাছাই করুন!');
-    if (!district)  return showError('জেলা বাছাই করুন!');
-    if (!thana)     return showError('থানা/উপজেলা বাছাই করুন!');
-    if (!phone)     return showError('মোবাইল নম্বর দিন!');
-
+    if(!user) return;
+    const shopName = document.getElementById('shopName').value.trim();
+    const ownerName = document.getElementById('ownerName').value.trim();
+    const division = document.getElementById('division').value;
+    const district = document.getElementById('district').value;
+    let upazila = document.getElementById('upazilaText') ? document.getElementById('upazilaText').value.trim() : document.getElementById('upazila')?.value;
+    const addressDetail = document.getElementById('address').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    if(!shopName) return showError('দোকানের নাম দিন!');
+    if(!ownerName) return showError('মালিকের নাম দিন!');
+    if(!division) return showError('বিভাগ বাছাই করুন!');
+    if(!district) return showError('জেলা বাছাই করুন!');
+    if(!upazila) upazila = '';
+    if(!phone) return showError('মোবাইল নম্বর দিন!');
+    const categoriesStr = selectedCategories.join(',');
     const btn = document.getElementById('saveBtn');
     btn.classList.add('loading');
-
     try {
         await db.ref('shops/' + user.uid).update({
-            shopName,
-            ownerName,
-            description: document.getElementById('description').value.trim(),
-            division,
-            district,
-            thana,
-            address: document.getElementById('address').value.trim(),
-            category,
-            phone,
-            whatsapp: document.getElementById('whatsapp').value.trim(),
-            telegram: document.getElementById('telegram').value.trim(),
+            shopName, ownerName, description: document.getElementById('description').value.trim(),
+            division, district, upazila, area: upazila, address: addressDetail,
+            categories: categoriesStr,
+            phone, whatsapp: document.getElementById('whatsapp').value.trim(),
+            facebook: document.getElementById('facebook').value.trim(),
             youtube: document.getElementById('youtube').value.trim(),
-            updatedAt: Date.now(),
+            avatar: shopName.charAt(0), updatedAt: Date.now()
         });
-
         document.getElementById('previewAvatar').textContent = shopName.charAt(0);
-        let addressPreview = thana ? `${thana}, ${district}` : district;
-        document.getElementById('previewAddress').textContent = `📍 ${addressPreview}`;
-
+        document.getElementById('previewName').textContent = shopName;
+        document.getElementById('previewAddress').textContent = `📍 ${upazila}, ${district}`;
         showSuccess('তথ্য সফলভাবে সংরক্ষণ হয়েছে!');
         btn.classList.remove('loading');
-    } catch (error) {
-        btn.classList.remove('loading');
-        showError('সংরক্ষণ করতে সমস্যা হয়েছে!');
-    }
+    } catch(e) { btn.classList.remove('loading'); showError('সংরক্ষণ করতে সমস্যা!'); }
 }
 
-async function logoutShop() {
-    await auth.signOut();
-    window.location.href = 'index.html';
-}
-
-function viewProfile() {
-    const user = auth.currentUser;
-    if (user) window.location.href = `profile.html?id=${user.uid}`;
-}
+function showError(msg) { const box = document.getElementById('errorMsg'); document.getElementById('errorText').innerText = msg; box.classList.add('show'); setTimeout(()=>box.classList.remove('show'),4000); }
+function showSuccess(msg) { const box = document.getElementById('successMsg'); document.getElementById('successText').innerText = msg; box.classList.add('show'); setTimeout(()=>box.classList.remove('show'),4000); }
+function logoutShop() { auth.signOut(); window.location.href = 'index.html'; }
+function viewProfile() { if(auth.currentUser) window.location.href = `profile.html?id=${auth.currentUser.uid}`; }
+window.onload = () => { if(document.getElementById('districtGroup')) document.getElementById('districtGroup').style.display = 'none'; };
 </script>
 </body>
 </html>
