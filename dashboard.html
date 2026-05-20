@@ -21,432 +21,420 @@
     --success: #2ecc71;
     --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 body {
-    font-family: 'Hind Siliguri', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    overflow-x: hidden;
+    font-family:'Hind Siliguri',sans-serif;
+    background:var(--bg);
+    min-height:100vh;
+    overflow-x:hidden;
 }
 #loadingScreen {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg,#1a0a3e,#6c2bd9);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
 }
 .loading-spinner {
-    width: 60px;
-    height: 60px;
-    border: 5px solid rgba(255,255,255,0.2);
-    border-top-color: #b77eff;
-    border-right-color: #d9a7ff;
-    border-radius: 50%;
-    animation: spinFill 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite, pulseGlow 1.4s ease-in-out infinite alternate;
-    margin-bottom: 20px;
-    box-shadow: 0 0 12px rgba(183, 126, 255, 0.6);
+    width:60px;
+    height:60px;
+    border:5px solid rgba(255,255,255,0.2);
+    border-top-color:#b77eff;
+    border-right-color:#d9a7ff;
+    border-radius:50%;
+    animation:spinFill 1s cubic-bezier(0.68,-0.55,0.265,1.55) infinite, pulseGlow 1.4s ease-in-out infinite alternate;
+    margin-bottom:20px;
+    box-shadow:0 0 12px rgba(183,126,255,0.6);
 }
 @keyframes spinFill {
-    0% { transform: rotate(0deg); border-width: 5px; border-top-color: #b77eff; border-right-color: #d9a7ff; }
-    50% { transform: rotate(180deg); border-width: 8px; border-top-color: #c58cff; border-right-color: #ecbfff; }
-    100% { transform: rotate(360deg); border-width: 5px; border-top-color: #a158ff; border-right-color: #c47cff; }
+    0% { transform:rotate(0deg); border-width:5px; border-top-color:#b77eff; border-right-color:#d9a7ff; }
+    50% { transform:rotate(180deg); border-width:8px; border-top-color:#c58cff; border-right-color:#ecbfff; }
+    100% { transform:rotate(360deg); border-width:5px; border-top-color:#a158ff; border-right-color:#c47cff; }
 }
 @keyframes pulseGlow {
-    0% { box-shadow: 0 0 5px #c085ff; opacity: 0.8; }
-    100% { box-shadow: 0 0 25px #e3b3ff; opacity: 1; }
+    0% { box-shadow:0 0 5px #c085ff; opacity:0.8; }
+    100% { box-shadow:0 0 25px #e3b3ff; opacity:1; }
 }
 .loading-text { 
-    color: white; 
-    font-size: 18px; 
-    font-weight: 500;
-    letter-spacing: 1px;
-    background: linear-gradient(135deg, #f0e6ff, #ffffff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 8px rgba(108,43,217,0.5);
-    animation: textFlicker 1.2s infinite alternate;
+    color:white; 
+    font-size:18px; 
+    font-weight:500;
+    letter-spacing:1px;
+    background:linear-gradient(135deg,#f0e6ff,#ffffff);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 8px rgba(108,43,217,0.5);
+    animation:textFlicker 1.2s infinite alternate;
 }
 @keyframes textFlicker {
-    0% { opacity: 0.6; letter-spacing: 0px; }
-    100% { opacity: 1; letter-spacing: 1.5px; }
+    0% { opacity:0.6; letter-spacing:0px; }
+    100% { opacity:1; letter-spacing:1.5px; }
 }
-
 .content { 
-    padding: 20px 16px 120px; 
+    padding:20px 16px 300px; 
 }
-
 .shop-preview-card {
-    background: white;
-    border-radius: 28px;
-    padding: 24px 20px;
-    margin-bottom: 24px;
-    box-shadow: 0 20px 35px -12px rgba(108,43,217,0.25);
-    border: 1px solid rgba(108,43,217,0.15);
-    transform-style: preserve-3d;
-    transition: transform 0.3s ease, box-shadow 0.3s;
-    animation: floatCard 3s infinite ease-in-out;
+    background:white;
+    border-radius:28px;
+    padding:24px 20px;
+    margin-bottom:24px;
+    box-shadow:0 20px 35px -12px rgba(108,43,217,0.25);
+    border:1px solid rgba(108,43,217,0.15);
+    transform-style:preserve-3d;
+    transition:transform 0.3s ease, box-shadow 0.3s;
+    animation:floatCard 3s infinite ease-in-out;
 }
 @keyframes floatCard {
-    0% { transform: translateY(0px) rotateX(2deg); }
-    50% { transform: translateY(-6px) rotateX(4deg); }
-    100% { transform: translateY(0px) rotateX(2deg); }
+    0% { transform:translateY(0px) rotateX(2deg); }
+    50% { transform:translateY(-6px) rotateX(4deg); }
+    100% { transform:translateY(0px) rotateX(2deg); }
 }
 .card-shop-name {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--primary-dark);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size:22px;
+    font-weight:800;
+    color:var(--primary-dark);
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
-.card-shop-name i { display: none; }
+.card-shop-name i { display:none; }
 .card-shop-address {
-    font-size: 14px;
-    color: #555;
-    margin-top: 6px;
-    border-top: 1px solid #efe6ff;
-    padding-top: 12px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
+    font-size:14px;
+    color:#555;
+    margin-top:6px;
+    border-top:1px solid #efe6ff;
+    padding-top:12px;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
 }
-.card-shop-address i { display: none; }
-
 .small-status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 99px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-top: 10px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:4px 10px;
+    border-radius:99px;
+    font-size:11px;
+    font-weight:600;
+    margin-top:10px;
 }
-.small-status-badge.approved { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
-.small-status-badge.pending { background: rgba(240,192,64,0.15); color: #f0c040; border: 1px solid rgba(240,192,64,0.3); }
-.small-status-badge.rejected { background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); }
-
+.small-status-badge.approved { background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.3); }
+.small-status-badge.pending { background:rgba(240,192,64,0.15); color:#f0c040; border:1px solid rgba(240,192,64,0.3); }
+.small-status-badge.rejected { background:rgba(231,76,60,0.15); color:#e74c3c; border:1px solid rgba(231,76,60,0.3); }
 .toast-congrats {
-    position: fixed;
-    bottom: 30px;
-    left: 20px;
-    right: 20px;
-    background: #2ecc71ee;
-    backdrop-filter: blur(8px);
-    color: white;
-    padding: 14px 20px;
-    border-radius: 40px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 600;
-    z-index: 10000;
-    animation: slideUpFade 0.4s ease forwards;
+    position:fixed;
+    bottom:30px;
+    left:20px;
+    right:20px;
+    background:#2ecc71ee;
+    backdrop-filter:blur(8px);
+    color:white;
+    padding:14px 20px;
+    border-radius:40px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:600;
+    z-index:10000;
+    animation:slideUpFade 0.4s ease forwards;
 }
 @keyframes slideUpFade {
-    from { transform: translateY(100px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from { transform:translateY(100px); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
 }
-
 .tile-card {
-    background: white;
-    border-radius: 20px;
-    padding: 18px;
-    box-shadow: var(--card-shadow);
-    border: 1.5px solid rgba(108,43,217,0.08);
-    margin-bottom: 16px;
+    background:white;
+    border-radius:20px;
+    padding:18px;
+    box-shadow:var(--card-shadow);
+    border:1.5px solid rgba(108,43,217,0.08);
+    margin-bottom:16px;
+}
+/* যোগাযোগ কার্ডের নিচে বড় মার্জিন */
+.tile-card:last-of-type {
+    margin-bottom: 250px;
 }
 .tile-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1.5px solid #f0ebff;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+    padding-bottom:12px;
+    border-bottom:1.5px solid #f0ebff;
 }
 .tile-icon {
-    width: 38px; height: 38px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    box-shadow: 0 4px 12px rgba(108,43,217,0.3);
+    width:38px; height:38px;
+    border-radius:12px;
+    background:linear-gradient(135deg, var(--primary), var(--primary-light));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    box-shadow:0 4px 12px rgba(108,43,217,0.3);
 }
-.tile-title { font-size: 15px; font-weight: 700; color: var(--text); }
-.tile-subtitle { font-size: 12px; color: var(--text-light); }
-
-.input-group { margin-bottom: 14px; }
-.input-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: block; }
-.input-wrap { position: relative; }
+.tile-title { font-size:15px; font-weight:700; color:var(--text); }
+.tile-subtitle { font-size:12px; color:var(--text-light); }
+.input-group { margin-bottom:14px; }
+.input-label { font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; display:block; }
+.input-wrap { position:relative; }
 .input-icon {
-    position: absolute;
-    left: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    pointer-events: none;
+    position:absolute;
+    left:14px; top:50%;
+    transform:translateY(-50%);
+    font-size:16px;
+    pointer-events:none;
 }
 .input-field {
-    width: 100%;
-    padding: 13px 14px 13px 42px;
-    border: 2px solid #e8e0ff;
-    border-radius: 12px;
-    font-size: 14px;
-    font-family: 'Hind Siliguri', sans-serif;
-    color: var(--text);
-    background: #faf8ff;
-    outline: none;
-    transition: all 0.2s;
+    width:100%;
+    padding:13px 14px 13px 42px;
+    border:2px solid #e8e0ff;
+    border-radius:12px;
+    font-size:14px;
+    font-family:'Hind Siliguri',sans-serif;
+    color:var(--text);
+    background:#faf8ff;
+    outline:none;
+    transition:all 0.2s;
 }
 .input-field:focus {
-    border-color: var(--primary);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(108,43,217,0.08);
+    border-color:var(--primary);
+    background:white;
+    box-shadow:0 0 0 4px rgba(108,43,217,0.08);
 }
 textarea.input-field {
-    padding-top: 13px;
-    resize: none;
-    height: 90px;
-    line-height: 1.6;
+    padding-top:13px;
+    resize:none;
+    height:90px;
+    line-height:1.6;
 }
-select.input-field { cursor: pointer; appearance: none; }
+select.input-field { cursor:pointer; appearance:none; }
 .select-arrow {
-    position: absolute;
-    right: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    color: var(--primary);
-    pointer-events: none;
+    position:absolute;
+    right:14px; top:50%;
+    transform:translateY(-50%);
+    font-size:12px;
+    color:var(--primary);
+    pointer-events:none;
 }
-
-.cat-chips-wrap { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.cat-chips-wrap { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
 .cat-chip {
-    background: #f0ebff;
-    border-radius: 40px;
-    padding: 6px 14px;
-    font-size: 13px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #4a1a9e;
-    font-weight: 500;
+    background:#f0ebff;
+    border-radius:40px;
+    padding:6px 14px;
+    font-size:13px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#4a1a9e;
+    font-weight:500;
 }
-.cat-chip i { cursor: pointer; font-size: 12px; color: #6c2bd9; }
+.cat-chip i { cursor:pointer; font-size:12px; color:#6c2bd9; }
 .cat-select-btn {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px dashed #cbbff5;
-    border-radius: 12px;
-    background: #faf8ff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--primary);
-    font-weight: 500;
-    cursor: pointer;
+    width:100%;
+    padding:12px 16px;
+    border:2px dashed #cbbff5;
+    border-radius:12px;
+    background:#faf8ff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--primary);
+    font-weight:500;
+    cursor:pointer;
 }
-.cat-select-btn:hover { background: #f0ebff; border-color: var(--primary); }
-
+.cat-select-btn:hover { background:#f0ebff; border-color:var(--primary); }
 .cat-popup-list {
-    max-height: 60vh;
-    overflow-y: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
-    gap: 8px;
+    max-height:60vh;
+    overflow-y:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
+    gap:8px;
 }
 .cat-item-multi {
-    padding: 12px 12px;
-    background: #faf8ff;
-    border-radius: 40px;
-    font-size: 13px;
-    font-weight: 500;
-    border: 1.5px solid #e8e0ff;
-    cursor: pointer;
+    padding:12px 12px;
+    background:#faf8ff;
+    border-radius:40px;
+    font-size:13px;
+    font-weight:500;
+    border:1.5px solid #e8e0ff;
+    cursor:pointer;
 }
-.cat-item-multi.selected { background: #6c2bd9; color: white; border-color: #6c2bd9; }
-.cat-popup-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 18px; }
-.popup-btn { padding: 10px 16px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; }
-
+.cat-item-multi.selected { background:#6c2bd9; color:white; border-color:#6c2bd9; }
+.cat-popup-actions { display:flex; justify-content:flex-end; gap:12px; margin-top:18px; }
+.popup-btn { padding:10px 16px; border-radius:40px; border:none; font-weight:600; cursor:pointer; }
 .custom-toast {
-    position: fixed;
-    bottom: 90px;
-    left: 20px;
-    right: 20px;
-    background: #2ecc71;
-    color: white;
-    padding: 14px 18px;
-    border-radius: 50px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 10001;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    animation: fadeSlideUp 0.3s ease forwards;
+    position:fixed;
+    bottom:90px;
+    left:20px;
+    right:20px;
+    background:#2ecc71;
+    color:white;
+    padding:14px 18px;
+    border-radius:50px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    z-index:10001;
+    box-shadow:0 6px 20px rgba(0,0,0,0.2);
+    animation:fadeSlideUp 0.3s ease forwards;
 }
-.custom-toast.error { background: #e74c3c; }
+.custom-toast.error { background:#e74c3c; }
 @keyframes fadeSlideUp {
-    from { transform: translateY(40px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from { transform:translateY(40px); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
 }
-
 .view-profile-btn {
-    width: 100%;
-    padding: 14px;
-    background: #f0ebff;
-    color: var(--primary);
-    border: none;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    width:100%;
+    padding:14px;
+    background:#f0ebff;
+    color:var(--primary);
+    border:none;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
 }
 .edit-toggle-btn {
-    background: linear-gradient(135deg, var(--primary-light), var(--primary));
-    color: white;
-    margin-bottom: 20px;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
+    background:linear-gradient(135deg, var(--primary-light), var(--primary));
+    color:white;
+    margin-bottom:20px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
 }
-.edit-toggle-btn i { color: white; }
-
+.edit-toggle-btn i { color:white; }
 #editFormContainer {
-    display: none;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+    display:none;
+    transition:all 0.3s ease;
+    margin-bottom:20px;
 }
 #editFormContainer.show {
-    display: block;
-    animation: slideDown 0.4s ease;
+    display:block;
+    animation:slideDown 0.4s ease;
 }
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform:translateY(-20px); }
+    to { opacity:1; transform:translateY(0); }
 }
-
 .submit-wrap {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 16px 20px;
-    background: white;
-    border-top: 1px solid #f0ebff;
-    box-shadow: 0 -4px 20px rgba(108,43,217,0.1);
-    z-index: 100;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    padding:16px 20px;
+    background:white;
+    border-top:1px solid #f0ebff;
+    box-shadow:0 -4px 20px rgba(108,43,217,0.1);
+    z-index:100;
 }
 .home-btn {
-    display: block;
-    text-align: center;
-    background-color: #2ecc71;
-    color: white;
-    font-weight: 700;
-    font-size: 16px;
-    padding: 12px 16px;
-    border-radius: 40px;
-    margin-bottom: 12px;
-    text-decoration: none;
+    display:block;
+    text-align:center;
+    background-color:#2ecc71;
+    color:white;
+    font-weight:700;
+    font-size:16px;
+    padding:12px 16px;
+    border-radius:40px;
+    margin-bottom:12px;
+    text-decoration:none;
 }
-.home-btn i { margin-right: 6px; }
-.home-btn:hover { background-color: #27ae60; transform: scale(0.98); }
-
-/* লগআউট বাটন - ইউনিক ডিজাইন ও অ্যানিমেশন */
+.home-btn i { margin-right:6px; }
+.home-btn:hover { background-color:#27ae60; transform:scale(0.98); }
 .logout-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
-    border: none;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    position: relative;
-    overflow: hidden;
+    width:100%;
+    padding:14px;
+    background:linear-gradient(135deg, #e74c3c, #c0392b);
+    color:white;
+    border:none;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);
+    position:relative;
+    overflow:hidden;
 }
 .logout-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255,255,255,0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:0;
+    height:0;
+    background:rgba(255,255,255,0.3);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    transition:width 0.6s, height 0.6s;
 }
 .logout-btn:hover::before {
-    width: 300px;
-    height: 300px;
+    width:300px;
+    height:300px;
 }
 .logout-btn:hover {
-    background: linear-gradient(135deg, #c0392b, #a93226);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(231,76,60,0.4);
+    background:linear-gradient(135deg, #c0392b, #a93226);
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 10px 25px rgba(231,76,60,0.4);
 }
 .logout-btn:active {
-    transform: translateY(2px) scale(0.98);
+    transform:translateY(2px) scale(0.98);
 }
 .logout-btn i {
-    transition: transform 0.3s ease;
+    transition:transform 0.3s ease;
 }
 .logout-btn:hover i {
-    transform: translateX(3px);
+    transform:translateX(3px);
 }
-
 .submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    border: none;
-    border-radius: 14px;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg, var(--primary), var(--primary-light));
+    color:white;
+    border:none;
+    border-radius:14px;
+    font-size:17px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
 }
-.submit-btn.loading { background: #b39ddb; pointer-events: none; }
+.submit-btn.loading { background:#b39ddb; pointer-events:none; }
 .spinner {
-    width: 20px; height: 20px;
-    border: 3px solid rgba(255,255,255,0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    display: none;
+    width:20px; height:20px;
+    border:3px solid rgba(255,255,255,0.3);
+    border-top-color:white;
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+    display:none;
 }
-.submit-btn.loading .spinner { display: block; }
-.submit-btn.loading .btn-text { display: none; }
+.submit-btn.loading .spinner { display:block; }
+.submit-btn.loading .btn-text { display:none; }
 </style>
 </head>
 <body>
@@ -520,7 +508,6 @@ select.input-field { cursor: pointer; appearance: none; }
 <div class="submit-wrap" id="saveWrap" style="display:none">
     <a href="index.html" class="home-btn"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</a>
     <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 সেভ করুন</span></button>
-    <!-- লগআউট বাটন - ইউনিক ডিজাইন ও অ্যানিমেশন -->
     <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
 </div>
 
@@ -547,81 +534,81 @@ const auth = firebase.auth();
 const db = firebase.database();
 
 const districtMap = {
-    'ঢাকা': ['ঢাকা', 'গাজীপুর', 'নারায়ণগঞ্জ', 'মুন্সীগঞ্জ', 'মানিকগঞ্জ', 'নরসিংদী', 'ফরিদপুর', 'রাজবাড়ী', 'গোপালগঞ্জ', 'মাদারীপুর', 'শরীয়তপুর', 'কিশোরগঞ্জ', 'টাঙ্গাইল'],
-    'চট্টগ্রাম': ['চট্টগ্রাম', 'কক্সবাজার', 'কুমিল্লা', 'চাঁদপুর', 'ব্রাহ্মণবাড়িয়া', 'নোয়াখালী', 'ফেনী', 'লক্ষ্মীপুর', 'রাঙামাটি', 'খাগড়াছড়ি', 'বান্দরবান'],
-    'রাজশাহী': ['রাজশাহী', 'নাটোর', 'নওগাঁ', 'চাঁপাইনবাবগঞ্জ', 'পাবনা', 'সিরাজগঞ্জ', 'বগুড়া', 'জয়পুরহাট'],
-    'খুলনা': ['খুলনা', 'বাগেরহাট', 'সাতক্ষীরা', 'যশোর', 'মাগুরা', 'নড়াইল', 'কুষ্টিয়া', 'মেহেরপুর', 'চুয়াডাঙ্গা', 'ঝিনাইদহ'],
-    'বরিশাল': ['বরিশাল', 'ভোলা', 'পটুয়াখালী', 'বরগুনা', 'পিরোজপুর', 'ঝালকাঠি'],
-    'সিলেট': ['সিলেট', 'মৌলভীবাজার', 'হবিগঞ্জ', 'সুনামগঞ্জ'],
-    'রংপুর': ['রংপুর', 'গাইবান্ধা', 'কুড়িগ্রাম', 'লালমনিরহাট', 'নীলফামারী', 'দিনাজপুর', 'ঠাকুরগাঁও', 'পঞ্চগড়'],
-    'ময়মনসিংহ': ['ময়মনসিংহ', 'জামালপুর', 'শেরপুর', 'নেত্রকোণা']
+    'ঢাকা': ['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
+    'চট্টগ্রাম': ['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
+    'রাজশাহী': ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
+    'খুলনা': ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
+    'বরিশাল': ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],
+    'সিলেট': ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
+    'রংপুর': ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],
+    'ময়মনসিংহ': ['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা']
 };
 
 const thanaMap = {
-    'ঢাকা': ['আদাবর', 'উত্তরা', 'তেজগাঁও', 'ধামরাই', 'নবাবগঞ্জ', 'বাড্ডা', 'মিরপুর', 'মোহাম্মদপুর', 'যাত্রাবাড়ী', 'রামপুরা', 'লালবাগ', 'শাহবাগ', 'সাভার', 'সূত্রাপুর', 'হাজারীবাগ', 'ডেমরা', 'গুলশান', 'কাফরুল', 'শ্যামপুর'],
-    'গাজীপুর': ['গাজীপুর সদর', 'কালিয়াকৈর', 'কাপাসিয়া', 'শ্রীপুর', 'কালীগঞ্জ'],
-    'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর', 'আড়াইহাজার', 'বন্দর', 'রূপগঞ্জ', 'সোনারগাঁও', 'ফতুল্লা'],
-    'টাঙ্গাইল': ['টাঙ্গাইল সদর', 'বাসাইল', 'দেলদুয়ার', 'ঘাটাইল', 'গোপালপুর', 'কালিহাতী', 'মধুপুর', 'মির্জাপুর', 'নাগরপুর', 'সখিপুর', 'ধনবাড়ী'],
-    'নরসিংদী': ['নরসিংদী সদর', 'বেলাবো', 'পলাশ', 'মনোহরদী', 'রায়পুরা', 'শিবপুর'],
-    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর', 'গজারিয়া', 'টংগিবাড়ী', 'লৌহজং', 'শ্রীনগর', 'সিরাজদিখান'],
-    'মানিকগঞ্জ': ['মানিকগঞ্জ সদর', 'ঘিওর', 'দৌলতপুর', 'শিবালয়', 'সাটুরিয়া', 'হরিরামপুর'],
-    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর', 'অট্টগ্রাম', 'ইটনা', 'করিমগঞ্জ', 'কটিয়াদী', 'তাড়াইল', 'পাকুন্দিয়া', 'বাজিতপুর', 'ভৈরব', 'মিঠামইন', 'হোসেনপুর', 'নিকলী', 'কুলিয়ারচর'],
-    'ফরিদপুর': ['ফরিদপুর সদর', 'আলফাডাঙ্গা', 'বোয়ালমারী', 'মধুখালী', 'নগরকান্দা', 'সদরপুর', 'চরভদ্রাসন', 'সালথা'],
-    'রাজবাড়ী': ['রাজবাড়ী সদর', 'গোয়ালন্দ', 'পাংশা', 'বালিয়াকান্দি', 'কালুখালী'],
-    'গোপালগঞ্জ': ['গোপালগঞ্জ সদর', 'কাশিয়ানী', 'কোটালীপাড়া', 'টুঙ্গিপাড়া', 'মুকসুদপুর'],
-    'শরীয়তপুর': ['শরীয়তপুর সদর', 'গোসাইরহাট', 'জাজিরা', 'নড়িয়া', 'ভেদরগঞ্জ', 'ডামুড্যা'],
-    'মাদারীপুর': ['মাদারীপুর সদর', 'কালকিনি', 'ডাসার', 'শিবচর', 'রাজৈর'],
-    'চট্টগ্রাম': ['চট্টগ্রাম সদর', 'আনোয়ারা', 'বাঁশখালী', 'বোয়ালখালী', 'চন্দনাইশ', 'দোহাজারী', 'ফটিকছড়ি', 'হাটহাজারী', 'লোহাগাড়া', 'মিরসরাই', 'পটিয়া', 'রাঙ্গুনিয়া', 'রাউজান', 'সন্দ্বীপ', 'সাতকানিয়া', 'সীতাকুণ্ডা'],
-    'কক্সবাজার': ['কক্সবাজার সদর', 'চকরিয়া', 'কুতুবদিয়া', 'মহেশখালী', 'রামু', 'টেকনাফ', 'উখিয়া', 'পেকুয়া'],
-    'কুমিল্লা': ['কুমিল্লা সদর', 'বরুড়া', 'ব্রাহ্মণপাড়া', 'বুড়িচং', 'চান্দিনা', 'চৌদ্দগ্রাম', 'দাউদকান্দি', 'দেবিদ্বার', 'হোমনা', 'লাকসাম', 'মনোহরগঞ্জ', 'মুরাদনগর', 'নাঙ্গলকোট', 'তিতাস'],
-    'চাঁদপুর': ['চাঁদপুর সদর', 'ফরিদগঞ্জ', 'হাইমচর', 'হাজীগঞ্জ', 'কচুয়া', 'মতলব উত্তর', 'মতলব দক্ষিণ', 'শাহরাস্তি'],
-    'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর', 'আখাউড়া', 'বাঞ্ছারামপুর', 'বিজয়নগর', 'কসবা', 'নবীনগর', 'নাসিরনগর', 'সরাইল'],
-    'নোয়াখালী': ['নোয়াখালী সদর', 'বেগমগঞ্জ', 'চাটখিল', 'কবিরহাট', 'সেনবাগ', 'সোনাইমুড়ি', 'সুবর্ণচর', 'কোম্পানীগঞ্জ'],
-    'ফেনী': ['ফেনী সদর', 'ছাগলনাইয়া', 'দাগনভূঁইয়া', 'পরশুরাম', 'সোনাগাজী'],
-    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর', 'রামগঞ্জ', 'রামগতি', 'রায়পুর', 'কমলনগর'],
-    'রাঙামাটি': ['রাঙামাটি সদর', 'কাউখালী', 'বিলাইছড়ি', 'বরকল', 'জুরাছড়ি', 'নানিয়ারচর', 'লংগদু', 'রাজস্থলী', 'বাঘাইছড়ি'],
-    'খাগড়াছড়ি': ['খাগড়াছড়ি সদর', 'দীঘিনালা', 'পানছড়ি', 'লক্ষ্মীছড়ি', 'মহালছড়ি', 'মাটিরাঙ্গা', 'গুইমারা', 'রামগড়'],
-    'বান্দরবান': ['বান্দরবান সদর', 'নাইক্ষ্যংছড়ি', 'রুমা', 'থানচি', 'লামা', 'আলীকদম', 'রোয়াংছড়ি'],
-    'সিলেট': ['সিলেট সদর', 'বালাগঞ্জ', 'বিয়ানীবাজার', 'বিশ্বনাথ', 'ফেঞ্চুগঞ্জ', 'গোলাপগঞ্জ', 'গোয়াইনঘাট', 'জৈন্তাপুর', 'কানাইঘাট', 'কোম্পানীগঞ্জ', 'জকিগঞ্জ', 'দক্ষিণ সুরমা', 'মোগলাবাজার'],
-    'মৌলভীবাজার': ['মৌলভীবাজার সদর', 'বড়লেখা', 'জুড়ী', 'কমলগঞ্জ', 'কুলাউড়া', 'রাজনগর', 'শ্রীমঙ্গল'],
-    'হবিগঞ্জ': ['হবিগঞ্জ সদর', 'আজমিরীগঞ্জ', 'বাহুবল', 'বানিয়াচং', 'চুনারুঘাট', 'কালাউক', 'লাখাই', 'মাধবপুর', 'নবীগঞ্জ', 'শায়েস্তাগঞ্জ'],
-    'সুনামগঞ্জ': ['সুনামগঞ্জ সদর', 'ছাতক', 'দিরাই', 'ধর্মপাশা', 'দোয়ারাবাজার', 'জগন্নাথপুর', 'জামালগঞ্জ', 'শাল্লা', 'তাহিরপুর', 'বিশ্বম্ভরপুর'],
-    'রাজশাহী': ['রাজশাহী সদর', 'বাঘা', 'বাগমারা', 'চারঘাট', 'দুর্গাপুর', 'গোদাগাড়ী', 'মোহনপুর', 'পবা', 'পুঠিয়া', 'তানোর'],
-    'নাটোর': ['নাটোর সদর', 'বাগাতিপাড়া', 'বড়াইগ্রাম', 'গুরুদাসপুর', 'লালপুর', 'নলডাঙ্গা', 'সিংড়া'],
-    'নওগাঁ': ['নওগাঁ সদর', 'আত্রাই', 'বাদলগাছী', 'ধামইরহাট', 'মহাদেবপুর', 'মান্দা', 'নিয়ামতপুর', 'পত্নীতলা', 'পোরশা', 'রাণীনগর', 'সাপাহার'],
-    'চাঁপাইনবাবগঞ্জ': ['চাঁপাইনবাবগঞ্জ সদর', 'গোমস্তাপুর', 'নাচোল', 'ভোলাহাট', 'শিবগঞ্জ'],
-    'পাবনা': ['পাবনা সদর', 'আটঘরিয়া', 'ঈশ্বরদী', 'চাটমোহর', 'ফরিদপুর', 'বেনাপোল', 'সাঁথিয়া', 'সুজানগর'],
-    'সিরাজগঞ্জ': ['সিরাজগঞ্জ সদর', 'কাজীপুর', 'কামারখন্দ', 'চৌহালী', 'তাড়াশ', 'বেলকুচি', 'শাহজাদপুর', 'সালঙ্গা', 'উল্লাপাড়া'],
-    'বগুড়া': ['বগুড়া সদর', 'আদমদীঘি', 'দুপচাঁচিয়া', 'ধুনট', 'নন্দীগ্রাম', 'শেরপুর', 'শাজাহানপুর', 'সারিয়াকান্দি', 'সোনাতলা', 'গাবতলী'],
-    'জয়পুরহাট': ['জয়পুরহাট সদর', 'আক্কেলপুর', 'কালাই', 'ক্ষেতলাল', 'পাঁচবিবি'],
-    'খুলনা': ['খুলনা সদর', 'বটিয়াঘাটা', 'দাকোপ', 'ডুমুরিয়া', 'দিঘলিয়া', 'কয়রা', 'পাইকগাছা', 'রূপসা', 'তেরখাদা'],
-    'বাগেরহাট': ['বাগেরহাট সদর', 'ফকিরহাট', 'কচুয়া', 'মোল্লাহাট', 'মোড়েলগঞ্জ', 'রামপাল', 'শরণখোলা', 'চিতলমারী', 'মোংলা'],
-    'যশোর': ['যশোর সদর', 'অভয়নগর', 'বাঘারপাড়া', 'চৌগাছা', 'ঝিকরগাছা', 'কেশবপুর', 'মনিরামপুর', 'শার্শা'],
-    'সাতক্ষীরা': ['সাতক্ষীরা সদর', 'আশাশুনি', 'দেবহাটা', 'কালীগঞ্জ', 'কলারোয়া', 'শ্যামনগর', 'তালা'],
-    'কুষ্টিয়া': ['কুষ্টিয়া সদর', 'কুমারখালী', 'খোকসা', 'মিরপুর', 'ভেড়ামারা', 'দৌলতপুর'],
-    'মাগুরা': ['মাগুরা সদর', 'মহম্মদপুর', 'শালিখা', 'শ্রীপুর'],
-    'নড়াইল': ['নড়াইল সদর', 'কালিয়া', 'লোহাগড়া', 'নড়িয়া সদর'],
-    'চুয়াডাঙ্গা': ['চুয়াডাঙ্গা সদর', 'আলমডাঙ্গা', 'দামুড়হুদা', 'জীবননগর'],
-    'ঝিনাইদহ': ['ঝিনাইদহ সদর', 'কালীগঞ্জ', 'কোটচাঁদপুর', 'শৈলকুপা', 'হরিণাকুন্ডু', 'মহেশপুর'],
-    'মেহেরপুর': ['মেহেরপুর সদর', 'গাংনি', 'মুজিবনগর'],
-    'বরিশাল': ['বরিশাল সদর', 'আগৈলঝারা', 'বাবুগঞ্জ', 'বাকেরগঞ্জ', 'বানারীপাড়া', 'গৌরনদী', 'হিজলা', 'মেহেন্দিগঞ্জ', 'মুলাদী', 'উজিরপুর'],
-    'ভোলা': ['ভোলা সদর', 'বোরহানউদ্দিন', 'চরফ্যাশন', 'দৌলতখান', 'লালমোহন', 'মনপুরা', 'তজুমদ্দিন'],
-    'পটুয়াখালী': ['পটুয়াখালী সদর', 'বাউফল', 'দুমকি', 'দশমিনা', 'গলাচিপা', 'কলাপাড়া', 'মির্জাগঞ্জ', 'রাঙ্গাবালী'],
-    'বরগুনা': ['বরগুনা সদর', 'আমতলী', 'বামনা', 'বেতাগী', 'পাথরঘাটা', 'তালতলী'],
-    'পিরোজপুর': ['পিরোজপুর সদর', 'ভাণ্ডারিয়া', 'কাউখালী', 'মঠবাড়িয়া', 'নাজিরপুর', 'নেছারাবাদ', 'ইন্দুরকানী'],
-    'ঝালকাঠি': ['ঝালকাঠি সদর', 'কাঠালিয়া', 'নলছিটি', 'রাজাপুর'],
-    'রংপুর': ['রংপুর সদর', 'বদরগঞ্জ', 'গঙ্গাচড়া', 'কাউনিয়া', 'মিঠাপুকুর', 'পীরগাছা', 'পীরগঞ্জ', 'তারাগঞ্জ'],
-    'দিনাজপুর': ['দিনাজপুর সদর', 'বিরামপুর', 'বীরগঞ্জ', 'বোচাগঞ্জ', 'চিরিরবন্দর', 'ফুলবাড়ী', 'ঘোড়াঘাট', 'হাকিমপুর', 'খানসামা', 'নবাবগঞ্জ', 'পার্বতীপুর', 'সেতাবগঞ্জ'],
-    'গাইবান্ধা': ['গাইবান্ধা সদর', 'ফুলছড়ি', 'গোবিন্দগঞ্জ', 'পলাশবাড়ী', 'সাদুল্যাপুর', 'সাঘাটা', 'সুন্দরগঞ্জ'],
-    'কুড়িগ্রাম': ['কুড়িগ্রাম সদর', 'ভূরুঙ্গামারী', 'চর রাজিবপুর', 'চিলমারী', 'নাগেশ্বরী', 'ফুলবাড়ী', 'রাজারহাট', 'উলিপুর'],
-    'লালমনিরহাট': ['লালমনিরহাট সদর', 'আদিতমারী', 'হাতীবান্ধা', 'কালীগঞ্জ', 'পাটগ্রাম'],
-    'নীলফামারী': ['নীলফামারী সদর', 'ডিমলা', 'ডোমার', 'জলঢাকা', 'কিশোরগঞ্জ', 'সৈয়দপুর'],
-    'ঠাকুরগাঁও': ['ঠাকুরগাঁও সদর', 'বালিয়াডাঙ্গী', 'হরিপুর', 'পীরগঞ্জ', 'রাণীশংকৈল'],
-    'পঞ্চগড়': ['পঞ্চগড় সদর', 'আটোয়ারী', 'বোদা', 'দেবীগঞ্জ', 'তেঁতুলিয়া'],
-    'ময়মনসিংহ': ['ময়মনসিংহ সদর', 'ভালুকা', 'ধোবাউড়া', 'ফুলবাড়িয়া', 'গফরগাঁও', 'গৌরীপুর', 'হালুয়াঘাট', 'ঈশ্বরগঞ্জ', 'মুক্তাগাছা', 'নান্দাইল', 'ফুলপুর', 'ত্রিশাল'],
-    'জামালপুর': ['জামালপুর সদর', 'বকশীগঞ্জ', 'দেওয়ানগঞ্জ', 'ইসলামপুর', 'মাদারগঞ্জ', 'মেলান্দহ', 'সরিষাবাড়ী'],
-    'শেরপুর': ['শেরপুর সদর', 'ঝিনাইগাতী', 'নকলা', 'নালিতাবাড়ী', 'শ্রীবর্দী'],
-    'নেত্রকোণা': ['নেত্রকোণা সদর', 'আটপাড়া', 'বারহাট্টা', 'দুর্গাপুর', 'খালিয়াজুড়ি', 'কলমাকান্দা', 'মদন', 'মোহনগঞ্জ', 'পূর্বধলা', 'কেন্দুয়া']
+    'ঢাকা': ['আদাবর','উত্তরা','তেজগাঁও','ধামরাই','নবাবগঞ্জ','বাড্ডা','মিরপুর','মোহাম্মদপুর','যাত্রাবাড়ী','রামপুরা','লালবাগ','শাহবাগ','সাভার','সূত্রাপুর','হাজারীবাগ','ডেমরা','গুলশান','কাফরুল','শ্যামপুর'],
+    'গাজীপুর': ['গাজীপুর সদর','কালিয়াকৈর','কাপাসিয়া','শ্রীপুর','কালীগঞ্জ'],
+    'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর','আড়াইহাজার','বন্দর','রূপগঞ্জ','সোনারগাঁও','ফতুল্লা'],
+    'টাঙ্গাইল': ['টাঙ্গাইল সদর','বাসাইল','দেলদুয়ার','ঘাটাইল','গোপালপুর','কালিহাতী','মধুপুর','মির্জাপুর','নাগরপুর','সখিপুর','ধনবাড়ী'],
+    'নরসিংদী': ['নরসিংদী সদর','বেলাবো','পলাশ','মনোহরদী','রায়পুরা','শিবপুর'],
+    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর','গজারিয়া','টংগিবাড়ী','লৌহজং','শ্রীনগর','সিরাজদিখান'],
+    'মানিকগঞ্জ': ['মানিকগঞ্জ সদর','ঘিওর','দৌলতপুর','শিবালয়','সাটুরিয়া','হরিরামপুর'],
+    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর','অট্টগ্রাম','ইটনা','করিমগঞ্জ','কটিয়াদী','তাড়াইল','পাকুন্দিয়া','বাজিতপুর','ভৈরব','মিঠামইন','হোসেনপুর','নিকলী','কুলিয়ারচর'],
+    'ফরিদপুর': ['ফরিদপুর সদর','আলফাডাঙ্গা','বোয়ালমারী','মধুখালী','নগরকান্দা','সদরপুর','চরভদ্রাসন','সালথা'],
+    'রাজবাড়ী': ['রাজবাড়ী সদর','গোয়ালন্দ','পাংশা','বালিয়াকান্দি','কালুখালী'],
+    'গোপালগঞ্জ': ['গোপালগঞ্জ সদর','কাশিয়ানী','কোটালীপাড়া','টুঙ্গিপাড়া','মুকসুদপুর'],
+    'শরীয়তপুর': ['শরীয়তপুর সদর','গোসাইরহাট','জাজিরা','নড়িয়া','ভেদরগঞ্জ','ডামুড্যা'],
+    'মাদারীপুর': ['মাদারীপুর সদর','কালকিনি','ডাসার','শিবচর','রাজৈর'],
+    'চট্টগ্রাম': ['চট্টগ্রাম সদর','আনোয়ারা','বাঁশখালী','বোয়ালখালী','চন্দনাইশ','দোহাজারী','ফটিকছড়ি','হাটহাজারী','লোহাগাড়া','মিরসরাই','পটিয়া','রাঙ্গুনিয়া','রাউজান','সন্দ্বীপ','সাতকানিয়া','সীতাকুণ্ডা'],
+    'কক্সবাজার': ['কক্সবাজার সদর','চকরিয়া','কুতুবদিয়া','মহেশখালী','রামু','টেকনাফ','উখিয়া','পেকুয়া'],
+    'কুমিল্লা': ['কুমিল্লা সদর','বরুড়া','ব্রাহ্মণপাড়া','বুড়িচং','চান্দিনা','চৌদ্দগ্রাম','দাউদকান্দি','দেবিদ্বার','হোমনা','লাকসাম','মনোহরগঞ্জ','মুরাদনগর','নাঙ্গলকোট','তিতাস'],
+    'চাঁদপুর': ['চাঁদপুর সদর','ফরিদগঞ্জ','হাইমচর','হাজীগঞ্জ','কচুয়া','মতলব উত্তর','মতলব দক্ষিণ','শাহরাস্তি'],
+    'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর','আখাউড়া','বাঞ্ছারামপুর','বিজয়নগর','কসবা','নবীনগর','নাসিরনগর','সরাইল'],
+    'নোয়াখালী': ['নোয়াখালী সদর','বেগমগঞ্জ','চাটখিল','কবিরহাট','সেনবাগ','সোনাইমুড়ি','সুবর্ণচর','কোম্পানীগঞ্জ'],
+    'ফেনী': ['ফেনী সদর','ছাগলনাইয়া','দাগনভূঁইয়া','পরশুরাম','সোনাগাজী'],
+    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর','রামগঞ্জ','রামগতি','রায়পুর','কমলনগর'],
+    'রাঙামাটি': ['রাঙামাটি সদর','কাউখালী','বিলাইছড়ি','বরকল','জুরাছড়ি','নানিয়ারচর','লংগদু','রাজস্থলী','বাঘাইছড়ি'],
+    'খাগড়াছড়ি': ['খাগড়াছড়ি সদর','দীঘিনালা','পানছড়ি','লক্ষ্মীছড়ি','মহালছড়ি','মাটিরাঙ্গা','গুইমারা','রামগড়'],
+    'বান্দরবান': ['বান্দরবান সদর','নাইক্ষ্যংছড়ি','রুমা','থানচি','লামা','আলীকদম','রোয়াংছড়ি'],
+    'সিলেট': ['সিলেট সদর','বালাগঞ্জ','বিয়ানীবাজার','বিশ্বনাথ','ফেঞ্চুগঞ্জ','গোলাপগঞ্জ','গোয়াইনঘাট','জৈন্তাপুর','কানাইঘাট','কোম্পানীগঞ্জ','জকিগঞ্জ','দক্ষিণ সুরমা','মোগলাবাজার'],
+    'মৌলভীবাজার': ['মৌলভীবাজার সদর','বড়লেখা','জুড়ী','কমলগঞ্জ','কুলাউড়া','রাজনগর','শ্রীমঙ্গল'],
+    'হবিগঞ্জ': ['হবিগঞ্জ সদর','আজমিরীগঞ্জ','বাহুবল','বানিয়াচং','চুনারুঘাট','কালাউক','লাখাই','মাধবপুর','নবীগঞ্জ','শায়েস্তাগঞ্জ'],
+    'সুনামগঞ্জ': ['সুনামগঞ্জ সদর','ছাতক','দিরাই','ধর্মপাশা','দোয়ারাবাজার','জগন্নাথপুর','জামালগঞ্জ','শাল্লা','তাহিরপুর','বিশ্বম্ভরপুর'],
+    'রাজশাহী': ['রাজশাহী সদর','বাঘা','বাগমারা','চারঘাট','দুর্গাপুর','গোদাগাড়ী','মোহনপুর','পবা','পুঠিয়া','তানোর'],
+    'নাটোর': ['নাটোর সদর','বাগাতিপাড়া','বড়াইগ্রাম','গুরুদাসপুর','লালপুর','নলডাঙ্গা','সিংড়া'],
+    'নওগাঁ': ['নওগাঁ সদর','আত্রাই','বাদলগাছী','ধামইরহাট','মহাদেবপুর','মান্দা','নিয়ামতপুর','পত্নীতলা','পোরশা','রাণীনগর','সাপাহার'],
+    'চাঁপাইনবাবগঞ্জ': ['চাঁপাইনবাবগঞ্জ সদর','গোমস্তাপুর','নাচোল','ভোলাহাট','শিবগঞ্জ'],
+    'পাবনা': ['পাবনা সদর','আটঘরিয়া','ঈশ্বরদী','চাটমোহর','ফরিদপুর','বেনাপোল','সাঁথিয়া','সুজানগর'],
+    'সিরাজগঞ্জ': ['সিরাজগঞ্জ সদর','কাজীপুর','কামারখন্দ','চৌহালী','তাড়াশ','বেলকুচি','শাহজাদপুর','সালঙ্গা','উল্লাপাড়া'],
+    'বগুড়া': ['বগুড়া সদর','আদমদীঘি','দুপচাঁচিয়া','ধুনট','নন্দীগ্রাম','শেরপুর','শাজাহানপুর','সারিয়াকান্দি','সোনাতলা','গাবতলী'],
+    'জয়পুরহাট': ['জয়পুরহাট সদর','আক্কেলপুর','কালাই','ক্ষেতলাল','পাঁচবিবি'],
+    'খুলনা': ['খুলনা সদর','বটিয়াঘাটা','দাকোপ','ডুমুরিয়া','দিঘলিয়া','কয়রা','পাইকগাছা','রূপসা','তেরখাদা'],
+    'বাগেরহাট': ['বাগেরহাট সদর','ফকিরহাট','কচুয়া','মোল্লাহাট','মোড়েলগঞ্জ','রামপাল','শরণখোলা','চিতলমারী','মোংলা'],
+    'যশোর': ['যশোর সদর','অভয়নগর','বাঘারপাড়া','চৌগাছা','ঝিকরগাছা','কেশবপুর','মনিরামপুর','শার্শা'],
+    'সাতক্ষীরা': ['সাতক্ষীরা সদর','আশাশুনি','দেবহাটা','কালীগঞ্জ','কলারোয়া','শ্যামনগর','তালা'],
+    'কুষ্টিয়া': ['কুষ্টিয়া সদর','কুমারখালী','খোকসা','মিরপুর','ভেড়ামারা','দৌলতপুর'],
+    'মাগুরা': ['মাগুরা সদর','মহম্মদপুর','শালিখা','শ্রীপুর'],
+    'নড়াইল': ['নড়াইল সদর','কালিয়া','লোহাগড়া','নড়িয়া সদর'],
+    'চুয়াডাঙ্গা': ['চুয়াডাঙ্গা সদর','আলমডাঙ্গা','দামুড়হুদা','জীবননগর'],
+    'ঝিনাইদহ': ['ঝিনাইদহ সদর','কালীগঞ্জ','কোটচাঁদপুর','শৈলকুপা','হরিণাকুন্ডু','মহেশপুর'],
+    'মেহেরপুর': ['মেহেরপুর সদর','গাংনি','মুজিবনগর'],
+    'বরিশাল': ['বরিশাল সদর','আগৈলঝারা','বাবুগঞ্জ','বাকেরগঞ্জ','বানারীপাড়া','গৌরনদী','হিজলা','মেহেন্দিগঞ্জ','মুলাদী','উজিরপুর'],
+    'ভোলা': ['ভোলা সদর','বোরহানউদ্দিন','চরফ্যাশন','দৌলতখান','লালমোহন','মনপুরা','তজুমদ্দিন'],
+    'পটুয়াখালী': ['পটুয়াখালী সদর','বাউফল','দুমকি','দশমিনা','গলাচিপা','কলাপাড়া','মির্জাগঞ্জ','রাঙ্গাবালী'],
+    'বরগুনা': ['বরগুনা সদর','আমতলী','বামনা','বেতাগী','পাথরঘাটা','তালতলী'],
+    'পিরোজপুর': ['পিরোজপুর সদর','ভাণ্ডারিয়া','কাউখালী','মঠবাড়িয়া','নাজিরপুর','নেছারাবাদ','ইন্দুরকানী'],
+    'ঝালকাঠি': ['ঝালকাঠি সদর','কাঠালিয়া','নলছিটি','রাজাপুর'],
+    'রংপুর': ['রংপুর সদর','বদরগঞ্জ','গঙ্গাচড়া','কাউনিয়া','মিঠাপুকুর','পীরগাছা','পীরগঞ্জ','তারাগঞ্জ'],
+    'দিনাজপুর': ['দিনাজপুর সদর','বিরামপুর','বীরগঞ্জ','বোচাগঞ্জ','চিরিরবন্দর','ফুলবাড়ী','ঘোড়াঘাট','হাকিমপুর','খানসামা','নবাবগঞ্জ','পার্বতীপুর','সেতাবগঞ্জ'],
+    'গাইবান্ধা': ['গাইবান্ধা সদর','ফুলছড়ি','গোবিন্দগঞ্জ','পলাশবাড়ী','সাদুল্যাপুর','সাঘাটা','সুন্দরগঞ্জ'],
+    'কুড়িগ্রাম': ['কুড়িগ্রাম সদর','ভূরুঙ্গামারী','চর রাজিবপুর','চিলমারী','নাগেশ্বরী','ফুলবাড়ী','রাজারহাট','উলিপুর'],
+    'লালমনিরহাট': ['লালমনিরহাট সদর','আদিতমারী','হাতীবান্ধা','কালীগঞ্জ','পাটগ্রাম'],
+    'নীলফামারী': ['নীলফামারী সদর','ডিমলা','ডোমার','জলঢাকা','কিশোরগঞ্জ','সৈয়দপুর'],
+    'ঠাকুরগাঁও': ['ঠাকুরগাঁও সদর','বালিয়াডাঙ্গী','হরিপুর','পীরগঞ্জ','রাণীশংকৈল'],
+    'পঞ্চগড়': ['পঞ্চগড় সদর','আটোয়ারী','বোদা','দেবীগঞ্জ','তেঁতুলিয়া'],
+    'ময়মনসিংহ': ['ময়মনসিংহ সদর','ভালুকা','ধোবাউড়া','ফুলবাড়িয়া','গফরগাঁও','গৌরীপুর','হালুয়াঘাট','ঈশ্বরগঞ্জ','মুক্তাগাছা','নান্দাইল','ফুলপুর','ত্রিশাল'],
+    'জামালপুর': ['জামালপুর সদর','বকশীগঞ্জ','দেওয়ানগঞ্জ','ইসলামপুর','মাদারগঞ্জ','মেলান্দহ','সরিষাবাড়ী'],
+    'শেরপুর': ['শেরপুর সদর','ঝিনাইগাতী','নকলা','নালিতাবাড়ী','শ্রীবর্দী'],
+    'নেত্রকোণা': ['নেত্রকোণা সদর','আটপাড়া','বারহাট্টা','দুর্গাপুর','খালিয়াজুড়ি','কলমাকান্দা','মদন','মোহনগঞ্জ','পূর্বধলা','কেন্দুয়া']
 };
 
 function onDivisionChange() { 
@@ -685,7 +672,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if(viewBtn) viewBtn.innerHTML = '<i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)';
 });
 
-// ========== প্রোফাইল ফাংশন ==========
 function viewProfile() {
     const user = auth.currentUser;
     if (user) {
@@ -695,7 +681,6 @@ function viewProfile() {
     }
 }
 
-// ========== লগআউট ফাংশন ==========
 function logout() {
     auth.signOut().then(() => {
         showFloatyToast('✅ সফলভাবে লগআউট হয়েছে!');
@@ -706,7 +691,6 @@ function logout() {
         showFloatyToast('লগআউট করতে সমস্যা হয়েছে!', true);
     });
 }
-// ==================================
 
 auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; document.getElementById('saveWrap').style.display='block'; if(data){ 
     document.getElementById('previewCardShopName').innerHTML = `${data.shopName || 'দোকানের নাম'}`;
