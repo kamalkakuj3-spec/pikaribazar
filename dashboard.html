@@ -408,7 +408,6 @@ select.input-field { cursor: pointer; appearance: none; }
         <div id="cardStatusBadge" class="small-status-badge pending">⏳ পেন্ডিং</div>
     </div>
 
-    <!-- এখানে onclick যোগ করা হয়েছে -->
     <button class="view-profile-btn" id="viewProfileBtn" onclick="viewProfile()"><i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
     <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
@@ -632,15 +631,16 @@ window.addEventListener('DOMContentLoaded', () => {
     if(viewBtn) viewBtn.innerHTML = '<i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)';
 });
 
-// ========== এখানে viewProfile ফাংশন যোগ করা হয়েছে ==========
+// ========== সঠিক viewProfile ফাংশন (প্রোফাইল পেজে UID সহ যাবে) ==========
 function viewProfile() {
-    if (auth.currentUser) {
-        window.location.href = 'profile.html';
+    const user = auth.currentUser;
+    if (user) {
+        window.location.href = `profile.html?id=${user.uid}`;
     } else {
         window.location.href = 'login.html';
     }
 }
-// ========================================================
+// ================================================================
 
 auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; document.getElementById('saveWrap').style.display='block'; if(data){ 
     document.getElementById('previewCardShopName').innerHTML = `${data.shopName || 'দোকানের নাম'}`;
