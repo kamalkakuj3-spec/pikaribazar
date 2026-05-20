@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>ড্যাশবোর্ড — পাইকারি বাজার</title>
+<title>ড্যাশবোর্ড — দোকান ব্যবস্থাপনা</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
@@ -19,7 +19,6 @@
     --text-light: #666;
     --error: #e74c3c;
     --success: #2ecc71;
-    --warning: #f0c040;
     --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,31 +49,21 @@ body {
 .loading-text { color: white; font-size: 16px; opacity: 0.8; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* Header without logo text & brand icon */
 .header {
     background: linear-gradient(135deg, #1a0a3e 0%, #6c2bd9 100%);
-    padding: 50px 20px 30px;
+    padding: 20px 20px 20px;
     position: relative;
     overflow: hidden;
 }
 .header-top {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-bottom: 20px;
     position: relative;
     z-index: 1;
 }
-.header-logo { display: flex; align-items: center; gap: 10px; }
-.header-logo-icon {
-    width: 38px; height: 38px;
-    background: var(--accent);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-}
-.header-logo-text { font-size: 16px; font-weight: 700; color: white; }
 .logout-btn {
     padding: 8px 16px;
     background: rgba(255,255,255,0.15);
@@ -126,6 +115,49 @@ body {
 
 .content { padding: 20px 16px 100px; }
 
+/* 3D card preview for shop */
+.shop-preview-card {
+    background: white;
+    border-radius: 28px;
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 20px 35px -12px rgba(108,43,217,0.25);
+    border: 1px solid rgba(108,43,217,0.15);
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s;
+    animation: floatCard 3s infinite ease-in-out;
+}
+@keyframes floatCard {
+    0% { transform: translateY(0px) rotateX(2deg); }
+    50% { transform: translateY(-6px) rotateX(4deg); }
+    100% { transform: translateY(0px) rotateX(2deg); }
+}
+.shop-preview-card:hover {
+    transform: translateY(-8px) rotateX(2deg);
+    box-shadow: 0 28px 40px -16px rgba(108,43,217,0.35);
+}
+.card-shop-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.card-shop-name i { color: var(--accent); font-size: 24px; }
+.card-shop-address {
+    font-size: 14px;
+    color: #555;
+    margin-top: 6px;
+    border-top: 1px solid #efe6ff;
+    padding-top: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+.card-shop-address i { color: var(--primary); margin-top: 2px; }
+
 .notice-tile {
     border-radius: 18px;
     padding: 16px;
@@ -133,7 +165,6 @@ body {
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 20px;
-    animation: tileIn 0.5s ease both;
 }
 .notice-tile.pending { background: #fffbeb; border: 1.5px solid #f0c040; }
 .notice-tile.approved { background: #edfaf3; border: 1.5px solid #2ecc71; }
@@ -162,8 +193,6 @@ body {
     to   { transform: translateY(0); opacity: 1; }
 }
 
-.section-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-
 .tile-card {
     background: white;
     border-radius: 20px;
@@ -171,11 +200,7 @@ body {
     box-shadow: var(--card-shadow);
     border: 1.5px solid rgba(108,43,217,0.08);
     margin-bottom: 16px;
-    animation: tileIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
-}
-@keyframes tileIn {
-    from { transform: translateY(30px) scale(0.95); opacity: 0; }
-    to   { transform: translateY(0) scale(1); opacity: 1; }
+    transition: all 0.2s;
 }
 .tile-header {
     display: flex;
@@ -285,18 +310,30 @@ textarea.input-field {
 .cat-popup-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 18px; }
 .popup-btn { padding: 10px 16px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; }
 
-.msg-box {
-    padding: 14px 16px;
-    border-radius: 14px;
-    font-size: 14px;
-    margin-bottom: 16px;
-    display: none;
+/* Toast message like register page */
+.custom-toast {
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
+    right: 20px;
+    background: #2ecc71;
+    color: white;
+    padding: 14px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    z-index: 10001;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    animation: fadeSlideUp 0.3s ease forwards;
+    font-size: 14px;
 }
-.msg-box.error { background: #fdf0ef; color: var(--error); border: 1.5px solid #f5c6c2; }
-.msg-box.success { background: #edfaf3; color: var(--success); border: 1.5px solid #b7ecd0; }
-.msg-box.show { display: flex; }
+.custom-toast.error { background: #e74c3c; }
+@keyframes fadeSlideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
 
 .submit-wrap {
     position: fixed;
@@ -318,7 +355,6 @@ textarea.input-field {
     margin-bottom: 12px;
     text-decoration: none;
     transition: 0.2s;
-    letter-spacing: 0.5px;
 }
 .home-btn i { margin-right: 6px; }
 .home-btn:hover { background-color: #27ae60; transform: scale(0.98); }
@@ -332,12 +368,11 @@ textarea.input-field {
     font-size: 17px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 6px 20px rgba(108,43,217,0.4);
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    transition: 0.2s;
 }
 .submit-btn:active { transform: scale(0.97); }
 .submit-btn.loading { background: #b39ddb; pointer-events: none; }
@@ -376,7 +411,6 @@ textarea.input-field {
 
 <div class="header" id="mainHeader" style="display:none">
     <div class="header-top">
-        <div class="header-logo"><div class="header-logo-icon">🏪</div><div class="header-logo-text">পাইকারি বাজার</div></div>
         <button class="logout-btn" onclick="logoutShop()">🚪 লগআউট</button>
     </div>
     <div class="profile-preview">
@@ -390,18 +424,19 @@ textarea.input-field {
 </div>
 
 <div class="content" id="mainContent" style="display:none">
-    <div class="msg-box error" id="errorMsg"><span>⚠️</span><span id="errorText"></span></div>
-    <div class="msg-box success" id="successMsg"><span>✅</span><span id="successText"></span></div>
+    <!-- 3D animated preview card -->
+    <div class="shop-preview-card" id="shopPreviewCard">
+        <div class="card-shop-name"><i class="fas fa-store"></i> <span id="previewCardShopName">দোকানের নাম</span></div>
+        <div class="card-shop-address"><i class="fas fa-map-marker-alt"></i> <span id="previewCardAddress">ঠিকানা প্রদর্শিত হবে</span></div>
+    </div>
 
     <div class="notice-tile pending" id="noticeTile">
         <div class="notice-icon">⏳</div>
         <div class="notice-text"><div class="notice-title">Approval পেন্ডিং</div>আপনার দোকান Admin-এর কাছে Approval-এর জন্য অপেক্ষায় আছে।</div>
     </div>
 
-    <!-- প্রোফাইল দেখুন (অন্যরা যেভাবে দেখবে) -->
     <button class="view-profile-btn" onclick="viewProfile()"><i class="fas fa-eye"></i> আমার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
 
-    <!-- দোকানের তথ্য -->
     <div class="tile-card">
         <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
         <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
@@ -409,7 +444,7 @@ textarea.input-field {
         <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
     </div>
 
-    <!-- ঠিকানা: বিভাগ → জেলা → উপজেলা/থানা (step by step like register) -->
+    <!-- ঠিকানা: বিভাগ → জেলা → উপজেলা/থানা correct step -->
     <div class="tile-card">
         <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা/থানা</div></div></div>
         <div class="input-group"><label class="input-label">বিভাগ *</label><div class="input-wrap"><span class="input-icon">🗺️</span><select class="input-field" id="division" onchange="loadDistricts()"><option value="">— বিভাগ বাছাই করুন —</option><option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option><option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option><option>রংপুর</option><option>ময়মনসিংহ</option></select><span class="select-arrow">▼</span></div></div>
@@ -418,7 +453,6 @@ textarea.input-field {
         <div class="input-group"><label class="input-label">আপনার দোকানের সম্পূর্ণ ঠিকানা লিখুন</label><div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="fullAddress" placeholder="বাড়ি নং, রাস্তা, ওয়ার্ড, গ্রাম/পাড়া সহ সম্পূর্ণ ঠিকানা"></textarea></div></div>
     </div>
 
-    <!-- ক্যাটাগরি মাল্টি সিলেক্ট -->
     <div class="tile-card">
         <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন</div></div></div>
         <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
@@ -426,13 +460,11 @@ textarea.input-field {
         <input type="hidden" id="categoriesHidden" value="">
     </div>
 
-    <!-- যোগাযোগের তথ্য: মোবাইল, whatsapp, টেলিগ্রাম, ফেসবুক বাদ -->
     <div class="tile-card">
         <div class="tile-header"><div class="tile-icon">📞</div><div><div class="tile-title">যোগাযোগের তথ্য</div><div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div></div></div>
         <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
         <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
         <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
-        <!-- ফেসবুক বাদ দেয়া হয়েছে -->
         <div class="input-group"><label class="input-label">YouTube চ্যানেল লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
     </div>
 </div>
@@ -442,7 +474,6 @@ textarea.input-field {
     <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 তথ্য সংরক্ষণ করুন</span></button>
 </div>
 
-<!-- Category Popup (multiple) -->
 <div id="multiCatPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:flex-end;">
     <div style="background:white; border-radius:24px 24px 0 0; padding:20px; width:100%; max-height:80vh; overflow-y:auto;">
         <div style="display:flex; justify-content:space-between; margin-bottom:16px;"><span style="font-weight:700;">🗂️ একাধিক ক্যাটাগরি বাছাই করুন</span><button onclick="closeMultiCatPopup()" style="background:#f0ebff; border:none; border-radius:30px; padding:6px 12px;">✕ বন্ধ</button></div>
@@ -495,12 +526,8 @@ function loadUpazilas() {
         document.getElementById('upazilaGroup').style.display = 'none';
     }
 }
-// category multi select
-const allCategories = [
-    '👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'
-];
+const allCategories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
 let selectedCategories = [];
-
 function renderChips() {
     const container = document.getElementById('selectedChipsContainer');
     container.innerHTML = '';
@@ -512,12 +539,8 @@ function renderChips() {
     });
     document.getElementById('categoriesHidden').value = selectedCategories.join(',');
 }
-function removeCategory(cat) {
-    selectedCategories = selectedCategories.filter(c => c !== cat);
-    renderChips();
-}
+function removeCategory(cat) { selectedCategories = selectedCategories.filter(c => c !== cat); renderChips(); }
 function openMultiCategoryPopup() {
-    const popup = document.getElementById('multiCatPopup');
     const listDiv = document.getElementById('multiCatList');
     listDiv.innerHTML = '';
     allCategories.forEach(cat => {
@@ -526,45 +549,31 @@ function openMultiCategoryPopup() {
         div.className = `cat-item-multi ${isSelected ? 'selected' : ''}`;
         div.innerHTML = `${cat} ${isSelected ? '<i class="fas fa-check-circle"></i>' : ''}`;
         div.onclick = () => {
-            if(selectedCategories.includes(cat)) {
-                selectedCategories = selectedCategories.filter(c => c !== cat);
-            } else {
-                selectedCategories.push(cat);
-            }
+            if(selectedCategories.includes(cat)) selectedCategories = selectedCategories.filter(c => c !== cat);
+            else selectedCategories.push(cat);
             renderChips();
             openMultiCategoryPopup();
         };
         listDiv.appendChild(div);
     });
-    popup.style.display = 'flex';
+    document.getElementById('multiCatPopup').style.display = 'flex';
 }
 function closeMultiCatPopup() { document.getElementById('multiCatPopup').style.display = 'none'; renderChips(); }
 
 let firstApprovalFlagShown = false;
 function showConfettiAndToast() {
     canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, startVelocity: 20, colors: ['#6c2bd9', '#f0c040', '#2ecc71'] });
-    let duration = 2000;
-    let end = Date.now() + duration;
-    let frame = () => {
-        canvasConfetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, startVelocity: 25 });
-        canvasConfetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, startVelocity: 25 });
-        if(Date.now() < end) requestAnimationFrame(frame);
-    };
+    let end = Date.now() + 2000;
+    const frame = () => { canvasConfetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, startVelocity: 25 }); canvasConfetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, startVelocity: 25 }); if(Date.now() < end) requestAnimationFrame(frame); };
     frame();
-    const toastDiv = document.createElement('div');
-    toastDiv.className = 'toast-congrats';
-    toastDiv.innerHTML = '<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে এবং তালিকায় যুক্ত হয়েছে 🎉';
-    document.body.appendChild(toastDiv);
-    setTimeout(() => { if(toastDiv) toastDiv.remove(); }, 4500);
+    const toastDiv = document.createElement('div'); toastDiv.className = 'toast-congrats'; toastDiv.innerHTML = '<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv);
+    setTimeout(() => toastDiv.remove(), 4500);
     localStorage.setItem('congratsShown_'+auth.currentUser?.uid, 'true');
 }
-
-function showToastMessage(message, type = 'success') {
-    const box = document.getElementById('successMsg');
-    document.getElementById('successText').innerText = message;
-    box.classList.add('show');
-    setTimeout(() => box.classList.remove('show'), 4000);
-    // অতিরিক্ত নোটিশ ইফেক্ট (registration.html এর মত টোস্ট + সফল বার্তা)
+function showFloatyToast(msg, isError = false) {
+    let toast = document.createElement('div'); toast.className = 'custom-toast' + (isError ? ' error' : ''); toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
 }
 
 auth.onAuthStateChanged(async user => {
@@ -578,24 +587,19 @@ auth.onAuthStateChanged(async user => {
     if(data) {
         document.getElementById('previewAvatar').textContent = data.shopName ? data.shopName.charAt(0) : '?';
         document.getElementById('previewName').textContent = data.shopName || '';
-        document.getElementById('previewAddress').textContent = `📍 ${data.upazila || data.area || ''}, ${data.district || ''}`;
-        const badge = document.getElementById('statusBadge');
-        const notice = document.getElementById('noticeTile');
+        document.getElementById('previewCardShopName').innerHTML = `<i class="fas fa-store"></i> ${data.shopName || 'দোকানের নাম'}`;
+        const addrLine = `${data.upazila || data.area || ''}, ${data.district || ''}`;
+        document.getElementById('previewAddress').textContent = `📍 ${addrLine}`;
+        document.getElementById('previewCardAddress').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${data.fullAddress || data.address || addrLine || 'ঠিকানা নেই'}`;
+        const badge = document.getElementById('statusBadge'), notice = document.getElementById('noticeTile');
         if(data.status === 'approved') {
-            badge.className = 'status-badge approved';
-            badge.textContent = '✅ Approved';
-            notice.className = 'notice-tile approved';
-            notice.innerHTML = '<div class="notice-icon">🎉</div><div class="notice-text"><div class="notice-title">অভিনন্দন!</div>আপনার দোকান Approved এবং তালিকায় যুক্ত।</div>';
+            badge.className = 'status-badge approved'; badge.textContent = '✅ Approved';
+            notice.className = 'notice-tile approved'; notice.innerHTML = '<div class="notice-icon">🎉</div><div class="notice-text"><div class="notice-title">অভিনন্দন!</div>আপনার দোকান Approved এবং তালিকায় যুক্ত।</div>';
             const alreadyShown = localStorage.getItem('congratsShown_'+user.uid);
-            if(!alreadyShown && !firstApprovalFlagShown) {
-                firstApprovalFlagShown = true;
-                showConfettiAndToast();
-            }
+            if(!alreadyShown && !firstApprovalFlagShown) { firstApprovalFlagShown = true; showConfettiAndToast(); }
         } else if(data.status === 'rejected') {
-            badge.className = 'status-badge rejected';
-            badge.textContent = '❌ Rejected';
-            notice.className = 'notice-tile rejected';
-            notice.innerHTML = '<div class="notice-icon">❌</div><div class="notice-text"><div class="notice-title">দুঃখিত!</div>আপনার দোকান Reject হয়েছে। সঠিক তথ্য দিন।</div>';
+            badge.className = 'status-badge rejected'; badge.textContent = '❌ Rejected';
+            notice.className = 'notice-tile rejected'; notice.innerHTML = '<div class="notice-icon">❌</div><div class="notice-text"><div class="notice-title">দুঃখিত!</div>আপনার দোকান Reject হয়েছে। সঠিক তথ্য দিন।</div>';
         }
         document.getElementById('shopName').value = data.shopName || '';
         document.getElementById('ownerName').value = data.ownerName || '';
@@ -605,36 +609,15 @@ auth.onAuthStateChanged(async user => {
         document.getElementById('telegram').value = data.telegram || '';
         document.getElementById('youtube').value = data.youtube || '';
         document.getElementById('fullAddress').value = data.fullAddress || data.address || '';
-        if(data.division) {
-            document.getElementById('division').value = data.division;
-            loadDistricts();
-            setTimeout(() => {
-                if(data.district) {
-                    document.getElementById('district').value = data.district;
-                    loadUpazilas();
-                    setTimeout(() => {
-                        if(data.upazila) document.getElementById('upazilaText').value = data.upazila;
-                        else if(data.area) document.getElementById('upazilaText').value = data.area;
-                    }, 100);
-                }
-            }, 50);
-        }
-        if(data.categories) {
-            let cats = [];
-            if(typeof data.categories === 'string') cats = data.categories.split(',').map(s=>s.trim());
-            else if(Array.isArray(data.categories)) cats = data.categories;
-            selectedCategories = cats.filter(c => c);
-            renderChips();
-        } else if(data.category && !data.categories) {
-            selectedCategories = [data.category];
-            renderChips();
-        } else renderChips();
+        if(data.division) { document.getElementById('division').value = data.division; loadDistricts(); setTimeout(() => { if(data.district) { document.getElementById('district').value = data.district; loadUpazilas(); setTimeout(() => { if(data.upazila) document.getElementById('upazilaText').value = data.upazila; else if(data.area) document.getElementById('upazilaText').value = data.area; }, 100); } }, 50); }
+        if(data.categories) { let cats = typeof data.categories === 'string' ? data.categories.split(',').map(s=>s.trim()) : (Array.isArray(data.categories) ? data.categories : []); selectedCategories = cats.filter(c=>c); renderChips(); }
+        else if(data.category && !data.categories) { selectedCategories = [data.category]; renderChips(); }
+        else renderChips();
     } else renderChips();
 });
 
 async function saveShopData() {
-    const user = auth.currentUser;
-    if(!user) return;
+    const user = auth.currentUser; if(!user) return;
     const shopName = document.getElementById('shopName').value.trim();
     const ownerName = document.getElementById('ownerName').value.trim();
     const division = document.getElementById('division').value;
@@ -642,35 +625,27 @@ async function saveShopData() {
     const upazila = document.getElementById('upazilaText').value.trim();
     const fullAddress = document.getElementById('fullAddress').value.trim();
     const phone = document.getElementById('phone').value.trim();
-    if(!shopName) return showErrorMsg('দোকানের নাম দিন!');
-    if(!ownerName) return showErrorMsg('মালিকের নাম দিন!');
-    if(!division) return showErrorMsg('বিভাগ বাছাই করুন!');
-    if(!district) return showErrorMsg('জেলা বাছাই করুন!');
-    if(!upazila) return showErrorMsg('উপজেলা/থানা লিখুন!');
-    if(!phone) return showErrorMsg('মোবাইল নম্বর দিন!');
-    
-    const categoriesStr = selectedCategories.join(',');
-    const btn = document.getElementById('saveBtn');
-    btn.classList.add('loading');
+    if(!shopName) return showFloatyToast('দোকানের নাম দিন!', true);
+    if(!ownerName) return showFloatyToast('মালিকের নাম দিন!', true);
+    if(!division) return showFloatyToast('বিভাগ বাছাই করুন!', true);
+    if(!district) return showFloatyToast('জেলা বাছাই করুন!', true);
+    if(!upazila) return showFloatyToast('উপজেলা/থানা লিখুন!', true);
+    if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!', true);
+    const btn = document.getElementById('saveBtn'); btn.classList.add('loading');
     try {
         await db.ref('shops/' + user.uid).update({
-            shopName, ownerName, description: document.getElementById('description').value.trim(),
-            division, district, upazila, area: upazila, fullAddress, address: fullAddress,
-            categories: categoriesStr,
-            phone, whatsapp: document.getElementById('whatsapp').value.trim(),
-            telegram: document.getElementById('telegram').value.trim(),
-            youtube: document.getElementById('youtube').value.trim(),
-            avatar: shopName.charAt(0), updatedAt: Date.now()
+            shopName, ownerName, description: document.getElementById('description').value.trim(), division, district, upazila, area: upazila, fullAddress, address: fullAddress,
+            categories: selectedCategories.join(','), phone, whatsapp: document.getElementById('whatsapp').value.trim(), telegram: document.getElementById('telegram').value.trim(), youtube: document.getElementById('youtube').value.trim(), avatar: shopName.charAt(0), updatedAt: Date.now()
         });
         document.getElementById('previewAvatar').textContent = shopName.charAt(0);
         document.getElementById('previewName').textContent = shopName;
+        document.getElementById('previewCardShopName').innerHTML = `<i class="fas fa-store"></i> ${shopName}`;
         document.getElementById('previewAddress').textContent = `📍 ${upazila}, ${district}`;
-        showSuccessToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে! দোকান আপডেট করা হয়েছে।');
+        document.getElementById('previewCardAddress').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${fullAddress || `${upazila}, ${district}`}`;
+        showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে! দোকান আপডেট হয়েছে।');
         btn.classList.remove('loading');
-    } catch(e) { btn.classList.remove('loading'); showErrorMsg('সংরক্ষণ করতে সমস্যা!'); }
+    } catch(e) { btn.classList.remove('loading'); showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।', true); }
 }
-function showErrorMsg(msg) { const box = document.getElementById('errorMsg'); document.getElementById('errorText').innerText = msg; box.classList.add('show'); setTimeout(()=>box.classList.remove('show'),4000); }
-function showSuccessToast(msg) { const box = document.getElementById('successMsg'); document.getElementById('successText').innerHTML = msg; box.classList.add('show'); setTimeout(()=>box.classList.remove('show'),4000); }
 function logoutShop() { auth.signOut(); window.location.href = 'index.html'; }
 function viewProfile() { if(auth.currentUser) window.location.href = `profile.html?id=${auth.currentUser.uid}`; }
 </script>
