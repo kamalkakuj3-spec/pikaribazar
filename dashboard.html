@@ -379,7 +379,7 @@ select.input-field { cursor: pointer; appearance: none; }
     </div>
 
     <!-- প্রোফাইল দেখুন বাটন -->
-    <button class="view-profile-btn" onclick="viewProfile()"><i class="fas fa-eye"></i> আমার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
+    <button class="view-profile-btn" onclick="viewProfile()"><i class="fas fa-eye"></i> <i class="fas fa-eye"></i> আমার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
     
     <!-- প্রোফাইল এডিট টগল বাটন -->
     <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
@@ -389,18 +389,18 @@ select.input-field { cursor: pointer; appearance: none; }
         <div class="tile-card">
             <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
             <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
-            <div class="input-group"><label class="input-label">প্রোপাইটারের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="প্রোপাইটারের নাম"></div></div>
+            <div class="input-group"><label class="input-label">প্রোপাইটারের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="এখানে প্রোপাইটারের নাম লিখুন"></div></div>
             <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
         </div>
 
         <div class="tile-card">
-            <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → থানা/উপজেলা</div></div></div>
+            <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা</div></div></div>
             <div class="input-group">
-                <label class="input-label">① বিভাগ *</label>
+                <label class="input-label">বিভাগ *</label>
                 <div class="input-wrap">
                     <span class="input-icon">🗺️</span>
                     <select class="input-field" id="division" onchange="onDivisionChange()">
-                        <option value="">— বিভাগ বাছাই করুন —</option>
+                        <option value="">বিভাগ বাছাই করুন</option>
                         <option value="ঢাকা">ঢাকা</option><option value="চট্টগ্রাম">চট্টগ্রাম</option><option value="রাজশাহী">রাজশাহী</option>
                         <option value="খুলনা">খুলনা</option><option value="বরিশাল">বরিশাল</option><option value="সিলেট">সিলেট</option>
                         <option value="রংপুর">রংপুর</option><option value="ময়মনসিংহ">ময়মনসিংহ</option>
@@ -409,16 +409,16 @@ select.input-field { cursor: pointer; appearance: none; }
                 </div>
             </div>
             <div class="input-group" id="districtGroup" style="display:none">
-                <label class="input-label">② জেলা *</label>
-                <div class="input-wrap"><span class="input-icon">📌</span><select class="input-field" id="district" onchange="onDistrictChange()"><option value="">— জেলা বাছাই করুন —</option></select><span class="select-arrow">▼</span></div>
+                <label class="input-label">জেলা *</label>
+                <div class="input-wrap"><span class="input-icon">📌</span><select class="input-field" id="district" onchange="onDistrictChange()"><option value="">জেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div>
             </div>
             <div class="input-group" id="thanaGroup" style="display:none">
-                <label class="input-label">③ থানা/উপজেলা *</label>
-                <div class="input-wrap"><span class="input-icon">🏘️</span><select class="input-field" id="thana" onchange="onThanaChange()"><option value="">— থানা বাছাই করুন —</option></select><span class="select-arrow">▼</span></div>
+                <label class="input-label">উপজেলা *</label>
+                <div class="input-wrap"><span class="input-icon">🏘️</span><select class="input-field" id="thana" onchange="onThanaChange()"><option value="">উপজেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div>
             </div>
             <div class="input-group" id="areaGroup" style="display:none">
-                <label class="input-label">④ এলাকা/বিস্তারিত ঠিকানা *</label>
-                <div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="দোকান নম্বর, রোড, সেক্টর ইত্যাদি..." style="height:70px"></textarea></div>
+                <label class="input-label">আপনার দোকানের পূর্ণাঙ্গ ঠিকানা লিখুন</label>
+                <div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="উদাহরণ: হাজী বই মার্কেট, স্টেশন রোড, চৌমুহন, নোয়াখালী। দোকান নম্বর," style="height:70px"></textarea></div>
             </div>
         </div>
 
@@ -434,7 +434,7 @@ select.input-field { cursor: pointer; appearance: none; }
             <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
             <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
             <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
-            <div class="input-group"><label class="input-label">YouTube চ্যানেল লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
+            <div class="input-group"><label class="input-label">আপনার দোকানের ভিডিও লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
         </div>
     </div>
 </div>
