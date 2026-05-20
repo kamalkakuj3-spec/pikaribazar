@@ -103,7 +103,7 @@ body {
     font-size: 13px;
 }
 
-/* সিলেক্টেড ক্যাটাগরি দেখানোর জন্য - দোকানের নামের নিচে */
+/* সিলেক্টেড ক্যাটাগরি দেখানোর জন্য - দোকানের নামের নিচে - সবসময় দৃশ্যমান */
 .selected-categories-display {
     margin: 15px auto 0;
     padding: 8px 12px;
@@ -114,6 +114,7 @@ body {
     gap: 8px;
     justify-content: center;
     max-width: 95%;
+    min-height: 40px;
 }
 .selected-cat-tag-mini {
     background: white;
@@ -123,6 +124,12 @@ body {
     font-size: 11px;
     font-weight: 500;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+/* কোন ক্যাটাগরি না থাকলে */
+.no-categories-msg {
+    color: #999;
+    font-size: 11px;
+    padding: 4px 0;
 }
 
 /* ছোট স্ট্যাটাস ব্যাজ - সাদা */
@@ -429,7 +436,9 @@ select.input-field { cursor: pointer; appearance: none; }
             <span id="previewCardAddress">ঠিকানা প্রদর্শিত হবে</span>
         </div>
         <!-- সিলেক্টেড ক্যাটাগরি প্রদর্শন - দোকানের নামের নিচে -->
-        <div id="selectedCategoriesDisplay" class="selected-categories-display"></div>
+        <div id="selectedCategoriesDisplay" class="selected-categories-display">
+            <span class="no-categories-msg">কোন ক্যাটাগরি নির্বাচন করা হয়নি</span>
+        </div>
         <div id="cardStatusBadge" class="small-status-badge pending">⏳ পেন্ডিং</div>
     </div>
 
@@ -561,11 +570,52 @@ function onThanaChange() { const thana=document.getElementById('thana').value; i
 
 const allCategories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
 let selectedCategories = [];
-function renderChips() { const container=document.getElementById('selectedChipsContainer'); container.innerHTML=''; selectedCategories.forEach(cat=>{ const chip=document.createElement('div'); chip.className='cat-chip'; chip.innerHTML=`${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g,"\\'")}')"></i>`; container.appendChild(chip);}); document.getElementById('categoriesHidden').value=selectedCategories.join(','); updatePreviewCategories(); }
-function updatePreviewCategories() { const container=document.getElementById('selectedCategoriesDisplay'); if(selectedCategories.length>0){ container.innerHTML=selectedCategories.map(cat=>`<span class="selected-cat-tag-mini">${cat}</span>`).join(''); container.style.display='flex'; } else { container.innerHTML=''; container.style.display='none'; } }
+
+function renderChips() { 
+    const container = document.getElementById('selectedChipsContainer'); 
+    container.innerHTML = ''; 
+    selectedCategories.forEach(cat => { 
+        const chip = document.createElement('div'); 
+        chip.className = 'cat-chip'; 
+        chip.innerHTML = `${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g, "\\'")}')"></i>`; 
+        container.appendChild(chip); 
+    }); 
+    document.getElementById('categoriesHidden').value = selectedCategories.join(','); 
+    updatePreviewCategories(); 
+}
+
+function updatePreviewCategories() { 
+    const container = document.getElementById('selectedCategoriesDisplay'); 
+    if (selectedCategories.length > 0) { 
+        container.innerHTML = selectedCategories.map(cat => `<span class="selected-cat-tag-mini">${cat}</span>`).join(''); 
+    } else { 
+        container.innerHTML = '<span class="no-categories-msg">কোন ক্যাটাগরি নির্বাচন করা হয়নি</span>'; 
+    } 
+}
+
 function removeCategory(cat){ selectedCategories=selectedCategories.filter(c=>c!==cat); renderChips();}
-function openMultiCategoryPopup(){ const listDiv=document.getElementById('multiCatList'); listDiv.innerHTML=''; allCategories.forEach(cat=>{ const isSelected=selectedCategories.includes(cat); const div=document.createElement('div'); div.className=`cat-item-multi ${isSelected?'selected':''}`; div.innerHTML=`${cat} ${isSelected?'<i class="fas fa-check-circle"></i>':''}`; div.onclick=()=>{ if(selectedCategories.includes(cat)) selectedCategories=selectedCategories.filter(c=>c!==cat); else selectedCategories.push(cat); renderChips(); openMultiCategoryPopup();}; listDiv.appendChild(div);}); document.getElementById('multiCatPopup').style.display='flex';}
-function closeMultiCatPopup(){ document.getElementById('multiCatPopup').style.display='none'; renderChips();}
+function openMultiCategoryPopup(){ 
+    const listDiv = document.getElementById('multiCatList'); 
+    listDiv.innerHTML = ''; 
+    allCategories.forEach(cat => { 
+        const isSelected = selectedCategories.includes(cat); 
+        const div = document.createElement('div'); 
+        div.className = `cat-item-multi ${isSelected ? 'selected' : ''}`; 
+        div.innerHTML = `${cat} ${isSelected ? '<i class="fas fa-check-circle"></i>' : ''}`; 
+        div.onclick = () => { 
+            if(selectedCategories.includes(cat)) { 
+                selectedCategories = selectedCategories.filter(c => c !== cat); 
+            } else { 
+                selectedCategories.push(cat); 
+            } 
+            renderChips(); 
+            openMultiCategoryPopup(); 
+        }; 
+        listDiv.appendChild(div); 
+    }); 
+    document.getElementById('multiCatPopup').style.display = 'flex'; 
+}
+function closeMultiCatPopup(){ document.getElementById('multiCatPopup').style.display='none'; renderChips(); }
 
 function toggleEditForm(){ const formDiv=document.getElementById('editFormContainer'); formDiv.classList.toggle('show'); if(formDiv.classList.contains('show')){ setTimeout(()=>{ document.getElementById('editToggleBtn').scrollIntoView({ behavior:'smooth', block:'center' }); }, 100); } }
 
@@ -573,12 +623,119 @@ let firstApprovalFlagShown=false;
 function showConfettiAndToast(){ canvasConfetti({particleCount:150,spread:70,origin:{y:0.6},startVelocity:20,colors:['#6c2bd9','#f0c040','#2ecc71']}); let end=Date.now()+2000; const frame=()=>{ canvasConfetti({particleCount:3,angle:60,spread:55,origin:{x:0,y:0.7},startVelocity:25}); canvasConfetti({particleCount:3,angle:120,spread:55,origin:{x:1,y:0.7},startVelocity:25}); if(Date.now()<end) requestAnimationFrame(frame);}; frame(); const toastDiv=document.createElement('div'); toastDiv.className='toast-congrats'; toastDiv.innerHTML='<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv); setTimeout(()=>toastDiv.remove(),4500); localStorage.setItem('congratsShown_'+auth.currentUser?.uid,'true');}
 function showFloatyToast(msg,isError=false){ let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000);}
 
-auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; document.getElementById('saveWrap').style.display='block'; if(data){ document.getElementById('previewCardShopName').innerHTML=`${data.shopName||'দোকানের নাম'}`; const addrLine=`${data.thana||data.upazila||''}, ${data.district||''}`; document.getElementById('previewCardAddress').innerHTML=`${data.area||addrLine||'ঠিকানা নেই'}`; const cardBadge=document.getElementById('cardStatusBadge'); if(data.status==='approved'){ cardBadge.className='small-status-badge approved'; cardBadge.innerHTML='✅ Approved'; const alreadyShown=localStorage.getItem('congratsShown_'+user.uid); if(!alreadyShown && !firstApprovalFlagShown){ firstApprovalFlagShown=true; showConfettiAndToast();}} else if(data.status==='rejected'){ cardBadge.className='small-status-badge rejected'; cardBadge.innerHTML='❌ Rejected';} else { cardBadge.className='small-status-badge pending'; cardBadge.innerHTML='⏳ পেন্ডিং';}
-document.getElementById('shopName').value=data.shopName||''; document.getElementById('ownerName').value=data.ownerName||''; document.getElementById('description').value=data.description||''; document.getElementById('phone').value=data.phone||''; document.getElementById('whatsapp').value=data.whatsapp||''; document.getElementById('telegram').value=data.telegram||''; document.getElementById('youtube').value=data.youtube||''; document.getElementById('area').value=data.area||'';
-if(data.division){ document.getElementById('division').value=data.division; onDivisionChange(); setTimeout(()=>{ if(data.district){ document.getElementById('district').value=data.district; onDistrictChange(); setTimeout(()=>{ if(data.thana) document.getElementById('thana').value=data.thana; else if(data.upazila) document.getElementById('thana').value=data.upazila; if(document.getElementById('thana').value){ document.getElementById('areaGroup').style.display='block'; document.getElementById('categorySection').style.display='block';}},100);}},50);}
-if(data.categories){ let cats=typeof data.categories==='string'?data.categories.split(',').map(s=>s.trim()):(Array.isArray(data.categories)?data.categories:[]); selectedCategories=cats.filter(c=>c); renderChips(); updatePreviewCategories();} else if(data.category && !data.categories){ selectedCategories=[data.category]; renderChips(); updatePreviewCategories();} else renderChips(); updatePreviewCategories();} else renderChips(); updatePreviewCategories();});
+auth.onAuthStateChanged(async user=>{ 
+    if(!user){ window.location.href='login.html'; return;} 
+    const snap=await db.ref('shops/'+user.uid).get(); 
+    const data=snap.val(); 
+    document.getElementById('loadingScreen').style.display='none'; 
+    document.getElementById('mainContent').style.display='block'; 
+    document.getElementById('saveWrap').style.display='block'; 
+    
+    if(data){ 
+        document.getElementById('previewCardShopName').innerHTML = `${data.shopName || 'দোকানের নাম'}`; 
+        const addrLine = `${data.thana || data.upazila || ''}, ${data.district || ''}`; 
+        document.getElementById('previewCardAddress').innerHTML = `${data.area || addrLine || 'ঠিকানা নেই'}`; 
+        
+        const cardBadge = document.getElementById('cardStatusBadge'); 
+        if(data.status === 'approved'){ 
+            cardBadge.className = 'small-status-badge approved'; 
+            cardBadge.innerHTML = '✅ Approved'; 
+            const alreadyShown = localStorage.getItem('congratsShown_'+user.uid); 
+            if(!alreadyShown && !firstApprovalFlagShown){ 
+                firstApprovalFlagShown = true; 
+                showConfettiAndToast(); 
+            } 
+        } else if(data.status === 'rejected'){ 
+            cardBadge.className = 'small-status-badge rejected'; 
+            cardBadge.innerHTML = '❌ Rejected'; 
+        } else { 
+            cardBadge.className = 'small-status-badge pending'; 
+            cardBadge.innerHTML = '⏳ পেন্ডিং'; 
+        }
+        
+        document.getElementById('shopName').value = data.shopName || ''; 
+        document.getElementById('ownerName').value = data.ownerName || ''; 
+        document.getElementById('description').value = data.description || ''; 
+        document.getElementById('phone').value = data.phone || ''; 
+        document.getElementById('whatsapp').value = data.whatsapp || ''; 
+        document.getElementById('telegram').value = data.telegram || ''; 
+        document.getElementById('youtube').value = data.youtube || ''; 
+        document.getElementById('area').value = data.area || '';
+        
+        // ক্যাটাগরি লোড করুন
+        if(data.categories){ 
+            let cats = typeof data.categories === 'string' ? data.categories.split(',').map(s => s.trim()) : (Array.isArray(data.categories) ? data.categories : []); 
+            selectedCategories = cats.filter(c => c); 
+        } else if(data.category && !data.categories){ 
+            selectedCategories = [data.category]; 
+        } else { 
+            selectedCategories = []; 
+        }
+        renderChips();
+        updatePreviewCategories();
+        
+        if(data.division){ 
+            document.getElementById('division').value = data.division; 
+            onDivisionChange(); 
+            setTimeout(() => { 
+                if(data.district){ 
+                    document.getElementById('district').value = data.district; 
+                    onDistrictChange(); 
+                    setTimeout(() => { 
+                        if(data.thana) document.getElementById('thana').value = data.thana; 
+                        else if(data.upazila) document.getElementById('thana').value = data.upazila; 
+                        if(document.getElementById('thana').value){ 
+                            document.getElementById('areaGroup').style.display = 'block'; 
+                            document.getElementById('categorySection').style.display = 'block'; 
+                        } 
+                    }, 100); 
+                } 
+            }, 50); 
+        } 
+    } else { 
+        selectedCategories = [];
+        renderChips();
+        updatePreviewCategories();
+    } 
+});
 
-async function saveShopData(){ const user=auth.currentUser; if(!user) return; const shopName=document.getElementById('shopName').value.trim(); const ownerName=document.getElementById('ownerName').value.trim(); const division=document.getElementById('division').value; const district=document.getElementById('district').value; const thana=document.getElementById('thana').value; const area=document.getElementById('area').value.trim(); const phone=document.getElementById('phone').value.trim(); if(!shopName) return showFloatyToast('দোকানের নাম দিন!',true); if(!ownerName) return showFloatyToast('মালিকের নাম দিন!',true); if(!division) return showFloatyToast('বিভাগ বাছাই করুন!',true); if(!district) return showFloatyToast('জেলা বাছাই করুন!',true); if(!thana) return showFloatyToast('উপজেলা নির্বাচন করুন!',true); if(!area) return showFloatyToast('পূর্ণাঙ্গ ঠিকানা দিন!',true); if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!',true); const btn=document.getElementById('saveBtn'); btn.classList.add('loading'); try{ await db.ref('shops/'+user.uid).update({ shopName, ownerName, description:document.getElementById('description').value.trim(), division, district, thana, upazila:thana, area, categories:selectedCategories.join(','), phone, whatsapp:document.getElementById('whatsapp').value.trim(), telegram:document.getElementById('telegram').value.trim(), youtube:document.getElementById('youtube').value.trim(), updatedAt:Date.now()}); document.getElementById('previewCardShopName').innerHTML=`${shopName}`; document.getElementById('previewCardAddress').innerHTML=`${area}`; updatePreviewCategories(); showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!'); btn.classList.remove('loading');} catch(e){ btn.classList.remove('loading'); showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।',true);}}
+async function saveShopData(){ 
+    const user=auth.currentUser; if(!user) return; 
+    const shopName=document.getElementById('shopName').value.trim(); 
+    const ownerName=document.getElementById('ownerName').value.trim(); 
+    const division=document.getElementById('division').value; 
+    const district=document.getElementById('district').value; 
+    const thana=document.getElementById('thana').value; 
+    const area=document.getElementById('area').value.trim(); 
+    const phone=document.getElementById('phone').value.trim(); 
+    if(!shopName) return showFloatyToast('দোকানের নাম দিন!',true); 
+    if(!ownerName) return showFloatyToast('মালিকের নাম দিন!',true); 
+    if(!division) return showFloatyToast('বিভাগ বাছাই করুন!',true); 
+    if(!district) return showFloatyToast('জেলা বাছাই করুন!',true); 
+    if(!thana) return showFloatyToast('উপজেলা নির্বাচন করুন!',true); 
+    if(!area) return showFloatyToast('পূর্ণাঙ্গ ঠিকানা দিন!',true); 
+    if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!',true); 
+    const btn=document.getElementById('saveBtn'); btn.classList.add('loading'); 
+    try{ 
+        await db.ref('shops/'+user.uid).update({ 
+            shopName, ownerName, description:document.getElementById('description').value.trim(), 
+            division, district, thana, upazila:thana, area, 
+            categories:selectedCategories.join(','), 
+            phone, whatsapp:document.getElementById('whatsapp').value.trim(), 
+            telegram:document.getElementById('telegram').value.trim(), 
+            youtube:document.getElementById('youtube').value.trim(), 
+            updatedAt:Date.now()
+        }); 
+        document.getElementById('previewCardShopName').innerHTML=`${shopName}`; 
+        document.getElementById('previewCardAddress').innerHTML=`${area}`; 
+        updatePreviewCategories(); 
+        showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!'); 
+        btn.classList.remove('loading'); 
+    } catch(e){ 
+        btn.classList.remove('loading'); 
+        showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।',true); 
+    }
+}
 function viewProfile(){ if(auth.currentUser) window.location.href=`profile.html?id=${auth.currentUser.uid}`;}
 </script>
 </body>
