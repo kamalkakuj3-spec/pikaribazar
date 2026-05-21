@@ -1,60 +1,116 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangladesh Division API</title>
 
-<title>API Test</title>
+    <style>
 
+        body{
+            margin:0;
+            padding:30px;
+            background:#f2f2f2;
+            font-family:Arial;
+        }
+
+        .box{
+            max-width:400px;
+            margin:auto;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        select{
+            width:100%;
+            padding:12px;
+            font-size:18px;
+            border:1px solid #ccc;
+            border-radius:5px;
+        }
+
+    </style>
 </head>
 
 <body>
 
-<h2>বাংলাদেশের বিভাগ</h2>
+    <div class="box">
 
-<select id="division">
-<option>লোড হচ্ছে...</option>
-</select>
+        <h2>বাংলাদেশের বিভাগ</h2>
 
-<script>
+        <select id="division">
 
-const division =
-document.getElementById("division");
+            <option>লোড হচ্ছে...</option>
 
-fetch("https://bdapis.vercel.app/api/v1.2/divisions")
+        </select>
 
-.then(res => res.json())
+    </div>
 
-.then(data => {
+    <script>
 
-    console.log(data);
+        // Dropdown Element
+        const divisionSelect =
+        document.getElementById("division");
 
-    division.innerHTML =
-    "<option>বিভাগ নির্বাচন করুন</option>";
+        // API URL
+        const apiUrl =
+        "https://bdapis.vercel.app/api/v1.2/divisions";
 
-    data.data.forEach(item => {
+        // API Fetch
+        fetch(apiUrl)
 
-        let option =
-        document.createElement("option");
+        .then(function(response){
 
-        option.textContent =
-        item.name;
+            return response.json();
 
-        division.appendChild(option);
+        })
 
-    });
+        .then(function(data){
 
-})
+            console.log(data);
 
-.catch(error => {
+            // পুরানো option remove
+            divisionSelect.innerHTML =
+            "<option>বিভাগ নির্বাচন করুন</option>";
 
-    alert("API কাজ করছে না");
+            // Loop
+            data.data.forEach(function(item){
 
-    console.log(error);
+                // option create
+                const option =
+                document.createElement("option");
 
-});
+                // option value
+                option.value = item.id;
 
-</script>
+                // option text
+                option.textContent =
+                item.name;
+
+                // append
+                divisionSelect.appendChild(option);
+
+            });
+
+        })
+
+        .catch(function(error){
+
+            console.log(error);
+
+            alert("API Load Failed");
+
+        });
+
+    </script>
 
 </body>
 </html>
