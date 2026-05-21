@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>বাংলাদেশের বিভাগ ও জেলা - JSON উদাহরণ</title>
+    <title>বাংলাদেশের বিভাগ, জেলা ও উপজেলা - JSON ভিউয়ার</title>
     <style>
         * {
             margin: 0;
@@ -11,18 +11,18 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Hind Siliguri', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
         .card {
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 30px;
             margin-bottom: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.2);
@@ -34,7 +34,7 @@
         }
         h1 {
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -44,15 +44,15 @@
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid #f0f0f0;
+            font-size: 14px;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 25px; }
         label {
             display: block;
             font-weight: 600;
             margin-bottom: 8px;
             color: #555;
+            font-size: 14px;
         }
         select {
             width: 100%;
@@ -79,25 +79,26 @@
             margin-top: 25px;
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
+            border-radius: 16px;
             color: white;
             display: none;
             animation: slideUp 0.3s ease;
         }
-        .result-box.show {
-            display: block;
-        }
+        .result-box.show { display: block; }
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .result-box h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            opacity: 0.9;
         }
-        .result-box p {
-            font-size: 20px;
-            font-weight: bold;
+        .result-box p { font-size: 22px; font-weight: bold; margin-bottom: 10px; }
+        .result-box .upazila-count {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 8px;
         }
         .loading {
             text-align: center;
@@ -123,6 +124,7 @@
             padding: 15px;
             border-radius: 12px;
             border-left: 4px solid #c33;
+            font-size: 14px;
         }
         .error pre {
             margin-top: 10px;
@@ -141,6 +143,36 @@
             color: #666;
             margin-top: 10px;
         }
+        .info-panel {
+            background: #f8f9ff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .info-panel h4 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .stat {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label { font-size: 12px; color: #888; margin-top: 5px; }
         button {
             background: #667eea;
             color: white;
@@ -151,10 +183,20 @@
             font-size: 14px;
             margin-top: 15px;
             transition: all 0.3s;
+            font-family: inherit;
         }
         button:hover {
             background: #5a67d8;
             transform: translateY(-2px);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+        a {
+            color: white;
         }
     </style>
 </head>
@@ -163,16 +205,16 @@
         <div class="card">
             <h1>
                 <span>🗺️</span>
-                বাংলাদেশের বিভাগ ও জেলা
+                বাংলাদেশের বিভাগ, জেলা ও উপজেলা
             </h1>
             <div class="subtitle">
-                JSON ফাইল থেকে ডাটা লোড করে দেখানো হচ্ছে
+                JSON ফাইল থেকে ডাটা লোড করে ৩-স্তরের সম্পর্ক দেখানো হচ্ছে
             </div>
 
             <div id="loadingDiv" class="loading">
                 <div class="loader"></div>
-                <p>JSON ফাইল লোড হচ্ছে...</p>
-                <div class="badge">https://raw.githubusercontent.com/...</div>
+                <p>divisions.json ফাইল লোড হচ্ছে...</p>
+                <div class="badge" id="urlBadge"></div>
             </div>
 
             <div id="errorDiv" class="error" style="display: none;"></div>
@@ -192,43 +234,43 @@
                     </select>
                 </div>
 
-                <div id="resultBox" class="result-box">
-                    <h3>✅ আপনার নির্বাচিত জেলা</h3>
-                    <p id="selectedInfo"></p>
+                <div class="form-group">
+                    <label>📌 ৩. উপজেলা/থানা নির্বাচন করুন</label>
+                    <select id="upazilaSelect" disabled>
+                        <option value="">-- প্রথমে জেলা নির্বাচন করুন --</option>
+                    </select>
                 </div>
 
-                <button onclick="resetSelections()">⟳ রিসেট করুন</button>
+                <div id="resultBox" class="result-box">
+                    <h3>✅ আপনার নির্বাচিত তথ্য</h3>
+                    <p id="selectedInfo"></p>
+                    <div id="upazilaInfo" class="upazila-count"></div>
+                </div>
+
+                <button onclick="resetSelections()">⟳ সব রিসেট করুন</button>
             </div>
         </div>
 
-        <div class="card" style="background: #f8f9ff;">
-            <h3 style="margin-bottom: 10px;">ℹ️ JSON ফাইলের তথ্য</h3>
-            <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                এই পেজটি আপনার গিটহাবের <strong>divisions.json</strong> ফাইল থেকে ডাটা লোড করে।<br>
-                ফাইলটি নিচের ফরম্যাটে হতে হবে:
-            </p>
-            <pre style="background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 12px; margin-top: 12px; font-size: 12px; overflow-x: auto;">
-{
-  "divisions": [
-    {
-      "name": "ঢাকা",
-      "districts": ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", ...]
-    },
-    {
-      "name": "চট্টগ্রাম",
-      "districts": ["চট্টগ্রাম", "কক্সবাজার", ...]
-    }
-  ]
-}</pre>
+        <div class="card" id="statsCard" style="display: none;">
+            <div class="info-panel">
+                <h4>📊 JSON ফাইলের পরিসংখ্যান</h4>
+                <div class="stats" id="statsContainer"></div>
+            </div>
+        </div>
+        <div class="footer">
+            ডাটা সোর্স: <a href="https://github.com/kamalkakuj3-spec/my-app/blob/main/divisions.json" target="_blank">GitHub রিপোজিটরি</a>
         </div>
     </div>
 
     <script>
-        // ⚠️ গুরুত্বপূর্ণ: আপনার আসল গিটহাব RAW লিংক এখানে বসান ⚠️
-        // উদাহরণ: https://raw.githubusercontent.com/username/repo/main/divisions.json
-        const JSON_URL = 'https://raw.githubusercontent.com/your-username/your-repo/main/divisions.json';
+        // আপনার দেওয়া GitHub RAW লিংক
+        const JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
+        
+        document.getElementById('urlBadge').innerText = JSON_URL;
         
         let divisionsData = [];
+        let currentDistricts = [];
+        let currentUpazilas = [];
 
         async function loadDivisions() {
             const loadingDiv = document.getElementById('loadingDiv');
@@ -252,13 +294,12 @@
                 
                 divisionsData = data.divisions;
                 
-                // সাফল্য: লোডিং আড়াল, কন্টেন্ট দেখান
                 loadingDiv.style.display = 'none';
                 contentDiv.style.display = 'block';
                 errorDiv.style.display = 'none';
                 
-                // বিভাগ সিলেক্ট বক্স পপুলেট করুন
                 populateDivisionSelect();
+                showStatistics();
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -269,16 +310,12 @@
                     <strong>ত্রুটি:</strong> ${error.message}<br><br>
                     <strong>সমাধান:</strong><br>
                     1. নিশ্চিত করুন যে URL টি সঠিক RAW লিংক<br>
-                    2. URL টি পরিবর্তন করুন: <code style="background:white;padding:2px 6px;border-radius:4px;">${JSON_URL}</code><br>
+                    2. বর্তমান URL: <code style="background:white;padding:2px 6px;border-radius:4px;">${JSON_URL}</code><br>
                     3. ফাইলটি পাবলিক কি না চেক করুন<br>
-                    4. JSON ফাইলের ফরম্যাট সঠিক কি না যাচাই করুন<br><br>
-                    <strong>সঠিক ফরম্যাট:</strong>
-                    <pre>{
-  "divisions": [
-    {"name": "ঢাকা", "districts": ["ঢাকা", "গাজীপুর"]},
-    {"name": "চট্টগ্রাম", "districts": ["চট্টগ্রাম", "কক্সবাজার"]}
-  ]
-}</pre>
+                    4. নিচের ফরম্যাটে URL দিন:<br>
+                    <code>https://raw.githubusercontent.com/ইউজারনেম/রিপোজিটরি/ব্রাঞ্চ/divisions.json</code><br><br>
+                    <strong>আপনার GitHub Pages লিংক ট্রাই করুন:</strong><br>
+                    <code>https://kamalkakuj3-spec.github.io/my-app/divisions.json</code>
                 `;
             }
         }
@@ -302,64 +339,150 @@
             if (!division) {
                 districtSelect.innerHTML = '<option value="">-- কোন জেলা পাওয়া যায়নি --</option>';
                 districtSelect.disabled = true;
+                currentDistricts = [];
                 return;
             }
             
+            currentDistricts = division.districts;
             districtSelect.innerHTML = '<option value="">-- একটি জেলা নির্বাচন করুন --</option>';
             division.districts.forEach(district => {
                 const option = document.createElement('option');
-                option.value = district;
-                option.textContent = district;
+                option.value = district.name;
+                option.textContent = district.name;
                 districtSelect.appendChild(option);
             });
             districtSelect.disabled = false;
         }
 
-        // বিভাগ পরিবর্তন ইভেন্ট
-        document.getElementById('divisionSelect').addEventListener('change', function() {
-            const selectedDivision = this.value;
-            const districtSelect = document.getElementById('districtSelect');
-            const resultBox = document.getElementById('resultBox');
+        function populateUpazilaSelect(districtName) {
+            const upazilaSelect = document.getElementById('upazilaSelect');
+            const district = currentDistricts.find(d => d.name === districtName);
             
-            if (!selectedDivision) {
-                districtSelect.innerHTML = '<option value="">-- প্রথমে বিভাগ নির্বাচন করুন --</option>';
-                districtSelect.disabled = true;
-                resultBox.classList.remove('show');
+            if (!district) {
+                upazilaSelect.innerHTML = '<option value="">-- কোন উপজেলা পাওয়া যায়নি --</option>';
+                upazilaSelect.disabled = true;
+                currentUpazilas = [];
                 return;
             }
             
-            populateDistrictSelect(selectedDivision);
+            currentUpazilas = district.upazilas;
+            upazilaSelect.innerHTML = '<option value="">-- একটি উপজেলা নির্বাচন করুন --</option>';
+            district.upazilas.forEach(upazila => {
+                const option = document.createElement('option');
+                option.value = upazila;
+                option.textContent = upazila;
+                upazilaSelect.appendChild(option);
+            });
+            upazilaSelect.disabled = false;
+        }
+
+        function showStatistics() {
+            const statsCard = document.getElementById('statsCard');
+            const statsContainer = document.getElementById('statsContainer');
+            
+            let totalDistricts = 0;
+            let totalUpazilas = 0;
+            
+            divisionsData.forEach(div => {
+                totalDistricts += div.districts.length;
+                div.districts.forEach(dist => {
+                    totalUpazilas += dist.upazilas.length;
+                });
+            });
+            
+            statsContainer.innerHTML = `
+                <div class="stat">
+                    <div class="stat-number">${divisionsData.length}</div>
+                    <div class="stat-label">টি বিভাগ</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">${totalDistricts}</div>
+                    <div class="stat-label">টি জেলা</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">${totalUpazilas}</div>
+                    <div class="stat-label">টি উপজেলা</div>
+                </div>
+            `;
+            
+            statsCard.style.display = 'block';
+        }
+
+        // ইভেন্ট লিসেনার
+        document.getElementById('divisionSelect').addEventListener('change', function() {
+            const selectedDivision = this.value;
+            const districtSelect = document.getElementById('districtSelect');
+            const upazilaSelect = document.getElementById('upazilaSelect');
+            const resultBox = document.getElementById('resultBox');
+            
+            districtSelect.innerHTML = '<option value="">-- প্রথমে বিভাগ নির্বাচন করুন --</option>';
+            districtSelect.disabled = true;
+            upazilaSelect.innerHTML = '<option value="">-- প্রথমে জেলা নির্বাচন করুন --</option>';
+            upazilaSelect.disabled = true;
             resultBox.classList.remove('show');
+            
+            if (!selectedDivision) return;
+            populateDistrictSelect(selectedDivision);
         });
 
-        // জেলা পরিবর্তন ইভেন্ট
         document.getElementById('districtSelect').addEventListener('change', function() {
-            const selectedDivision = document.getElementById('divisionSelect').value;
             const selectedDistrict = this.value;
+            const upazilaSelect = document.getElementById('upazilaSelect');
+            const resultBox = document.getElementById('resultBox');
+            
+            upazilaSelect.innerHTML = '<option value="">-- প্রথমে জেলা নির্বাচন করুন --</option>';
+            upazilaSelect.disabled = true;
+            resultBox.classList.remove('show');
+            
+            if (!selectedDistrict) return;
+            populateUpazilaSelect(selectedDistrict);
+        });
+
+        document.getElementById('upazilaSelect').addEventListener('change', function() {
+            const selectedDivision = document.getElementById('divisionSelect').value;
+            const selectedDistrict = document.getElementById('districtSelect').value;
+            const selectedUpazila = this.value;
             const resultBox = document.getElementById('resultBox');
             const selectedInfo = document.getElementById('selectedInfo');
+            const upazilaInfo = document.getElementById('upazilaInfo');
             
-            if (selectedDivision && selectedDistrict) {
-                selectedInfo.innerHTML = `${selectedDivision} বিভাগের <span style="font-size:24px;display:inline-block;margin-top:8px;">${selectedDistrict}</span> জেলা`;
+            if (selectedDivision && selectedDistrict && selectedUpazila) {
+                selectedInfo.innerHTML = `
+                    <div style="font-size:14px; opacity:0.9;">বিভাগ</div>
+                    <div style="font-size:20px; margin-bottom:10px;">${selectedDivision}</div>
+                    <div style="font-size:14px; opacity:0.9;">জেলা</div>
+                    <div style="font-size:20px; margin-bottom:10px;">${selectedDistrict}</div>
+                    <div style="font-size:14px; opacity:0.9;">উপজেলা / থানা</div>
+                    <div style="font-size:24px; font-weight:bold;">${selectedUpazila}</div>
+                `;
+                
+                const district = currentDistricts.find(d => d.name === selectedDistrict);
+                if (district) {
+                    const index = district.upazilas.indexOf(selectedUpazila);
+                    upazilaInfo.innerHTML = `📌 ${district.upazilas.length}টি উপজেলার মধ্যে ${index+1}তম`;
+                }
+                
                 resultBox.classList.add('show');
             } else {
                 resultBox.classList.remove('show');
             }
         });
 
-        // রিসেট ফাংশন
         window.resetSelections = function() {
             const divisionSelect = document.getElementById('divisionSelect');
             const districtSelect = document.getElementById('districtSelect');
+            const upazilaSelect = document.getElementById('upazilaSelect');
             const resultBox = document.getElementById('resultBox');
             
             divisionSelect.value = '';
             districtSelect.innerHTML = '<option value="">-- প্রথমে বিভাগ নির্বাচন করুন --</option>';
             districtSelect.disabled = true;
+            upazilaSelect.innerHTML = '<option value="">-- প্রথমে জেলা নির্বাচন করুন --</option>';
+            upazilaSelect.disabled = true;
             resultBox.classList.remove('show');
         };
 
-        // পেজ লোড হলে JSON লোড করুন
+        // সবশেষে, পেজ লোড হলে কাজ শুরু করো
         loadDivisions();
     </script>
 </body>
