@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>API Test</title>
+
+</head>
+
+<body>
+
+<h2>বাংলাদেশের বিভাগ</h2>
+
+<select id="division">
+<option>লোড হচ্ছে...</option>
+</select>
+
+<script>
+
+const division =
+document.getElementById("division");
+
+fetch("https://bdapis.vercel.app/api/v1.2/divisions")
+
+.then(res => res.json())
+
+.then(data => {
+
+    console.log(data);
+
+    division.innerHTML =
+    "<option>বিভাগ নির্বাচন করুন</option>";
+
+    data.data.forEach(item => {
+
+        let option =
+        document.createElement("option");
+
+        option.textContent =
+        item.name;
+
+        division.appendChild(option);
+
+    });
+
+})
+
+.catch(error => {
+
+    alert("API কাজ করছে না");
+
+    console.log(error);
+
+});
+
+</script>
+
+</body>
+</html>
