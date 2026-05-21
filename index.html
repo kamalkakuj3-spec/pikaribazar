@@ -142,6 +142,43 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
+/* বিভাগ ভিডিও কার্ড (নতুন) */
+.division-video-card {
+    margin: 0 16px 12px;
+    background: transparent;
+    animation: tileIn 0.4s ease both;
+}
+.division-video-player {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(108,43,217,0.18);
+    background: linear-gradient(135deg, #ffffff, #f8f6ff);
+    border: 1px solid rgba(108,43,217,0.1);
+}
+.division-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    background: #000;
+    display: block;
+}
+.division-video-info {
+    padding: 12px 12px;
+    background: linear-gradient(135deg, #ffffff, #f8f6ff);
+    text-align: center;
+}
+.division-video-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+.division-video-desc {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
 .shop-video-card {
     margin: 0 16px 12px;
     background: transparent;
@@ -422,6 +459,19 @@ marquee {
         <div class="ab-arrow">→</div>
     </a>
 
+    <!-- 🎬 বিভাগ ভিডিও কার্ড (এডমিন প্যানেল থেকে কন্ট্রোল) -->
+    <div id="divisionVideoCard" class="division-video-card" style="display: none;">
+        <div class="division-video-player">
+            <video id="divisionVideo" class="division-video" autoplay muted loop playsinline>
+                <source src="" type="video/mp4">
+            </video>
+            <div class="division-video-info">
+                <div class="division-video-title" id="divisionVideoTitle"></div>
+                <div class="division-video-desc" id="divisionVideoDesc"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- FILTERS -->
     <div class="filter-wrap">
         <button class="reset-btn" id="resetBtn" onclick="window.resetFilters()">🔄 ফিল্টার রিসেট করুন</button>
@@ -491,10 +541,10 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const db = firebase.database();
 
-// ========== JSON ডাটা লোড (হার্ডকোডেড ডাটা বাদ) ==========
+// ========== JSON ডাটা লোড ==========
 const JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
 
-let geoData = []; // বিভাগের ডাটা
+let geoData = [];
 let allShops = [];
 let selectedDivision = '';
 let selectedDistrict = '';
@@ -516,13 +566,34 @@ const allCategories = [
     'সেলাই ও কারুকাজ', 'যানবাহন যন্ত্রাংশ', 'অন্যান্য'
 ];
 
-// এলোমেলো অ্যারে শাফল ফাংশন
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+// ========== বিভাগ ভিডিও লোড (Firebase থেকে) ==========
+function loadDivisionVideo() {
+    db.ref('divisionVideo').on('value', (snap) => {
+        const videoCard = document.getElementById('divisionVideoCard');
+        const videoElement = document.getElementById('divisionVideo');
+        const titleEl = document.getElementById('divisionVideoTitle');
+        const descEl = document.getElementById('divisionVideoDesc');
+        
+        if (snap.exists() && snap.val().enabled === true && snap.val().videoUrl) {
+            const data = snap.val();
+            videoCard.style.display = 'block';
+            videoElement.src = data.videoUrl;
+            videoElement.load();
+            videoElement.play().catch(e => console.log('Auto-play prevented:', e));
+            titleEl.textContent = data.title || 'প্রোমো ভিডিও';
+            descEl.textContent = data.description || '';
+        } else {
+            videoCard.style.display = 'none';
+        }
+    });
 }
 
 // ========== JSON লোড ফাংশন ==========
@@ -532,7 +603,6 @@ async function loadGeoData() {
         const data = await res.json();
         geoData = data.divisions;
         
-        // বিভাগের চিপ তৈরি করুন
         const divisionContainer = document.getElementById('divisionChips');
         divisionContainer.innerHTML = '<div class="f-chip active" onclick="window.selectDivision(\'\')">সব বিভাগ</div>';
         
@@ -550,7 +620,6 @@ async function loadGeoData() {
     }
 }
 
-// ক্যাটাগরি চিপ লোড
 function loadCategoryChips() {
     const container = document.getElementById('categoryChips');
     container.innerHTML = '<div class="f-chip active" onclick="window.selectCategory(\'\')">সব</div>';
@@ -563,13 +632,12 @@ function loadCategoryChips() {
     });
 }
 
-// ========== ফিল্টার ফাংশন (JSON ভিত্তিক) ==========
+// ========== ফিল্টার ফাংশন ==========
 window.selectDivision = function(div) {
     selectedDivision = div;
     selectedDistrict = '';
     selectedThana = '';
     
-    // UI আপডেট
     document.querySelectorAll('#divisionChips .f-chip').forEach(c => {
         const isActive = c.textContent === (div || 'সব বিভাগ');
         if (isActive) c.classList.add('active');
@@ -586,7 +654,6 @@ window.selectDivision = function(div) {
     if (resetBtn) resetBtn.style.display = div ? 'block' : 'none';
     
     if (div) {
-        // জেলা লোড করুন
         const division = geoData.find(d => d.name === div);
         const districts = division ? division.districts : [];
         const districtContainer = document.getElementById('districtChips');
@@ -633,7 +700,6 @@ window.selectDistrict = function(dist) {
     if (num2Div) num2Div.className = dist ? 'fs-num done' : 'fs-num';
     
     if (dist) {
-        // উপজেলা লোড করুন
         const division = geoData.find(d => d.name === selectedDivision);
         const district = division?.districts.find(d => d.name === dist);
         const upazilas = district ? district.upazilas : [];
@@ -945,6 +1011,7 @@ window.checkNet = function() {
         if (noInternetDiv) noInternetDiv.style.display = 'none';
         loadGeoData();
         loadCategoryChips();
+        loadDivisionVideo();
         window.loadMarquee();
         window.loadSlider();
         window.loadShops();
