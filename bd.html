@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>বাংলাদেশ - বিভাগ, জেলা, উপজেলা, ইউনিয়ন (JSON লিংক সহ)</title>
+    <title>বাংলাদেশ - বিভাগ, জেলা, উপজেলা, ইউনিয়ন (JSON লিংক সংস্করণ)</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
         }
         body {
             background: linear-gradient(145deg, #e0f2e9 0%, #c8e0d4 100%);
@@ -149,6 +149,15 @@
             color: #a1221a;
             margin-top: 15px;
         }
+        .success-msg {
+            background: #e0f7ea;
+            border-left: 5px solid #188c4a;
+            padding: 10px;
+            border-radius: 16px;
+            color: #0f5236;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
         @media (max-width: 700px) {
             .card-body { padding: 18px; }
             .form-grid { gap: 15px; }
@@ -163,6 +172,9 @@
             <p>JSON ফাইল থেকে লোড হচ্ছে: divisions.json → districts.json → upazilas.json → unions.json</p>
         </div>
         <div class="card-body">
+            <!-- লোড স্ট্যাটাস -->
+            <div id="loadStatus" class="success-msg" style="margin-bottom: 20px;">⏳ JSON ফাইল লোড হচ্ছে...</div>
+
             <div class="form-grid">
                 <div class="form-group">
                     <label>📌 ১. বিভাগ (Division)</label>
@@ -227,47 +239,69 @@
     const unionSelect = document.getElementById('unionSelect');
     const selectionDisplay = document.getElementById('selectionDisplay');
     const dynamicListArea = document.getElementById('dynamicListArea');
+    const loadStatusDiv = document.getElementById('loadStatus');
 
-    // হেল্পার: JSON ফাইল fetch করার জেনেরিক ফাংশন
-    async function fetchJSON(url) {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP ${response.status} - ${url}`);
-        const data = await response.json();
-        // ফাইলগুলোর স্ট্রাকচারে actual data array থাকে "data" প্রপার্টিতে (যেমন আপনার দেওয়া ফাইলে)
-        // যদি ডাটা array সরাসরি হয় তাহলে সেটা রিটার্ন করব, নাহলে data field খুঁজব
-        if (Array.isArray(data)) return data;
-        if (data && Array.isArray(data.data)) return data.data;
-        if (data && Array.isArray(data)) return data;
-        throw new Error('Invalid JSON format');
+    // JSON ফাইল fetch (আপনার দেওয়া exact নাম ব্যবহার করা হয়েছে)
+    async function fetchJSON(url, fileName) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} - ${fileName} পাওয়া যায়নি`);
+            }
+            const data = await response.json();
+            // ফাইল ফরম্যাট চেক: আপনার দেওয়া ফাইলে ডাটা "data" কী এর ভিতরে
+            if (data && Array.isArray(data.data)) {
+                return data.data;
+            }
+            if (Array.isArray(data)) {
+                return data;
+            }
+            throw new Error(`${fileName} ফাইলের ফরম্যাট সঠিক নয়`);
+        } catch (err) {
+            throw new Error(`${fileName}: ${err.message}`);
+        }
     }
 
-    // লোড semua ফাইল
+    // সব JSON লোড করুন
     async function loadAllData() {
         try {
-            // ধরে নিচ্ছি JSON ফাইলগুলো একই ডিরেক্টরিতে আছে
-            divisionsData = await fetchJSON('divisions.json');
-            districtsData = await fetchJSON('districts.json');
-            upazilasData = await fetchJSON('upazilas.json');
-            unionsData = await fetchJSON('unions.json');
+            loadStatusDiv.innerHTML = '⏳ divisions.json লোড হচ্ছে...';
+            divisionsData = await fetchJSON('divisions.json', 'divisions.json');
+            
+            loadStatusDiv.innerHTML = '⏳ districts.json লোড হচ্ছে...';
+            districtsData = await fetchJSON('districts.json', 'districts.json');
+            
+            loadStatusDiv.innerHTML = '⏳ upazilas.json লোড হচ্ছে...';
+            upazilasData = await fetchJSON('upazilas.json', 'upazilas.json');
+            
+            loadStatusDiv.innerHTML = '⏳ unions.json লোড হচ্ছে...';
+            unionsData = await fetchJSON('unions.json', 'unions.json');
 
-            // কনসোল লগ (ডিবাগ)
-            console.log('divisions loaded:', divisionsData.length);
-            console.log('districts loaded:', districtsData.length);
-            console.log('upazilas loaded:', upazilasData.length);
-            console.log('unions loaded:', unionsData.length);
+            // সফল লোড
+            loadStatusDiv.innerHTML = `✅ সফল! ${divisionsData.length} বিভাগ, ${districtsData.length} জেলা, ${upazilasData.length} উপজেলা, ${unionsData.length} ইউনিয়ন লোড হয়েছে।`;
+            loadStatusDiv.style.background = '#e0f7ea';
+            loadStatusDiv.style.borderLeftColor = '#188c4a';
+            
+            console.log('Divisions:', divisionsData.length);
+            console.log('Districts:', districtsData.length);
+            console.log('Upazilas:', upazilasData.length);
+            console.log('Unions:', unionsData.length);
 
             // বিভাগ সিলেক্ট পপুলেট
             populateDivisions();
-            // সক্রিয় করা
             divisionSelect.disabled = false;
-            // অন্য গুলো রিসেট
             resetDependents();
             updateSelectionDisplay();
             showListForCurrentLevel();
         } catch (error) {
             console.error(error);
-            dynamicListArea.innerHTML = `<div class="error-msg">❌ JSON লোড করতে সমস্যা: ${error.message}<br>নিশ্চিত করুন যে divisions.json, districts.json, upazilas.json, unions.json ফাইলগুলো সঠিক পাথে আছে।</div>`;
-            selectionDisplay.innerText = 'JSON লোড ব্যর্থ';
+            loadStatusDiv.innerHTML = `❌ JSON লোড ব্যর্থ: ${error.message}<br><br>
+            <strong>সমাধান:</strong> নিশ্চিত করুন যে নিচের ফাইলগুলো একই ফোল্ডারে আছে:<br>
+            📄 divisions.json &nbsp; 📄 districts.json &nbsp; 📄 upazilas.json &nbsp; 📄 unions.json`;
+            loadStatusDiv.style.background = '#ffe6e5';
+            loadStatusDiv.style.borderLeftColor = '#c7362b';
+            selectionDisplay.innerText = 'JSON লোড ব্যর্থ, উপরের মেসেজ দেখুন';
+            dynamicListArea.innerHTML = `<div class="error-msg">❌ ${error.message}</div>`;
         }
     }
 
@@ -276,7 +310,8 @@
         divisionsData.forEach(div => {
             const opt = document.createElement('option');
             opt.value = div.id;
-            opt.textContent = `${div.name} (${div.bn_name})`;
+            const displayName = div.bn_name ? `${div.name} (${div.bn_name})` : div.name;
+            opt.textContent = displayName;
             divisionSelect.appendChild(opt);
         });
         document.getElementById('divisionCount').innerText = `মোট: ${divisionsData.length}টি`;
@@ -295,7 +330,6 @@
     }
 
     function resetDependents() {
-        // জেলা রিসেট
         districtSelect.innerHTML = '<option value="">-- প্রথমে বিভাগ নির্বাচন করুন --</option>';
         districtSelect.disabled = true;
         upazilaSelect.innerHTML = '<option value="">-- প্রথমে জেলা নির্বাচন করুন --</option>';
@@ -317,12 +351,13 @@
         filtered.forEach(dist => {
             const opt = document.createElement('option');
             opt.value = dist.id;
-            opt.textContent = `${dist.name} (${dist.bn_name})`;
+            const displayName = dist.bn_name ? `${dist.name} (${dist.bn_name})` : dist.name;
+            opt.textContent = displayName;
             districtSelect.appendChild(opt);
         });
         districtSelect.disabled = false;
         document.getElementById('districtCount').innerText = `মোট: ${filtered.length}টি`;
-        // উপজেলা ও ইউনিয়ন রিসেট
+        
         upazilaSelect.innerHTML = '<option value="">-- প্রথমে জেলা নির্বাচন করুন --</option>';
         upazilaSelect.disabled = true;
         unionSelect.innerHTML = '<option value="">-- প্রথমে উপজেলা নির্বাচন করুন --</option>';
@@ -330,7 +365,6 @@
         document.getElementById('upazilaCount').innerText = '';
         document.getElementById('unionCount').innerText = '';
 
-        // তালিকা দেখান (জেলা সমূহ)
         if (filtered.length) {
             const tags = filtered.map(d => `<span class="item-tag">${d.name} (${d.bn_name})</span>`).join('');
             dynamicListArea.innerHTML = `<div class="items-list">${tags}</div>`;
@@ -353,17 +387,17 @@
         filtered.forEach(up => {
             const opt = document.createElement('option');
             opt.value = up.id;
-            opt.textContent = `${up.name} (${up.bn_name})`;
+            const displayName = up.bn_name ? `${up.name} (${up.bn_name})` : up.name;
+            opt.textContent = displayName;
             upazilaSelect.appendChild(opt);
         });
         upazilaSelect.disabled = false;
         document.getElementById('upazilaCount').innerText = `মোট: ${filtered.length}টি`;
-        // ইউনিয়ন রিসেট
+        
         unionSelect.innerHTML = '<option value="">-- প্রথমে উপজেলা নির্বাচন করুন --</option>';
         unionSelect.disabled = true;
         document.getElementById('unionCount').innerText = '';
 
-        // তালিকা দেখান: উপজেলা সমূহ
         if (filtered.length) {
             const tags = filtered.map(u => `<span class="item-tag">${u.name} (${u.bn_name})</span>`).join('');
             dynamicListArea.innerHTML = `<div class="items-list">${tags}</div>`;
@@ -384,13 +418,13 @@
         filtered.forEach(uni => {
             const opt = document.createElement('option');
             opt.value = uni.id;
-            opt.textContent = `${uni.name} (${uni.bn_name})`;
+            const displayName = uni.bn_name ? `${uni.name} (${uni.bn_name})` : uni.name;
+            opt.textContent = displayName;
             unionSelect.appendChild(opt);
         });
         unionSelect.disabled = false;
         document.getElementById('unionCount').innerText = `মোট: ${filtered.length}টি`;
 
-        // তালিকা দেখান: ইউনিয়ন সমূহ
         if (filtered.length) {
             const tags = filtered.map(u => `<span class="item-tag">${u.name} (${u.bn_name})</span>`).join('');
             dynamicListArea.innerHTML = `<div class="items-list">${tags}</div>`;
@@ -456,7 +490,6 @@
     divisionSelect.addEventListener('change', (e) => {
         const divId = e.target.value;
         updateDistricts(divId);
-        // রিসেট ভ্যালু
         districtSelect.value = "";
         upazilaSelect.value = "";
         unionSelect.value = "";
@@ -480,7 +513,6 @@
     });
     unionSelect.addEventListener('change', () => {
         updateSelectionDisplay();
-        // ইউনিয়ন নির্বাচিত হলে ইউনিয়ন দেখাবে ইতিমধ্যে দেখাচ্ছে
         const upId = upazilaSelect.value;
         if(upId) {
             const unionsHere = getUnionsByUpazila(upId);
