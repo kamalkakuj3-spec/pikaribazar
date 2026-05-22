@@ -196,7 +196,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড */
+/* ========== দোকানের ভিডিও কার্ড (সেন্টার অ্যালাইন) ========== */
 .shop-video-card {
     margin: 0 16px 12px;
     background: transparent;
@@ -234,19 +234,20 @@ marquee {
     text-align: center;
 }
 .shop-video-info {
-    padding: 12px 0 0;
+    padding: 16px 12px;
     background: transparent;
     text-align: center;
 }
 .shop-video-name {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: var(--primary);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     cursor: pointer;
     transition: color 0.2s;
-    display: inline-block;
+    display: block;
     text-align: center;
+    line-height: 1.3;
 }
 .shop-video-name:hover {
     color: var(--primary-dark);
@@ -254,16 +255,22 @@ marquee {
 }
 .shop-video-category {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--primary-light);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     text-align: center;
+    background: #f0ebff;
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 99px;
 }
 .shop-video-address {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-light);
     text-align: center;
     margin-top: 5px;
+    line-height: 1.4;
+    display: block;
 }
 @keyframes tileIn {
     from { transform: translateY(15px); opacity: 0; }
@@ -583,7 +590,7 @@ async function loadCategories() {
         console.log('ক্যাটাগরি লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
     } catch (error) {
         console.error('ক্যাটাগরি লোড ব্যর্থ:', error);
-        categoriesList = [];
+        categoriesList = ["পোশাক ও বস্ত্র", "খাদ্যপণ্য ও মসলা", "ইলেকট্রনিক্স", "গৃহস্থালি পণ্য", "হার্ডওয়্যার ও নির্মাণ", "ওষুধ ও স্বাস্থ্য", "সৌন্দর্য ও কসমেটিক্স", "ব্যাগ ও জুতা", "কৃষি ও সার", "স্টেশনারি ও অফিস", "অটোমোবাইল", "খেলনা ও শিশু পণ্য", "উপহার ও সাজসজ্জা", "প্যাকেজিং সামগ্রী", "শিল্প ও কারখানা", "মাছ ও মাংস", "নার্সারি ও বাগান", "খেলাধুলা সামগ্রী", "বই ও শিক্ষা সামগ্রী", "সোলার ও বিদ্যুৎ", "সেলাই ও কারুকাজ", "যানবাহন যন্ত্রাংশ", "অন্যান্য"];
     }
 }
 
@@ -651,14 +658,9 @@ async function loadGeoData() {
     }
 }
 
-// ========== ক্যাটাগরি চিপ লোড (JSON থেকে) ==========
-async function loadCategoryChips() {
+function loadCategoryChips() {
     const container = document.getElementById('categoryChips');
     container.innerHTML = '<div class="f-chip active" onclick="window.selectCategory(\'\')">সব</div>';
-    
-    if (categoriesList.length === 0) {
-        await loadCategories();
-    }
     
     categoriesList.forEach(cat => {
         const chip = document.createElement('div');
@@ -878,7 +880,7 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-// ========== রেন্ডার শপস (ক্যাটাগরি দেখানো) ==========
+// ========== রেন্ডার শপস (Cloudinary + YouTube, সেন্টার অ্যালাইন) ==========
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -891,27 +893,60 @@ window.renderShops = function(shops) {
     const shuffledShops = shuffleArray([...shops]);
     
     container.innerHTML = shuffledShops.map(shop => {
-        let videoId = null;
-        if (shop.youtubeVideoId) {
-            videoId = shop.youtubeVideoId;
-        } else if (shop.youtube) {
+        let videoEmbed = '';
+        
+        // Cloudinary ভিডিও
+        if (shop.videoUrl) {
+            videoEmbed = `<video class="shop-video" src="${escapeHtml(shop.videoUrl)}" controls preload="metadata" poster="${escapeHtml(shop.thumbnail || '')}" playsinline></video>`;
+        }
+        // YouTube ভিডিও (আইডি)
+        else if (shop.youtubeVideoId) {
+            videoEmbed = `<iframe class="shop-video" src="https://www.youtube.com/embed/${escapeHtml(shop.youtubeVideoId)}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>`;
+        }
+        // YouTube ভিডিও (লিংক)
+        else if (shop.youtube) {
             const patterns = [
                 /(?:youtube\.com\/watch\?v=)([^&]+)/,
                 /(?:youtu\.be\/)([^?]+)/,
                 /(?:youtube\.com\/embed\/)([^?]+)/
             ];
+            let videoId = null;
             for (let pattern of patterns) {
                 const match = shop.youtube.match(pattern);
                 if (match) { videoId = match[1]; break; }
             }
+            if (videoId) {
+                videoEmbed = `<iframe class="shop-video" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>`;
+            } else {
+                videoEmbed = `<div class="no-video">🎬 ভিডিও লিংক সঠিক নয়</div>`;
+            }
+        }
+        else {
+            videoEmbed = `<div class="no-video">🎬 কোন ভিডিও নেই</div>";
         }
         
-        const videoEmbed = videoId 
-            ? `<iframe class="shop-video" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>`
-            : `<div class="no-video">🎬 কোন ভিডিও নেই</div>`;
+        // ✅ ক্যাটাগরি নির্ধারণ (আইকন বাদ দিয়ে)
+        let categoryName = shop.categories || shop.category || 'পাইকারি দোকান';
         
-        const categoryName = shop.category || 'পাইকারি দোকান';
-        const addressText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
+        // একাধিক ক্যাটাগরি থাকলে প্রথমটি নিবে
+        if (typeof categoryName === 'string' && categoryName.includes(',')) {
+            categoryName = categoryName.split(',')[0];
+        }
+        
+        // আইকন বাদ দিন
+        categoryName = categoryName.replace(/[👗🛒📱🏠🔧💊🧴🎒🌾🖨️🚗🧸🎉📦🔬🐟🪴⚽📚🔌🧵🛺🔹]/g, '').trim();
+        
+        // ✅ বিবরণ/ঠিকানা তৈরি
+        let description = '';
+        if (shop.description) {
+            description = shop.description;
+        } else if (shop.area) {
+            description = shop.area;
+        } else if (shop.thana && shop.district) {
+            description = `${shop.thana}, ${shop.district}`;
+        } else {
+            description = shop.district || 'ঠিকানা প্রদান করা হয়নি';
+        }
         
         return `
         <div class="shop-video-card">
@@ -921,7 +956,7 @@ window.renderShops = function(shops) {
             <div class="shop-video-info">
                 <h3 class="shop-video-name" onclick="window.viewShop('${shop.id}')">${escapeHtml(shop.shopName) || 'নাম নেই'}</h3>
                 <div class="shop-video-category">${escapeHtml(categoryName)}</div>
-                <p class="shop-video-address">📍 ${escapeHtml(addressText)}</p>
+                <p class="shop-video-address">📍 ${escapeHtml(description)}</p>
             </div>
         </div>`;
     }).join('');
@@ -955,7 +990,11 @@ window.initVideoObservers = function() {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) {
                     try {
-                        iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                        if (iframe.tagName === 'IFRAME') {
+                            iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                        } else if (iframe.tagName === 'VIDEO') {
+                            iframe.pause();
+                        }
                     } catch(e) {}
                 }
             });
@@ -1048,8 +1087,7 @@ window.checkNet = function() {
     if (navigator.onLine) {
         if (noInternetDiv) noInternetDiv.style.display = 'none';
         loadGeoData();
-        loadCategories();
-        loadCategoryChips();
+        loadCategories().then(() => loadCategoryChips());
         loadAdminVideos();
         window.loadMarquee();
         window.loadSlider();
@@ -1088,7 +1126,7 @@ window.navigateTo = function(page, event) {
     }
 };
 
-// ক্যাটাগরি পপআপ (JSON থেকে লোড করা ক্যাটাগরি দেখাবে)
+// ক্যাটাগরি পপআপ
 window.openCategoryPopup = function() {
     const existingPopup = document.querySelector('.category-popup-overlay');
     if (existingPopup) existingPopup.remove();
