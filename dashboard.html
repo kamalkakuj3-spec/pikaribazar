@@ -84,14 +84,7 @@ body {
     margin-bottom:24px;
     box-shadow:0 20px 35px -12px rgba(108,43,217,0.25);
     border:1px solid rgba(108,43,217,0.15);
-    transform-style:preserve-3d;
     transition:transform 0.3s ease, box-shadow 0.3s;
-    animation:floatCard 3s infinite ease-in-out;
-}
-@keyframes floatCard {
-    0% { transform:translateY(0px) rotateX(2deg); }
-    50% { transform:translateY(-6px) rotateX(4deg); }
-    100% { transform:translateY(0px) rotateX(2deg); }
 }
 .card-shop-name {
     font-size:22px;
@@ -102,7 +95,6 @@ body {
     align-items:center;
     gap:8px;
 }
-.card-shop-name i { display:none; }
 .card-shop-address {
     font-size:14px;
     color:#555;
@@ -155,7 +147,6 @@ body {
     border:1.5px solid rgba(108,43,217,0.08);
     margin-bottom:16px;
 }
-/* যোগাযোগ কার্ডের নিচে বড় মার্জিন */
 .tile-card:last-of-type {
     margin-bottom: 100px;
 }
@@ -439,7 +430,7 @@ select.input-field { cursor:pointer; appearance:none; }
 </head>
 <body>
 
-<div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 অপেক্ষা করুন লোডিং হচ্ছে...</div></div>
+<div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ডাটা লোড হচ্ছে...</div></div>
 
 <div class="content" id="mainContent" style="display:none">
     <div class="shop-preview-card" id="shopPreviewCard">
@@ -460,16 +451,13 @@ select.input-field { cursor:pointer; appearance:none; }
         </div>
 
         <div class="tile-card">
-            <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা</div></div></div>
+            <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা (JSON থেকে লোড)</div></div></div>
             <div class="input-group">
                 <label class="input-label">বিভাগ *</label>
                 <div class="input-wrap">
                     <span class="input-icon">🗺️</span>
                     <select class="input-field" id="division" onchange="onDivisionChange()">
                         <option value="">বিভাগ বাছাই করুন</option>
-                        <option value="ঢাকা">ঢাকা</option><option value="চট্টগ্রাম">চট্টগ্রাম</option><option value="রাজশাহী">রাজশাহী</option>
-                        <option value="খুলনা">খুলনা</option><option value="বরিশাল">বরিশাল</option><option value="সিলেট">সিলেট</option>
-                        <option value="রংপুর">রংপুর</option><option value="ময়মনসিংহ">ময়মনসিংহ</option>
                     </select>
                     <span class="select-arrow">▼</span>
                 </div>
@@ -489,7 +477,7 @@ select.input-field { cursor:pointer; appearance:none; }
         </div>
 
         <div class="tile-card" id="categorySection">
-            <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন</div></div></div>
+            <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন (JSON থেকে লোড)</div></div></div>
             <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
             <button type="button" class="cat-select-btn" onclick="openMultiCategoryPopup()"><span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span><span>▼</span></button>
             <input type="hidden" id="categoriesHidden" value="">
@@ -533,144 +521,177 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-const districtMap = {
-    'ঢাকা': ['ঢাকা','গাজীপুর','নারায়ণগঞ্জ','মুন্সীগঞ্জ','মানিকগঞ্জ','নরসিংদী','ফরিদপুর','রাজবাড়ী','গোপালগঞ্জ','মাদারীপুর','শরীয়তপুর','কিশোরগঞ্জ','টাঙ্গাইল'],
-    'চট্টগ্রাম': ['চট্টগ্রাম','কক্সবাজার','কুমিল্লা','চাঁদপুর','ব্রাহ্মণবাড়িয়া','নোয়াখালী','ফেনী','লক্ষ্মীপুর','রাঙামাটি','খাগড়াছড়ি','বান্দরবান'],
-    'রাজশাহী': ['রাজশাহী','নাটোর','নওগাঁ','চাঁপাইনবাবগঞ্জ','পাবনা','সিরাজগঞ্জ','বগুড়া','জয়পুরহাট'],
-    'খুলনা': ['খুলনা','বাগেরহাট','সাতক্ষীরা','যশোর','মাগুরা','নড়াইল','কুষ্টিয়া','মেহেরপুর','চুয়াডাঙ্গা','ঝিনাইদহ'],
-    'বরিশাল': ['বরিশাল','ভোলা','পটুয়াখালী','বরগুনা','পিরোজপুর','ঝালকাঠি'],
-    'সিলেট': ['সিলেট','মৌলভীবাজার','হবিগঞ্জ','সুনামগঞ্জ'],
-    'রংপুর': ['রংপুর','গাইবান্ধা','কুড়িগ্রাম','লালমনিরহাট','নীলফামারী','দিনাজপুর','ঠাকুরগাঁও','পঞ্চগড়'],
-    'ময়মনসিংহ': ['ময়মনসিংহ','জামালপুর','শেরপুর','নেত্রকোণা']
-};
+// ========== JSON URL ==========
+const DIVISIONS_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
+const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
 
-const thanaMap = {
-    'ঢাকা': ['আদাবর','উত্তরা','তেজগাঁও','ধামরাই','নবাবগঞ্জ','বাড্ডা','মিরপুর','মোহাম্মদপুর','যাত্রাবাড়ী','রামপুরা','লালবাগ','শাহবাগ','সাভার','সূত্রাপুর','হাজারীবাগ','ডেমরা','গুলশান','কাফরুল','শ্যামপুর'],
-    'গাজীপুর': ['গাজীপুর সদর','কালিয়াকৈর','কাপাসিয়া','শ্রীপুর','কালীগঞ্জ'],
-    'নারায়ণগঞ্জ': ['নারায়ণগঞ্জ সদর','আড়াইহাজার','বন্দর','রূপগঞ্জ','সোনারগাঁও','ফতুল্লা'],
-    'টাঙ্গাইল': ['টাঙ্গাইল সদর','বাসাইল','দেলদুয়ার','ঘাটাইল','গোপালপুর','কালিহাতী','মধুপুর','মির্জাপুর','নাগরপুর','সখিপুর','ধনবাড়ী'],
-    'নরসিংদী': ['নরসিংদী সদর','বেলাবো','পলাশ','মনোহরদী','রায়পুরা','শিবপুর'],
-    'মুন্সীগঞ্জ': ['মুন্সীগঞ্জ সদর','গজারিয়া','টংগিবাড়ী','লৌহজং','শ্রীনগর','সিরাজদিখান'],
-    'মানিকগঞ্জ': ['মানিকগঞ্জ সদর','ঘিওর','দৌলতপুর','শিবালয়','সাটুরিয়া','হরিরামপুর'],
-    'কিশোরগঞ্জ': ['কিশোরগঞ্জ সদর','অট্টগ্রাম','ইটনা','করিমগঞ্জ','কটিয়াদী','তাড়াইল','পাকুন্দিয়া','বাজিতপুর','ভৈরব','মিঠামইন','হোসেনপুর','নিকলী','কুলিয়ারচর'],
-    'ফরিদপুর': ['ফরিদপুর সদর','আলফাডাঙ্গা','বোয়ালমারী','মধুখালী','নগরকান্দা','সদরপুর','চরভদ্রাসন','সালথা'],
-    'রাজবাড়ী': ['রাজবাড়ী সদর','গোয়ালন্দ','পাংশা','বালিয়াকান্দি','কালুখালী'],
-    'গোপালগঞ্জ': ['গোপালগঞ্জ সদর','কাশিয়ানী','কোটালীপাড়া','টুঙ্গিপাড়া','মুকসুদপুর'],
-    'শরীয়তপুর': ['শরীয়তপুর সদর','গোসাইরহাট','জাজিরা','নড়িয়া','ভেদরগঞ্জ','ডামুড্যা'],
-    'মাদারীপুর': ['মাদারীপুর সদর','কালকিনি','ডাসার','শিবচর','রাজৈর'],
-    'চট্টগ্রাম': ['চট্টগ্রাম সদর','আনোয়ারা','বাঁশখালী','বোয়ালখালী','চন্দনাইশ','দোহাজারী','ফটিকছড়ি','হাটহাজারী','লোহাগাড়া','মিরসরাই','পটিয়া','রাঙ্গুনিয়া','রাউজান','সন্দ্বীপ','সাতকানিয়া','সীতাকুণ্ডা'],
-    'কক্সবাজার': ['কক্সবাজার সদর','চকরিয়া','কুতুবদিয়া','মহেশখালী','রামু','টেকনাফ','উখিয়া','পেকুয়া'],
-    'কুমিল্লা': ['কুমিল্লা সদর','বরুড়া','ব্রাহ্মণপাড়া','বুড়িচং','চান্দিনা','চৌদ্দগ্রাম','দাউদকান্দি','দেবিদ্বার','হোমনা','লাকসাম','মনোহরগঞ্জ','মুরাদনগর','নাঙ্গলকোট','তিতাস'],
-    'চাঁদপুর': ['চাঁদপুর সদর','ফরিদগঞ্জ','হাইমচর','হাজীগঞ্জ','কচুয়া','মতলব উত্তর','মতলব দক্ষিণ','শাহরাস্তি'],
-    'ব্রাহ্মণবাড়িয়া': ['ব্রাহ্মণবাড়িয়া সদর','আখাউড়া','বাঞ্ছারামপুর','বিজয়নগর','কসবা','নবীনগর','নাসিরনগর','সরাইল'],
-    'নোয়াখালী': ['নোয়াখালী সদর','বেগমগঞ্জ','চাটখিল','কবিরহাট','সেনবাগ','সোনাইমুড়ি','সুবর্ণচর','কোম্পানীগঞ্জ'],
-    'ফেনী': ['ফেনী সদর','ছাগলনাইয়া','দাগনভূঁইয়া','পরশুরাম','সোনাগাজী'],
-    'লক্ষ্মীপুর': ['লক্ষ্মীপুর সদর','রামগঞ্জ','রামগতি','রায়পুর','কমলনগর'],
-    'রাঙামাটি': ['রাঙামাটি সদর','কাউখালী','বিলাইছড়ি','বরকল','জুরাছড়ি','নানিয়ারচর','লংগদু','রাজস্থলী','বাঘাইছড়ি'],
-    'খাগড়াছড়ি': ['খাগড়াছড়ি সদর','দীঘিনালা','পানছড়ি','লক্ষ্মীছড়ি','মহালছড়ি','মাটিরাঙ্গা','গুইমারা','রামগড়'],
-    'বান্দরবান': ['বান্দরবান সদর','নাইক্ষ্যংছড়ি','রুমা','থানচি','লামা','আলীকদম','রোয়াংছড়ি'],
-    'সিলেট': ['সিলেট সদর','বালাগঞ্জ','বিয়ানীবাজার','বিশ্বনাথ','ফেঞ্চুগঞ্জ','গোলাপগঞ্জ','গোয়াইনঘাট','জৈন্তাপুর','কানাইঘাট','কোম্পানীগঞ্জ','জকিগঞ্জ','দক্ষিণ সুরমা','মোগলাবাজার'],
-    'মৌলভীবাজার': ['মৌলভীবাজার সদর','বড়লেখা','জুড়ী','কমলগঞ্জ','কুলাউড়া','রাজনগর','শ্রীমঙ্গল'],
-    'হবিগঞ্জ': ['হবিগঞ্জ সদর','আজমিরীগঞ্জ','বাহুবল','বানিয়াচং','চুনারুঘাট','কালাউক','লাখাই','মাধবপুর','নবীগঞ্জ','শায়েস্তাগঞ্জ'],
-    'সুনামগঞ্জ': ['সুনামগঞ্জ সদর','ছাতক','দিরাই','ধর্মপাশা','দোয়ারাবাজার','জগন্নাথপুর','জামালগঞ্জ','শাল্লা','তাহিরপুর','বিশ্বম্ভরপুর'],
-    'রাজশাহী': ['রাজশাহী সদর','বাঘা','বাগমারা','চারঘাট','দুর্গাপুর','গোদাগাড়ী','মোহনপুর','পবা','পুঠিয়া','তানোর'],
-    'নাটোর': ['নাটোর সদর','বাগাতিপাড়া','বড়াইগ্রাম','গুরুদাসপুর','লালপুর','নলডাঙ্গা','সিংড়া'],
-    'নওগাঁ': ['নওগাঁ সদর','আত্রাই','বাদলগাছী','ধামইরহাট','মহাদেবপুর','মান্দা','নিয়ামতপুর','পত্নীতলা','পোরশা','রাণীনগর','সাপাহার'],
-    'চাঁপাইনবাবগঞ্জ': ['চাঁপাইনবাবগঞ্জ সদর','গোমস্তাপুর','নাচোল','ভোলাহাট','শিবগঞ্জ'],
-    'পাবনা': ['পাবনা সদর','আটঘরিয়া','ঈশ্বরদী','চাটমোহর','ফরিদপুর','বেনাপোল','সাঁথিয়া','সুজানগর'],
-    'সিরাজগঞ্জ': ['সিরাজগঞ্জ সদর','কাজীপুর','কামারখন্দ','চৌহালী','তাড়াশ','বেলকুচি','শাহজাদপুর','সালঙ্গা','উল্লাপাড়া'],
-    'বগুড়া': ['বগুড়া সদর','আদমদীঘি','দুপচাঁচিয়া','ধুনট','নন্দীগ্রাম','শেরপুর','শাজাহানপুর','সারিয়াকান্দি','সোনাতলা','গাবতলী'],
-    'জয়পুরহাট': ['জয়পুরহাট সদর','আক্কেলপুর','কালাই','ক্ষেতলাল','পাঁচবিবি'],
-    'খুলনা': ['খুলনা সদর','বটিয়াঘাটা','দাকোপ','ডুমুরিয়া','দিঘলিয়া','কয়রা','পাইকগাছা','রূপসা','তেরখাদা'],
-    'বাগেরহাট': ['বাগেরহাট সদর','ফকিরহাট','কচুয়া','মোল্লাহাট','মোড়েলগঞ্জ','রামপাল','শরণখোলা','চিতলমারী','মোংলা'],
-    'যশোর': ['যশোর সদর','অভয়নগর','বাঘারপাড়া','চৌগাছা','ঝিকরগাছা','কেশবপুর','মনিরামপুর','শার্শা'],
-    'সাতক্ষীরা': ['সাতক্ষীরা সদর','আশাশুনি','দেবহাটা','কালীগঞ্জ','কলারোয়া','শ্যামনগর','তালা'],
-    'কুষ্টিয়া': ['কুষ্টিয়া সদর','কুমারখালী','খোকসা','মিরপুর','ভেড়ামারা','দৌলতপুর'],
-    'মাগুরা': ['মাগুরা সদর','মহম্মদপুর','শালিখা','শ্রীপুর'],
-    'নড়াইল': ['নড়াইল সদর','কালিয়া','লোহাগড়া','নড়িয়া সদর'],
-    'চুয়াডাঙ্গা': ['চুয়াডাঙ্গা সদর','আলমডাঙ্গা','দামুড়হুদা','জীবননগর'],
-    'ঝিনাইদহ': ['ঝিনাইদহ সদর','কালীগঞ্জ','কোটচাঁদপুর','শৈলকুপা','হরিণাকুন্ডু','মহেশপুর'],
-    'মেহেরপুর': ['মেহেরপুর সদর','গাংনি','মুজিবনগর'],
-    'বরিশাল': ['বরিশাল সদর','আগৈলঝারা','বাবুগঞ্জ','বাকেরগঞ্জ','বানারীপাড়া','গৌরনদী','হিজলা','মেহেন্দিগঞ্জ','মুলাদী','উজিরপুর'],
-    'ভোলা': ['ভোলা সদর','বোরহানউদ্দিন','চরফ্যাশন','দৌলতখান','লালমোহন','মনপুরা','তজুমদ্দিন'],
-    'পটুয়াখালী': ['পটুয়াখালী সদর','বাউফল','দুমকি','দশমিনা','গলাচিপা','কলাপাড়া','মির্জাগঞ্জ','রাঙ্গাবালী'],
-    'বরগুনা': ['বরগুনা সদর','আমতলী','বামনা','বেতাগী','পাথরঘাটা','তালতলী'],
-    'পিরোজপুর': ['পিরোজপুর সদর','ভাণ্ডারিয়া','কাউখালী','মঠবাড়িয়া','নাজিরপুর','নেছারাবাদ','ইন্দুরকানী'],
-    'ঝালকাঠি': ['ঝালকাঠি সদর','কাঠালিয়া','নলছিটি','রাজাপুর'],
-    'রংপুর': ['রংপুর সদর','বদরগঞ্জ','গঙ্গাচড়া','কাউনিয়া','মিঠাপুকুর','পীরগাছা','পীরগঞ্জ','তারাগঞ্জ'],
-    'দিনাজপুর': ['দিনাজপুর সদর','বিরামপুর','বীরগঞ্জ','বোচাগঞ্জ','চিরিরবন্দর','ফুলবাড়ী','ঘোড়াঘাট','হাকিমপুর','খানসামা','নবাবগঞ্জ','পার্বতীপুর','সেতাবগঞ্জ'],
-    'গাইবান্ধা': ['গাইবান্ধা সদর','ফুলছড়ি','গোবিন্দগঞ্জ','পলাশবাড়ী','সাদুল্যাপুর','সাঘাটা','সুন্দরগঞ্জ'],
-    'কুড়িগ্রাম': ['কুড়িগ্রাম সদর','ভূরুঙ্গামারী','চর রাজিবপুর','চিলমারী','নাগেশ্বরী','ফুলবাড়ী','রাজারহাট','উলিপুর'],
-    'লালমনিরহাট': ['লালমনিরহাট সদর','আদিতমারী','হাতীবান্ধা','কালীগঞ্জ','পাটগ্রাম'],
-    'নীলফামারী': ['নীলফামারী সদর','ডিমলা','ডোমার','জলঢাকা','কিশোরগঞ্জ','সৈয়দপুর'],
-    'ঠাকুরগাঁও': ['ঠাকুরগাঁও সদর','বালিয়াডাঙ্গী','হরিপুর','পীরগঞ্জ','রাণীশংকৈল'],
-    'পঞ্চগড়': ['পঞ্চগড় সদর','আটোয়ারী','বোদা','দেবীগঞ্জ','তেঁতুলিয়া'],
-    'ময়মনসিংহ': ['ময়মনসিংহ সদর','ভালুকা','ধোবাউড়া','ফুলবাড়িয়া','গফরগাঁও','গৌরীপুর','হালুয়াঘাট','ঈশ্বরগঞ্জ','মুক্তাগাছা','নান্দাইল','ফুলপুর','ত্রিশাল'],
-    'জামালপুর': ['জামালপুর সদর','বকশীগঞ্জ','দেওয়ানগঞ্জ','ইসলামপুর','মাদারগঞ্জ','মেলান্দহ','সরিষাবাড়ী'],
-    'শেরপুর': ['শেরপুর সদর','ঝিনাইগাতী','নকলা','নালিতাবাড়ী','শ্রীবর্দী'],
-    'নেত্রকোণা': ['নেত্রকোণা সদর','আটপাড়া','বারহাট্টা','দুর্গাপুর','খালিয়াজুড়ি','কলমাকান্দা','মদন','মোহনগঞ্জ','পূর্বধলা','কেন্দুয়া']
-};
+// ========== গ্লোবাল ভেরিয়েবল ==========
+let divisionsData = [];      // বিভাগের তথ্য
+let categoriesList = [];     // ক্যাটাগরির তালিকা
+let selectedCategories = [];
+let currentShopData = null;
 
-function onDivisionChange() { 
-    const div = document.getElementById('division').value; 
-    const dSel = document.getElementById('district'); 
-    dSel.innerHTML = '<option value="">— জেলা বাছাই করুন —</option>'; 
-    document.getElementById('districtGroup').style.display = 'none'; 
-    document.getElementById('thanaGroup').style.display = 'none'; 
-    document.getElementById('areaGroup').style.display = 'none'; 
-    if(div && districtMap[div]) {
-        districtMap[div].forEach(d => { 
-            let opt = new Option(d, d); 
-            dSel.add(opt);
-        }); 
-        document.getElementById('districtGroup').style.display = 'block';
-    } 
-}
-
-function onDistrictChange() { 
-    const dist = document.getElementById('district').value; 
-    const tSel = document.getElementById('thana'); 
-    tSel.innerHTML = '<option value="">— উপজেলা / থানা বাছাই করুন —</option>'; 
-    document.getElementById('thanaGroup').style.display = 'none'; 
-    document.getElementById('areaGroup').style.display = 'none'; 
-    if(dist && thanaMap[dist]) {
-        thanaMap[dist].forEach(t => { 
-            let opt = new Option(t, t); 
-            tSel.add(opt);
-        }); 
-        document.getElementById('thanaGroup').style.display = 'block';
-    } else if(dist) {
-        tSel.innerHTML = '<option value="সদর">সদর উপজেলা</option>';
-        document.getElementById('thanaGroup').style.display = 'block';
+// ========== JSON লোড ফাংশন ==========
+async function loadDivisionsFromJSON() {
+    try {
+        const res = await fetch(DIVISIONS_JSON_URL);
+        const data = await res.json();
+        divisionsData = data.divisions;
+        console.log('বিভাগ JSON লোড সফল!', divisionsData.length, 'টি বিভাগ');
+        
+        // বিভাগ সিলেক্ট বক্স পপুলেট
+        const divisionSelect = document.getElementById('division');
+        divisionSelect.innerHTML = '<option value="">বিভাগ বাছাই করুন</option>';
+        divisionsData.forEach(div => {
+            const option = document.createElement('option');
+            option.value = div.name;
+            option.textContent = div.name;
+            divisionSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('বিভাগ JSON লোড ব্যর্থ:', error);
+        showFloatyToast('বিভাগের তথ্য লোড করতে ব্যর্থ! নেটওয়ার্ক চেক করুন।', true);
     }
 }
 
-function onThanaChange() { 
-    const thana = document.getElementById('thana').value; 
-    if(thana && thana !== "") { 
-        document.getElementById('areaGroup').style.display = 'block';
-    } else { 
-        document.getElementById('areaGroup').style.display = 'none';
-    } 
+async function loadCategoriesFromJSON() {
+    try {
+        const res = await fetch(CATEGORIES_JSON_URL);
+        categoriesList = await res.json();
+        console.log('ক্যাটাগরি JSON লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
+    } catch (error) {
+        console.error('ক্যাটাগরি JSON লোড ব্যর্থ:', error);
+        // ব্যাকআপ ক্যাটাগরি
+        categoriesList = ["পোশাক ও বস্ত্র", "খাদ্যপণ্য ও মসলা", "ইলেকট্রনিক্স", "গৃহস্থালি পণ্য", "হার্ডওয়্যার ও নির্মাণ", "ওষুধ ও স্বাস্থ্য", "সৌন্দর্য ও কসমেটিক্স", "ব্যাগ ও জুতা", "কৃষি ও সার", "স্টেশনারি ও অফিস", "অটোমোবাইল", "খেলনা ও শিশু পণ্য", "উপহার ও সাজসজ্জা", "প্যাকেজিং সামগ্রী", "শিল্প ও কারখানা", "মাছ ও মাংস", "নার্সারি ও বাগান", "খেলাধুলা সামগ্রী", "বই ও শিক্ষা সামগ্রী", "সোলার ও বিদ্যুৎ", "সেলাই ও কারুকাজ", "যানবাহন যন্ত্রাংশ", "অন্যান্য"];
+    }
 }
 
-const allCategories = ['👗 পোশাক ও বস্ত্র','🛒 খাদ্যপণ্য ও মসলা','📱 ইলেকট্রনিক্স','🏠 গৃহস্থালি পণ্য','🔧 হার্ডওয়্যার ও নির্মাণ','💊 ওষুধ ও স্বাস্থ্য','🧴 সৌন্দর্য ও কসমেটিক্স','🎒 ব্যাগ ও জুতা','🌾 কৃষি ও সার','🖨️ স্টেশনারি ও অফিস','🚗 অটোমোবাইল','🧸 খেলনা ও শিশু পণ্য','🎉 উপহার ও সাজসজ্জা','📦 প্যাকেজিং সামগ্রী','🔬 শিল্প ও কারখানা','🐟 মাছ ও মাংস','🪴 নার্সারি ও বাগান','⚽ খেলাধুলা সামগ্রী','📚 বই ও শিক্ষা সামগ্রী','🔌 সোলার ও বিদ্যুৎ','🧵 সেলাই ও কারুকাজ','🛺 যানবাহন যন্ত্রাংশ','🔹 অন্যান্য'];
-let selectedCategories = [];
-function renderChips() { const container=document.getElementById('selectedChipsContainer'); container.innerHTML=''; selectedCategories.forEach(cat=>{ const chip=document.createElement('div'); chip.className='cat-chip'; chip.innerHTML=`${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g,"\\'")}')"></i>`; container.appendChild(chip);}); document.getElementById('categoriesHidden').value=selectedCategories.join(','); }
-function removeCategory(cat){ selectedCategories=selectedCategories.filter(c=>c!==cat); renderChips();}
-function openMultiCategoryPopup(){ const listDiv=document.getElementById('multiCatList'); listDiv.innerHTML=''; allCategories.forEach(cat=>{ const isSelected=selectedCategories.includes(cat); const div=document.createElement('div'); div.className=`cat-item-multi ${isSelected?'selected':''}`; div.innerHTML=`${cat} ${isSelected?'<i class="fas fa-check-circle"></i>':''}`; div.onclick=()=>{ if(selectedCategories.includes(cat)) selectedCategories=selectedCategories.filter(c=>c!==cat); else selectedCategories.push(cat); renderChips(); openMultiCategoryPopup();}; listDiv.appendChild(div);}); document.getElementById('multiCatPopup').style.display='flex';}
-function closeMultiCatPopup(){ document.getElementById('multiCatPopup').style.display='none'; renderChips();}
+// ========== বিভাগ পরিবর্তন ==========
+window.onDivisionChange = function() {
+    const divisionName = document.getElementById('division').value;
+    const districtSelect = document.getElementById('district');
+    const thanaSelect = document.getElementById('thana');
+    
+    // রিসেট জেলা ও উপজেলা
+    districtSelect.innerHTML = '<option value="">জেলা বাছাই করুন</option>';
+    thanaSelect.innerHTML = '<option value="">উপজেলা বাছাই করুন</option>';
+    document.getElementById('districtGroup').style.display = 'none';
+    document.getElementById('thanaGroup').style.display = 'none';
+    document.getElementById('areaGroup').style.display = 'none';
+    
+    if (!divisionName) return;
+    
+    const division = divisionsData.find(d => d.name === divisionName);
+    if (division && division.districts) {
+        division.districts.forEach(dist => {
+            const option = document.createElement('option');
+            option.value = dist.name;
+            option.textContent = dist.name;
+            districtSelect.appendChild(option);
+        });
+        document.getElementById('districtGroup').style.display = 'block';
+    }
+};
 
-function toggleEditForm(){ const formDiv=document.getElementById('editFormContainer'); formDiv.classList.toggle('show'); if(formDiv.classList.contains('show')){ setTimeout(()=>{ document.getElementById('editToggleBtn').scrollIntoView({ behavior:'smooth', block:'center' }); }, 100); } }
+// ========== জেলা পরিবর্তন ==========
+window.onDistrictChange = function() {
+    const divisionName = document.getElementById('division').value;
+    const districtName = document.getElementById('district').value;
+    const thanaSelect = document.getElementById('thana');
+    
+    // রিসেট উপজেলা
+    thanaSelect.innerHTML = '<option value="">উপজেলা বাছাই করুন</option>';
+    document.getElementById('thanaGroup').style.display = 'none';
+    document.getElementById('areaGroup').style.display = 'none';
+    
+    if (!divisionName || !districtName) return;
+    
+    const division = divisionsData.find(d => d.name === divisionName);
+    const district = division?.districts.find(d => d.name === districtName);
+    
+    if (district && district.upazilas) {
+        district.upazilas.forEach(upazila => {
+            const option = document.createElement('option');
+            option.value = upazila;
+            option.textContent = upazila;
+            thanaSelect.appendChild(option);
+        });
+        document.getElementById('thanaGroup').style.display = 'block';
+    } else if (districtName) {
+        // যদি উপজেলা না থাকে, ডিফল্ট
+        const option = document.createElement('option');
+        option.value = "সদর";
+        option.textContent = "সদর উপজেলা";
+        thanaSelect.appendChild(option);
+        document.getElementById('thanaGroup').style.display = 'block';
+    }
+};
 
-let firstApprovalFlagShown=false;
-function showConfettiAndToast(){ canvasConfetti({particleCount:150,spread:70,origin:{y:0.6},startVelocity:20,colors:['#6c2bd9','#f0c040','#2ecc71']}); let end=Date.now()+2000; const frame=()=>{ canvasConfetti({particleCount:3,angle:60,spread:55,origin:{x:0,y:0.7},startVelocity:25}); canvasConfetti({particleCount:3,angle:120,spread:55,origin:{x:1,y:0.7},startVelocity:25}); if(Date.now()<end) requestAnimationFrame(frame);}; frame(); const toastDiv=document.createElement('div'); toastDiv.className='toast-congrats'; toastDiv.innerHTML='<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv); setTimeout(()=>toastDiv.remove(),4500); localStorage.setItem('congratsShown_'+auth.currentUser?.uid,'true');}
-function showFloatyToast(msg,isError=false){ let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000);}
+// ========== উপজেলা পরিবর্তন ==========
+window.onThanaChange = function() {
+    const thana = document.getElementById('thana').value;
+    if (thana && thana !== "") {
+        document.getElementById('areaGroup').style.display = 'block';
+    } else {
+        document.getElementById('areaGroup').style.display = 'none';
+    }
+};
 
-window.addEventListener('DOMContentLoaded', () => {
-    const viewBtn = document.getElementById('viewProfileBtn');
-    if(viewBtn) viewBtn.innerHTML = '<i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)';
-});
+// ========== ক্যাটাগরি ফাংশন ==========
+function renderChips() {
+    const container = document.getElementById('selectedChipsContainer');
+    container.innerHTML = '';
+    selectedCategories.forEach(cat => {
+        const chip = document.createElement('div');
+        chip.className = 'cat-chip';
+        chip.innerHTML = `${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g, "\\'")}')"></i>`;
+        container.appendChild(chip);
+    });
+    document.getElementById('categoriesHidden').value = selectedCategories.join(',');
+}
+
+function removeCategory(cat) {
+    selectedCategories = selectedCategories.filter(c => c !== cat);
+    renderChips();
+}
+
+function openMultiCategoryPopup() {
+    const listDiv = document.getElementById('multiCatList');
+    listDiv.innerHTML = '';
+    categoriesList.forEach(cat => {
+        const isSelected = selectedCategories.includes(cat);
+        const div = document.createElement('div');
+        div.className = `cat-item-multi ${isSelected ? 'selected' : ''}`;
+        div.innerHTML = `${cat} ${isSelected ? '<i class="fas fa-check-circle"></i>' : ''}`;
+        div.onclick = () => {
+            if (selectedCategories.includes(cat)) {
+                selectedCategories = selectedCategories.filter(c => c !== cat);
+            } else {
+                selectedCategories.push(cat);
+            }
+            renderChips();
+            openMultiCategoryPopup();
+        };
+        listDiv.appendChild(div);
+    });
+    document.getElementById('multiCatPopup').style.display = 'flex';
+}
+
+function closeMultiCatPopup() {
+    document.getElementById('multiCatPopup').style.display = 'none';
+    renderChips();
+}
+
+// ========== UI ফাংশন ==========
+function toggleEditForm() {
+    const formDiv = document.getElementById('editFormContainer');
+    formDiv.classList.toggle('show');
+    if (formDiv.classList.contains('show')) {
+        setTimeout(() => {
+            document.getElementById('editToggleBtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    }
+}
 
 function viewProfile() {
     const user = auth.currentUser;
@@ -692,19 +713,168 @@ function logout() {
     });
 }
 
-auth.onAuthStateChanged(async user=>{ if(!user){ window.location.href='login.html'; return;} const snap=await db.ref('shops/'+user.uid).get(); const data=snap.val(); document.getElementById('loadingScreen').style.display='none'; document.getElementById('mainContent').style.display='block'; document.getElementById('saveWrap').style.display='block'; if(data){ 
-    document.getElementById('previewCardShopName').innerHTML = `${data.shopName || 'দোকানের নাম'}`;
-    const addrLine=`${data.thana||data.upazila||''}, ${data.district||''}`;
-    document.getElementById('previewCardAddress').innerHTML = `${data.area||addrLine||'ঠিকানা নেই'}`;
-    const cardBadge=document.getElementById('cardStatusBadge'); 
-    if(data.status==='approved'){ cardBadge.className='small-status-badge approved'; cardBadge.innerHTML='✅ Approved'; const alreadyShown=localStorage.getItem('congratsShown_'+user.uid); if(!alreadyShown && !firstApprovalFlagShown){ firstApprovalFlagShown=true; showConfettiAndToast();}} 
-    else if(data.status==='rejected'){ cardBadge.className='small-status-badge rejected'; cardBadge.innerHTML='❌ Rejected';} 
-    else { cardBadge.className='small-status-badge pending'; cardBadge.innerHTML='⏳ পেন্ডিং';}
-    document.getElementById('shopName').value=data.shopName||''; document.getElementById('ownerName').value=data.ownerName||''; document.getElementById('description').value=data.description||''; document.getElementById('phone').value=data.phone||''; document.getElementById('whatsapp').value=data.whatsapp||''; document.getElementById('telegram').value=data.telegram||''; document.getElementById('youtube').value=data.youtube||''; document.getElementById('area').value=data.area||'';
-    if(data.division){ document.getElementById('division').value=data.division; onDivisionChange(); setTimeout(()=>{ if(data.district){ document.getElementById('district').value=data.district; onDistrictChange(); setTimeout(()=>{ if(data.thana) document.getElementById('thana').value=data.thana; else if(data.upazila) document.getElementById('thana').value=data.upazila; if(document.getElementById('thana').value && document.getElementById('thana').value !== ""){ document.getElementById('areaGroup').style.display='block'; }},100);}},50);}
-    if(data.categories){ let cats=typeof data.categories==='string'?data.categories.split(',').map(s=>s.trim()):(Array.isArray(data.categories)?data.categories:[]); selectedCategories=cats.filter(c=>c); renderChips();} else if(data.category && !data.categories){ selectedCategories=[data.category]; renderChips();} else renderChips();} else renderChips();});
+let firstApprovalFlagShown = false;
+function showConfettiAndToast() {
+    canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, startVelocity: 20, colors: ['#6c2bd9', '#f0c040', '#2ecc71'] });
+    let end = Date.now() + 2000;
+    const frame = () => {
+        canvasConfetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, startVelocity: 25 });
+        canvasConfetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, startVelocity: 25 });
+        if (Date.now() < end) requestAnimationFrame(frame);
+    };
+    frame();
+    const toastDiv = document.createElement('div');
+    toastDiv.className = 'toast-congrats';
+    toastDiv.innerHTML = '<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉';
+    document.body.appendChild(toastDiv);
+    setTimeout(() => toastDiv.remove(), 4500);
+    localStorage.setItem('congratsShown_' + auth.currentUser?.uid, 'true');
+}
 
-async function saveShopData(){ const user=auth.currentUser; if(!user) return; const shopName=document.getElementById('shopName').value.trim(); const ownerName=document.getElementById('ownerName').value.trim(); const division=document.getElementById('division').value; const district=document.getElementById('district').value; const thana=document.getElementById('thana').value; const area=document.getElementById('area').value.trim(); const phone=document.getElementById('phone').value.trim(); if(!shopName) return showFloatyToast('দোকানের নাম দিন!',true); if(!ownerName) return showFloatyToast('মালিকের নাম দিন!',true); if(!division) return showFloatyToast('বিভাগ বাছাই করুন!',true); if(!district) return showFloatyToast('জেলা বাছাই করুন!',true); if(!thana || thana === "") return showFloatyToast('উপজেলা/থানা নির্বাচন করুন!',true); if(!area) return showFloatyToast('এলাকা/বিস্তারিত ঠিকানা দিন!',true); if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!',true); const btn=document.getElementById('saveBtn'); btn.classList.add('loading'); try{ await db.ref('shops/'+user.uid).update({ shopName, ownerName, description:document.getElementById('description').value.trim(), division, district, thana, upazila:thana, area, categories:selectedCategories.join(','), phone, whatsapp:document.getElementById('whatsapp').value.trim(), telegram:document.getElementById('telegram').value.trim(), youtube:document.getElementById('youtube').value.trim(), updatedAt:Date.now()}); document.getElementById('previewCardShopName').innerHTML = `${shopName}`; document.getElementById('previewCardAddress').innerHTML = `${area}`; showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!'); btn.classList.remove('loading');} catch(e){ btn.classList.remove('loading'); showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।',true);}}
+function showFloatyToast(msg, isError = false) {
+    let toast = document.createElement('div');
+    toast.className = 'custom-toast' + (isError ? ' error' : '');
+    toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+}
+
+// ========== ডাটা সেভ ==========
+async function saveShopData() {
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    const shopName = document.getElementById('shopName').value.trim();
+    const ownerName = document.getElementById('ownerName').value.trim();
+    const division = document.getElementById('division').value;
+    const district = document.getElementById('district').value;
+    const thana = document.getElementById('thana').value;
+    const area = document.getElementById('area').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    
+    if (!shopName) return showFloatyToast('দোকানের নাম দিন!', true);
+    if (!ownerName) return showFloatyToast('মালিকের নাম দিন!', true);
+    if (!division) return showFloatyToast('বিভাগ বাছাই করুন!', true);
+    if (!district) return showFloatyToast('জেলা বাছাই করুন!', true);
+    if (!thana || thana === "") return showFloatyToast('উপজেলা/থানা নির্বাচন করুন!', true);
+    if (!area) return showFloatyToast('এলাকা/বিস্তারিত ঠিকানা দিন!', true);
+    if (!phone) return showFloatyToast('মোবাইল নম্বর দিন!', true);
+    
+    const btn = document.getElementById('saveBtn');
+    btn.classList.add('loading');
+    
+    try {
+        await db.ref('shops/' + user.uid).update({
+            shopName, ownerName,
+            description: document.getElementById('description').value.trim(),
+            division, district, thana, upazila: thana, area,
+            categories: selectedCategories.join(','),
+            phone,
+            whatsapp: document.getElementById('whatsapp').value.trim(),
+            telegram: document.getElementById('telegram').value.trim(),
+            youtube: document.getElementById('youtube').value.trim(),
+            updatedAt: Date.now()
+        });
+        
+        document.getElementById('previewCardShopName').innerHTML = shopName;
+        document.getElementById('previewCardAddress').innerHTML = area;
+        showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!');
+        btn.classList.remove('loading');
+    } catch (e) {
+        btn.classList.remove('loading');
+        showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।', true);
+    }
+}
+
+// ========== ইউজার ডাটা লোড ==========
+auth.onAuthStateChanged(async user => {
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // প্রথমে JSON লোড করুন
+    await loadDivisionsFromJSON();
+    await loadCategoriesFromJSON();
+    
+    const snap = await db.ref('shops/' + user.uid).get();
+    currentShopData = snap.val();
+    
+    // লোডিং স্ক্রিন বন্ধ করুন
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('saveWrap').style.display = 'block';
+    
+    if (currentShopData) {
+        // প্রিভিউ কার্ড আপডেট
+        document.getElementById('previewCardShopName').innerHTML = currentShopData.shopName || 'দোকানের নাম';
+        const addrLine = `${currentShopData.thana || currentShopData.upazila || ''}, ${currentShopData.district || ''}`;
+        document.getElementById('previewCardAddress').innerHTML = currentShopData.area || addrLine || 'ঠিকানা নেই';
+        
+        const cardBadge = document.getElementById('cardStatusBadge');
+        if (currentShopData.status === 'approved') {
+            cardBadge.className = 'small-status-badge approved';
+            cardBadge.innerHTML = '✅ Approved';
+            const alreadyShown = localStorage.getItem('congratsShown_' + user.uid);
+            if (!alreadyShown && !firstApprovalFlagShown) {
+                firstApprovalFlagShown = true;
+                showConfettiAndToast();
+            }
+        } else if (currentShopData.status === 'rejected') {
+            cardBadge.className = 'small-status-badge rejected';
+            cardBadge.innerHTML = '❌ Rejected';
+        } else {
+            cardBadge.className = 'small-status-badge pending';
+            cardBadge.innerHTML = '⏳ পেন্ডিং';
+        }
+        
+        // ফর্ম ফিল্ড পপুলেট
+        document.getElementById('shopName').value = currentShopData.shopName || '';
+        document.getElementById('ownerName').value = currentShopData.ownerName || '';
+        document.getElementById('description').value = currentShopData.description || '';
+        document.getElementById('phone').value = currentShopData.phone || '';
+        document.getElementById('whatsapp').value = currentShopData.whatsapp || '';
+        document.getElementById('telegram').value = currentShopData.telegram || '';
+        document.getElementById('youtube').value = currentShopData.youtube || '';
+        document.getElementById('area').value = currentShopData.area || '';
+        
+        // বিভাগ, জেলা, উপজেলা সেট করুন
+        if (currentShopData.division) {
+            document.getElementById('division').value = currentShopData.division;
+            onDivisionChange();
+            setTimeout(() => {
+                if (currentShopData.district) {
+                    document.getElementById('district').value = currentShopData.district;
+                    onDistrictChange();
+                    setTimeout(() => {
+                        if (currentShopData.thana) {
+                            document.getElementById('thana').value = currentShopData.thana;
+                        } else if (currentShopData.upazila) {
+                            document.getElementById('thana').value = currentShopData.upazila;
+                        }
+                        if (document.getElementById('thana').value && document.getElementById('thana').value !== "") {
+                            document.getElementById('areaGroup').style.display = 'block';
+                        }
+                    }, 100);
+                }
+            }, 100);
+        }
+        
+        // ক্যাটাগরি সেট করুন
+        if (currentShopData.categories) {
+            let cats = typeof currentShopData.categories === 'string' ? currentShopData.categories.split(',').map(s => s.trim()) : (Array.isArray(currentShopData.categories) ? currentShopData.categories : []);
+            selectedCategories = cats.filter(c => c);
+            renderChips();
+        } else if (currentShopData.category && !currentShopData.categories) {
+            selectedCategories = [currentShopData.category];
+            renderChips();
+        } else {
+            renderChips();
+        }
+    } else {
+        renderChips();
+    }
+});
 </script>
 </body>
 </html>
