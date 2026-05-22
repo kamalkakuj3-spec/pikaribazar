@@ -252,19 +252,22 @@ marquee {
     color: var(--primary-dark);
     text-decoration: underline;
 }
-.shop-video-desc {
-    font-size: 13px;
-    color: var(--text-light);
+.shop-video-category {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-light);
     margin-bottom: 8px;
-    line-height: 1.5;
     text-align: center;
-    margin-left: 16px;
-    margin-right: 16px;
+    background: #f0ebff;
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 99px;
 }
 .shop-video-address {
     font-size: 12px;
     color: var(--text-light);
     text-align: center;
+    margin-top: 5px;
 }
 @keyframes tileIn {
     from { transform: translateY(15px); opacity: 0; }
@@ -487,9 +490,7 @@ marquee {
                 <div class="fs-title">বিভাগ বাছাই করুন</div>
                 <div class="fs-sel" id="sel1"></div>
             </div>
-            <div class="chip-scroll" id="divisionChips">
-                <!-- বিভাগ JS দিয়ে লোড হবে -->
-            </div>
+            <div class="chip-scroll" id="divisionChips"></div>
         </div>
 
         <div class="filter-step hidden" id="step2">
@@ -617,7 +618,7 @@ function renderVideoGrid() {
     
     container.innerHTML = allVideos.map(video => `
         <div class="video-card">
-            <video src="${video.videoUrl}" poster="${video.thumbnail || ''}" controls preload="metadata"></video>
+            <video src="${escapeHtml(video.videoUrl)}" poster="${escapeHtml(video.thumbnail || '')}" controls preload="metadata"></video>
             <div class="video-card-info">
                 <div class="video-card-title">${escapeHtml(video.title || 'ভিডিও')}</div>
                 <div class="video-card-desc">${escapeHtml(video.description || '')}</div>
@@ -871,6 +872,7 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
+// ========== রেন্ডার শপস (আপডেটেড - ক্যাটাগরি দেখাবে) ==========
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -902,8 +904,12 @@ window.renderShops = function(shops) {
             ? `<iframe class="shop-video" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>`
             : `<div class="no-video">🎬 কোন ভিডিও নেই</div>`;
         
-        const description = shop.description || shop.category || 'পাইকারি দোকান';
+        // ✅ পরিবর্তন: এখানে ক্যাটাগরি দেখানো হচ্ছে
+        const categoryName = shop.category || 'পাইকারি দোকান';
         const addressText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
+        
+        // ক্যাটাগরি অনুযায়ী আইকন
+        const categoryIcon = getCategoryIcon(categoryName);
         
         return `
         <div class="shop-video-card">
@@ -912,14 +918,43 @@ window.renderShops = function(shops) {
             </div>
             <div class="shop-video-info">
                 <h3 class="shop-video-name" onclick="window.viewShop('${shop.id}')">${escapeHtml(shop.shopName) || 'নাম নেই'}</h3>
-                <p class="shop-video-desc">${escapeHtml(description)}</p>
-                <p class="shop-video-address">${escapeHtml(addressText)}</p>
+                <div class="shop-video-category">${categoryIcon} ${escapeHtml(categoryName)}</div>
+                <p class="shop-video-address">📍 ${escapeHtml(addressText)}</p>
             </div>
         </div>`;
     }).join('');
     
     window.initVideoObservers();
 };
+
+// ক্যাটাগরি অনুযায়ী আইকন ফাংশন
+function getCategoryIcon(category) {
+    const icons = {
+        'পোশাক ও বস্ত্র': '👗',
+        'খাদ্যপণ্য ও মসলা': '🛒',
+        'ইলেকট্রনিক্স': '📱',
+        'গৃহস্থালি পণ্য': '🏠',
+        'হার্ডওয়্যার ও নির্মাণ': '🔧',
+        'ওষুধ ও স্বাস্থ্য': '💊',
+        'সৌন্দর্য ও কসমেটিক্স': '🧴',
+        'ব্যাগ ও জুতা': '🎒',
+        'কৃষি ও সার': '🌾',
+        'স্টেশনারি ও অফিস': '🖨️',
+        'অটোমোবাইল': '🚗',
+        'খেলনা ও শিশু পণ্য': '🧸',
+        'উপহার ও সাজসজ্জা': '🎉',
+        'প্যাকেজিং সামগ্রী': '📦',
+        'শিল্প ও কারখানা': '🔬',
+        'মাছ ও মাংস': '🐟',
+        'নার্সারি ও বাগান': '🪴',
+        'খেলাধুলা সামগ্রী': '⚽',
+        'বই ও শিক্ষা সামগ্রী': '📚',
+        'সোলার ও বিদ্যুৎ': '🔌',
+        'সেলাই ও কারুকাজ': '🧵',
+        'যানবাহন যন্ত্রাংশ': '🛺'
+    };
+    return icons[category] || '📂';
+}
 
 function escapeHtml(str) {
     if (!str) return '';
