@@ -142,7 +142,7 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* এডমিনের ভিডিও গ্রিড */
+/* এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও প্লেয়ার) */
 .video-grid-section {
     margin: 0 16px 20px;
 }
@@ -163,12 +163,17 @@ marquee {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(108,43,217,0.2);
 }
-.video-card video {
+.video-player-container {
+    position: relative;
+    background: #000;
     width: 100%;
     aspect-ratio: 16 / 9;
+}
+.cloudinary-video {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
-    background: #000;
 }
 .video-card-info {
     padding: 12px 14px;
@@ -196,7 +201,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড */
+/* দোকানের কার্ড (ইউটিউব) */
 .shop-video-card {
     margin: 0 16px 12px;
     background: transparent;
@@ -517,7 +522,7 @@ marquee {
         </div>
     </div>
 
-    <!-- এডমিনের ভিডিও গ্রিড -->
+    <!-- এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও) -->
     <div class="video-grid-section" id="videoGridSection">
         <div class="video-grid" id="videoGrid"></div>
     </div>
@@ -562,7 +567,9 @@ let selectedThana = '';
 let selectedCategories = [];
 let allVideos = [];
 
-let videoObservers = [];
+let videoObservers = []; // for YouTube iframes
+let cloudinaryVideoElements = []; // for Cloudinary video observers
+
 let curSlide = 0;
 let slTimer = null;
 let slData = [];
@@ -587,7 +594,7 @@ async function loadCategories() {
     }
 }
 
-// ========== একাধিক ভিডিও লোড ==========
+// ========== Cloudinary ভিডিও লোড (অটোপ্লে, মিউট, লুপ, স্ক্রল পজ) ==========
 function loadAdminVideos() {
     db.ref('adminVideos').orderByChild('order').on('value', (snap) => {
         allVideos = [];
@@ -603,9 +610,53 @@ function loadAdminVideos() {
     });
 }
 
+function setupCloudinaryVideo(videoElement, videoUrl) {
+    if (!videoElement) return;
+    
+    // সেট ভিডিও সোর্স
+    videoElement.src = videoUrl;
+    videoElement.muted = true; // মিউট অবস্থায় শুরু
+    videoElement.loop = true; // শেষ হলে পুনরায় শুরু (লুপ)
+    videoElement.playsInline = true;
+    videoElement.autoplay = true;
+    
+    // অটোপ্লে করার চেষ্টা
+    const playPromise = videoElement.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log("Autoplay prevented:", error);
+            // কিছু ব্রাউজারে ম্যানুয়ালি প্লে করতে হয়, সেক্ষেত্রে মিউটেড থাকলেও কাজ করবে
+            videoElement.muted = true;
+            videoElement.play();
+        });
+    }
+    
+    // স্ক্রল পজ করার জন্য ইন্টারসেকশন অবজারভার
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // ভিডিও ভিউতে আসলে প্লে করুন (যদি পজ করা থাকে)
+                videoElement.play().catch(e => console.log("Play on view error:", e));
+            } else {
+                // ভিডিও ভিউ থেকে বেরিয়ে গেলে পজ করুন
+                videoElement.pause();
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    observer.observe(videoElement);
+    cloudinaryVideoElements.push({ element: videoElement, observer });
+}
+
 function renderVideoGrid() {
     const container = document.getElementById('videoGrid');
     if (!container) return;
+    
+    // পূর্বের অবজারভারগুলি cleanup করুন
+    cloudinaryVideoElements.forEach(item => {
+        if (item.observer) item.observer.disconnect();
+    });
+    cloudinaryVideoElements = [];
     
     if (allVideos.length === 0) {
         container.innerHTML = `<div class="video-grid-empty">
@@ -617,14 +668,36 @@ function renderVideoGrid() {
     }
     
     container.innerHTML = allVideos.map(video => `
-        <div class="video-card">
-            <video src="${escapeHtml(video.videoUrl)}" poster="${escapeHtml(video.thumbnail || '')}" controls preload="metadata"></video>
+        <div class="video-card" data-video-id="${video.id}">
+            <div class="video-player-container">
+                <video class="cloudinary-video" preload="metadata" playsinline></video>
+            </div>
             <div class="video-card-info">
                 <div class="video-card-title">${escapeHtml(video.title || 'ভিডিও')}</div>
                 <div class="video-card-desc">${escapeHtml(video.description || '')}</div>
             </div>
         </div>
     `).join('');
+    
+    // প্রতিটি ভিডিও এলিমেন্টে সোর্স ও ইভেন্ট সেট করুন
+    const videoCards = document.querySelectorAll('.video-card');
+    videoCards.forEach((card, idx) => {
+        const videoElement = card.querySelector('.cloudinary-video');
+        if (videoElement && allVideos[idx]) {
+            let videoUrl = allVideos[idx].videoUrl;
+            // Cloudinary URL চেক, যদি কিছু না থাকে তাহলে placeholder
+            if (videoUrl && videoUrl.trim() !== '') {
+                setupCloudinaryVideo(videoElement, videoUrl);
+            } else {
+                videoElement.style.background = "#1a0a3e";
+                videoElement.style.display = "flex";
+                videoElement.style.alignItems = "center";
+                videoElement.style.justifyContent = "center";
+                videoElement.style.color = "white";
+                videoElement.innerHTML = "🎬";
+            }
+        }
+    });
 }
 
 // ========== JSON লোড ==========
@@ -878,7 +951,7 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-// ========== রেন্ডার শপস (ক্যাটাগরি দেখানো) ==========
+// ========== রেন্ডার শপস (ইউটিউব ভিডিও) ==========
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -1162,7 +1235,7 @@ window.applyCategoryFilter = function() {
     window.applyFilters();
 };
 
-// স্ক্রল ইভেন্ট
+// স্ক্রল ইভেন্ট (শুধু সার্চ সেকশন হাইড করার জন্য)
 let lastScrollTop = 0;
 const searchSectionEl = document.getElementById('searchSection');
 window.addEventListener('scroll', function() {
