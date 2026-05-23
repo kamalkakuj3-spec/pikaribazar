@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>PROVISION | প্রিমিয়াম মার্কেটপ্লেস + প্রোফাইল</title>
+    <title>প্রোভিশন | বাংলাদেশের প্রিমিয়াম অনলাইন মার্কেটপ্লেস</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -29,10 +29,9 @@
             background: var(--bg);
             color: var(--text);
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
-        /* animated background glow */
+        /* animated background */
         body::before {
             content: "";
             position: fixed;
@@ -45,12 +44,11 @@
             pointer-events: none;
         }
 
-        /* floating light orb */
         .glow-orb {
             position: fixed;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(162,89,247,0.12), transparent 70%);
+            background: radial-gradient(circle, rgba(162,89,247,0.1), transparent 70%);
             border-radius: 50%;
             filter: blur(60px);
             z-index: -1;
@@ -62,55 +60,102 @@
             100% { transform: translate(15%, 20%) scale(1.4); opacity: 0.8; }
         }
 
-        /* glassmorphic header */
-        .glass-header {
+        /* navbar */
+        .navbar {
             position: sticky;
             top: 0;
             z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
-            background: rgba(255, 255, 255, 0.8);
             border-bottom: 1px solid rgba(108, 43, 217, 0.2);
-            padding: 14px 24px;
+            padding: 16px 24px;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 20px;
         }
 
-        .logo h1 {
-            font-size: 1.7rem;
+        .logo {
+            font-size: 1.8rem;
             font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--primary);
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 32px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .nav-links a {
-            color: var(--primary-dark);
+            color: var(--text);
             text-decoration: none;
             font-weight: 600;
             transition: 0.2s;
             cursor: pointer;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: var(--primary);
         }
 
+        .nav-links a i {
+            margin-right: 6px;
+        }
+
+        /* main container */
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 24px 20px 80px;
         }
 
-        /* 3D Slider Premium */
+        /* hero section */
+        .hero {
+            background: linear-gradient(135deg, var(--white), #faf8ff);
+            border-radius: 48px;
+            padding: 60px 40px;
+            margin-bottom: 48px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* slider */
         .slider-3d {
             perspective: 1200px;
             margin-bottom: 48px;
@@ -119,7 +164,7 @@
         .slider-wrapper {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 350px;
             overflow: hidden;
             border-radius: 32px;
             box-shadow: var(--card-shadow);
@@ -136,7 +181,6 @@
             width: 33.33%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.95);
         }
 
         @keyframes slide3d {
@@ -158,10 +202,9 @@
             gap: 12px;
             border-left: 5px solid var(--primary);
             padding-left: 20px;
-            color: var(--text);
         }
 
-        /* product grid 2 columns */
+        /* product grid */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -173,20 +216,20 @@
             background: var(--white);
             border-radius: 32px;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 0.4s;
             border: 1px solid rgba(108, 43, 217, 0.15);
             box-shadow: var(--card-shadow);
+            cursor: pointer;
         }
 
         .product-card:hover {
-            transform: translateY(-12px) scale(1.02);
+            transform: translateY(-8px);
             border-color: var(--primary-light);
-            box-shadow: 0 30px 45px -12px rgba(108,43,217,0.3);
         }
 
         .product-img {
             width: 100%;
-            height: 240px;
+            height: 260px;
             object-fit: cover;
         }
 
@@ -195,32 +238,24 @@
         }
 
         .product-name {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: var(--text);
         }
 
         .product-price {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: var(--primary);
             margin: 8px 0;
         }
 
-        .product-desc {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            line-height: 1.4;
-        }
-
-        /* profile section premium */
+        /* profile section */
         .profile-section {
-            margin-top: 40px;
             background: var(--white);
             border-radius: 48px;
-            padding: 28px;
+            padding: 32px;
             box-shadow: var(--card-shadow);
-            border: 1px solid rgba(108, 43, 217, 0.1);
+            margin-top: 40px;
         }
 
         .profile-header {
@@ -246,8 +281,7 @@
         }
 
         .shop-title h2 {
-            font-size: 2rem;
-            color: var(--text);
+            font-size: 1.8rem;
         }
 
         .status-badge {
@@ -257,7 +291,7 @@
             border-radius: 60px;
             color: var(--primary);
             font-weight: 600;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             margin-top: 8px;
         }
 
@@ -273,7 +307,6 @@
             border-radius: 24px;
             padding: 16px;
             border-left: 3px solid var(--primary);
-            color: var(--text);
         }
 
         .contact-buttons {
@@ -291,102 +324,181 @@
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            transition: 0.2s;
             background: #f0ebff;
             color: var(--primary);
-            border: none;
+            transition: 0.2s;
         }
 
-        .contact-btn.call:hover { background: var(--primary); color: white; }
-        .contact-btn.whatsapp:hover { background: #25D366; color: white; }
-        .contact-btn.telegram:hover { background: #0088cc; color: white; }
+        .contact-btn:hover { background: var(--primary); color: white; }
 
-        .not-found {
-            text-align: center;
-            padding: 40px;
-            background: #faf8ff;
-            border-radius: 48px;
-            color: var(--text);
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-light);
-            font-size: 0.8rem;
+        /* footer */
+        .footer {
+            background: var(--white);
             border-top: 1px solid rgba(108,43,217,0.1);
-            margin-top: 40px;
+            padding: 48px 24px 24px;
+            margin-top: 60px;
         }
 
-        @media (max-width: 700px) {
-            .product-grid { gap: 16px; }
-            .product-img { height: 180px; }
-            .shop-title h2 { font-size: 1.5rem; }
-            .glass-header { flex-direction: column; text-align: center; }
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+            gap: 40px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--text-light);
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 32px;
+            margin-top: 32px;
+            border-top: 1px solid rgba(108,43,217,0.1);
+            color: var(--text-light);
         }
 
         .loading {
             text-align: center;
             padding: 50px;
             color: var(--primary);
-            font-size: 1.2rem;
             grid-column: span 2;
         }
 
-        .error-message {
-            color: #e74c3c;
+        .not-found {
             text-align: center;
-            padding: 20px;
+            padding: 40px;
+            background: #faf8ff;
+            border-radius: 48px;
         }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .product-grid { gap: 16px; }
+            .product-img { height: 180px; }
+            .nav-container { flex-direction: column; }
+            .nav-links { justify-content: center; }
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="glow-orb" style="top: -100px; left: -100px;"></div>
-<div class="glow-orb" style="bottom: 0; right: 0; width: 400px; height: 400px; background: radial-gradient(circle, rgba(108,43,217,0.08), transparent);"></div>
+<div class="glow-orb" style="bottom: 0; right: 0; width: 400px; height: 400px;"></div>
 
-<header class="glass-header">
-    <div class="logo">
-        <h1><i class="fas fa-crown"></i> PROVISION <span style="font-size:0.9rem;">| প্রিমিয়াম বাজার</span></h1>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="#" onclick="navigateTo('home')" class="logo">
+            <i class="fas fa-crown"></i> PROVISION
+        </a>
+        <div class="nav-links">
+            <a href="#" onclick="navigateTo('home')" id="navHome" class="active"><i class="fas fa-home"></i> হোম</a>
+            <a href="#" onclick="navigateTo('products')" id="navProducts"><i class="fas fa-store"></i> পণ্য</a>
+            <a href="#" onclick="navigateTo('profile')" id="navProfile"><i class="fas fa-id-card"></i> প্রোফাইল</a>
+            <a href="#" onclick="navigateTo('contact')" id="navContact"><i class="fas fa-envelope"></i> যোগাযোগ</a>
+        </div>
     </div>
-    <div class="nav-links">
-        <a onclick="scrollToProducts()"><i class="fas fa-store"></i> পণ্য</a>
-        <a onclick="scrollToProfile()"><i class="fas fa-id-card"></i> প্রোফাইল</a>
-    </div>
-</header>
+</nav>
 
-<div class="main-container">
-    <!-- 3D Slider -->
-    <div class="slider-3d">
-        <div class="slider-wrapper">
-            <div class="slides-3d">
-                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&h=400&fit=crop" alt="Offer">
-                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop" alt="New">
-                <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&h=400&fit=crop" alt="Discount">
+<main class="main-container" id="mainContent">
+    <!-- HOME PAGE -->
+    <div id="homePage">
+        <div class="hero">
+            <h1>স্বাগতম প্রোভিশনে</h1>
+            <p>বাংলাদেশের সবচেয়ে可信 অনলাইন মার্কেটপ্লেস — প্রিমিয়াম পণ্য, বিশ্বস্ত দোকান</p>
+        </div>
+        <div class="slider-3d">
+            <div class="slider-wrapper">
+                <div class="slides-3d">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&h=400&fit=crop" alt="Offer">
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&h=400&fit=crop" alt="New">
+                    <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1400&h=400&fit=crop" alt="Discount">
+                </div>
+            </div>
+        </div>
+        <div class="section-title">
+            <i class="fas fa-fire" style="color:var(--primary)"></i>
+            <span>ট্রেন্ডিং পণ্য</span>
+        </div>
+        <div class="product-grid" id="homeProductsGrid">
+            <div class="loading"><i class="fas fa-spinner fa-pulse"></i> পণ্য লোড হচ্ছে...</div>
+        </div>
+    </div>
+
+    <!-- PRODUCTS PAGE (full list) -->
+    <div id="productsPage" class="hidden">
+        <div class="section-title">
+            <i class="fas fa-box-open"></i>
+            <span>সকল পণ্য</span>
+        </div>
+        <div class="product-grid" id="allProductsGrid">
+            <div class="loading"><i class="fas fa-spinner fa-pulse"></i> লোডিং...</div>
+        </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div id="profilePage" class="hidden">
+        <div class="profile-section" id="profileSectionDetail">
+            <div style="text-align:center; padding: 40px;" id="profileLoadIndicator">
+                <i class="fas fa-spinner fa-pulse"></i> প্রোফাইল লোড হচ্ছে...
+            </div>
+            <div id="profileDetailContent" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contactPage" class="hidden">
+        <div class="hero" style="padding: 40px;">
+            <h1><i class="fas fa-headset"></i> যোগাযোগ করুন</h1>
+            <p>আমরা ২৪/৭ ঘন্টা আপনার জন্য উন্মুক্ত</p>
+        </div>
+        <div class="profile-section">
+            <div class="info-grid">
+                <div class="info-item"><i class="fas fa-phone-alt"></i> <strong>ফোন</strong><br>+880 1234 567890</div>
+                <div class="info-item"><i class="fas fa-envelope"></i> <strong>ইমেইল</strong><br>support@provision.com</div>
+                <div class="info-item"><i class="fab fa-facebook"></i> <strong>ফেসবুক</strong><br>/provision.bd</div>
+                <div class="info-item"><i class="fab fa-whatsapp"></i> <strong>হোয়াটসঅ্যাপ</strong><br>+880 1234 567890</div>
             </div>
         </div>
     </div>
+</main>
 
-    <!-- PRODUCT SECTION -->
-    <div class="section-title" id="productsSection">
-        <i class="fas fa-bolt" style="color:var(--primary)"></i> 
-        <span>এক্সক্লুসিভ কালেকশন</span>
-    </div>
-    <div class="product-grid" id="productGrid">
-        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> লোডিং পণ্য...</div>
-    </div>
-
-    <!-- PROFILE DISPLAY SECTION -->
-    <div class="profile-section" id="profileSection">
-        <div style="text-align:center; padding: 30px;" id="profileLoadingIndicator">
-            <i class="fas fa-spinner fa-pulse"></i> প্রোফাইল লোড হচ্ছে...
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h4><i class="fas fa-store"></i> প্রোভিশন</h4>
+            <p>বাংলাদেশের প্রিমিয়াম অনলাইন মার্কেটপ্লেস</p>
         </div>
-        <div id="profileContent" style="display:none;"></div>
+        <div class="footer-section">
+            <h4>লিংক</h4>
+            <a href="#" onclick="navigateTo('home')">হোম</a>
+            <a href="#" onclick="navigateTo('products')">পণ্য</a>
+            <a href="#" onclick="navigateTo('profile')">প্রোফাইল</a>
+        </div>
+        <div class="footer-section">
+            <h4>সাপোর্ট</h4>
+            <a href="#">হেল্প সেন্টার</a>
+            <a href="#">রিটার্ন পলিসি</a>
+            <a href="#">টার্মস এন্ড কন্ডিশন</a>
+        </div>
     </div>
-    <footer>
-        <i class="fas fa-gem"></i> প্রিমিয়াম মার্কেটপ্লেস | নিরাপদ ও দ্রুত
-    </footer>
-</div>
+    <div class="footer-bottom">
+        &copy; 2025 PROVISION | সর্বস্বত্ব সংরক্ষিত
+    </div>
+</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -399,6 +511,8 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
+    let allProductsCache = [];
 
     function getGoogleDriveImageUrl(url) {
         if(!url) return "https://via.placeholder.com/500x300/eee/6c2bd9?text=No+Image";
@@ -419,59 +533,86 @@
         });
     }
 
-    async function loadProducts() {
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> পণ্য আনয়ন...</div>';
+    async function loadAllProducts() {
         try {
             const snapshot = await db.ref("products").once('value');
-            if(!snapshot.exists()) {
-                grid.innerHTML = '<div class="loading">📦 কোন পণ্য নেই</div>';
-                return;
-            }
-            let html = '';
+            const products = [];
             snapshot.forEach(child => {
-                const p = child.val();
-                const img = getGoogleDriveImageUrl(p.image);
-                html += `
-                    <div class="product-card">
-                        <img class="product-img" src="${img}" alt="${escapeHtml(p.name)}" onerror="this.src='https://via.placeholder.com/500x300/eee/6c2bd9?text=Error'">
-                        <div class="product-info">
-                            <div class="product-name">${escapeHtml(p.name)}</div>
-                            <div class="product-price">৳ ${escapeHtml(p.price)}</div>
-                            <div class="product-desc">${escapeHtml((p.desc || "প্রিমিয়াম কোয়ালিটি পণ্য").substring(0, 90))}</div>
-                        </div>
-                    </div>
-                `;
+                products.push({ id: child.key, ...child.val() });
             });
-            grid.innerHTML = html;
+            allProductsCache = products;
+            renderHomeProducts();
+            renderAllProductsPage();
         } catch(e) {
-            grid.innerHTML = '<div class="loading">⚠️ লোড করতে ব্যর্থ</div>';
+            console.error(e);
         }
     }
 
+    function renderHomeProducts() {
+        const grid = document.getElementById('homeProductsGrid');
+        const displayProducts = allProductsCache.slice(0, 4);
+        if(displayProducts.length === 0) {
+            grid.innerHTML = '<div class="loading">📦 কোন পণ্য নেই</div>';
+            return;
+        }
+        let html = '';
+        displayProducts.forEach(p => {
+            html += `
+                <div class="product-card">
+                    <img class="product-img" src="${getGoogleDriveImageUrl(p.image)}" alt="${escapeHtml(p.name)}" onerror="this.src='https://via.placeholder.com/500x300/eee/6c2bd9?text=Error'">
+                    <div class="product-info">
+                        <div class="product-name">${escapeHtml(p.name)}</div>
+                        <div class="product-price">৳ ${escapeHtml(p.price)}</div>
+                        <div class="product-desc">${escapeHtml((p.desc || "প্রিমিয়াম কোয়ালিটি").substring(0, 80))}</div>
+                    </div>
+                </div>
+            `;
+        });
+        grid.innerHTML = html;
+    }
+
+    function renderAllProductsPage() {
+        const grid = document.getElementById('allProductsGrid');
+        if(allProductsCache.length === 0) {
+            grid.innerHTML = '<div class="loading">📦 কোন পণ্য নেই</div>';
+            return;
+        }
+        let html = '';
+        allProductsCache.forEach(p => {
+            html += `
+                <div class="product-card">
+                    <img class="product-img" src="${getGoogleDriveImageUrl(p.image)}" alt="${escapeHtml(p.name)}" onerror="this.src='https://via.placeholder.com/500x300/eee/6c2bd9?text=Error'">
+                    <div class="product-info">
+                        <div class="product-name">${escapeHtml(p.name)}</div>
+                        <div class="product-price">৳ ${escapeHtml(p.price)}</div>
+                        <div class="product-desc">${escapeHtml((p.desc || "প্রিমিয়াম কোয়ালিটি").substring(0, 80))}</div>
+                    </div>
+                </div>
+            `;
+        });
+        grid.innerHTML = html;
+    }
+
+    // profile load by URL param
     const urlParams = new URLSearchParams(window.location.search);
     const shopId = urlParams.get('id');
 
-    async function loadShopProfile(uid) {
-        const profileDiv = document.getElementById('profileContent');
-        const loadingIndicator = document.getElementById('profileLoadingIndicator');
+    async function loadProfileForPage(uid) {
+        const contentDiv = document.getElementById('profileDetailContent');
+        const loader = document.getElementById('profileLoadIndicator');
         if(!uid) {
-            profileDiv.innerHTML = `<div class="not-found">
-                <i class="fas fa-store-slash" style="font-size:48px;"></i>
-                <h3>কোন দোকান আইডি দেওয়া হয়নি</h3>
-                <p>URL এ ?id=shopId যোগ করুন</p>
-                </div>`;
-            loadingIndicator.style.display = 'none';
-            profileDiv.style.display = 'block';
+            contentDiv.innerHTML = `<div class="not-found"><i class="fas fa-store-slash"></i><h3>কোন দোকান আইডি দেওয়া হয়নি</h3><p>URL এ ?id=shopId যোগ করুন</p></div>`;
+            loader.style.display = 'none';
+            contentDiv.style.display = 'block';
             return;
         }
         try {
             const snap = await db.ref('shops/' + uid).once('value');
             const shop = snap.val();
             if(!shop) {
-                profileDiv.innerHTML = `<div class="not-found"><i class="fas fa-search"></i> দোকান পাওয়া যায়নি</div>`;
-                loadingIndicator.style.display = 'none';
-                profileDiv.style.display = 'block';
+                contentDiv.innerHTML = `<div class="not-found"><i class="fas fa-search"></i> দোকান পাওয়া যায়নি</div>`;
+                loader.style.display = 'none';
+                contentDiv.style.display = 'block';
                 return;
             }
             const isApproved = (shop.status === 'approved');
@@ -481,16 +622,16 @@
             const avatarChar = (shop.shopName?.charAt(0) || '?').toUpperCase();
             const addressLine = shop.thana ? `${shop.thana}, ${shop.district}` : (shop.area ? `${shop.area}, ${shop.district}` : shop.district || 'ঠিকানা নেই');
             let contactsHtml = '';
-            if(shop.phone) contactsHtml += `<a href="tel:${shop.phone}" class="contact-btn call"><i class="fas fa-phone-alt"></i> কল করুন</a>`;
+            if(shop.phone) contactsHtml += `<a href="tel:${shop.phone}" class="contact-btn"><i class="fas fa-phone-alt"></i> কল করুন</a>`;
             if(shop.whatsapp) {
                 let wa = shop.whatsapp.replace(/[^0-9]/g,'');
                 if(!wa.startsWith('88')) wa = '88'+wa;
-                contactsHtml += `<a href="https://wa.me/${wa}" target="_blank" class="contact-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>`;
+                contactsHtml += `<a href="https://wa.me/${wa}" target="_blank" class="contact-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>`;
             }
             if(shop.telegram) {
                 let tg = shop.telegram.replace(/[^0-9]/g,'');
                 if(!tg.startsWith('88')) tg = '88'+tg;
-                contactsHtml += `<a href="https://t.me/+${tg}" target="_blank" class="contact-btn telegram"><i class="fab fa-telegram-plane"></i> Telegram</a>`;
+                contactsHtml += `<a href="https://t.me/+${tg}" target="_blank" class="contact-btn"><i class="fab fa-telegram-plane"></i> Telegram</a>`;
             }
             if(contactsHtml === '') contactsHtml = `<p style="color:#aaa;">কোন যোগাযোগের তথ্য নেই</p>`;
             let categoriesDisplay = 'সাধারণ পণ্য';
@@ -498,7 +639,7 @@
                 if(typeof shop.categories === 'string') categoriesDisplay = shop.categories;
                 else if(Array.isArray(shop.categories)) categoriesDisplay = shop.categories.join(', ');
             }
-            const fullProfileHtml = `
+            const html = `
                 <div class="profile-header">
                     <div class="profile-avatar">${escapeHtml(avatarChar)}</div>
                     <div class="shop-title">
@@ -514,30 +655,64 @@
                 </div>
                 ${shop.description ? `<div style="background:#faf8ff; border-radius:24px; padding:16px; margin:20px 0"><i class="fas fa-align-left"></i> <strong>দোকানের বিবরণ</strong><br>${escapeHtml(shop.description)}</div>` : ''}
                 <div class="contact-buttons">${contactsHtml}</div>
-                ${shop.youtube ? `<div style="margin-top:20px;"><a href="${shop.youtube}" target="_blank" style="color:var(--primary);"><i class="fab fa-youtube"></i> ভিডিও ট্যুর দেখুন</a></div>` : ''}
             `;
-            profileDiv.innerHTML = fullProfileHtml;
-            loadingIndicator.style.display = 'none';
-            profileDiv.style.display = 'block';
+            contentDiv.innerHTML = html;
+            loader.style.display = 'none';
+            contentDiv.style.display = 'block';
         } catch(err) {
-            profileDiv.innerHTML = `<div class="not-found"><i class="fas fa-exclamation-triangle"></i> ত্রুটি: ${err.message}</div>`;
-            loadingIndicator.style.display = 'none';
-            profileDiv.style.display = 'block';
+            contentDiv.innerHTML = `<div class="not-found"><i class="fas fa-exclamation-triangle"></i> ত্রুটি</div>`;
+            loader.style.display = 'none';
+            contentDiv.style.display = 'block';
         }
     }
 
-    window.scrollToProducts = () => document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
-    window.scrollToProfile = () => document.getElementById('profileSection').scrollIntoView({ behavior: 'smooth' });
-
-    loadProducts();
-    setTimeout(() => {
-        if(shopId) loadShopProfile(shopId);
-        else {
-            document.getElementById('profileLoadingIndicator').style.display = 'none';
-            document.getElementById('profileContent').style.display = 'block';
-            document.getElementById('profileContent').innerHTML = `<div class="not-found"><i class="fas fa-link"></i><h3>দোকানের প্রোফাইল দেখুন</h3><p>URL এ ?id=দোকানের_আইডি যোগ করুন</p></div>`;
+    // routing
+    function navigateTo(page) {
+        document.getElementById('homePage').classList.add('hidden');
+        document.getElementById('productsPage').classList.add('hidden');
+        document.getElementById('profilePage').classList.add('hidden');
+        document.getElementById('contactPage').classList.add('hidden');
+        
+        document.getElementById('navHome').classList.remove('active');
+        document.getElementById('navProducts').classList.remove('active');
+        document.getElementById('navProfile').classList.remove('active');
+        document.getElementById('navContact').classList.remove('active');
+        
+        if(page === 'home') {
+            document.getElementById('homePage').classList.remove('hidden');
+            document.getElementById('navHome').classList.add('active');
+            window.scrollTo({top:0, behavior:'smooth'});
+        } else if(page === 'products') {
+            document.getElementById('productsPage').classList.remove('hidden');
+            document.getElementById('navProducts').classList.add('active');
+            renderAllProductsPage();
+            window.scrollTo({top:0, behavior:'smooth'});
+        } else if(page === 'profile') {
+            document.getElementById('profilePage').classList.remove('hidden');
+            document.getElementById('navProfile').classList.add('active');
+            if(shopId) loadProfileForPage(shopId);
+            else {
+                document.getElementById('profileLoadIndicator').style.display = 'none';
+                document.getElementById('profileDetailContent').style.display = 'block';
+                document.getElementById('profileDetailContent').innerHTML = `<div class="not-found"><i class="fas fa-link"></i><h3>প্রোফাইল দেখতে URL এ ?id=shopId দিন</h3></div>`;
+            }
+            window.scrollTo({top:0, behavior:'smooth'});
+        } else if(page === 'contact') {
+            document.getElementById('contactPage').classList.remove('hidden');
+            document.getElementById('navContact').classList.add('active');
+            window.scrollTo({top:0, behavior:'smooth'});
         }
-    }, 100);
+    }
+
+    window.navigateTo = navigateTo;
+
+    // init
+    loadAllProducts();
+    if(shopId && window.location.pathname.includes('profile')) {
+        setTimeout(() => navigateTo('profile'), 100);
+    } else {
+        navigateTo('home');
+    }
 </script>
 </body>
 </html>
