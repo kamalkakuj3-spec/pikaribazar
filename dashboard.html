@@ -20,6 +20,9 @@
     --error: #e74c3c;
     --success: #2ecc71;
     --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
+    --gold: #b8860b;
+    --dark-bg: #0b0b0b;
+    --dark-card: #151515;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -27,6 +30,11 @@ body {
     background:var(--bg);
     min-height:100vh;
     overflow-x:hidden;
+}
+/* Dark theme for admin panel */
+body.admin-theme {
+    background:var(--dark-bg);
+    color:white;
 }
 #loadingScreen {
     position:fixed;
@@ -77,6 +85,57 @@ body {
 .content { 
     padding:20px 16px 300px; 
 }
+/* Navigation Tabs */
+.nav-tabs {
+    display: flex;
+    background: white;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    padding: 5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+body.admin-theme .nav-tabs {
+    background: #1a1a1a;
+}
+.nav-tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 14px;
+}
+body.admin-theme .nav-tab {
+    color: #ccc;
+}
+.nav-tab.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(108,43,217,0.3);
+}
+body.admin-theme .nav-tab.active {
+    background: var(--gold);
+    color: black;
+}
+/* Page Container */
+.page {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+.page.active-page {
+    display: block;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* ========== DASHBOARD STYLES (Original) ========== */
 .shop-preview-card {
     background:white;
     border-radius:28px;
@@ -84,7 +143,10 @@ body {
     margin-bottom:24px;
     box-shadow:0 20px 35px -12px rgba(108,43,217,0.25);
     border:1px solid rgba(108,43,217,0.15);
-    transition:transform 0.3s ease, box-shadow 0.3s;
+}
+body.admin-theme .shop-preview-card {
+    background:#111;
+    border-color:#2a2a2a;
 }
 .card-shop-name {
     font-size:22px;
@@ -95,6 +157,9 @@ body {
     align-items:center;
     gap:8px;
 }
+body.admin-theme .card-shop-name {
+    color:var(--gold);
+}
 .card-shop-address {
     font-size:14px;
     color:#555;
@@ -104,6 +169,10 @@ body {
     display:flex;
     gap:10px;
     align-items:flex-start;
+}
+body.admin-theme .card-shop-address {
+    color:#aaa;
+    border-top-color:#2a2a2a;
 }
 .small-status-badge {
     display:inline-flex;
@@ -147,8 +216,9 @@ body {
     border:1.5px solid rgba(108,43,217,0.08);
     margin-bottom:16px;
 }
-.tile-card:last-of-type {
-    margin-bottom: 100px;
+body.admin-theme .tile-card {
+    background:#111;
+    border-color:#2a2a2a;
 }
 .tile-header {
     display:flex;
@@ -157,6 +227,9 @@ body {
     margin-bottom:16px;
     padding-bottom:12px;
     border-bottom:1.5px solid #f0ebff;
+}
+body.admin-theme .tile-header {
+    border-bottom-color:#2a2a2a;
 }
 .tile-icon {
     width:38px; height:38px;
@@ -169,9 +242,11 @@ body {
     box-shadow:0 4px 12px rgba(108,43,217,0.3);
 }
 .tile-title { font-size:15px; font-weight:700; color:var(--text); }
+body.admin-theme .tile-title { color:white; }
 .tile-subtitle { font-size:12px; color:var(--text-light); }
 .input-group { margin-bottom:14px; }
 .input-label { font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; display:block; }
+body.admin-theme .input-label { color:#ddd; }
 .input-wrap { position:relative; }
 .input-icon {
     position:absolute;
@@ -192,10 +267,19 @@ body {
     outline:none;
     transition:all 0.2s;
 }
+body.admin-theme .input-field {
+    background:#1a1a1a;
+    border-color:#333;
+    color:white;
+}
 .input-field:focus {
     border-color:var(--primary);
     background:white;
     box-shadow:0 0 0 4px rgba(108,43,217,0.08);
+}
+body.admin-theme .input-field:focus {
+    background:#222;
+    border-color:var(--gold);
 }
 textarea.input-field {
     padding-top:13px;
@@ -224,6 +308,10 @@ select.input-field { cursor:pointer; appearance:none; }
     color:#4a1a9e;
     font-weight:500;
 }
+body.admin-theme .cat-chip {
+    background:#2a2a2a;
+    color:var(--gold);
+}
 .cat-chip i { cursor:pointer; font-size:12px; color:#6c2bd9; }
 .cat-select-btn {
     width:100%;
@@ -237,6 +325,11 @@ select.input-field { cursor:pointer; appearance:none; }
     color:var(--primary);
     font-weight:500;
     cursor:pointer;
+}
+body.admin-theme .cat-select-btn {
+    background:#1a1a1a;
+    border-color:#444;
+    color:var(--gold);
 }
 .cat-select-btn:hover { background:#f0ebff; border-color:var(--primary); }
 .cat-popup-list {
@@ -280,11 +373,9 @@ select.input-field { cursor:pointer; appearance:none; }
     from { transform:translateY(40px); opacity:0; }
     to { transform:translateY(0); opacity:1; }
 }
-.view-profile-btn {
+.view-profile-btn, .edit-toggle-btn {
     width:100%;
     padding:14px;
-    background:#f0ebff;
-    color:var(--primary);
     border:none;
     border-radius:14px;
     font-size:15px;
@@ -296,23 +387,18 @@ select.input-field { cursor:pointer; appearance:none; }
     justify-content:center;
     gap:8px;
 }
+.view-profile-btn {
+    background:#f0ebff;
+    color:var(--primary);
+}
+body.admin-theme .view-profile-btn {
+    background:#2a2a2a;
+    color:var(--gold);
+}
 .edit-toggle-btn {
     background:linear-gradient(135deg, var(--primary-light), var(--primary));
     color:white;
-    margin-bottom:20px;
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    font-size:15px;
-    font-weight:600;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    cursor:pointer;
 }
-.edit-toggle-btn i { color:white; }
 #editFormContainer {
     display:none;
     transition:all 0.3s ease;
@@ -337,6 +423,10 @@ select.input-field { cursor:pointer; appearance:none; }
     box-shadow:0 -4px 20px rgba(108,43,217,0.1);
     z-index:100;
 }
+body.admin-theme .submit-wrap {
+    background:#111;
+    border-top-color:#2a2a2a;
+}
 .home-btn {
     display:block;
     text-align:center;
@@ -350,7 +440,6 @@ select.input-field { cursor:pointer; appearance:none; }
     text-decoration:none;
 }
 .home-btn i { margin-right:6px; }
-.home-btn:hover { background-color:#27ae60; transform:scale(0.98); }
 .logout-btn {
     width:100%;
     padding:14px;
@@ -366,39 +455,7 @@ select.input-field { cursor:pointer; appearance:none; }
     align-items:center;
     justify-content:center;
     gap:10px;
-    transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);
-    position:relative;
-    overflow:hidden;
-}
-.logout-btn::before {
-    content:'';
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:0;
-    height:0;
-    background:rgba(255,255,255,0.3);
-    border-radius:50%;
-    transform:translate(-50%,-50%);
-    transition:width 0.6s, height 0.6s;
-}
-.logout-btn:hover::before {
-    width:300px;
-    height:300px;
-}
-.logout-btn:hover {
-    background:linear-gradient(135deg, #c0392b, #a93226);
-    transform:translateY(-3px) scale(1.02);
-    box-shadow:0 10px 25px rgba(231,76,60,0.4);
-}
-.logout-btn:active {
-    transform:translateY(2px) scale(0.98);
-}
-.logout-btn i {
-    transition:transform 0.3s ease;
-}
-.logout-btn:hover i {
-    transform:translateX(3px);
+    transition:all 0.3s;
 }
 .submit-btn {
     width:100%;
@@ -426,6 +483,68 @@ select.input-field { cursor:pointer; appearance:none; }
 }
 .submit-btn.loading .spinner { display:block; }
 .submit-btn.loading .btn-text { display:none; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ========== ADMIN PANEL STYLES ========== */
+.admin-box {
+    max-width:500px;
+    margin:0 auto;
+    background:#151515;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+.admin-box h3 {
+    margin-bottom:15px;
+    color:var(--gold);
+}
+.admin-box input, .admin-box textarea {
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border:none;
+    border-radius:8px;
+    background:#2a2a2a;
+    color:white;
+    font-family:inherit;
+}
+.admin-box button {
+    width:100%;
+    padding:12px;
+    background:var(--gold);
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    color:black;
+    border-radius:8px;
+    margin-top:10px;
+    font-size:15px;
+}
+.admin-box button:hover {
+    background:#d4a017;
+}
+.product-list-box {
+    background:#151515;
+    border-radius:12px;
+    padding:20px;
+    margin-top:20px;
+}
+.product-item {
+    border-bottom:1px solid #333;
+    padding:12px;
+    margin-bottom:10px;
+}
+.product-item strong {
+    color:var(--gold);
+}
+.message {
+    margin-top:10px;
+    padding:10px;
+    border-radius:8px;
+    text-align:center;
+}
+.message.success { background:#28a745; color:white; }
+.message.error { background:#dc3545; color:white; }
 </style>
 </head>
 <body>
@@ -433,64 +552,132 @@ select.input-field { cursor:pointer; appearance:none; }
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ডাটা লোড হচ্ছে...</div></div>
 
 <div class="content" id="mainContent" style="display:none">
-    <div class="shop-preview-card" id="shopPreviewCard">
-        <div class="card-shop-name"><span id="previewCardShopName">দোকানের নাম</span></div>
-        <div class="card-shop-address"><span id="previewCardAddress">ঠিকানা প্রদর্শিত হবে</span></div>
-        <div id="cardStatusBadge" class="small-status-badge pending">⏳ পেন্ডিং</div>
+    
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" data-page="dashboard">📊 ড্যাশবোর্ড</button>
+        <button class="nav-tab" data-page="profileView">👁️ প্রোফাইল ভিউ</button>
+        <button class="nav-tab" data-page="adminPanel">⚙️ অ্যাডমিন প্যানেল</button>
     </div>
 
-    <button class="view-profile-btn" id="viewProfileBtn" onclick="viewProfile()"><i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
-    <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
-
-    <div id="editFormContainer">
-        <div class="tile-card">
-            <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
-            <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
-            <div class="input-group"><label class="input-label">প্রোপাইটারের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="এখানে প্রোপাইটারের নাম লিখুন"></div></div>
-            <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
+    <!-- Dashboard Page (Original) -->
+    <div id="dashboardPage" class="page active-page">
+        <div class="shop-preview-card" id="shopPreviewCard">
+            <div class="card-shop-name"><span id="previewCardShopName">দোকানের নাম</span></div>
+            <div class="card-shop-address"><span id="previewCardAddress">ঠিকানা প্রদর্শিত হবে</span></div>
+            <div id="cardStatusBadge" class="small-status-badge pending">⏳ পেন্ডিং</div>
         </div>
 
-        <div class="tile-card">
-            <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা (JSON থেকে লোড)</div></div></div>
-            <div class="input-group">
-                <label class="input-label">বিভাগ *</label>
-                <div class="input-wrap">
-                    <span class="input-icon">🗺️</span>
-                    <select class="input-field" id="division" onchange="onDivisionChange()">
-                        <option value="">বিভাগ বাছাই করুন</option>
-                    </select>
-                    <span class="select-arrow">▼</span>
+        <button class="view-profile-btn" id="viewProfileBtn" onclick="viewProfile()"><i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
+        <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
+
+        <div id="editFormContainer">
+            <div class="tile-card">
+                <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
+                <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
+                <div class="input-group"><label class="input-label">প্রোপাইটারের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="এখানে প্রোপাইটারের নাম লিখুন"></div></div>
+                <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
+            </div>
+
+            <div class="tile-card">
+                <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা (JSON থেকে লোড)</div></div></div>
+                <div class="input-group">
+                    <label class="input-label">বিভাগ *</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">🗺️</span>
+                        <select class="input-field" id="division" onchange="onDivisionChange()">
+                            <option value="">বিভাগ বাছাই করুন</option>
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="input-group" id="districtGroup" style="display:none">
+                    <label class="input-label">জেলা *</label>
+                    <div class="input-wrap"><span class="input-icon">📌</span><select class="input-field" id="district" onchange="onDistrictChange()"><option value="">জেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div>
+                </div>
+                <div class="input-group" id="thanaGroup" style="display:none">
+                    <label class="input-label">উপজেলা/থানা *</label>
+                    <div class="input-wrap"><span class="input-icon">🏘️</span><select class="input-field" id="thana" onchange="onThanaChange()"><option value="">উপজেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div>
+                </div>
+                <div class="input-group" id="areaGroup" style="display:none">
+                    <label class="input-label">আপনার দোকানের পূর্ণাঙ্গ ঠিকানা লিখুন</label>
+                    <div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="উদাহরণ: হাজী বই মার্কেট, স্টেশন রোড, চৌমুহন, নোয়াখালী।" style="height:70px"></textarea></div>
                 </div>
             </div>
-            <div class="input-group" id="districtGroup" style="display:none">
-                <label class="input-label">জেলা *</label>
-                <div class="input-wrap"><span class="input-icon">📌</span><select class="input-field" id="district" onchange="onDistrictChange()"><option value="">জেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div>
-            </div>
-            <div class="input-group" id="thanaGroup" style="display:none">
-                <label class="input-label">উপজেলা/থানা *</label>
-                <div class="input-wrap"><span class="input-icon">🏘️</span><select class="input-field" id="thana" onchange="onThanaChange()"><option value="">উপজেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div>
-            </div>
-            <div class="input-group" id="areaGroup" style="display:none">
-                <label class="input-label">আপনার দোকানের পূর্ণাঙ্গ ঠিকানা লিখুন</label>
-                <div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="উদাহরণ: হাজী বই মার্কেট, স্টেশন রোড, চৌমুহন, নোয়াখালী।" style="height:70px"></textarea></div>
-            </div>
-        </div>
 
-        <div class="tile-card" id="categorySection">
-            <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন (JSON থেকে লোড)</div></div></div>
-            <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
-            <button type="button" class="cat-select-btn" onclick="openMultiCategoryPopup()"><span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span><span>▼</span></button>
-            <input type="hidden" id="categoriesHidden" value="">
-        </div>
+            <div class="tile-card" id="categorySection">
+                <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন (JSON থেকে লোড)</div></div></div>
+                <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
+                <button type="button" class="cat-select-btn" onclick="openMultiCategoryPopup()"><span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span><span>▼</span></button>
+                <input type="hidden" id="categoriesHidden" value="">
+            </div>
 
-        <div class="tile-card">
-            <div class="tile-header"><div class="tile-icon">📞</div><div><div class="tile-title">যোগাযোগের তথ্য</div><div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div></div></div>
-            <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
-            <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
-            <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
-            <div class="input-group"><label class="input-label">আপনার দোকানের ভিডিও লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
+            <div class="tile-card">
+                <div class="tile-header"><div class="tile-icon">📞</div><div><div class="tile-title">যোগাযোগের তথ্য</div><div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div></div></div>
+                <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
+                <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
+                <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
+                <div class="input-group"><label class="input-label">আপনার দোকানের ভিডিও লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
+            </div>
         </div>
     </div>
+
+    <!-- Profile View Page (Like profile.html) -->
+    <div id="profileViewPage" class="page">
+        <div class="profile-card" style="background:white; border-radius:28px; overflow:hidden; margin-bottom:20px;">
+            <div class="cover" id="coverBg" style="height:150px; background:linear-gradient(135deg, #6c2bd9, #a259f7); display:flex; align-items:center; justify-content:center;">
+                <div>
+                    <div class="cover-shop-name" id="coverShopName" style="font-size:22px;">দোকানের নাম</div>
+                    <div class="cover-address" id="coverAddress" style="font-size:12px;">📍 ঠিকানা</div>
+                </div>
+            </div>
+            <div class="avatar-wrap" style="margin-top:-40px; margin-left:20px;">
+                <div class="avatar" id="profileAvatar" style="width:70px; height:70px; font-size:28px; border-radius:20px;">?</div>
+            </div>
+            <div class="profile-info" style="padding:12px 20px 20px;">
+                <div class="shop-name-text" id="shopNameText" style="font-size:20px;"></div>
+                <div class="owner-name" id="ownerNameText" style="font-size:13px;"></div>
+                <div class="address-badge" style="display:inline-flex; background:#f0ebff; padding:4px 12px; border-radius:99px;"><span>📍</span><span id="addressText"></span></div>
+            </div>
+            <div class="divider" style="height:1px; background:#f0ebff; margin:0 20px;"></div>
+            <div class="description-wrap" id="descriptionWrap" style="display:none; padding:16px 20px;">
+                <div class="description-title" style="font-weight:700;">📋 দোকান পরিচিতি</div>
+                <div class="description-scroll-wrap" style="background:#faf8ff; padding:10px; border-radius:12px;">
+                    <span id="descriptionText" style="font-size:13px;"></span>
+                </div>
+            </div>
+            <div class="contact-grid" id="contactGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 20px 20px;"></div>
+        </div>
+        <div class="info-card" style="background:white; border-radius:20px; padding:18px;">
+            <div class="info-card-title" style="font-weight:700;">📋 দোকানের বিস্তারিত</div>
+            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">🏪</div><div><div class="info-label">দোকানের নাম</div><div class="info-value" id="detailShopName">—</div></div></div>
+            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">👤</div><div><div class="info-label">মালিকের নাম</div><div class="info-value" id="detailOwnerName">—</div></div></div>
+            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">🗺️</div><div><div class="info-label">বিভাগ</div><div class="info-value" id="detailDivision">—</div></div></div>
+            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">📌</div><div><div class="info-label">জেলা</div><div class="info-value" id="detailDistrict">—</div></div></div>
+            <div class="info-row" id="detailThanaRow"><div class="info-icon">📍</div><div><div class="info-label">থানা/উপজেলা</div><div class="info-value" id="detailThana">—</div></div></div>
+            <div class="info-row" id="detailPhoneRow"><div class="info-icon">📱</div><div><div class="info-label">মোবাইল</div><div class="info-value" id="detailPhone">—</div></div></div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Page -->
+    <div id="adminPanelPage" class="page">
+        <div class="admin-box">
+            <h3>➕ Add New Product</h3>
+            <input id="productName" placeholder="Product Name">
+            <input id="productPrice" placeholder="Price (৳)">
+            <input id="productImage" placeholder="Google Drive Share Link">
+            <textarea id="productDesc" placeholder="Description" rows="3"></textarea>
+            <button onclick="addProduct()">➕ ADD PRODUCT</button>
+            <button onclick="loadProductsList()" style="background:#28a745; margin-top:5px;">👁️ VIEW ALL PRODUCTS</button>
+        </div>
+
+        <div id="productListContainer" class="product-list-box" style="display:none;">
+            <h3 style="color:var(--gold); margin-bottom:15px;">📦 Product List</h3>
+            <div id="productsItems"></div>
+            <button onclick="hideProductList()" style="background:#6c757d;">CLOSE</button>
+        </div>
+    </div>
+
 </div>
 
 <div class="submit-wrap" id="saveWrap" style="display:none">
@@ -521,25 +708,156 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// ========== JSON URL ==========
 const DIVISIONS_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
 const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
 
-// ========== গ্লোবাল ভেরিয়েবল ==========
-let divisionsData = [];      // বিভাগের তথ্য
-let categoriesList = [];     // ক্যাটাগরির তালিকা
+let divisionsData = [];
+let categoriesList = [];
 let selectedCategories = [];
 let currentShopData = null;
 
-// ========== JSON লোড ফাংশন ==========
+// ========== TAB SWITCHING ==========
+document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        const pageId = tab.dataset.page;
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(pageId + 'Page').classList.add('active-page');
+        
+        // Apply theme
+        if (pageId === 'adminPanel') {
+            document.body.classList.add('admin-theme');
+        } else {
+            document.body.classList.remove('admin-theme');
+        }
+        
+        // Refresh data when switching to profile view
+        if (pageId === 'profileView' && auth.currentUser) {
+            loadProfileViewData(auth.currentUser.uid);
+        }
+    });
+});
+
+// ========== PROFILE VIEW DATA ==========
+async function loadProfileViewData(uid) {
+    try {
+        const snap = await db.ref('shops/' + uid).get();
+        if (snap.exists()) {
+            const shop = snap.val();
+            document.getElementById('coverShopName').textContent = shop.shopName || '';
+            let addr = shop.thana ? `${shop.thana}, ${shop.district}` : (shop.area ? shop.area : shop.district);
+            document.getElementById('coverAddress').textContent = `📍 ${addr || ''}`;
+            document.getElementById('profileAvatar').textContent = (shop.shopName || '?').charAt(0);
+            document.getElementById('shopNameText').textContent = shop.shopName || '';
+            document.getElementById('ownerNameText').textContent = shop.ownerName ? `👤 ${shop.ownerName}` : '';
+            document.getElementById('addressText').textContent = addr || '';
+            if (shop.description) {
+                document.getElementById('descriptionWrap').style.display = 'block';
+                document.getElementById('descriptionText').textContent = shop.description;
+            }
+            let contactHtml = '';
+            if (shop.phone) contactHtml += `<a href="tel:${shop.phone}" class="contact-tile call" style="background:#f0ebff; padding:12px; border-radius:16px; text-decoration:none; display:flex; align-items:center; gap:8px;">📞 <span>Call</span></a>`;
+            if (shop.whatsapp) contactHtml += `<a href="https://wa.me/88${shop.whatsapp.replace(/[^0-9]/g,'')}" class="contact-tile whatsapp" style="background:#e8faf0; padding:12px; border-radius:16px; text-decoration:none; display:flex; align-items:center; gap:8px;">💬 <span>WhatsApp</span></a>`;
+            if (shop.telegram) contactHtml += `<a href="https://t.me/+88${shop.telegram.replace(/[^0-9]/g,'')}" class="contact-tile telegram" style="background:#e8f0fe; padding:12px; border-radius:16px; text-decoration:none; display:flex; align-items:center; gap:8px;">📡 <span>Telegram</span></a>`;
+            document.getElementById('contactGrid').innerHTML = contactHtml || '<div style="grid-column:span 2; text-align:center;">কোনো যোগাযোগের তথ্য নেই</div>';
+            document.getElementById('detailShopName').textContent = shop.shopName || '—';
+            document.getElementById('detailOwnerName').textContent = shop.ownerName || '—';
+            document.getElementById('detailDivision').textContent = shop.division || '—';
+            document.getElementById('detailDistrict').textContent = shop.district || '—';
+            document.getElementById('detailThana').textContent = shop.thana || shop.area || '—';
+            document.getElementById('detailPhone').textContent = shop.phone || '—';
+        }
+    } catch(e) { console.error(e); }
+}
+
+// ========== ADMIN PANEL FUNCTIONS ==========
+function extractDriveImageId(url) {
+    if(!url) return null;
+    let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if(match) return match[1];
+    match = url.match(/id=([a-zA-Z0-9_-]+)/);
+    if(match) return match[1];
+    return null;
+}
+
+function addProduct() {
+    let name = document.getElementById('productName').value.trim();
+    let price = document.getElementById('productPrice').value.trim();
+    let image = document.getElementById('productImage').value.trim();
+    let desc = document.getElementById('productDesc').value.trim();
+    
+    if(!name || !price || !image) {
+        showAdminMessage('Please fill all required fields!', 'error');
+        return;
+    }
+    
+    db.ref("products").push({
+        name: name,
+        price: price,
+        image: image,
+        desc: desc,
+        timestamp: Date.now()
+    }).then(() => {
+        showAdminMessage('✅ Product Added Successfully!', 'success');
+        document.getElementById('productName').value = '';
+        document.getElementById('productPrice').value = '';
+        document.getElementById('productImage').value = '';
+        document.getElementById('productDesc').value = '';
+    }).catch(error => {
+        showAdminMessage('❌ Error: ' + error.message, 'error');
+    });
+}
+
+function showAdminMessage(msg, type) {
+    let oldMsg = document.querySelector('.admin-box .message');
+    if(oldMsg) oldMsg.remove();
+    let msgDiv = document.createElement('div');
+    msgDiv.className = 'message ' + type;
+    msgDiv.textContent = msg;
+    document.querySelector('.admin-box').appendChild(msgDiv);
+    setTimeout(() => msgDiv.remove(), 3000);
+}
+
+function loadProductsList() {
+    let container = document.getElementById('productListContainer');
+    let itemsDiv = document.getElementById('productsItems');
+    container.style.display = 'block';
+    itemsDiv.innerHTML = '<p>Loading...</p>';
+    
+    db.ref("products").once("value").then(snapshot => {
+        itemsDiv.innerHTML = '';
+        let hasProducts = false;
+        snapshot.forEach(child => {
+            hasProducts = true;
+            let p = child.val();
+            itemsDiv.innerHTML += `
+                <div class="product-item">
+                    <strong>${escapeHtml(p.name)}</strong><br>
+                    Price: ৳ ${escapeHtml(p.price)}<br>
+                    <small>ID: ${child.key.substring(0,8)}...</small>
+                </div>
+            `;
+        });
+        if(!hasProducts) itemsDiv.innerHTML = '<p>No products found.</p>';
+    });
+}
+
+function hideProductList() {
+    document.getElementById('productListContainer').style.display = 'none';
+}
+
+function escapeHtml(str) {
+    if(!str) return '';
+    return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+}
+
+// ========== DASHBOARD FUNCTIONS (Original) ==========
 async function loadDivisionsFromJSON() {
     try {
         const res = await fetch(DIVISIONS_JSON_URL);
         const data = await res.json();
         divisionsData = data.divisions;
-        console.log('বিভাগ JSON লোড সফল!', divisionsData.length, 'টি বিভাগ');
-        
-        // বিভাগ সিলেক্ট বক্স পপুলেট
         const divisionSelect = document.getElementById('division');
         divisionSelect.innerHTML = '<option value="">বিভাগ বাছাই করুন</option>';
         divisionsData.forEach(div => {
@@ -550,7 +868,6 @@ async function loadDivisionsFromJSON() {
         });
     } catch (error) {
         console.error('বিভাগ JSON লোড ব্যর্থ:', error);
-        showFloatyToast('বিভাগের তথ্য লোড করতে ব্যর্থ! নেটওয়ার্ক চেক করুন।', true);
     }
 }
 
@@ -558,29 +875,21 @@ async function loadCategoriesFromJSON() {
     try {
         const res = await fetch(CATEGORIES_JSON_URL);
         categoriesList = await res.json();
-        console.log('ক্যাটাগরি JSON লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
     } catch (error) {
-        console.error('ক্যাটাগরি JSON লোড ব্যর্থ:', error);
-        // ব্যাকআপ ক্যাটাগরি
         categoriesList = ["পোশাক ও বস্ত্র", "খাদ্যপণ্য ও মসলা", "ইলেকট্রনিক্স", "গৃহস্থালি পণ্য", "হার্ডওয়্যার ও নির্মাণ", "ওষুধ ও স্বাস্থ্য", "সৌন্দর্য ও কসমেটিক্স", "ব্যাগ ও জুতা", "কৃষি ও সার", "স্টেশনারি ও অফিস", "অটোমোবাইল", "খেলনা ও শিশু পণ্য", "উপহার ও সাজসজ্জা", "প্যাকেজিং সামগ্রী", "শিল্প ও কারখানা", "মাছ ও মাংস", "নার্সারি ও বাগান", "খেলাধুলা সামগ্রী", "বই ও শিক্ষা সামগ্রী", "সোলার ও বিদ্যুৎ", "সেলাই ও কারুকাজ", "যানবাহন যন্ত্রাংশ", "অন্যান্য"];
     }
 }
 
-// ========== বিভাগ পরিবর্তন ==========
 window.onDivisionChange = function() {
     const divisionName = document.getElementById('division').value;
     const districtSelect = document.getElementById('district');
     const thanaSelect = document.getElementById('thana');
-    
-    // রিসেট জেলা ও উপজেলা
     districtSelect.innerHTML = '<option value="">জেলা বাছাই করুন</option>';
     thanaSelect.innerHTML = '<option value="">উপজেলা বাছাই করুন</option>';
     document.getElementById('districtGroup').style.display = 'none';
     document.getElementById('thanaGroup').style.display = 'none';
     document.getElementById('areaGroup').style.display = 'none';
-    
     if (!divisionName) return;
-    
     const division = divisionsData.find(d => d.name === divisionName);
     if (division && division.districts) {
         division.districts.forEach(dist => {
@@ -593,22 +902,16 @@ window.onDivisionChange = function() {
     }
 };
 
-// ========== জেলা পরিবর্তন ==========
 window.onDistrictChange = function() {
     const divisionName = document.getElementById('division').value;
     const districtName = document.getElementById('district').value;
     const thanaSelect = document.getElementById('thana');
-    
-    // রিসেট উপজেলা
     thanaSelect.innerHTML = '<option value="">উপজেলা বাছাই করুন</option>';
     document.getElementById('thanaGroup').style.display = 'none';
     document.getElementById('areaGroup').style.display = 'none';
-    
     if (!divisionName || !districtName) return;
-    
     const division = divisionsData.find(d => d.name === divisionName);
     const district = division?.districts.find(d => d.name === districtName);
-    
     if (district && district.upazilas) {
         district.upazilas.forEach(upazila => {
             const option = document.createElement('option');
@@ -617,17 +920,9 @@ window.onDistrictChange = function() {
             thanaSelect.appendChild(option);
         });
         document.getElementById('thanaGroup').style.display = 'block';
-    } else if (districtName) {
-        // যদি উপজেলা না থাকে, ডিফল্ট
-        const option = document.createElement('option');
-        option.value = "সদর";
-        option.textContent = "সদর উপজেলা";
-        thanaSelect.appendChild(option);
-        document.getElementById('thanaGroup').style.display = 'block';
     }
 };
 
-// ========== উপজেলা পরিবর্তন ==========
 window.onThanaChange = function() {
     const thana = document.getElementById('thana').value;
     if (thana && thana !== "") {
@@ -637,7 +932,6 @@ window.onThanaChange = function() {
     }
 };
 
-// ========== ক্যাটাগরি ফাংশন ==========
 function renderChips() {
     const container = document.getElementById('selectedChipsContainer');
     container.innerHTML = '';
@@ -682,15 +976,9 @@ function closeMultiCatPopup() {
     renderChips();
 }
 
-// ========== UI ফাংশন ==========
 function toggleEditForm() {
     const formDiv = document.getElementById('editFormContainer');
     formDiv.classList.toggle('show');
-    if (formDiv.classList.contains('show')) {
-        setTimeout(() => {
-            document.getElementById('editToggleBtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-    }
 }
 
 function viewProfile() {
@@ -705,30 +993,18 @@ function viewProfile() {
 function logout() {
     auth.signOut().then(() => {
         showFloatyToast('✅ সফলভাবে লগআউট হয়েছে!');
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1500);
-    }).catch((error) => {
-        showFloatyToast('লগআউট করতে সমস্যা হয়েছে!', true);
+        setTimeout(() => window.location.href = 'index.html', 1500);
     });
 }
 
 let firstApprovalFlagShown = false;
 function showConfettiAndToast() {
-    canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, startVelocity: 20, colors: ['#6c2bd9', '#f0c040', '#2ecc71'] });
-    let end = Date.now() + 2000;
-    const frame = () => {
-        canvasConfetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, startVelocity: 25 });
-        canvasConfetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, startVelocity: 25 });
-        if (Date.now() < end) requestAnimationFrame(frame);
-    };
-    frame();
+    canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     const toastDiv = document.createElement('div');
     toastDiv.className = 'toast-congrats';
     toastDiv.innerHTML = '<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉';
     document.body.appendChild(toastDiv);
     setTimeout(() => toastDiv.remove(), 4500);
-    localStorage.setItem('congratsShown_' + auth.currentUser?.uid, 'true');
 }
 
 function showFloatyToast(msg, isError = false) {
@@ -739,7 +1015,6 @@ function showFloatyToast(msg, isError = false) {
     setTimeout(() => toast.remove(), 4000);
 }
 
-// ========== ডাটা সেভ ==========
 async function saveShopData() {
     const user = auth.currentUser;
     if (!user) return;
@@ -756,7 +1031,7 @@ async function saveShopData() {
     if (!ownerName) return showFloatyToast('মালিকের নাম দিন!', true);
     if (!division) return showFloatyToast('বিভাগ বাছাই করুন!', true);
     if (!district) return showFloatyToast('জেলা বাছাই করুন!', true);
-    if (!thana || thana === "") return showFloatyToast('উপজেলা/থানা নির্বাচন করুন!', true);
+    if (!thana) return showFloatyToast('উপজেলা/থানা নির্বাচন করুন!', true);
     if (!area) return showFloatyToast('এলাকা/বিস্তারিত ঠিকানা দিন!', true);
     if (!phone) return showFloatyToast('মোবাইল নম্বর দিন!', true);
     
@@ -780,33 +1055,32 @@ async function saveShopData() {
         document.getElementById('previewCardAddress').innerHTML = area;
         showFloatyToast('✅ তথ্য সফলভাবে সংরক্ষণ হয়েছে!');
         btn.classList.remove('loading');
+        loadProfileViewData(user.uid);
     } catch (e) {
         btn.classList.remove('loading');
-        showFloatyToast('সংরক্ষণ ব্যর্থ! আবার চেষ্টা করুন।', true);
+        showFloatyToast('সংরক্ষণ ব্যর্থ!', true);
     }
 }
 
-// ========== ইউজার ডাটা লোড ==========
+// ========== AUTH STATE ==========
 auth.onAuthStateChanged(async user => {
     if (!user) {
         window.location.href = 'login.html';
         return;
     }
     
-    // প্রথমে JSON লোড করুন
     await loadDivisionsFromJSON();
     await loadCategoriesFromJSON();
     
     const snap = await db.ref('shops/' + user.uid).get();
     currentShopData = snap.val();
     
-    // লোডিং স্ক্রিন বন্ধ করুন
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('saveWrap').style.display = 'block';
+    loadProfileViewData(user.uid);
     
     if (currentShopData) {
-        // প্রিভিউ কার্ড আপডেট
         document.getElementById('previewCardShopName').innerHTML = currentShopData.shopName || 'দোকানের নাম';
         const addrLine = `${currentShopData.thana || currentShopData.upazila || ''}, ${currentShopData.district || ''}`;
         document.getElementById('previewCardAddress').innerHTML = currentShopData.area || addrLine || 'ঠিকানা নেই';
@@ -828,7 +1102,6 @@ auth.onAuthStateChanged(async user => {
             cardBadge.innerHTML = '⏳ পেন্ডিং';
         }
         
-        // ফর্ম ফিল্ড পপুলেট
         document.getElementById('shopName').value = currentShopData.shopName || '';
         document.getElementById('ownerName').value = currentShopData.ownerName || '';
         document.getElementById('description').value = currentShopData.description || '';
@@ -838,7 +1111,6 @@ auth.onAuthStateChanged(async user => {
         document.getElementById('youtube').value = currentShopData.youtube || '';
         document.getElementById('area').value = currentShopData.area || '';
         
-        // বিভাগ, জেলা, উপজেলা সেট করুন
         if (currentShopData.division) {
             document.getElementById('division').value = currentShopData.division;
             onDivisionChange();
@@ -847,28 +1119,19 @@ auth.onAuthStateChanged(async user => {
                     document.getElementById('district').value = currentShopData.district;
                     onDistrictChange();
                     setTimeout(() => {
-                        if (currentShopData.thana) {
-                            document.getElementById('thana').value = currentShopData.thana;
-                        } else if (currentShopData.upazila) {
-                            document.getElementById('thana').value = currentShopData.upazila;
-                        }
-                        if (document.getElementById('thana').value && document.getElementById('thana').value !== "") {
-                            document.getElementById('areaGroup').style.display = 'block';
-                        }
+                        if (currentShopData.thana) document.getElementById('thana').value = currentShopData.thana;
+                        if (document.getElementById('thana').value) document.getElementById('areaGroup').style.display = 'block';
                     }, 100);
                 }
             }, 100);
         }
         
-        // ক্যাটাগরি সেট করুন
         if (currentShopData.categories) {
             let cats = typeof currentShopData.categories === 'string' ? currentShopData.categories.split(',').map(s => s.trim()) : (Array.isArray(currentShopData.categories) ? currentShopData.categories : []);
             selectedCategories = cats.filter(c => c);
             renderChips();
-        } else if (currentShopData.category && !currentShopData.categories) {
+        } else if (currentShopData.category) {
             selectedCategories = [currentShopData.category];
-            renderChips();
-        } else {
             renderChips();
         }
     } else {
