@@ -36,12 +36,36 @@
             background-clip: text;
             color: transparent;
         }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
         .status-badge {
             background: #f0ebff;
             padding: 8px 20px;
             border-radius: 40px;
             font-weight: 600;
             color: #6c2bd9;
+        }
+        .logout-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .logout-btn:hover {
+            transform: scale(0.96);
+            background: linear-gradient(135deg, #c0392b, #a93226);
         }
         
         /* Grid */
@@ -86,10 +110,12 @@
             border-radius: 24px;
             font-family: inherit;
             font-size: 0.9rem;
+            transition: 0.2s;
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #6c2bd9;
+            box-shadow: 0 0 0 3px rgba(108,43,217,0.1);
         }
         .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
@@ -106,8 +132,10 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            transition: 0.2s;
         }
         button:hover { transform: scale(0.98); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
         
         .product-list {
             max-height: 400px;
@@ -122,6 +150,7 @@
             display: flex;
             gap: 12px;
             align-items: center;
+            border: 1px solid #ede9fe;
         }
         .product-img-sm {
             width: 50px;
@@ -141,12 +170,20 @@
             border-radius: 40px;
             text-align: center;
             z-index: 1000;
+            animation: fadeUp 0.3s ease;
         }
         .toast.error { background: #e74c3c; }
+        
+        @keyframes fadeUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
         
         @media (max-width: 700px) {
             .grid-2col { grid-template-columns: 1fr; }
             .row-2 { grid-template-columns: 1fr; }
+            .header { flex-direction: column; text-align: center; }
+            .header-actions { justify-content: center; }
         }
     </style>
 </head>
@@ -157,7 +194,10 @@
         <div class="logo">
             <h1><i class="fas fa-store"></i> PROVISION ড্যাশবোর্ড</h1>
         </div>
-        <div class="status-badge" id="statusBadge">⏳ লোড হচ্ছে...</div>
+        <div class="header-actions">
+            <div class="status-badge" id="statusBadge">⏳ লোড হচ্ছে...</div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+        </div>
     </div>
 
     <div class="grid-2col">
@@ -215,6 +255,13 @@
             <div class="form-group">
                 <label>টেলিগ্রাম</label>
                 <input type="tel" id="telegram" placeholder="01xxxxxxxxx">
+            </div>
+            
+            <!-- ইউটিউব ভিডিও লিংক -->
+            <div class="form-group">
+                <label><i class="fab fa-youtube" style="color:#ff0000;"></i> ইউটিউব ভিডিও লিংক</label>
+                <input type="url" id="youtube" placeholder="https://www.youtube.com/watch?v=xxxxxx">
+                <small style="color:#6c2bd9; display:block; margin-top:5px;">🔹 এই ভিডিওটি হোমপেজে দেখানো হবে</small>
             </div>
             
             <div class="form-group">
@@ -367,6 +414,7 @@
             document.getElementById('telegram').value = data.telegram || '';
             document.getElementById('area').value = data.area || '';
             document.getElementById('description').value = data.description || '';
+            document.getElementById('youtube').value = data.youtube || '';
             
             let badge = document.getElementById('statusBadge');
             if (data.status === 'approved') badge.innerHTML = '✅ অনুমোদিত দোকান';
@@ -391,7 +439,7 @@
         }
     }
 
-    // Save profile
+    // Save profile (ইউটিউব লিংক সহ)
     async function saveProfile() {
         if (!currentUser) return;
         let shopName = document.getElementById('shopName').value.trim();
@@ -401,6 +449,7 @@
         let thana = document.getElementById('thanaSelect').value;
         let area = document.getElementById('area').value.trim();
         let phone = document.getElementById('phone').value.trim();
+        let youtube = document.getElementById('youtube').value.trim();
 
         if (!shopName || !ownerName || !division || !district || !thana || !area || !phone) {
             showToast('সব তথ্য পূরণ করুন!', true);
@@ -412,7 +461,7 @@
         btn.disabled = true;
         try {
             await db.ref('shops/' + currentUser.uid).update({
-                shopName, ownerName, division, district, thana, area, phone,
+                shopName, ownerName, division, district, thana, area, phone, youtube,
                 whatsapp: document.getElementById('whatsapp').value.trim(),
                 telegram: document.getElementById('telegram').value.trim(),
                 description: document.getElementById('description').value.trim(),
@@ -490,6 +539,19 @@
         listDiv.innerHTML = html;
     }
 
+    // লগআউট ফাংশন
+    async function logout() {
+        try {
+            await auth.signOut();
+            showToast('লগআউট সফল!');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        } catch(e) {
+            showToast('লগআউট ব্যর্থ: ' + e.message, true);
+        }
+    }
+
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
@@ -501,6 +563,7 @@
     document.getElementById('thanaSelect').addEventListener('change', onThanaChange);
     document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
     document.getElementById('addProductBtn').addEventListener('click', addProduct);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
 
     // Auth
     auth.onAuthStateChanged(async (user) => {
