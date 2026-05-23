@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>BizNest | ড্যাশবোর্ড & পণ্য প্যানেল</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <title>BizNest | ড্যাশবোর্ড + পণ্য ব্যবস্থাপনা</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <style>
@@ -16,7 +16,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f7f9fc;
+            background: #f8fafc;
             color: #0f172a;
             overflow-x: hidden;
         }
@@ -40,7 +40,7 @@
             z-index: 2;
         }
 
-        /* header */
+        /* Header */
         .header-modern {
             display: flex;
             justify-content: space-between;
@@ -52,7 +52,7 @@
             backdrop-filter: blur(12px);
             padding: 14px 24px;
             border-radius: 60px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
             border: 1px solid rgba(108, 43, 217, 0.2);
         }
 
@@ -87,7 +87,7 @@
             border-color: #cbd5e1;
         }
 
-        /* shop banner */
+        /* Shop Banner */
         .shop-banner {
             background: linear-gradient(105deg, #faf5ff, #ffffff);
             border-radius: 32px;
@@ -128,14 +128,13 @@
         .status-badge.pending { background: #fff3e0; color: #b95b0d; }
         .status-badge.rejected { background: #ffe8e6; color: #c62828; }
 
-        /* collapsible cards */
+        /* Collapsible Cards */
         .collapsible-card {
             background: white;
             border-radius: 32px;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.05);
             margin-bottom: 28px;
             overflow: hidden;
-            transition: all 0.2s;
             border: 1px solid rgba(108, 43, 217, 0.08);
         }
 
@@ -187,11 +186,11 @@
         }
 
         .card-body-collapsible.open {
-            max-height: 2000px; /* enough for content */
+            max-height: 2500px; /* enough for all content */
             padding: 0 28px 28px 28px;
         }
 
-        /* form elements */
+        /* Form Elements */
         .input-group {
             margin-bottom: 20px;
         }
@@ -404,7 +403,6 @@
             .container {
                 padding: 16px 16px 120px;
             }
-
             .card-body-collapsible.open {
                 padding: 0 20px 20px 20px;
             }
@@ -435,7 +433,7 @@
         <p id="shopAddressPreview" style="margin-top: 12px; color: #334155;"><i class="fas fa-map-marker-alt"></i> ঠিকানা প্রদর্শিত হবে</p>
     </div>
 
-    <!-- ========== COLLAPSIBLE: প্রোফাইল এডিট ========== -->
+    <!-- ========== প্রোফাইল এডিট সেকশন ========== -->
     <div class="collapsible-card" id="profileCard">
         <div class="card-header-clickable" id="profileHeader">
             <div class="card-title-section">
@@ -445,7 +443,7 @@
             <i class="fas fa-chevron-down toggle-icon" id="profileToggleIcon"></i>
         </div>
         <div class="card-body-collapsible" id="profileBody">
-            <!-- full profile edit fields -->
+            <!-- সম্পূর্ণ প্রোফাইল এডিট ফিল্ডস -->
             <div class="input-group">
                 <label class="input-label">দোকানের নাম *</label>
                 <input class="input-field" id="shopName" placeholder="মেসার্স উদয়ন">
@@ -500,7 +498,7 @@
         </div>
     </div>
 
-    <!-- ========== COLLAPSIBLE: পণ্য ব্যবস্থাপনা ========== -->
+    <!-- ========== পণ্য ব্যবস্থাপনা সেকশন ========== -->
     <div class="collapsible-card" id="productCard">
         <div class="card-header-clickable" id="productHeader">
             <div class="card-title-section">
@@ -556,7 +554,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
-    // ---------- FIREBASE ----------
+    // ---------- Firebase Config ----------
     const firebaseConfig = {
         apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
         authDomain: "agls-5bd4c.firebaseapp.com",
@@ -576,7 +574,7 @@
     let globalCategories = ["পোশাক ও বস্ত্র", "ইলেকট্রনিক্স", "গৃহস্থালি পণ্য", "খাদ্যপণ্য ও মসলা", "ওষুধ ও স্বাস্থ্য", "সৌন্দর্য", "অন্যান্য"];
     let selectedCategories = [];
 
-    // ----- UI Helpers -----
+    // Helper: Toast
     function showToast(msg, isError = false) {
         let toast = document.createElement('div');
         toast.className = 'toast-message';
@@ -586,29 +584,30 @@
         setTimeout(() => toast.remove(), 3500);
     }
 
-    // collapsible logic
+    // Collapsible control (start closed)
     function setupCollapsible(headerId, bodyId, iconId) {
         const header = document.getElementById(headerId);
         const body = document.getElementById(bodyId);
         const icon = document.getElementById(iconId);
         if (!header || !body) return;
+        // Initially closed
+        body.classList.remove('open');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+        
         header.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = body.classList.contains('open');
             if (isOpen) {
                 body.classList.remove('open');
-                icon.style.transform = 'rotate(0deg)';
+                if (icon) icon.style.transform = 'rotate(0deg)';
             } else {
                 body.classList.add('open');
-                icon.style.transform = 'rotate(180deg)';
+                if (icon) icon.style.transform = 'rotate(180deg)';
             }
         });
-        // initially both closed (clean interface), but you can keep one open optionally. We'll keep both closed.
-        body.classList.remove('open');
-        icon.style.transform = 'rotate(0deg)';
     }
 
-    // load divisions
+    // Load divisions from json
     async function loadDivisions() {
         try {
             const res = await fetch(DIVISIONS_JSON);
@@ -666,7 +665,7 @@
         if (document.getElementById('categoryModal').style.display === 'flex') renderCategoryModal();
     };
 
-    // Division cascade
+    // Division / District / Thana cascade
     window.onDivisionChange = function () {
         const divName = document.getElementById('division').value;
         const districtSel = document.getElementById('district');
@@ -775,7 +774,7 @@
     function viewProfile() { const u = auth.currentUser; if (u) window.location.href = `profile.html?id=${u.uid}`; else window.location.href = 'login.html'; }
     function logout() { auth.signOut().then(() => { showToast("লগআউট সম্পন্ন"); setTimeout(() => window.location.href = 'index.html', 1200); }); }
 
-    // Load user data
+    // Auth state & data load
     auth.onAuthStateChanged(async (user) => {
         if (!user) { window.location.href = 'login.html'; return; }
         await loadDivisions();
@@ -819,7 +818,7 @@
         } else { renderChips(); }
     });
 
-    // attach event listeners
+    // Event Listeners
     document.getElementById('addProductBtn')?.addEventListener('click', addProduct);
     document.getElementById('viewProductsBtn')?.addEventListener('click', viewProducts);
     document.getElementById('closeProductListBtn')?.addEventListener('click', hideProducts);
@@ -837,13 +836,9 @@
     });
     document.getElementById('closeModalBtn')?.addEventListener('click', () => document.getElementById('categoryModal').style.display = 'none');
 
-    // setup collapsible sections
+    // Initialize collapsible (both closed by default)
     setupCollapsible('profileHeader', 'profileBody', 'profileToggleIcon');
     setupCollapsible('productHeader', 'productBody', 'productToggleIcon');
-
-    // make sure divs are closed at start
-    document.getElementById('profileBody')?.classList.remove('open');
-    document.getElementById('productBody')?.classList.remove('open');
 </script>
 </body>
 </html>
