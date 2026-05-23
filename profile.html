@@ -233,7 +233,7 @@
             color: var(--text);
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 12px 16px;
             border: 1.5px solid rgba(108,43,217,0.2);
@@ -241,9 +241,10 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.9rem;
             transition: 0.2s;
+            background: var(--white);
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
             border-color: var(--primary);
         }
@@ -449,7 +450,7 @@
         </div>
     </div>
 
-    <!-- ADD PRODUCT SECTION (শুধু প্রোফাইল মালিক দেখবে) -->
+    <!-- ADD PRODUCT SECTION -->
     <div id="addProductSection" style="display: none;">
         <div class="add-product-card">
             <h3><i class="fas fa-plus-circle"></i> নতুন পণ্য যোগ করুন</h3>
@@ -512,6 +513,10 @@
     let currentUserId = null;
     let currentShopData = null;
     let viewingShopId = null;
+    let divisionsData = [];
+
+    // JSON URLs
+    const DIVISIONS_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
 
     function showToast(message, type = 'success') {
         const toast = document.createElement('div');
@@ -524,7 +529,6 @@
     function getGoogleDriveImageUrl(url) {
         if(!url) return "https://via.placeholder.com/500x300/eee/6c2bd9?text=No+Image";
         
-        // Extract file ID from various Google Drive URL formats
         let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
         if(match) return `https://lh3.googleusercontent.com/d/${match[1]}=w500`;
         
@@ -534,7 +538,6 @@
         match = url.match(/file\/d\/([a-zA-Z0-9_-]+)/);
         if(match) return `https://lh3.googleusercontent.com/d/${match[1]}=w500`;
         
-        // If it's already a direct image URL
         if(url.match(/\.(jpg|jpeg|png|gif|webp)/i)) return url;
         
         return "https://via.placeholder.com/500x300/eee/6c2bd9?text=Invalid+Link";
@@ -548,6 +551,20 @@
             if(m === '>') return '&gt;';
             return m;
         });
+    }
+
+    // Load divisions from JSON
+    async function loadDivisionsData() {
+        try {
+            const response = await fetch(DIVISIONS_JSON_URL);
+            const data = await response.json();
+            divisionsData = data.divisions;
+            console.log('Divisions loaded:', divisionsData.length);
+            return true;
+        } catch(error) {
+            console.error('Error loading divisions:', error);
+            return false;
+        }
     }
 
     // নির্দিষ্ট দোকানের পণ্য লোড করা
@@ -574,7 +591,6 @@
                 products.push({ id: child.key, ...child.val() });
             });
             
-            // Sort by timestamp (newest first)
             products.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             
             products.forEach(p => {
@@ -629,23 +645,23 @@
         
         try {
             const productsRef = db.ref(`products/${currentUserId}`);
-            await productsRef.push({
+            const newProduct = {
                 name: name,
                 price: price,
                 image: image,
                 desc: desc,
                 timestamp: Date.now()
-            });
+            };
+            await productsRef.push(newProduct);
             
+            console.log('Product added successfully:', newProduct);
             showToast('✅ পণ্য সফলভাবে যোগ করা হয়েছে!', 'success');
             
-            // Clear form
             document.getElementById('productName').value = '';
             document.getElementById('productPrice').value = '';
             document.getElementById('productImage').value = '';
             document.getElementById('productDesc').value = '';
             
-            // Reload products
             await loadProductsForShop(currentUserId, true);
             
         } catch(e) {
@@ -691,7 +707,6 @@
                 return;
             }
             
-            // Set section title
             productsSectionTitle.innerHTML = `${escapeHtml(shop.shopName || 'দোকান')} - পণ্যসমূহ`;
             
             const isApproved = (shop.status === 'approved');
@@ -700,7 +715,13 @@
                 '<div class="status-badge" style="background:#fff3e0;color:#b95b0d;"><i class="fas fa-clock"></i> পেন্ডিং</div>';
             
             const avatarChar = (shop.shopName?.charAt(0) || '?').toUpperCase();
-            const addressLine = shop.thana ? `${shop.thana}, ${shop.district}` : (shop.area ? `${shop.area}, ${shop.district}` : shop.district || 'ঠিকানা নেই');
+            
+            // Build address from shop data
+            let addressParts = [];
+            if(shop.thana) addressParts.push(shop.thana);
+            if(shop.district) addressParts.push(shop.district);
+            if(shop.division) addressParts.push(shop.division);
+            const addressLine = addressParts.join(', ') || (shop.area || 'ঠিকানা নেই');
             
             let contactsHtml = '';
             if(shop.phone) contactsHtml += `<a href="tel:${shop.phone}" class="contact-btn"><i class="fas fa-phone-alt"></i> কল করুন</a>`;
@@ -748,7 +769,6 @@
             loadingIndicator.style.display = 'none';
             profileDiv.style.display = 'block';
             
-            // Show/hide add product form
             if(isOwner && isApproved) {
                 addProductSection.style.display = 'block';
                 await loadProductsForShop(uid, true);
@@ -772,7 +792,8 @@
             currentUserId = user.uid;
             console.log('Logged in user:', currentUserId);
             
-            // Load shop data
+            await loadDivisionsData();
+            
             const shopSnap = await db.ref('shops/' + currentUserId).once('value');
             currentShopData = shopSnap.val();
             
@@ -784,13 +805,12 @@
             } else if(currentShopData) {
                 await loadShopProfile(currentUserId);
             } else {
-                // User has no shop profile
                 document.getElementById('profileLoadingIndicator').style.display = 'none';
                 document.getElementById('profileContent').style.display = 'block';
                 document.getElementById('profileContent').innerHTML = `<div class="not-found">
                     <i class="fas fa-store"></i>
                     <h3>আপনার এখনো দোকান নেই</h3>
-                    <p>দয়া করে প্রথমে <a href="dashboard.html" style="color:var(--primary);">ড্যাশবোর্ডে</a> গিয়ে দোকান রেজিস্টার করুন</p>
+                    <p>দয়া করে প্রথমে ড্যাশবোর্ডে গিয়ে দোকান রেজিস্টার করুন</p>
                 </div>`;
                 document.getElementById('addProductSection').style.display = 'none';
                 document.getElementById('productsSectionTitle').innerHTML = 'পণ্যসমূহ';
@@ -798,6 +818,8 @@
             }
         } else {
             console.log('User not logged in');
+            await loadDivisionsData();
+            
             const urlParams = new URLSearchParams(window.location.search);
             const shopId = urlParams.get('id');
             if(shopId) {
@@ -815,7 +837,6 @@
         }
     });
 
-    // Event listeners
     document.getElementById('addProductBtn')?.addEventListener('click', addProduct);
     
     window.scrollToProducts = () => document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
