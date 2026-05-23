@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>ড্যাশবোর্ড — দোকান ব্যবস্থাপনা</title>
+<title>ড্যাশবোর্ড — পাইকারি বাজার</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
@@ -21,8 +21,6 @@
     --success: #2ecc71;
     --card-shadow: 0 8px 32px rgba(108,43,217,0.15);
     --gold: #b8860b;
-    --dark-bg: #0b0b0b;
-    --dark-card: #151515;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -30,11 +28,6 @@ body {
     background:var(--bg);
     min-height:100vh;
     overflow-x:hidden;
-}
-/* Dark theme for admin panel */
-body.admin-theme {
-    background:var(--dark-bg);
-    color:white;
 }
 #loadingScreen {
     position:fixed;
@@ -53,39 +46,15 @@ body.admin-theme {
     border-top-color:#b77eff;
     border-right-color:#d9a7ff;
     border-radius:50%;
-    animation:spinFill 1s cubic-bezier(0.68,-0.55,0.265,1.55) infinite, pulseGlow 1.4s ease-in-out infinite alternate;
+    animation:spinFill 1s cubic-bezier(0.68,-0.55,0.265,1.55) infinite;
     margin-bottom:20px;
-    box-shadow:0 0 12px rgba(183,126,255,0.6);
 }
 @keyframes spinFill {
-    0% { transform:rotate(0deg); border-width:5px; border-top-color:#b77eff; border-right-color:#d9a7ff; }
-    50% { transform:rotate(180deg); border-width:8px; border-top-color:#c58cff; border-right-color:#ecbfff; }
-    100% { transform:rotate(360deg); border-width:5px; border-top-color:#a158ff; border-right-color:#c47cff; }
+    0% { transform:rotate(0deg); }
+    100% { transform:rotate(360deg); }
 }
-@keyframes pulseGlow {
-    0% { box-shadow:0 0 5px #c085ff; opacity:0.8; }
-    100% { box-shadow:0 0 25px #e3b3ff; opacity:1; }
-}
-.loading-text { 
-    color:white; 
-    font-size:18px; 
-    font-weight:500;
-    letter-spacing:1px;
-    background:linear-gradient(135deg,#f0e6ff,#ffffff);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    text-shadow:0 0 8px rgba(108,43,217,0.5);
-    animation:textFlicker 1.2s infinite alternate;
-}
-@keyframes textFlicker {
-    0% { opacity:0.6; letter-spacing:0px; }
-    100% { opacity:1; letter-spacing:1.5px; }
-}
-.content { 
-    padding:20px 16px 300px; 
-}
-/* Navigation Tabs */
+.loading-text { color:white; font-size:18px; font-weight:500; }
+.content { padding:20px 16px 300px; }
 .nav-tabs {
     display: flex;
     background: white;
@@ -93,14 +62,12 @@ body.admin-theme {
     margin-bottom: 20px;
     padding: 5px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-body.admin-theme .nav-tabs {
-    background: #1a1a1a;
+    flex-wrap: wrap;
 }
 .nav-tab {
     flex: 1;
     text-align: center;
-    padding: 12px;
+    padding: 12px 8px;
     border-radius: 25px;
     font-weight: 600;
     cursor: pointer;
@@ -111,19 +78,11 @@ body.admin-theme .nav-tabs {
     font-family: 'Hind Siliguri', sans-serif;
     font-size: 14px;
 }
-body.admin-theme .nav-tab {
-    color: #ccc;
-}
 .nav-tab.active {
     background: var(--primary);
     color: white;
     box-shadow: 0 2px 8px rgba(108,43,217,0.3);
 }
-body.admin-theme .nav-tab.active {
-    background: var(--gold);
-    color: black;
-}
-/* Page Container */
 .page {
     display: none;
     animation: fadeIn 0.3s ease;
@@ -135,7 +94,7 @@ body.admin-theme .nav-tab.active {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-/* ========== DASHBOARD STYLES (Original) ========== */
+/* ========== DASHBOARD STYLES ========== */
 .shop-preview-card {
     background:white;
     border-radius:28px;
@@ -143,10 +102,6 @@ body.admin-theme .nav-tab.active {
     margin-bottom:24px;
     box-shadow:0 20px 35px -12px rgba(108,43,217,0.25);
     border:1px solid rgba(108,43,217,0.15);
-}
-body.admin-theme .shop-preview-card {
-    background:#111;
-    border-color:#2a2a2a;
 }
 .card-shop-name {
     font-size:22px;
@@ -157,22 +112,12 @@ body.admin-theme .shop-preview-card {
     align-items:center;
     gap:8px;
 }
-body.admin-theme .card-shop-name {
-    color:var(--gold);
-}
 .card-shop-address {
     font-size:14px;
     color:#555;
     margin-top:6px;
     border-top:1px solid #efe6ff;
     padding-top:12px;
-    display:flex;
-    gap:10px;
-    align-items:flex-start;
-}
-body.admin-theme .card-shop-address {
-    color:#aaa;
-    border-top-color:#2a2a2a;
 }
 .small-status-badge {
     display:inline-flex;
@@ -216,10 +161,6 @@ body.admin-theme .card-shop-address {
     border:1.5px solid rgba(108,43,217,0.08);
     margin-bottom:16px;
 }
-body.admin-theme .tile-card {
-    background:#111;
-    border-color:#2a2a2a;
-}
 .tile-header {
     display:flex;
     align-items:center;
@@ -227,9 +168,6 @@ body.admin-theme .tile-card {
     margin-bottom:16px;
     padding-bottom:12px;
     border-bottom:1.5px solid #f0ebff;
-}
-body.admin-theme .tile-header {
-    border-bottom-color:#2a2a2a;
 }
 .tile-icon {
     width:38px; height:38px;
@@ -242,11 +180,9 @@ body.admin-theme .tile-header {
     box-shadow:0 4px 12px rgba(108,43,217,0.3);
 }
 .tile-title { font-size:15px; font-weight:700; color:var(--text); }
-body.admin-theme .tile-title { color:white; }
 .tile-subtitle { font-size:12px; color:var(--text-light); }
 .input-group { margin-bottom:14px; }
 .input-label { font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; display:block; }
-body.admin-theme .input-label { color:#ddd; }
 .input-wrap { position:relative; }
 .input-icon {
     position:absolute;
@@ -267,19 +203,10 @@ body.admin-theme .input-label { color:#ddd; }
     outline:none;
     transition:all 0.2s;
 }
-body.admin-theme .input-field {
-    background:#1a1a1a;
-    border-color:#333;
-    color:white;
-}
 .input-field:focus {
     border-color:var(--primary);
     background:white;
     box-shadow:0 0 0 4px rgba(108,43,217,0.08);
-}
-body.admin-theme .input-field:focus {
-    background:#222;
-    border-color:var(--gold);
 }
 textarea.input-field {
     padding-top:13px;
@@ -308,10 +235,6 @@ select.input-field { cursor:pointer; appearance:none; }
     color:#4a1a9e;
     font-weight:500;
 }
-body.admin-theme .cat-chip {
-    background:#2a2a2a;
-    color:var(--gold);
-}
 .cat-chip i { cursor:pointer; font-size:12px; color:#6c2bd9; }
 .cat-select-btn {
     width:100%;
@@ -325,11 +248,6 @@ body.admin-theme .cat-chip {
     color:var(--primary);
     font-weight:500;
     cursor:pointer;
-}
-body.admin-theme .cat-select-btn {
-    background:#1a1a1a;
-    border-color:#444;
-    color:var(--gold);
 }
 .cat-select-btn:hover { background:#f0ebff; border-color:var(--primary); }
 .cat-popup-list {
@@ -391,10 +309,6 @@ body.admin-theme .cat-select-btn {
     background:#f0ebff;
     color:var(--primary);
 }
-body.admin-theme .view-profile-btn {
-    background:#2a2a2a;
-    color:var(--gold);
-}
 .edit-toggle-btn {
     background:linear-gradient(135deg, var(--primary-light), var(--primary));
     color:white;
@@ -422,10 +336,6 @@ body.admin-theme .view-profile-btn {
     border-top:1px solid #f0ebff;
     box-shadow:0 -4px 20px rgba(108,43,217,0.1);
     z-index:100;
-}
-body.admin-theme .submit-wrap {
-    background:#111;
-    border-top-color:#2a2a2a;
 }
 .home-btn {
     display:block;
@@ -485,66 +395,348 @@ body.admin-theme .submit-wrap {
 .submit-btn.loading .btn-text { display:none; }
 @keyframes spin { to { transform:rotate(360deg); } }
 
+/* ========== PROFILE VIEW STYLES ========== */
+.profile-card {
+    background: white;
+    border-radius: 28px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.cover {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cover-shop-name {
+    font-size: 22px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #f0c040 0%, #fff8dc 40%, #ffffff 50%, #fff8dc 60%, #f0c040 100%);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-align: center;
+}
+.cover-address {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+}
+.avatar-wrap {
+    margin-top: -40px;
+    margin-left: 20px;
+}
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    border: 4px solid white;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+.profile-info {
+    padding: 12px 20px 20px;
+}
+.shop-name-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+.owner-name {
+    font-size: 13px;
+    color: var(--text-light);
+}
+.address-badge {
+    display: inline-flex;
+    background: #f0ebff;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    color: var(--primary);
+}
+.divider {
+    height: 1px;
+    background: #f0ebff;
+    margin: 0 20px;
+}
+.description-wrap {
+    padding: 16px 20px;
+}
+.description-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.description-scroll-wrap {
+    background: #faf8ff;
+    padding: 10px;
+    border-radius: 12px;
+}
+.description-scroll-text {
+    font-size: 13px;
+    color: var(--text-light);
+}
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 20px 20px;
+}
+.contact-tile {
+    padding: 12px;
+    border-radius: 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+.contact-tile.call { background: #f0ebff; color: var(--primary); }
+.contact-tile.whatsapp { background: #e8faf0; color: #25D366; }
+.contact-tile.telegram { background: #e8f0fe; color: #0088cc; }
+.info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 18px;
+}
+.info-card-title {
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #f0ebff;
+}
+.info-row {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+}
+.info-icon { font-size: 18px; width: 26px; }
+.info-label { font-size: 12px; color: var(--text-light); }
+.info-value { font-size: 14px; font-weight: 500; }
+
 /* ========== ADMIN PANEL STYLES ========== */
-.admin-box {
-    max-width:500px;
-    margin:0 auto;
-    background:#151515;
-    padding:20px;
-    border-radius:12px;
-    margin-bottom:20px;
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
 }
-.admin-box h3 {
-    margin-bottom:15px;
-    color:var(--gold);
+.admin-stat-tile {
+    background: white;
+    border-radius: 24px;
+    padding: 22px 18px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
 }
-.admin-box input, .admin-box textarea {
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    border:none;
-    border-radius:8px;
-    background:#2a2a2a;
-    color:white;
-    font-family:inherit;
+.admin-stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
-.admin-box button {
-    width:100%;
-    padding:12px;
-    background:var(--gold);
-    border:none;
-    font-weight:bold;
-    cursor:pointer;
-    color:black;
-    border-radius:8px;
-    margin-top:10px;
-    font-size:15px;
+.admin-stat-label {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 600;
 }
-.admin-box button:hover {
-    background:#d4a017;
+.admin-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 20px;
+    overflow-x: auto;
+    gap: 2px;
+    padding: 4px;
 }
-.product-list-box {
-    background:#151515;
-    border-radius:12px;
-    padding:20px;
-    margin-top:20px;
+.admin-tab {
+    flex: 1;
+    min-width: 80px;
+    padding: 14px 10px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text-light);
+    border-radius: 16px;
 }
-.product-item {
-    border-bottom:1px solid #333;
-    padding:12px;
-    margin-bottom:10px;
+.admin-tab.active {
+    color: var(--primary);
+    background: white;
+    box-shadow: 0 6px 20px rgba(108,43,217,0.2);
 }
-.product-item strong {
-    color:var(--gold);
+.admin-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 16px;
 }
-.message {
-    margin-top:10px;
-    padding:10px;
-    border-radius:8px;
-    text-align:center;
+.ac-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
 }
-.message.success { background:#28a745; color:white; }
-.message.error { background:#dc3545; color:white; }
+.ac-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+}
+.ac-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+}
+.ac-info {
+    font-size: 12px;
+    color: var(--text-light);
+}
+.ac-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f0ebff;
+}
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: auto;
+}
+.status-badge.pending  { background: #fffbeb; color: #d97706; }
+.status-badge.approved { background: #ecfdf5; color: #059669; }
+.status-badge.rejected { background: #fef2f2; color: #dc2626; }
+.ac-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.ac-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.btn-approve { background: #ecfdf5; color: #059669; }
+.btn-reject  { background: #fef2f2; color: #dc2626; }
+.btn-delete  { background: #fef2f2; color: #dc2626; }
+.btn-view    { background: #f0ebff; color: var(--primary); }
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+}
+.video-card-admin {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 16px;
+}
+.video-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.video-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+}
+.video-url {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    word-break: break-all;
+}
+.video-preview {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 12px;
+}
+.video-actions {
+    display: flex;
+    gap: 10px;
+}
+.video-edit-btn, .video-delete-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.video-edit-btn { background: #f0ebff; color: var(--primary); }
+.video-delete-btn { background: #fef2f2; color: #dc2626; }
+.add-video-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+}
+.add-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+.save-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.marquee-preview {
+    background: #f0ebff;
+    padding: 16px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+}
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 9999;
+    display: none;
+}
 </style>
 </head>
 <body>
@@ -560,7 +752,7 @@ body.admin-theme .submit-wrap {
         <button class="nav-tab" data-page="adminPanel">⚙️ অ্যাডমিন প্যানেল</button>
     </div>
 
-    <!-- Dashboard Page (Original) -->
+    <!-- ==================== DASHBOARD PAGE ==================== -->
     <div id="dashboardPage" class="page active-page">
         <div class="shop-preview-card" id="shopPreviewCard">
             <div class="card-shop-name"><span id="previewCardShopName">দোকানের নাম</span></div>
@@ -568,19 +760,19 @@ body.admin-theme .submit-wrap {
             <div id="cardStatusBadge" class="small-status-badge pending">⏳ পেন্ডিং</div>
         </div>
 
-        <button class="view-profile-btn" id="viewProfileBtn" onclick="viewProfile()"><i class="fas fa-user-circle"></i> আপনার প্রোফাইল (অন্যরা যেভাবে দেখবে)</button>
+        <button class="view-profile-btn" id="viewProfileBtn" onclick="viewProfile()"><i class="fas fa-user-circle"></i> আপনার প্রোফাইল দেখুন</button>
         <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
         <div id="editFormContainer">
             <div class="tile-card">
                 <div class="tile-header"><div class="tile-icon">🏪</div><div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div></div>
                 <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
-                <div class="input-group"><label class="input-label">প্রোপাইটারের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="এখানে প্রোপাইটারের নাম লিখুন"></div></div>
+                <div class="input-group"><label class="input-label">মালিকের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div></div>
                 <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
             </div>
 
             <div class="tile-card">
-                <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা (JSON থেকে লোড)</div></div></div>
+                <div class="tile-header"><div class="tile-icon">📍</div><div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা</div></div></div>
                 <div class="input-group">
                     <label class="input-label">বিভাগ *</label>
                     <div class="input-wrap">
@@ -600,13 +792,13 @@ body.admin-theme .submit-wrap {
                     <div class="input-wrap"><span class="input-icon">🏘️</span><select class="input-field" id="thana" onchange="onThanaChange()"><option value="">উপজেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div>
                 </div>
                 <div class="input-group" id="areaGroup" style="display:none">
-                    <label class="input-label">আপনার দোকানের পূর্ণাঙ্গ ঠিকানা লিখুন</label>
-                    <div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="উদাহরণ: হাজী বই মার্কেট, স্টেশন রোড, চৌমুহন, নোয়াখালী।" style="height:70px"></textarea></div>
+                    <label class="input-label">পূর্ণাঙ্গ ঠিকানা লিখুন</label>
+                    <div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="বিস্তারিত ঠিকানা লিখুন..." style="height:70px"></textarea></div>
                 </div>
             </div>
 
             <div class="tile-card" id="categorySection">
-                <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন (JSON থেকে লোড)</div></div></div>
+                <div class="tile-header"><div class="tile-icon">🗂️</div><div><div class="tile-title">পণ্যের ক্যাটাগরি (একাধিক)</div><div class="tile-subtitle">আপনার দোকানের পণ্যের ধরন বাছাই করুন</div></div></div>
                 <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
                 <button type="button" class="cat-select-btn" onclick="openMultiCategoryPopup()"><span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span><span>▼</span></button>
                 <input type="hidden" id="categoriesHidden" value="">
@@ -617,64 +809,101 @@ body.admin-theme .submit-wrap {
                 <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
                 <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
                 <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
-                <div class="input-group"><label class="input-label">আপনার দোকানের ভিডিও লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
+                <div class="input-group"><label class="input-label">ভিডিও লিংক</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
             </div>
         </div>
     </div>
 
-    <!-- Profile View Page (Like profile.html) -->
+    <!-- ==================== PROFILE VIEW PAGE ==================== -->
     <div id="profileViewPage" class="page">
-        <div class="profile-card" style="background:white; border-radius:28px; overflow:hidden; margin-bottom:20px;">
-            <div class="cover" id="coverBg" style="height:150px; background:linear-gradient(135deg, #6c2bd9, #a259f7); display:flex; align-items:center; justify-content:center;">
+        <div class="profile-card">
+            <div class="cover" id="coverBg" style="background:linear-gradient(135deg, #6c2bd9, #a259f7);">
                 <div>
-                    <div class="cover-shop-name" id="coverShopName" style="font-size:22px;">দোকানের নাম</div>
-                    <div class="cover-address" id="coverAddress" style="font-size:12px;">📍 ঠিকানা</div>
+                    <div class="cover-shop-name" id="coverShopName">দোকানের নাম</div>
+                    <div class="cover-address" id="coverAddress">📍 ঠিকানা</div>
                 </div>
             </div>
-            <div class="avatar-wrap" style="margin-top:-40px; margin-left:20px;">
-                <div class="avatar" id="profileAvatar" style="width:70px; height:70px; font-size:28px; border-radius:20px;">?</div>
+            <div class="avatar-wrap">
+                <div class="avatar" id="profileAvatar">?</div>
             </div>
-            <div class="profile-info" style="padding:12px 20px 20px;">
-                <div class="shop-name-text" id="shopNameText" style="font-size:20px;"></div>
-                <div class="owner-name" id="ownerNameText" style="font-size:13px;"></div>
-                <div class="address-badge" style="display:inline-flex; background:#f0ebff; padding:4px 12px; border-radius:99px;"><span>📍</span><span id="addressText"></span></div>
+            <div class="profile-info">
+                <div class="shop-name-text" id="shopNameText"></div>
+                <div class="owner-name" id="ownerNameText"></div>
+                <div class="address-badge"><span>📍</span><span id="addressText"></span></div>
             </div>
-            <div class="divider" style="height:1px; background:#f0ebff; margin:0 20px;"></div>
-            <div class="description-wrap" id="descriptionWrap" style="display:none; padding:16px 20px;">
-                <div class="description-title" style="font-weight:700;">📋 দোকান পরিচিতি</div>
-                <div class="description-scroll-wrap" style="background:#faf8ff; padding:10px; border-radius:12px;">
-                    <span id="descriptionText" style="font-size:13px;"></span>
+            <div class="divider"></div>
+            <div class="description-wrap" id="descriptionWrap" style="display:none">
+                <div class="description-title">📋 দোকান পরিচিতি</div>
+                <div class="description-scroll-wrap">
+                    <span class="description-scroll-text" id="descriptionText"></span>
                 </div>
             </div>
-            <div class="contact-grid" id="contactGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 20px 20px;"></div>
+            <div class="contact-grid" id="contactGrid"></div>
         </div>
-        <div class="info-card" style="background:white; border-radius:20px; padding:18px;">
-            <div class="info-card-title" style="font-weight:700;">📋 দোকানের বিস্তারিত</div>
-            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">🏪</div><div><div class="info-label">দোকানের নাম</div><div class="info-value" id="detailShopName">—</div></div></div>
-            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">👤</div><div><div class="info-label">মালিকের নাম</div><div class="info-value" id="detailOwnerName">—</div></div></div>
-            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">🗺️</div><div><div class="info-label">বিভাগ</div><div class="info-value" id="detailDivision">—</div></div></div>
-            <div class="info-row" style="display:flex; gap:12px; padding:8px 0;"><div class="info-icon">📌</div><div><div class="info-label">জেলা</div><div class="info-value" id="detailDistrict">—</div></div></div>
+        <div class="info-card">
+            <div class="info-card-title">📋 দোকানের বিস্তারিত</div>
+            <div class="info-row"><div class="info-icon">🏪</div><div><div class="info-label">দোকানের নাম</div><div class="info-value" id="detailShopName">—</div></div></div>
+            <div class="info-row"><div class="info-icon">👤</div><div><div class="info-label">মালিকের নাম</div><div class="info-value" id="detailOwnerName">—</div></div></div>
+            <div class="info-row"><div class="info-icon">🗺️</div><div><div class="info-label">বিভাগ</div><div class="info-value" id="detailDivision">—</div></div></div>
+            <div class="info-row"><div class="info-icon">📌</div><div><div class="info-label">জেলা</div><div class="info-value" id="detailDistrict">—</div></div></div>
             <div class="info-row" id="detailThanaRow"><div class="info-icon">📍</div><div><div class="info-label">থানা/উপজেলা</div><div class="info-value" id="detailThana">—</div></div></div>
-            <div class="info-row" id="detailPhoneRow"><div class="info-icon">📱</div><div><div class="info-label">মোবাইল</div><div class="info-value" id="detailPhone">—</div></div></div>
+            <div class="info-row"><div class="info-icon">📱</div><div><div class="info-label">মোবাইল</div><div class="info-value" id="detailPhone">—</div></div></div>
         </div>
     </div>
 
-    <!-- Admin Panel Page -->
+    <!-- ==================== ADMIN PANEL PAGE (admin.html এর সম্পূর্ণ কোড) ==================== -->
     <div id="adminPanelPage" class="page">
-        <div class="admin-box">
-            <h3>➕ Add New Product</h3>
-            <input id="productName" placeholder="Product Name">
-            <input id="productPrice" placeholder="Price (৳)">
-            <input id="productImage" placeholder="Google Drive Share Link">
-            <textarea id="productDesc" placeholder="Description" rows="3"></textarea>
-            <button onclick="addProduct()">➕ ADD PRODUCT</button>
-            <button onclick="loadProductsList()" style="background:#28a745; margin-top:5px;">👁️ VIEW ALL PRODUCTS</button>
+        <div class="admin-stats-grid">
+            <div class="admin-stat-tile"><div class="admin-stat-num" id="statTotal">০</div><div class="admin-stat-label">মোট দোকান</div></div>
+            <div class="admin-stat-tile"><div class="admin-stat-num" id="statPending">০</div><div class="admin-stat-label">⏳ পেন্ডিং</div></div>
+            <div class="admin-stat-tile"><div class="admin-stat-num" id="statApproved">০</div><div class="admin-stat-label">✅ Approved</div></div>
+            <div class="admin-stat-tile"><div class="admin-stat-num" id="statRejected">০</div><div class="admin-stat-label">❌ Rejected</div></div>
         </div>
 
-        <div id="productListContainer" class="product-list-box" style="display:none;">
-            <h3 style="color:var(--gold); margin-bottom:15px;">📦 Product List</h3>
-            <div id="productsItems"></div>
-            <button onclick="hideProductList()" style="background:#6c757d;">CLOSE</button>
+        <div class="admin-tabs">
+            <div class="admin-tab active" onclick="switchAdminTab('pending')">⏳ পেন্ডিং <span id="pendingBadge" style="background:var(--accent);color:white;padding:2px 8px;border-radius:20px;margin-left:5px;">0</span></div>
+            <div class="admin-tab" onclick="switchAdminTab('approved')">✅ Approved</div>
+            <div class="admin-tab" onclick="switchAdminTab('rejected')">❌ Rejected</div>
+            <div class="admin-tab" onclick="switchAdminTab('videos')">🎬 ভিডিও</div>
+            <div class="admin-tab" onclick="switchAdminTab('marquee')">📢 চলন্ত লেখা</div>
+            <div class="admin-tab" onclick="switchAdminTab('slider')">🖼️ Slider</div>
+        </div>
+
+        <div id="adminShopSection"></div>
+
+        <div id="adminVideosSection" style="display:none">
+            <div class="add-video-card">
+                <div class="add-title">➕ নতুন ভিডিও যোগ করুন</div>
+                <div class="input-group"><label>🎬 ভিডিও URL (MP4 লিংক)</label><input type="url" class="input-field" id="videoUrl" placeholder="https://example.com/video.mp4"></div>
+                <div class="input-group"><label>📝 টাইটেল</label><input type="text" class="input-field" id="videoTitle" placeholder="ভিডিওর টাইটেল"></div>
+                <div class="input-group"><label>📄 বিবরণ</label><input type="text" class="input-field" id="videoDesc" placeholder="ভিডিও সম্পর্কে সংক্ষিপ্ত বিবরণ"></div>
+                <div class="input-group"><label>🖼️ থাম্বনেইল URL</label><input type="url" class="input-field" id="videoThumb" placeholder="https://example.com/thumb.jpg"></div>
+                <div class="input-group"><label>🔢 অর্ডার</label><input type="number" class="input-field" id="videoOrder" value="0"></div>
+                <button class="save-btn" onclick="addVideo()">➕ ভিডিও যোগ করুন</button>
+            </div>
+            <div id="videosList"></div>
+        </div>
+
+        <div id="adminMarqueeSection" style="display:none">
+            <div class="admin-card">
+                <div class="marquee-preview"><div style="font-size:12px;color:#666;margin-bottom:8px">প্রিভিউ:</div><div id="marqueePreview" style="background:linear-gradient(90deg,var(--primary),var(--primary-light));color:white;padding:14px;border-radius:99px;text-align:center">এখানে লেখা দেখাবে</div></div>
+                <input type="text" class="input-field" id="marqueeTextInput" placeholder="চলন্ত লেখার টেক্সট লিখুন..." style="margin-bottom:16px">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px"><input type="checkbox" id="marqueeEnableCheck"> <label>চলন্ত লেখা সক্রিয় করুন</label></div>
+                <button class="save-btn" onclick="saveMarquee()">💾 সংরক্ষণ করুন</button>
+            </div>
+        </div>
+
+        <div id="adminSliderSection" style="display:none">
+            <div class="admin-card">
+                <div class="add-title">🖼️ Slider পরিচালনা</div>
+                <div id="slideList"></div>
+                <div style="margin-top:20px;padding-top:20px;border-top:1px solid #eee">
+                    <div class="add-title" style="font-size:16px">➕ নতুন স্লাইড যোগ করুন</div>
+                    <input type="url" class="input-field" id="slideImg" placeholder="ছবির URL" style="margin-bottom:10px">
+                    <input type="url" class="input-field" id="slideLink" placeholder="লিংক (ঐচ্ছিক)" style="margin-bottom:10px">
+                    <button class="save-btn" onclick="addSlide()">➕ যোগ করুন</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -693,6 +922,8 @@ body.admin-theme .submit-wrap {
         <div class="cat-popup-actions"><button class="popup-btn" style="background:#e0d6ff;" onclick="closeMultiCatPopup()">সেভ করুন</button></div>
     </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -715,6 +946,8 @@ let divisionsData = [];
 let categoriesList = [];
 let selectedCategories = [];
 let currentShopData = null;
+let currentAdminTab = 'pending';
+let allShops = {};
 
 // ========== TAB SWITCHING ==========
 document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -725,14 +958,6 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(pageId + 'Page').classList.add('active-page');
         
-        // Apply theme
-        if (pageId === 'adminPanel') {
-            document.body.classList.add('admin-theme');
-        } else {
-            document.body.classList.remove('admin-theme');
-        }
-        
-        // Refresh data when switching to profile view
         if (pageId === 'profileView' && auth.currentUser) {
             loadProfileViewData(auth.currentUser.uid);
         }
@@ -757,9 +982,17 @@ async function loadProfileViewData(uid) {
                 document.getElementById('descriptionText').textContent = shop.description;
             }
             let contactHtml = '';
-            if (shop.phone) contactHtml += `<a href="tel:${shop.phone}" class="contact-tile call" style="background:#f0ebff; padding:12px; border-radius:16px; text-decoration:none; display:flex; align-items:center; gap:8px;">📞 <span>Call</span></a>`;
-            if (shop.whatsapp) contactHtml += `<a href="https://wa.me/88${shop.whatsapp.replace(/[^0-9]/g,'')}" class="contact-tile whatsapp" style="background:#e8faf0; padding:12px; border-radius:16px; text-decoration:none; display:flex; align-items:center; gap:8px;">💬 <span>WhatsApp</span></a>`;
-            if (shop.telegram) contactHtml += `<a href="https://t.me/+88${shop.telegram.replace(/[^0-9]/g,'')}" class="contact-tile telegram" style="background:#e8f0fe; padding:12px; border-radius:16px; text-decoration:none; display:flex; align-items:center; gap:8px;">📡 <span>Telegram</span></a>`;
+            if (shop.phone) contactHtml += `<a href="tel:${shop.phone}" class="contact-tile call"><span>📞</span> Call করুন</a>`;
+            if (shop.whatsapp) {
+                let waNumber = shop.whatsapp.replace(/[^0-9]/g, '');
+                if (!waNumber.startsWith('88')) waNumber = '88' + waNumber;
+                contactHtml += `<a href="https://wa.me/${waNumber}" class="contact-tile whatsapp"><span>💬</span> WhatsApp</a>`;
+            }
+            if (shop.telegram) {
+                let tgNumber = shop.telegram.replace(/[^0-9]/g, '');
+                if (!tgNumber.startsWith('88')) tgNumber = '88' + tgNumber;
+                contactHtml += `<a href="https://t.me/+${tgNumber}" class="contact-tile telegram"><span>📡</span> Telegram</a>`;
+            }
             document.getElementById('contactGrid').innerHTML = contactHtml || '<div style="grid-column:span 2; text-align:center;">কোনো যোগাযোগের তথ্য নেই</div>';
             document.getElementById('detailShopName').textContent = shop.shopName || '—';
             document.getElementById('detailOwnerName').textContent = shop.ownerName || '—';
@@ -771,88 +1004,7 @@ async function loadProfileViewData(uid) {
     } catch(e) { console.error(e); }
 }
 
-// ========== ADMIN PANEL FUNCTIONS ==========
-function extractDriveImageId(url) {
-    if(!url) return null;
-    let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if(match) return match[1];
-    match = url.match(/id=([a-zA-Z0-9_-]+)/);
-    if(match) return match[1];
-    return null;
-}
-
-function addProduct() {
-    let name = document.getElementById('productName').value.trim();
-    let price = document.getElementById('productPrice').value.trim();
-    let image = document.getElementById('productImage').value.trim();
-    let desc = document.getElementById('productDesc').value.trim();
-    
-    if(!name || !price || !image) {
-        showAdminMessage('Please fill all required fields!', 'error');
-        return;
-    }
-    
-    db.ref("products").push({
-        name: name,
-        price: price,
-        image: image,
-        desc: desc,
-        timestamp: Date.now()
-    }).then(() => {
-        showAdminMessage('✅ Product Added Successfully!', 'success');
-        document.getElementById('productName').value = '';
-        document.getElementById('productPrice').value = '';
-        document.getElementById('productImage').value = '';
-        document.getElementById('productDesc').value = '';
-    }).catch(error => {
-        showAdminMessage('❌ Error: ' + error.message, 'error');
-    });
-}
-
-function showAdminMessage(msg, type) {
-    let oldMsg = document.querySelector('.admin-box .message');
-    if(oldMsg) oldMsg.remove();
-    let msgDiv = document.createElement('div');
-    msgDiv.className = 'message ' + type;
-    msgDiv.textContent = msg;
-    document.querySelector('.admin-box').appendChild(msgDiv);
-    setTimeout(() => msgDiv.remove(), 3000);
-}
-
-function loadProductsList() {
-    let container = document.getElementById('productListContainer');
-    let itemsDiv = document.getElementById('productsItems');
-    container.style.display = 'block';
-    itemsDiv.innerHTML = '<p>Loading...</p>';
-    
-    db.ref("products").once("value").then(snapshot => {
-        itemsDiv.innerHTML = '';
-        let hasProducts = false;
-        snapshot.forEach(child => {
-            hasProducts = true;
-            let p = child.val();
-            itemsDiv.innerHTML += `
-                <div class="product-item">
-                    <strong>${escapeHtml(p.name)}</strong><br>
-                    Price: ৳ ${escapeHtml(p.price)}<br>
-                    <small>ID: ${child.key.substring(0,8)}...</small>
-                </div>
-            `;
-        });
-        if(!hasProducts) itemsDiv.innerHTML = '<p>No products found.</p>';
-    });
-}
-
-function hideProductList() {
-    document.getElementById('productListContainer').style.display = 'none';
-}
-
-function escapeHtml(str) {
-    if(!str) return '';
-    return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
-}
-
-// ========== DASHBOARD FUNCTIONS (Original) ==========
+// ========== DASHBOARD FUNCTIONS ==========
 async function loadDivisionsFromJSON() {
     try {
         const res = await fetch(DIVISIONS_JSON_URL);
@@ -876,7 +1028,7 @@ async function loadCategoriesFromJSON() {
         const res = await fetch(CATEGORIES_JSON_URL);
         categoriesList = await res.json();
     } catch (error) {
-        categoriesList = ["পোশাক ও বস্ত্র", "খাদ্যপণ্য ও মসলা", "ইলেকট্রনিক্স", "গৃহস্থালি পণ্য", "হার্ডওয়্যার ও নির্মাণ", "ওষুধ ও স্বাস্থ্য", "সৌন্দর্য ও কসমেটিক্স", "ব্যাগ ও জুতা", "কৃষি ও সার", "স্টেশনারি ও অফিস", "অটোমোবাইল", "খেলনা ও শিশু পণ্য", "উপহার ও সাজসজ্জা", "প্যাকেজিং সামগ্রী", "শিল্প ও কারখানা", "মাছ ও মাংস", "নার্সারি ও বাগান", "খেলাধুলা সামগ্রী", "বই ও শিক্ষা সামগ্রী", "সোলার ও বিদ্যুৎ", "সেলাই ও কারুকাজ", "যানবাহন যন্ত্রাংশ", "অন্যান্য"];
+        categoriesList = ["কসমেটিক্স", "ব্যাগ", "স্টেশনারি", "খেলনা", "উপহার সামগ্রী", "যানবাহন", "অন্যান্য"];
     }
 }
 
@@ -935,12 +1087,20 @@ window.onThanaChange = function() {
 function renderChips() {
     const container = document.getElementById('selectedChipsContainer');
     container.innerHTML = '';
-    selectedCategories.forEach(cat => {
-        const chip = document.createElement('div');
-        chip.className = 'cat-chip';
-        chip.innerHTML = `${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g, "\\'")}')"></i>`;
-        container.appendChild(chip);
-    });
+    if (selectedCategories.length === 0) {
+        const emptyMsg = document.createElement('div');
+        emptyMsg.className = 'cat-chip';
+        emptyMsg.style.opacity = '0.7';
+        emptyMsg.innerHTML = '⚠️ কোন ক্যাটাগরি সিলেক্ট করা হয়নি';
+        container.appendChild(emptyMsg);
+    } else {
+        selectedCategories.forEach(cat => {
+            const chip = document.createElement('div');
+            chip.className = 'cat-chip';
+            chip.innerHTML = `${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g, "\\'")}')"></i>`;
+            container.appendChild(chip);
+        });
+    }
     document.getElementById('categoriesHidden').value = selectedCategories.join(',');
 }
 
@@ -956,7 +1116,7 @@ function openMultiCategoryPopup() {
         const isSelected = selectedCategories.includes(cat);
         const div = document.createElement('div');
         div.className = `cat-item-multi ${isSelected ? 'selected' : ''}`;
-        div.innerHTML = `${cat} ${isSelected ? '<i class="fas fa-check-circle"></i>' : ''}`;
+        div.innerHTML = `${cat} ${isSelected ? '✅' : '➕'}`;
         div.onclick = () => {
             if (selectedCategories.includes(cat)) {
                 selectedCategories = selectedCategories.filter(c => c !== cat);
@@ -1015,6 +1175,13 @@ function showFloatyToast(msg, isError = false) {
     setTimeout(() => toast.remove(), 4000);
 }
 
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+}
+
 async function saveShopData() {
     const user = auth.currentUser;
     if (!user) return;
@@ -1061,6 +1228,192 @@ async function saveShopData() {
         showFloatyToast('সংরক্ষণ ব্যর্থ!', true);
     }
 }
+
+// ========== ADMIN PANEL FUNCTIONS ==========
+db.ref('shops').on('value', snap => {
+    allShops = {};
+    let total=0, pending=0, approved=0, rejected=0;
+    if (snap.exists()) {
+        snap.forEach(c => {
+            allShops[c.key] = c.val();
+            total++;
+            const st = c.val().status;
+            if (st==='pending') pending++;
+            if (st==='approved') approved++;
+            if (st==='rejected') rejected++;
+        });
+    }
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statApproved').textContent = approved;
+    document.getElementById('statRejected').textContent = rejected;
+    document.getElementById('pendingBadge').textContent = pending;
+    
+    if (currentAdminTab !== 'videos' && currentAdminTab !== 'marquee' && currentAdminTab !== 'slider') {
+        renderShops(currentAdminTab);
+    }
+});
+
+function switchAdminTab(tab) {
+    currentAdminTab = tab;
+    document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.getElementById('adminShopSection').style.display = (tab==='pending'||tab==='approved'||tab==='rejected') ? 'block' : 'none';
+    document.getElementById('adminVideosSection').style.display = tab==='videos' ? 'block' : 'none';
+    document.getElementById('adminMarqueeSection').style.display = tab==='marquee' ? 'block' : 'none';
+    document.getElementById('adminSliderSection').style.display = tab==='slider' ? 'block' : 'none';
+
+    if (tab==='videos') loadVideos();
+    else if (tab==='slider') loadSliderAdmin();
+    else if (tab==='marquee') loadMarqueeSettings();
+    else renderShops(tab);
+}
+
+function renderShops(status) {
+    const list = document.getElementById('adminShopSection');
+    const filtered = Object.entries(allShops).filter(([,s])=>s.status===status);
+    if (!filtered.length) {
+        list.innerHTML=`<div class="empty-state"><div class="empty-icon">🏪</div><div>কোনো দোকান নেই</div></div>`;
+        return;
+    }
+    const grads = ['linear-gradient(135deg,#6c2bd9,#a259f7)','linear-gradient(135deg,#0f3460,#16213e)','linear-gradient(135deg,#1a6b3c,#2ecc71)'];
+    list.innerHTML = filtered.map(([id,shop],i) => {
+        const av = (shop.shopName||'?').charAt(0);
+        const statusLabel = shop.status==='pending'?'⏳ পেন্ডিং':shop.status==='approved'?'✅ Approved':'❌ Rejected';
+        let actionBtns = '';
+        if (status==='pending') {
+            actionBtns = `<button class="ac-btn btn-approve" onclick="updateStatus('${id}','approved')">✅ Approve</button>
+                          <button class="ac-btn btn-reject" onclick="updateStatus('${id}','rejected')">❌ Reject</button>`;
+        } else if (status==='approved') {
+            actionBtns = `<button class="ac-btn btn-reject" onclick="updateStatus('${id}','rejected')">❌ Reject</button>
+                          <button class="ac-btn btn-delete" onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button>
+                          <button class="ac-btn btn-view" onclick="window.open('profile.html?id=${id}','_blank')">👁️ দেখুন</button>`;
+        } else {
+            actionBtns = `<button class="ac-btn btn-approve" onclick="updateStatus('${id}','approved')">✅ Approve</button>
+                          <button class="ac-btn btn-delete" onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button>`;
+        }
+        return `<div class="admin-card"><div class="ac-top"><div class="ac-avatar" style="background:${grads[i%grads.length]}">${av}</div><div style="flex:1"><div class="ac-name">${escapeHtml(shop.shopName||'—')}</div><div class="ac-info">${escapeHtml(shop.ownerName||'')}</div></div><div class="status-badge ${shop.status}">${statusLabel}</div></div><div class="ac-row"><span>📍</span><span>${escapeHtml(shop.area||'')}, ${escapeHtml(shop.district||'')}</span></div><div class="ac-row"><span>📱</span><span>${escapeHtml(shop.phone||'—')}</span></div><div class="ac-actions">${actionBtns}</div></div>`;
+    }).join('');
+}
+
+async function updateStatus(id, status) {
+    try { 
+        await db.ref('shops/'+id).update({status}); 
+        showToast(status==='approved'?'✅ Approved!':'❌ Rejected!'); 
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+async function deleteShop(id, name) {
+    if (!confirm(`"${name}" Delete করবেন?`)) return;
+    try { 
+        await db.ref('shops/'+id).remove(); 
+        showToast('🗑️ Delete হয়েছে!'); 
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+function loadVideos() {
+    db.ref('adminVideos').orderByChild('order').on('value', snap => {
+        const container = document.getElementById('videosList');
+        if (!snap.exists()) {
+            container.innerHTML = '<div class="empty-state"><div>🎬 কোনো ভিডিও নেই</div></div>';
+            return;
+        }
+        let html = '';
+        snap.forEach(child => {
+            const v = child.val();
+            const key = child.key;
+            html += `<div class="video-card-admin"><div class="video-header"><div class="video-title">${escapeHtml(v.title || 'ভিডিও')}</div><div style="font-size:11px;color:#666">অর্ডার: ${v.order || 0}</div></div>
+            <div class="video-url">${escapeHtml(v.videoUrl || '')}</div>
+            ${v.thumbnail ? `<img src="${v.thumbnail}" class="video-preview" onerror="this.style.display='none'">` : ''}
+            <div style="font-size:12px;color:#666;margin-bottom:12px">${escapeHtml(v.description || '')}</div>
+            <div class="video-actions"><button class="video-edit-btn" onclick="editVideo('${key}')">✏️ এডিট</button><button class="video-delete-btn" onclick="deleteVideo('${key}')">🗑️ ডিলিট</button></div></div>`;
+        });
+        container.innerHTML = html;
+    });
+}
+
+async function addVideo() {
+    const videoUrl = document.getElementById('videoUrl').value.trim();
+    const title = document.getElementById('videoTitle').value.trim();
+    const description = document.getElementById('videoDesc').value.trim();
+    const thumbnail = document.getElementById('videoThumb').value.trim();
+    const order = parseInt(document.getElementById('videoOrder').value) || 0;
+    if (!videoUrl) { showToast('⚠️ ভিডিও URL দিন!'); return; }
+    try {
+        await db.ref('adminVideos').push({ videoUrl, title: title || 'ভিডিও', description, thumbnail, order, enabled: true });
+        document.getElementById('videoUrl').value = '';
+        document.getElementById('videoTitle').value = '';
+        document.getElementById('videoDesc').value = '';
+        document.getElementById('videoThumb').value = '';
+        document.getElementById('videoOrder').value = '0';
+        showToast('✅ ভিডিও যোগ হয়েছে!');
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+async function deleteVideo(key) {
+    if (!confirm('ভিডিও ডিলিট করবেন?')) return;
+    try { await db.ref('adminVideos/'+key).remove(); showToast('🗑️ ভিডিও ডিলিট হয়েছে!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+function editVideo(key) {
+    const newUrl = prompt('নতুন ভিডিও URL দিন:');
+    if (newUrl) { db.ref('adminVideos/'+key).update({ videoUrl: newUrl }); showToast('✏️ আপডেট হয়েছে!'); }
+}
+
+function loadMarqueeSettings() {
+    db.ref('marquee').on('value', snap => {
+        if (snap.exists()) {
+            const data = snap.val();
+            document.getElementById('marqueeTextInput').value = data.text || '';
+            document.getElementById('marqueeEnableCheck').checked = data.enabled === true;
+            updateMarqueePreview(data.text || '');
+        }
+    });
+}
+
+function updateMarqueePreview(text) {
+    const preview = document.getElementById('marqueePreview');
+    if (text && text.trim()) preview.innerHTML = `<marquee>✨ ${text} ✨</marquee>`;
+    else preview.innerHTML = '🔇 চলন্ত লেখা বন্ধ আছে';
+}
+
+async function saveMarquee() {
+    const text = document.getElementById('marqueeTextInput').value.trim();
+    const enabled = document.getElementById('marqueeEnableCheck').checked;
+    try { await db.ref('marquee').set({ text, enabled }); updateMarqueePreview(text); showToast('💾 সংরক্ষিত!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+function loadSliderAdmin() {
+    db.ref('slider').on('value', snap => {
+        const list = document.getElementById('slideList');
+        if (!snap.exists()) { list.innerHTML = '<div class="empty-state">কোনো স্লাইড নেই</div>'; return; }
+        let html = '';
+        snap.forEach(child => {
+            const s = child.val();
+            html += `<div style="background:#faf8ff;border-radius:16px;margin-bottom:12px;overflow:hidden"><img src="${s.image}" style="width:100%;height:120px;object-fit:cover"><div style="padding:12px;display:flex;justify-content:space-between"><span style="font-size:12px;color:#666">${s.link||'কোনো লিংক নেই'}</span><button class="video-delete-btn" style="padding:6px 12px" onclick="deleteSlide('${child.key}')">🗑️</button></div></div>`;
+        });
+        list.innerHTML = html;
+    });
+}
+
+async function addSlide() {
+    const img = document.getElementById('slideImg').value.trim();
+    if (!img) { showToast('ছবির URL দিন!'); return; }
+    const link = document.getElementById('slideLink').value.trim();
+    try { await db.ref('slider').push({image: img, link: link||''}); document.getElementById('slideImg').value=''; document.getElementById('slideLink').value=''; showToast('✅ যোগ হয়েছে!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+async function deleteSlide(key) {
+    if (!confirm('ডিলিট করবেন?')) return;
+    try { await db.ref('slider/'+key).remove(); showToast('🗑️ ডিলিট হয়েছে!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
 
 // ========== AUTH STATE ==========
 auth.onAuthStateChanged(async user => {
