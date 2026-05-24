@@ -12,114 +12,425 @@
     --primary: #6c2bd9;
     --primary-dark: #4a1a9e;
     --primary-light: #a259f7;
+    --primary-soft: #e8e0ff;
     --accent: #f0c040;
-    --bg: #f5f3ff;
+    --accent-dark: #d4a017;
+    --bg: #f8f6ff;
     --white: #ffffff;
     --text: #1a1a2e;
     --text-light: #666;
-    --card-shadow: 0 20px 35px -12px rgba(108,43,217,0.25);
-    --glow-purple: 0 0 20px rgba(108,43,217,0.6);
-    --glow-gold: 0 0 15px rgba(240,192,64,0.5);
+    --text-muted: #888;
+    --success: #2ecc71;
+    --error: #e74c3c;
+    --warning: #f39c12;
+    --card-shadow: 0 12px 30px -12px rgba(108,43,217,0.15);
+    --glow-purple: 0 0 15px rgba(108,43,217,0.4);
+    --glow-gold: 0 0 12px rgba(240,192,64,0.4);
+    --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family:'Hind Siliguri',sans-serif;
-    background: linear-gradient(145deg, #f5f3ff 0%, #ede8ff 100%);
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede8ff 100%);
     min-height:100vh;
   }
+  
+  /* 3D Premium Loading Screen */
   #loadingScreen {
-    position:fixed; inset:0; background:linear-gradient(135deg,#1a0a3e,#6c2bd9,#a259f7);
+    position:fixed; inset:0; background:linear-gradient(135deg,#1a0a3e,#4a1a9e,#6c2bd9);
     display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999;
   }
   .loading-spinner {
-    width:70px; height:70px; border:5px solid rgba(255,255,255,0.2);
-    border-top-color:#f0c040; border-right-color:#a259f7; border-bottom-color:#6c2bd9;
-    border-radius:50%; animation:spin3D 1.2s infinite; box-shadow:0 0 25px rgba(240,192,64,0.5);
+    width:70px; height:70px;
+    background: conic-gradient(from 0deg, #f0c040, #a259f7, #6c2bd9, #f0c040);
+    border-radius:50%;
+    animation: spin3D 1s linear infinite;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .loading-spinner-inner {
+    width:55px; height:55px;
+    background:#1a0a3e;
+    border-radius:50%;
   }
   @keyframes spin3D {
-    0% { transform:rotate(0deg) scale(1); }
-    50% { transform:rotate(180deg) scale(1.1); border-width:8px; }
-    100% { transform:rotate(360deg) scale(1); }
+    0% { transform:rotate(0deg); }
+    100% { transform:rotate(360deg); }
   }
   .loading-text {
-    margin-top:25px; font-size:18px; font-weight:600;
+    margin-top:25px;
+    font-size:18px;
+    font-weight:600;
     background:linear-gradient(135deg,#f0c040,#ffffff,#c084fc);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    animation:textGlow 1.5s infinite alternate; letter-spacing:2px;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    letter-spacing:2px;
   }
-  @keyframes textGlow {
-    0% { opacity:0.6; text-shadow:0 0 0px rgba(255,255,255,0); }
-    100% { opacity:1; text-shadow:0 0 20px rgba(240,192,64,0.8); }
-  }
+  
+  /* Main Content */
   .content { padding:20px 16px 300px; }
+  
+  /* Premium Shop Card */
   .shop-preview-card {
-    background:white; border-radius:32px; padding:24px 22px; margin-bottom:24px;
-    box-shadow:var(--card-shadow); border:1px solid rgba(108,43,217,0.15);
-    transition:all 0.4s cubic-bezier(0.2,0.9,0.4,1.1);
+    background: linear-gradient(135deg, var(--white), #fefcff);
+    border-radius:32px;
+    padding:24px 22px;
+    margin-bottom:24px;
+    box-shadow: var(--card-shadow);
+    border:1px solid rgba(108,43,217,0.12);
+    transition: var(--transition);
+    position:relative;
+    overflow:hidden;
   }
-  .shop-preview-card:hover { transform:translateY(-8px); }
-  .card-shop-name { font-size:24px; font-weight:800; background:linear-gradient(135deg, var(--primary-dark), var(--primary-light)); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
-  .card-shop-address { font-size:14px; color:#555; margin-top:8px; border-top:1px solid #efe6ff; padding-top:12px; display:flex; gap:12px; }
-  .small-status-badge { display:inline-flex; align-items:center; gap:8px; padding:5px 14px; border-radius:99px; font-size:12px; font-weight:700; margin-top:12px; }
-  .small-status-badge.approved { background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.4); }
-  .small-status-badge.pending { background:rgba(240,192,64,0.15); color:#f0c040; border:1px solid rgba(240,192,64,0.4); }
-  .tile-card { background:white; border-radius:24px; padding:20px; box-shadow:var(--card-shadow); border:1.5px solid rgba(108,43,217,0.08); margin-bottom:18px; }
-  .tile-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid #f0ebff; cursor:pointer; }
-  .tile-icon { width:44px; height:44px; border-radius:16px; background:linear-gradient(135deg, var(--primary), var(--primary-light)); display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 6px 15px rgba(108,43,217,0.3); }
-  .tile-title { font-size:16px; font-weight:800; color:var(--text); }
-  .tile-subtitle { font-size:12px; color:var(--text-light); }
-  .collapse-icon { margin-left:auto; font-size:18px; color:var(--primary-light); }
-  .tile-content { max-height:2000px; overflow:hidden; transition:max-height 0.4s; }
+  .shop-preview-card::before {
+    content:'';
+    position:absolute;
+    top:-50%;
+    left:-50%;
+    width:200%;
+    height:200%;
+    background:radial-gradient(circle, rgba(108,43,217,0.03), transparent);
+    pointer-events:none;
+  }
+  .shop-preview-card:hover {
+    transform:translateY(-4px);
+    box-shadow:0 20px 40px -12px rgba(108,43,217,0.25);
+  }
+  .card-shop-name {
+    font-size:26px;
+    font-weight:800;
+    background:linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .card-shop-address {
+    font-size:14px;
+    color:var(--text-light);
+    margin-top:8px;
+    border-top:1px solid #f0ebff;
+    padding-top:14px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .small-status-badge {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 16px;
+    border-radius:99px;
+    font-size:13px;
+    font-weight:700;
+    margin-top:14px;
+  }
+  .small-status-badge.approved { background:rgba(46,204,113,0.12); color:#2ecc71; border:1px solid rgba(46,204,113,0.3); }
+  .small-status-badge.pending { background:rgba(240,192,64,0.12); color:#f0c040; border:1px solid rgba(240,192,64,0.3); }
+  .small-status-badge.rejected { background:rgba(231,76,60,0.12); color:#e74c3c; border:1px solid rgba(231,76,60,0.3); }
+  
+  /* Premium Toast */
+  .toast-congrats {
+    position:fixed;
+    bottom:30px;
+    left:20px;
+    right:20px;
+    background:linear-gradient(135deg, #2ecc71, #27ae60);
+    backdrop-filter:blur(10px);
+    color:white;
+    padding:16px 22px;
+    border-radius:60px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-weight:700;
+    z-index:10000;
+    animation:slideUpGlow 0.5s forwards;
+    box-shadow:0 10px 30px rgba(46,204,113,0.4);
+  }
+  @keyframes slideUpGlow {
+    from { transform:translateY(100px); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
+  }
+  
+  /* Premium Card Tiles */
+  .tile-card {
+    background:var(--white);
+    border-radius:28px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(108,43,217,0.08);
+    border:1px solid rgba(108,43,217,0.08);
+    margin-bottom:20px;
+    transition: var(--transition);
+  }
+  .tile-card:hover {
+    box-shadow:0 15px 35px -12px rgba(108,43,217,0.15);
+    border-color:rgba(108,43,217,0.15);
+  }
+  .tile-header {
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:2px solid #f0ebff;
+    cursor:pointer;
+    transition: var(--transition);
+  }
+  .tile-header:hover .tile-icon {
+    transform:scale(1.05);
+  }
+  .tile-icon {
+    width:48px; height:48px;
+    border-radius:20px;
+    background:linear-gradient(135deg, var(--primary), var(--primary-light));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    box-shadow:0 6px 15px rgba(108,43,217,0.25);
+    transition: var(--transition);
+  }
+  .tile-title { font-size:17px; font-weight:800; color:var(--text); }
+  .tile-subtitle { font-size:12px; color:var(--text-muted); margin-top:2px; }
+  .collapse-icon { margin-left:auto; font-size:18px; color:var(--primary-light); transition:transform 0.3s; }
+  .tile-content { max-height:2000px; overflow:hidden; transition:max-height 0.4s ease; }
   .tile-content.collapsed { max-height:0; }
-  .input-group { margin-bottom:16px; }
-  .input-label { font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; display:block; }
-  .input-field { width:100%; padding:13px 14px; border:2px solid #e8e0ff; border-radius:16px; font-size:14px; font-family:'Hind Siliguri',sans-serif; background:#faf8ff; outline:none; }
-  .input-field:focus { border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(108,43,217,0.1); }
-  textarea.input-field { resize:none; height:90px; }
-  .view-profile-btn, .edit-toggle-btn { width:100%; padding:14px; border-radius:20px; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px; border:none; }
-  .view-profile-btn { background:#f0ebff; color:var(--primary); }
-  .view-profile-btn:hover { background:var(--primary); color:white; transform:translateY(-3px); box-shadow:var(--glow-purple); }
-  .edit-toggle-btn { background:linear-gradient(135deg, var(--primary-light), var(--primary)); color:white; }
-  .edit-toggle-btn:hover { transform:translateY(-3px); box-shadow:var(--glow-purple); }
-  #editFormContainer { display:none; transition:all 0.4s ease; }
-  #editFormContainer.show { display:block; animation:slideDownBounce 0.5s; }
-  @keyframes slideDownBounce { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:translateY(0); } }
-  .submit-wrap { position:fixed; bottom:0; left:0; right:0; padding:16px 20px; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); border-top:1px solid #f0ebff; z-index:100; }
-  .home-btn { display:block; text-align:center; background:linear-gradient(135deg, #2ecc71, #27ae60); color:white; font-weight:700; padding:12px; border-radius:50px; margin-bottom:12px; text-decoration:none; }
-  .logout-btn { width:100%; padding:14px; background:linear-gradient(135deg, #e74c3c, #c0392b); color:white; border:none; border-radius:20px; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:12px; }
-  .submit-btn { width:100%; padding:16px; background:linear-gradient(135deg, var(--primary), var(--primary-light)); color:white; border:none; border-radius:20px; font-size:17px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px; }
+  
+  /* Form Inputs - Premium Style */
+  .input-group { margin-bottom:18px; }
+  .input-label { font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px; display:block; }
+  .input-field {
+    width:100%;
+    padding:14px 16px;
+    border:2px solid #e8e0ff;
+    border-radius:20px;
+    font-size:14px;
+    font-family:'Hind Siliguri',sans-serif;
+    color:var(--text);
+    background:#faf8ff;
+    outline:none;
+    transition: var(--transition);
+  }
+  .input-field:focus {
+    border-color:var(--primary);
+    background:var(--white);
+    box-shadow:0 0 0 4px rgba(108,43,217,0.08);
+  }
+  textarea.input-field { resize:none; height:90px; line-height:1.5; }
+  
+  /* Premium Buttons */
+  .view-profile-btn, .edit-toggle-btn {
+    width:100%;
+    padding:15px;
+    border-radius:24px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:14px;
+    border:none;
+    transition: var(--transition);
+  }
+  .view-profile-btn {
+    background:linear-gradient(135deg, #f0ebff, #e8e0ff);
+    color:var(--primary);
+  }
+  .view-profile-btn:hover {
+    background:linear-gradient(135deg, var(--primary), var(--primary-light));
+    color:white;
+    transform:translateY(-2px);
+    box-shadow:var(--glow-purple);
+  }
+  .edit-toggle-btn {
+    background:linear-gradient(135deg, var(--primary-light), var(--primary));
+    color:white;
+  }
+  .edit-toggle-btn:hover {
+    transform:translateY(-2px);
+    box-shadow:var(--glow-purple);
+  }
+  
+  /* Submit Wrap */
+  .submit-wrap {
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    padding:18px 20px;
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:blur(20px);
+    border-top:1px solid #f0ebff;
+    box-shadow:0 -8px 30px rgba(108,43,217,0.08);
+    z-index:100;
+  }
+  .home-btn {
+    display:block;
+    text-align:center;
+    background:linear-gradient(135deg, #2ecc71, #27ae60);
+    color:white;
+    font-weight:700;
+    font-size:15px;
+    padding:14px;
+    border-radius:60px;
+    margin-bottom:14px;
+    text-decoration:none;
+    transition: var(--transition);
+  }
+  .home-btn:hover { transform:scale(0.98); box-shadow:0 5px 20px rgba(46,204,113,0.4); }
+  .logout-btn {
+    width:100%;
+    padding:15px;
+    background:linear-gradient(135deg, #e74c3c, #c0392b);
+    color:white;
+    border:none;
+    border-radius:24px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    transition: var(--transition);
+  }
+  .logout-btn:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(231,76,60,0.35); }
+  .submit-btn {
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg, var(--primary), var(--primary-light));
+    color:white;
+    border:none;
+    border-radius:24px;
+    font-size:17px;
+    font-weight:800;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:14px;
+    transition: var(--transition);
+  }
+  .submit-btn:hover { transform:translateY(-2px); box-shadow:var(--glow-purple); }
   .submit-btn.loading { background:#b39ddb; pointer-events:none; }
-  .spinner { width:22px; height:22px; border:3px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin 0.8s linear infinite; display:none; }
+  .spinner {
+    width:22px; height:22px;
+    border:3px solid rgba(255,255,255,0.3);
+    border-top-color:white;
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+    display:none;
+  }
   .submit-btn.loading .spinner { display:block; }
   .submit-btn.loading .btn-text { display:none; }
   @keyframes spin { to { transform:rotate(360deg); } }
-  .custom-toast { position:fixed; bottom:100px; left:20px; right:20px; background:linear-gradient(135deg, #2ecc71, #27ae60); color:white; padding:14px 20px; border-radius:50px; font-weight:700; display:flex; align-items:center; gap:12px; z-index:10001; animation:fadeSlideUp 0.3s ease forwards; }
+  
+  /* Toast Message */
+  .custom-toast {
+    position:fixed;
+    bottom:100px;
+    left:20px;
+    right:20px;
+    background:linear-gradient(135deg, #2ecc71, #27ae60);
+    color:white;
+    padding:14px 20px;
+    border-radius:60px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    z-index:10001;
+    animation:fadeSlideUp 0.3s ease forwards;
+  }
   .custom-toast.error { background:linear-gradient(135deg, #e74c3c, #c0392b); }
-  @keyframes fadeSlideUp { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
-  .product-item { background:#f8f4ff; border-radius:16px; padding:12px; margin-bottom:12px; border:1px solid #e2d5ff; }
-  .product-main-row { display:flex; gap:12px; align-items:center; }
-  .product-img-small { width:60px; height:60px; border-radius:12px; object-fit:cover; border:2px solid #b980ff; }
+  @keyframes fadeSlideUp {
+    from { transform:translateY(40px); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
+  }
+  
+  /* Product Item Styles */
+  .product-item {
+    background:#faf8ff;
+    border-radius:20px;
+    padding:14px;
+    margin-bottom:14px;
+    border:1px solid #e8e0ff;
+    transition: var(--transition);
+  }
+  .product-item:hover {
+    background:var(--white);
+    border-color:var(--primary-light);
+    box-shadow:0 5px 15px rgba(108,43,217,0.08);
+  }
+  .product-main-row {
+    display:flex;
+    gap:14px;
+    align-items:center;
+  }
+  .product-img-small {
+    width:65px;
+    height:65px;
+    border-radius:16px;
+    object-fit:cover;
+    border:2px solid var(--primary-light);
+  }
   .product-details-small { flex:1; }
-  .product-name-small { font-weight:800; color:#3c1b75; font-size:14px; }
-  .product-price-small { color:#9b4dff; font-weight:700; font-size:12px; }
+  .product-name-small { font-weight:800; color:var(--primary-dark); font-size:15px; margin-bottom:4px; }
+  .product-price-small { color:var(--primary); font-weight:700; font-size:13px; }
   .three-dots-menu { position:relative; }
-  .three-dots-btn { background:none; border:none; font-size:20px; cursor:pointer; padding:5px 10px; color:#9b4dff; }
-  .dropdown-menu { position:absolute; top:100%; right:0; background:white; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.15); min-width:150px; display:none; z-index:100; }
+  .three-dots-btn {
+    background:#f0ebff; border:none; font-size:18px; cursor:pointer;
+    padding:8px 12px; color:var(--primary); border-radius:40px;
+    transition: var(--transition);
+  }
+  .three-dots-btn:hover { background:var(--primary-light); color:white; }
+  .dropdown-menu {
+    position:absolute; top:100%; right:0; background:white;
+    border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    min-width:160px; display:none; z-index:100; overflow:hidden;
+    border:1px solid #e8e0ff;
+  }
   .dropdown-menu.show { display:block; }
-  .dropdown-item { padding:10px 15px; cursor:pointer; font-size:13px; display:flex; align-items:center; gap:8px; color:#2d165c; }
+  .dropdown-item {
+    padding:12px 16px; cursor:pointer; font-size:13px; display:flex;
+    align-items:center; gap:10px; color:var(--text); transition: var(--transition);
+  }
   .dropdown-item:hover { background:#f3edff; }
-  .dropdown-item.delete-item { color:#dc2626; }
-  .edit-form { margin-top:12px; padding-top:12px; border-top:1px dashed #c084fc; display:none; }
+  .dropdown-item.delete-item { color:#e74c3c; }
+  .edit-form { margin-top:14px; padding-top:14px; border-top:1px dashed #e0d5ff; display:none; }
   .edit-form.show { display:block; }
-  .edit-form input, .edit-form textarea { padding:8px 12px; font-size:13px; margin-bottom:8px; width:100%; border:1.5px solid #d9c8ff; border-radius:12px; }
-  .edit-actions { display:flex; gap:8px; }
-  .edit-actions button { padding:6px 12px; font-size:12px; width:auto; margin:0; }
-  .slider-item { background:#f3edff; padding:10px; border-radius:12px; margin-bottom:10px; }
+  .edit-form input, .edit-form textarea {
+    padding:10px 14px; font-size:13px; margin-bottom:10px;
+    width:100%; border:1.5px solid #e8e0ff; border-radius:14px;
+  }
+  .edit-actions { display:flex; gap:10px; }
+  .edit-actions button { padding:8px 16px; font-size:12px; width:auto; margin:0; border-radius:30px; }
+  
+  /* Slider Item */
+  .slider-item { background:#faf8ff; padding:14px; border-radius:20px; margin-bottom:12px; border:1px solid #e8e0ff; }
+  
+  /* Popup */
+  .cat-popup-list { max-height:60vh; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:10px; }
+  .cat-item-multi { padding:12px; background:#faf8ff; border-radius:40px; font-size:13px; font-weight:500; border:1.5px solid #e8e0ff; cursor:pointer; transition: var(--transition); }
+  .cat-item-multi.selected { background:linear-gradient(135deg, var(--primary), var(--primary-light)); color:white; border-color:var(--primary); }
+  
+  #editFormContainer { display:none; transition: var(--transition); }
+  #editFormContainer.show { display:block; animation:slideDown 0.4s ease; }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
 </style>
 </head>
 <body>
 
-<div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 প্রিমিয়াম ড্যাশবোর্ড লোড হচ্ছে...</div></div>
+<div id="loadingScreen"><div class="loading-spinner"><div class="loading-spinner-inner"></div></div><div class="loading-text">🚀 প্রিমিয়াম ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
 <div class="content" id="mainContent" style="display:none">
     <div class="shop-preview-card">
@@ -132,6 +443,7 @@
     <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
     <div id="editFormContainer">
+        <!-- Shop Information -->
         <div class="tile-card">
             <div class="tile-header" onclick="toggleCard('shopInfo')">
                 <div class="tile-icon"><i class="fas fa-store"></i></div>
@@ -139,7 +451,7 @@
                 <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
             </div>
             <div class="tile-content" id="contentShopInfo">
-                <div class="input-group"><label class="input-label">দোকানের নাম *</label><input class="input-field" type="text" id="shopName" placeholder="দোকানের 이름"></div>
+                <div class="input-group"><label class="input-label">দোকানের নাম *</label><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div>
                 <div class="input-group"><label class="input-label">মালিকের নাম *</label><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div>
                 <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div>
                 <div class="input-group"><label class="input-label">পূর্ণাঙ্গ ঠিকানা</label><textarea class="input-field" id="area" placeholder="বিস্তারিত ঠিকানা" style="height:70px"></textarea></div>
@@ -149,6 +461,7 @@
             </div>
         </div>
         
+        <!-- Product Management -->
         <div class="tile-card">
             <div class="tile-header" onclick="toggleCard('productManage')">
                 <div class="tile-icon"><i class="fas fa-boxes"></i></div>
@@ -160,12 +473,12 @@
                 <div class="input-group"><label class="input-label">দাম (৳)</label><input type="text" id="prodPrice" class="input-field" placeholder="যেমন: 2499"></div>
                 <div class="input-group"><label class="input-label">Google Drive ইমেজ লিংক *</label><input type="text" id="prodImage" class="input-field" placeholder="https://drive.google.com/file/d/xxxxx/view"></div>
                 <div class="input-group"><label class="input-label">বিবরণ</label><textarea id="prodDesc" class="input-field" rows="2" placeholder="প্রোডাক্টের বিবরণ..."></textarea></div>
-                <button id="addProductBtn" class="submit-btn" style="margin-top:0; padding:12px;">➕ প্রোডাক্ট যোগ করুন</button>
+                <button id="addProductBtn" class="submit-btn" style="margin-top:0; padding:14px;">➕ প্রোডাক্ট যোগ করুন</button>
                 <div id="productListPanel" style="margin-top: 20px; max-height: 400px; overflow-y: auto;"></div>
             </div>
         </div>
         
-        <!-- স্লাইডার কন্ট্রোল (দোকান ভিত্তিক) -->
+        <!-- Slider Control -->
         <div class="tile-card">
             <div class="tile-header" onclick="toggleCard('sliderControl')">
                 <div class="tile-icon"><i class="fas fa-images"></i></div>
@@ -174,11 +487,11 @@
             </div>
             <div class="tile-content" id="contentSliderControl">
                 <div id="sliderListContainer"></div>
-                <button id="addNewSlideBtn" style="background:linear-gradient(135deg,#22c55e,#16a34a); padding:12px; border:none; border-radius:16px; color:white; font-weight:700; cursor:pointer; width:100%; margin-top:10px;">+ নতুন স্লাইড যোগ করুন</button>
+                <button id="addNewSlideBtn" style="background:linear-gradient(135deg,#22c55e,#16a34a); padding:14px; border:none; border-radius:24px; color:white; font-weight:700; cursor:pointer; width:100%; margin-top:12px;">+ নতুন স্লাইড যোগ করুন</button>
             </div>
         </div>
         
-        <!-- টিকার কন্ট্রোল (দোকান ভিত্তিক) -->
+        <!-- Ticker Control -->
         <div class="tile-card">
             <div class="tile-header" onclick="toggleCard('tickerControl')">
                 <div class="tile-icon"><i class="fas fa-comment-dots"></i></div>
@@ -187,9 +500,9 @@
             </div>
             <div class="tile-content" id="contentTickerControl">
                 <div class="input-group"><label class="input-label">টিকারের বার্তা (কমা দিয়ে আলাদা করুন)</label><input type="text" id="tickerInput" class="input-field" placeholder="EXCLUSIVE DROP, 40% OFF, FREE SHIPPING"></div>
-                <div class="input-group"><button id="updateTickerBtn" class="submit-btn" style="padding:10px;">💾 টিকার আপডেট করুন</button></div>
-                <div class="input-group"><button id="resetTickerBtn" style="background:#6c63a0; padding:12px; border:none; border-radius:16px; color:white; font-weight:700; cursor:pointer; width:100%;">⟳ ডিফল্ট রিসেট</button></div>
-                <div style="background:#1f0a3b; padding:10px; border-radius:40px; margin-top:10px;"><div id="tickerPreview" style="color:#f0eaff; text-align:center; font-size:12px;">প্রিভিউ</div></div>
+                <div class="input-group"><button id="updateTickerBtn" class="submit-btn" style="padding:12px;">💾 টিকার আপডেট করুন</button></div>
+                <div class="input-group"><button id="resetTickerBtn" style="background:#6c63a0; padding:14px; border:none; border-radius:24px; color:white; font-weight:700; cursor:pointer; width:100%;">⟳ ডিফল্ট রিসেট</button></div>
+                <div style="background:linear-gradient(135deg,#1f0a3b,#2d1a5e); padding:12px; border-radius:40px; margin-top:12px;"><div id="tickerPreview" style="color:#f0eaff; text-align:center; font-size:13px; font-weight:500;">প্রিভিউ</div></div>
             </div>
         </div>
     </div>
@@ -199,6 +512,14 @@
     <a href="index.html" class="home-btn"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</a>
     <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 প্রোফাইল সেভ করুন</span></button>
     <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+</div>
+
+<div id="multiCatPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(5px); z-index:9999; align-items:flex-end;">
+    <div style="background:white; border-radius:32px 32px 0 0; padding:24px; width:100%; max-height:75vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:20px;"><span style="font-weight:800; font-size:18px;">🗂️ ক্যাটাগরি বাছাই করুন</span><button onclick="closeMultiCatPopup()" style="background:#f0ebff; border:none; border-radius:40px; padding:8px 16px; cursor:pointer;">✕ বন্ধ</button></div>
+        <div id="multiCatList" class="cat-popup-list"></div>
+        <div class="cat-popup-actions"><button class="popup-btn" style="background:linear-gradient(135deg, #6c2bd9, #a259f7); color:white; padding:12px 24px; border:none; border-radius:40px; margin-top:16px; cursor:pointer;" onclick="closeMultiCatPopup()">✅ সেভ করুন</button></div>
+    </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -222,7 +543,6 @@ let allProducts = [];
 function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
 function showToast(msg, isError=false) { let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000); }
 
-// Shop Data Save
 async function saveShopData() {
     if(!currentShopId) return;
     const shopName=document.getElementById('shopName').value.trim();
@@ -270,7 +590,7 @@ function renderProductList() {
         const div=document.createElement('div'); div.className='product-item';
         div.innerHTML=`
             <div class="product-main-row">
-                <img class="product-img-small" src="${imgUrl}" onerror="this.src='https://via.placeholder.com/60x60/ede6ff/a855f7?text=No'">
+                <img class="product-img-small" src="${imgUrl}" onerror="this.src='https://via.placeholder.com/65x65/ede6ff/a855f7?text=No'">
                 <div class="product-details-small">
                     <div class="product-name-small">${escapeHtml(prod.name)}</div>
                     <div class="product-price-small">${prod.price?`৳ ${escapeHtml(prod.price)}`:'মূল্য নির্ধারিত হয়নি'}</div>
@@ -290,8 +610,8 @@ function renderProductList() {
                 <input type="text" id="edit-price-${prod.id}" value="${escapeHtml(prod.price||'')}" placeholder="দাম">
                 <textarea id="edit-desc-${prod.id}" rows="2" placeholder="বিবরণ">${escapeHtml(prod.desc||'')}</textarea>
                 <div class="edit-actions">
-                    <button class="save-edit-btn" data-id="${prod.id}" style="background:#22c55e; color:white; border:none; padding:6px 12px; border-radius:30px;">সেভ</button>
-                    <button class="cancel-edit-btn" data-id="${prod.id}" style="background:#6c63a0; color:white; border:none; padding:6px 12px; border-radius:30px;">বাতিল</button>
+                    <button class="save-edit-btn" data-id="${prod.id}" style="background:#22c55e; color:white; border:none; padding:8px 16px; border-radius:30px;">সেভ</button>
+                    <button class="cancel-edit-btn" data-id="${prod.id}" style="background:#6c63a0; color:white; border:none; padding:8px 16px; border-radius:30px;">বাতিল</button>
                 </div>
             </div>
         `;
@@ -323,9 +643,9 @@ async function addProduct() {
     document.getElementById('prodName').value=''; document.getElementById('prodPrice').value=''; document.getElementById('prodImage').value=''; document.getElementById('prodDesc').value='';
     loadProducts();
 }
-function getThumbUrl(url){ if(!url) return "https://via.placeholder.com/60x60/ede6ff/a855f7?text=No"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`; return url; }
+function getThumbUrl(url){ if(!url) return "https://via.placeholder.com/65x65/ede6ff/a855f7?text=No"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`; return url; }
 
-// ========== SLIDER (দোকান ভিত্তিক) ==========
+// SLIDER
 let slidesData = [];
 async function loadSlides() {
     if(!currentShopId) return;
@@ -335,13 +655,13 @@ async function loadSlides() {
     if(slidesData.length===0){ slidesData = [{image:"https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop"}]; }
     renderSliderList();
 }
-function renderSliderList(){ const c=document.getElementById('sliderListContainer'); c.innerHTML=''; slidesData.forEach((s,i)=>{ const d=document.createElement('div'); d.className='slider-item'; d.innerHTML=`<div style="display:flex; gap:10px; align-items:center;"><img src="${getDriveUrl(s.image,50)}" style="width:50px; height:40px; object-fit:cover; border-radius:8px;"><input type="text" value="${escapeHtml(s.image)}" placeholder="Google Drive Link" style="flex:1; padding:8px; border-radius:12px; border:1px solid #d9c8ff;" onchange="updateSlideImage(${i},this.value)"><button onclick="removeSlide(${i})" style="background:#dc2626; color:white; border:none; padding:6px 12px; border-radius:30px;">🗑</button></div>`; c.appendChild(d); }); }
-function getDriveUrl(url,w=100){ if(!url) return "https://via.placeholder.com/100x60/ede6ff/a855f7"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w${w}`; return url; }
+function renderSliderList(){ const c=document.getElementById('sliderListContainer'); c.innerHTML=''; slidesData.forEach((s,i)=>{ const d=document.createElement('div'); d.className='slider-item'; d.innerHTML=`<div style="display:flex; gap:12px; align-items:center;"><img src="${getDriveUrl(s.image,50)}" style="width:55px; height:45px; object-fit:cover; border-radius:12px;"><input type="text" value="${escapeHtml(s.image)}" placeholder="Google Drive Link" style="flex:1; padding:10px; border-radius:16px; border:1px solid #d9c8ff;" onchange="updateSlideImage(${i},this.value)"><button onclick="removeSlide(${i})" style="background:#dc2626; color:white; border:none; padding:8px 14px; border-radius:30px;">🗑</button></div>`; c.appendChild(d); }); }
+function getDriveUrl(url,w=100){ if(!url) return "https://via.placeholder.com/55x45/ede6ff/a855f7"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w${w}`; return url; }
 async function updateSlideImage(idx,url){ slidesData[idx].image=url; await db.ref(`sliders/${currentShopId}`).set(slidesData); showToast('স্লাইডার আপডেট হয়েছে'); }
 async function removeSlide(idx){ if(slidesData.length===1){ showToast('কমপক্ষে একটি স্লাইড রাখতে হবে!',true); return; } slidesData.splice(idx,1); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('স্লাইড মুছে ফেলা হয়েছে'); }
 async function addNewSlide(){ slidesData.push({image:"https://via.placeholder.com/1200x400/8b5cf6/ffffff?text=New+Slide"}); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('নতুন স্লাইড যোগ হয়েছে'); }
 
-// ========== TICKER (দোকান ভিত্তিক) ==========
+// TICKER
 let tickerItems = [];
 async function loadTicker() {
     if(!currentShopId) return;
@@ -352,7 +672,7 @@ async function loadTicker() {
     document.getElementById('tickerInput').value=tickerItems.join(', ');
     updateTickerPreview(tickerItems);
 }
-function updateTickerPreview(items){ document.getElementById('tickerPreview').innerHTML=items.map(t=>`✨ ${escapeHtml(t)} ✨`).join(' '); }
+function updateTickerPreview(items){ document.getElementById('tickerPreview').innerHTML=items.map(t=>`✨ ${escapeHtml(t)} ✨`).join(' • '); }
 async function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showToast('কিছু লিখুন!',true); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; await db.ref(`tickers/${currentShopId}`).set(items); updateTickerPreview(items); showToast('টিকার আপডেট হয়েছে!'); }
 async function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; await db.ref(`tickers/${currentShopId}`).set(def); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
 
