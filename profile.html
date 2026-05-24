@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>পাইকারি বাজার | প্রিমিয়াম স্টোর</title>
+<title>প্রোফাইল | প্রিমিয়াম স্টোর</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
@@ -17,7 +17,7 @@
     --text: #1a1a2e;
     --text-light: #666;
     --card-shadow: 0 20px 35px -12px rgba(108,43,217,0.25);
-    --glow-purple: 0 0 15px rgba(108,43,217,0.6);
+    --glow-purple: 0 0 20px rgba(108,43,217,0.6);
     --glow-gold: 0 0 15px rgba(240,192,64,0.5);
   }
 
@@ -114,35 +114,129 @@
     box-shadow: var(--glow-purple);
   }
 
-  /* Main Content */
-  #mainContent { display: none; padding-bottom: 40px; }
+  /* Header with Search */
+  .header {
+    background: linear-gradient(135deg, #ffffff, #f3eaff, #d9c8ff);
+    padding: 0.8rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid #b27eff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .store-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+  .store-name-header {
+    font-weight: 800;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-align: center;
+  }
+  .search-icon-btn {
+    position: absolute;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: #6a2be2;
+    padding: 6px;
+    transition: all 0.2s;
+  }
+  .search-icon-btn:hover { color: #a855f7; transform: scale(1.05); }
+  .search-container {
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .search-container.open {
+    max-height: 52px;
+    opacity: 1;
+    visibility: visible;
+  }
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #fefcff;
+    border: 1.5px solid #d9c8ff;
+    border-radius: 40px;
+    padding: 0 10px;
+  }
+  .search-input {
+    flex: 1;
+    padding: 8px 6px;
+    border: none;
+    font-size: 0.8rem;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+  }
+  .search-clear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #9b4dff;
+    padding: 4px;
+  }
 
-  /* ========== PROFILE CARD - 3D Premium Design ========== */
+  /* Moving Ticker */
+  .ticker-section {
+    padding: 0 0.8rem;
+    margin-top: 0.5rem;
+  }
+  .ticker-wrap {
+    background: #1f0a3b;
+    padding: 8px 0;
+    overflow: hidden;
+    border-radius: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .ticker {
+    display: flex;
+    white-space: nowrap;
+    animation: scrollTicker 28s linear infinite;
+    gap: 1.5rem;
+  }
+  .ticker-item {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #f0eaff;
+    background: rgba(160, 120, 255, 0.2);
+    padding: 0.2rem 1rem;
+    border-radius: 40px;
+  }
+  @keyframes scrollTicker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Profile Card */
   .profile-card {
     background: white;
     border-radius: 0 0 40px 40px;
     padding-bottom: 25px;
     box-shadow: var(--card-shadow);
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
     position: relative;
     overflow: hidden;
   }
-  .profile-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(108,43,217,0.05), transparent);
-    animation: rotateGlow 20s linear infinite;
-  }
-  @keyframes rotateGlow {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  /* Cover with 3D Parallax */
   .cover {
     position: relative;
     width: 100%;
@@ -151,7 +245,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transform-style: preserve-3d;
   }
   .cover::after {
     content: '';
@@ -174,7 +267,6 @@
     text-align: center;
     padding: 0 20px;
     z-index: 2;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
   }
   @keyframes shimmer {
     0% { background-position: 200%; }
@@ -193,15 +285,12 @@
     border-radius: 40px;
     background: rgba(0,0,0,0.2);
   }
-
-  /* Avatar 3D Float */
   .avatar-wrap {
     margin-top: -55px;
     margin-left: 25px;
     display: inline-block;
     z-index: 20;
     position: relative;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
   }
   .avatar {
     width: 100px; height: 100px;
@@ -214,19 +303,12 @@
     font-weight: 800;
     color: white;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    transition: all 0.3s ease;
     animation: avatarFloat 3s ease-in-out infinite;
   }
   @keyframes avatarFloat {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-8px); }
   }
-  .avatar:hover {
-    transform: scale(1.05) rotate(5deg);
-    animation: none;
-  }
-
-  /* Profile Info */
   .profile-info { padding: 12px 25px 0; }
   .shop-name-text {
     font-size: 26px;
@@ -256,16 +338,12 @@
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(108,43,217,0.1);
   }
-
   .divider {
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
     margin: 0 25px 18px;
   }
-
-  /* Description with 3D Scroll */
   .description-wrap { padding: 0 25px; margin-bottom: 20px; }
   .description-title {
     font-size: 14px;
@@ -282,7 +360,6 @@
     border-radius: 20px;
     padding: 14px;
     border: 1px solid rgba(108,43,217,0.15);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.02), 0 5px 15px rgba(108,43,217,0.08);
   }
   .description-scroll-text {
     display: inline-block;
@@ -297,7 +374,7 @@
     100% { transform: translateX(-100%); }
   }
 
-  /* Contact Grid - Premium Glassmorphism */
+  /* Contact Grid */
   .contact-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -314,20 +391,15 @@
     gap: 6px;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    font-family: 'Hind Siliguri', sans-serif;
-    backdrop-filter: blur(10px);
   }
-  .contact-tile:hover {
-    transform: translateY(-5px) scale(1.02);
-  }
-  .contact-tile:active { transform: scale(0.96); }
+  .contact-tile:hover { transform: translateY(-5px) scale(1.02); }
   .contact-tile.call { background: linear-gradient(135deg, #f0ebff, #e8e0ff); color: var(--primary); }
   .contact-tile.whatsapp { background: linear-gradient(135deg, #e8faf0, #d4f5e3); color: #25D366; }
   .contact-tile.telegram { background: linear-gradient(135deg, #e8f0fe, #d6e8fc); color: #0088cc; }
   .contact-tile-icon { font-size: 28px; }
   .contact-tile-text { font-size: 12px; font-weight: 600; }
 
-  /* ========== 3D SLIDER SECTION ========== */
+  /* Image Slider */
   .slider-section {
     max-width: 1200px;
     margin: 15px auto 10px auto;
@@ -341,12 +413,9 @@
     overflow: hidden;
     border-radius: 28px;
     box-shadow: 0 25px 45px -12px rgba(108,43,217,0.4);
-    transform-style: preserve-3d;
     transition: transform 0.3s ease;
   }
-  .slider-container:hover {
-    transform: translateY(-5px) rotateX(2deg);
-  }
+  .slider-container:hover { transform: translateY(-5px) rotateX(2deg); }
   .slides-wrapper {
     display: flex;
     width: 100%;
@@ -411,7 +480,7 @@
     box-shadow: var(--glow-gold);
   }
 
-  /* ========== PRODUCT GRID ========== */
+  /* Product Grid */
   .container {
     max-width: 1200px;
     margin: 20px auto 30px;
@@ -445,7 +514,6 @@
   .product:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 20px 35px rgba(108,43,217,0.2);
-    border-color: var(--primary-light);
   }
   .product-img-wrapper { padding: 8px; }
   .product img {
@@ -514,7 +582,7 @@
     border-radius: 20px;
   }
 
-  /* Scroll Top Button */
+  /* Scroll Top */
   .scroll-top {
     position: fixed;
     bottom: 25px;
@@ -583,7 +651,31 @@
 </div>
 
 <!-- MAIN CONTENT -->
-<div id="mainContent">
+<div id="mainContent" style="display:none">
+  
+  <!-- HEADER with Search -->
+  <div class="header">
+    <div class="store-header-top">
+      <span class="store-name-header" id="storeNameHeader">প্রিমিয়াম স্টোর</span>
+      <button class="search-icon-btn" id="searchIconBtn">🔍</button>
+    </div>
+    <div class="search-container" id="searchContainer">
+      <div class="search-input-wrapper">
+        <span class="search-icon-inline">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="প্রোডাক্ট সার্চ করুন..." autocomplete="off">
+        <button class="search-clear" id="searchClearBtn" style="display: none;">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Moving Ticker -->
+  <div class="ticker-section">
+    <div class="ticker-wrap">
+      <div class="ticker" id="tickerContainer"></div>
+    </div>
+  </div>
+
+  <!-- Profile Card -->
   <div class="profile-card">
     <div class="cover" id="coverBg">
       <div>
@@ -643,7 +735,6 @@ const db = firebase.database();
 
 const urlParams = new URLSearchParams(window.location.search);
 const shopId = urlParams.get('id');
-
 if (!shopId) { showNotFound(); } else { loadShop(); }
 
 const gradients = ['linear-gradient(135deg, #6c2bd9, #a259f7)', 'linear-gradient(135deg, #0f3460, #16213e)', 'linear-gradient(135deg, #1a6b3c, #2ecc71)', 'linear-gradient(135deg, #e74c3c, #c0392b)', 'linear-gradient(135deg, #f39c12, #e67e22)', 'linear-gradient(135deg, #1abc9c, #16a085)', 'linear-gradient(135deg, #2980b9, #1a5276)'];
@@ -660,6 +751,7 @@ async function loadShop() {
 
     document.getElementById('coverBg').style.background = grad;
     document.getElementById('coverShopName').textContent = shop.shopName || '';
+    document.getElementById('storeNameHeader').textContent = shop.shopName || '';
     let fullAddress = '';
     if (shop.thana) fullAddress = `${shop.thana}, ${shop.district || ''}`;
     else if (shop.area) fullAddress = `${shop.area}, ${shop.district || ''}`;
@@ -691,6 +783,7 @@ async function loadShop() {
     document.getElementById('contactGrid').innerHTML = contactHtml;
     document.title = `${shop.shopName} | প্রিমিয়াম স্টোর`;
     document.getElementById('mainContent').style.display = 'block';
+    loadTickerFromStorage();
     loadSlider();
     loadProducts();
   } catch(e) { showNotFound(); }
@@ -701,16 +794,27 @@ function showNotFound() {
   document.getElementById('notFound').style.display = 'block';
 }
 
-// Slider
+// TICKER
+const TICKER_STORAGE_KEY = "proshop_ticker_items";
+const DEFAULT_TICKER = ["✨ EXCLUSIVE DROP : AI COLLECTION", "🚀 UP TO 40% OFF", "💜 FREE SHIPPING", "⚡ LIMITED EDITION"];
+function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+function loadTickerFromStorage() {
+  const stored = localStorage.getItem(TICKER_STORAGE_KEY);
+  let items = DEFAULT_TICKER;
+  if (stored) { try { const parsed = JSON.parse(stored); if (Array.isArray(parsed) && parsed.length) items = parsed; } catch(e) {} }
+  const tickerDiv = document.getElementById('tickerContainer');
+  const doubled = [...items, ...items];
+  tickerDiv.innerHTML = doubled.map(text => `<span class="ticker-item">✨ ${escapeHtml(text)}</span>`).join('');
+}
+
+// SLIDER
 const SLIDER_STORAGE_KEY = "proshop_slider_images";
 const DEFAULT_SLIDES = [{ image: "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop" }];
 let currentSlideIndex = 0, slideInterval = null, slidesData = [];
 
 function getGoogleDriveImageUrl(url, w=1200) {
   if(!url) return "https://via.placeholder.com/1200x400/ede6ff/a855f7?text=No+Image";
-  let f = null;
-  let m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if(m) f=m[1];
+  let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1];
   if(!f) { m=url.match(/id=([a-zA-Z0-9_-]+)/); if(m) f=m[1]; }
   if(!f) { m=url.match(/file\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; }
   if(f) return `https://lh3.googleusercontent.com/d/${f}=w${w}`;
@@ -742,7 +846,7 @@ function goToSlide(i) { if(i>=0&&i<slidesData.length) { currentSlideIndex=i; upd
 function resetAutoSlide() { if(slideInterval) clearInterval(slideInterval); slideInterval=setInterval(()=>nextSlide(),5000); }
 function loadSlider() { loadSliderFromStorage(); document.getElementById('prevBtn').addEventListener('click',prevSlide); document.getElementById('nextBtn').addEventListener('click',nextSlide); const sc=document.getElementById('sliderContainer'); sc.addEventListener('mouseenter',()=>{ if(slideInterval) clearInterval(slideInterval); }); sc.addEventListener('mouseleave',()=>resetAutoSlide()); }
 
-// Products
+// PRODUCTS
 let allProducts = [];
 function getProductImageUrl(url) {
   if(!url) return "https://via.placeholder.com/400x400/ede6ff/a855f7?text=No+Image";
@@ -753,8 +857,8 @@ function getProductImageUrl(url) {
   if(url.match(/\.(jpg|jpeg|png|gif|webp)/i)) return url;
   return "https://via.placeholder.com/400x400/ede6ff/a855f7?text=Image+Error";
 }
-function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>]/g,function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-function renderProductGrid(prods){
+
+function renderProductGrid(prods) {
   const g=document.getElementById('productGrid');
   if(!prods||prods.length===0){ g.innerHTML='<div class="no-results">🔍 কোন প্রোডাক্ট খুঁজে পাওয়া যায়নি</div>'; return; }
   g.innerHTML='';
@@ -769,7 +873,8 @@ function renderProductGrid(prods){
   });
   document.querySelectorAll('.three-dots').forEach(btn=>{ btn.addEventListener('click',(e)=>{ e.stopPropagation(); const dd=btn.closest('.product-info').querySelector('.product-desc'); if(dd) dd.classList.toggle('show'); }); });
 }
-function loadProducts(){
+
+function loadProducts() {
   const ref=firebase.database().ref("products");
   ref.once("value").then(snapshot=>{
     allProducts=[]; snapshot.forEach(c=>{ allProducts.push({id:c.key,...c.val()}); });
@@ -777,7 +882,35 @@ function loadProducts(){
     renderProductGrid(allProducts);
   }).catch(()=>{ document.getElementById('productGrid').innerHTML='<div class="no-products">⚠️ প্রোডাক্ট লোড করতে সমস্যা হয়েছে</div>'; });
 }
-window.addEventListener('scroll',()=>{ const btn=document.getElementById('scrollTop'); if(window.scrollY>300) btn.classList.add('show'); else btn.classList.remove('show'); });
+
+// SEARCH FUNCTIONALITY
+function performSearch() {
+  const term = document.getElementById('searchInput').value.trim().toLowerCase();
+  const clearBtn = document.getElementById('searchClearBtn');
+  if (term) clearBtn.style.display = 'flex';
+  else clearBtn.style.display = 'none';
+  if (!term) { renderProductGrid(allProducts); return; }
+  const filtered = allProducts.filter(p => (p.name && p.name.toLowerCase().includes(term)) || (p.price && p.price.toString().includes(term)) || (p.desc && p.desc.toLowerCase().includes(term)));
+  renderProductGrid(filtered);
+}
+
+// SEARCH BAR TOGGLE
+const searchContainer = document.getElementById('searchContainer');
+const searchIconBtn = document.getElementById('searchIconBtn');
+const searchInput = document.getElementById('searchInput');
+const searchClearBtn = document.getElementById('searchClearBtn');
+
+searchIconBtn.addEventListener('click', () => {
+  searchContainer.classList.toggle('open');
+  if (searchContainer.classList.contains('open')) searchInput.focus();
+  else { searchInput.value = ''; performSearch(); }
+});
+searchClearBtn.addEventListener('click', () => { searchInput.value = ''; performSearch(); searchInput.focus(); });
+searchInput.addEventListener('input', performSearch);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && searchContainer.classList.contains('open')) { searchContainer.classList.remove('open'); searchInput.value = ''; performSearch(); } });
+
+// SCROLL TOP
+window.addEventListener('scroll', () => { const btn = document.getElementById('scrollTop'); if(window.scrollY>300) btn.classList.add('show'); else btn.classList.remove('show'); });
 </script>
 </body>
 </html>
