@@ -196,7 +196,7 @@
     padding: 4px;
   }
 
-  /* ========== IMAGE SLIDER (Above Ticker) ========== */
+  /* ========== IMAGE SLIDER ========== */
   .slider-section {
     max-width: 1200px;
     margin: 15px auto 5px auto;
@@ -277,14 +277,14 @@
     box-shadow: var(--glow-gold);
   }
 
-  /* Moving Ticker (Below Slider) */
+  /* Moving Ticker */
   .ticker-section {
     padding: 0 15px;
-    margin: 5px 0 10px 0;
+    margin: 5px 0 20px 0;
   }
   .ticker-wrap {
     background: #1f0a3b;
-    padding: 8px 0;
+    padding: 10px 0;
     overflow: hidden;
     border-radius: 40px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -296,7 +296,7 @@
     gap: 1.5rem;
   }
   .ticker-item {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: #f0eaff;
     background: rgba(160, 120, 255, 0.2);
@@ -308,320 +308,8 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* Profile Card */
-  .profile-card {
-    background: white;
-    border-radius: 0 0 40px 40px;
-    padding-bottom: 25px;
-    box-shadow: var(--card-shadow);
-    margin: 0 0 20px 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .cover {
-    position: relative;
-    width: 100%;
-    height: 220px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .cover::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(108,43,217,0.3));
-    pointer-events: none;
-  }
-  .cover-shop-name {
-    font-size: 32px;
-    font-weight: 900;
-    letter-spacing: 4px;
-    display: inline-block;
-    background: linear-gradient(90deg, #f0c040, #fff8dc, #ffffff, #fff8dc, #f0c040);
-    background-size: 300%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: shimmer 3s linear infinite;
-    text-align: center;
-    padding: 0 20px;
-    z-index: 2;
-  }
-  @keyframes shimmer {
-    0% { background-position: 200%; }
-    100% { background-position: -100%; }
-  }
-  .cover-address {
-    font-size: 14px;
-    color: rgba(255,255,255,0.85);
-    margin-top: 12px;
-    text-align: center;
-    z-index: 2;
-    position: relative;
-    backdrop-filter: blur(4px);
-    display: inline-block;
-    padding: 4px 16px;
-    border-radius: 40px;
-    background: rgba(0,0,0,0.2);
-  }
-  .avatar-wrap {
-    margin-top: -55px;
-    margin-left: 25px;
-    display: inline-block;
-    z-index: 20;
-    position: relative;
-  }
-  .avatar {
-    width: 100px; height: 100px;
-    border-radius: 30px;
-    border: 4px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 42px;
-    font-weight: 800;
-    color: white;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    animation: avatarFloat 3s ease-in-out infinite;
-  }
-  @keyframes avatarFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-  }
-  .profile-info { padding: 12px 25px 0; }
-  .shop-name-text {
-    font-size: 26px;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 5px;
-  }
-  .owner-name {
-    font-size: 14px;
-    color: var(--text-light);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .address-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: linear-gradient(135deg, #f0ebff, #e8e0ff);
-    color: var(--primary);
-    padding: 6px 16px;
-    border-radius: 99px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
-  .divider {
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-    margin: 0 25px 18px;
-  }
-  .description-wrap { padding: 0 25px; margin-bottom: 20px; }
-  .description-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .description-scroll-wrap {
-    overflow: hidden;
-    background: linear-gradient(135deg, #faf8ff, #f5f0ff);
-    border-radius: 20px;
-    padding: 14px;
-    border: 1px solid rgba(108,43,217,0.15);
-  }
-  .description-scroll-text {
-    display: inline-block;
-    white-space: nowrap;
-    animation: scrollLeft 30s linear infinite;
-    font-size: 14px;
-    color: var(--text-light);
-    font-weight: 500;
-  }
-  @keyframes scrollLeft {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-  }
-
-  /* Contact Grid */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    padding: 0 25px;
-    margin-bottom: 10px;
-  }
-  .contact-tile {
-    padding: 14px 8px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-  .contact-tile:hover { transform: translateY(-5px) scale(1.02); }
-  .contact-tile.call { background: linear-gradient(135deg, #f0ebff, #e8e0ff); color: var(--primary); }
-  .contact-tile.whatsapp { background: linear-gradient(135deg, #e8faf0, #d4f5e3); color: #25D366; }
-  .contact-tile.telegram { background: linear-gradient(135deg, #e8f0fe, #d6e8fc); color: #0088cc; }
-  .contact-tile-icon { font-size: 28px; }
-  .contact-tile-text { font-size: 12px; font-weight: 600; }
-
-  /* Product Grid */
-  .container {
-    max-width: 1200px;
-    margin: 20px auto 30px;
-    padding: 0 15px;
-  }
-  .section-title {
-    font-size: 22px;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 20px;
-    display: inline-block;
-    border-left: 5px solid var(--accent);
-    padding-left: 15px;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-  .product {
-    background: white;
-    overflow: hidden;
-    transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(108,43,217,0.1);
-    border: 1px solid rgba(108,43,217,0.1);
-  }
-  .product:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 35px rgba(108,43,217,0.2);
-  }
-  .product-img-wrapper { padding: 8px; }
-  .product img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    display: block;
-    border-radius: 16px;
-    background: #f3edff;
-  }
-  .product-info {
-    padding: 8px 12px 14px 12px;
-    background: white;
-  }
-  .product-price {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--primary);
-    margin-bottom: 5px;
-  }
-  .name-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 6px;
-  }
-  .product-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.3;
-    flex: 1;
-  }
-  .three-dots {
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    color: var(--primary-light);
-    background: none;
-    border: none;
-    padding: 5px 8px;
-    border-radius: 50%;
-    transition: all 0.2s;
-  }
-  .three-dots:hover {
-    background: #f0ebff;
-    color: var(--primary);
-  }
-  .product-desc {
-    font-size: 12px;
-    color: var(--text-light);
-    line-height: 1.4;
-    margin-top: 8px;
-    padding-top: 6px;
-    border-top: 1px dashed #e2d5ff;
-    display: none;
-  }
-  .product-desc.show { display: block; }
-  .loading, .no-products, .no-results {
-    text-align: center;
-    padding: 40px;
-    font-size: 14px;
-    color: var(--primary);
-    grid-column: span 2;
-    background: white;
-    border-radius: 20px;
-  }
-
-  /* Scroll Top */
-  .scroll-top {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 22px;
-    opacity: 0;
-    transition: all 0.3s;
-    box-shadow: var(--glow-purple);
-    z-index: 99;
-    color: white;
-    border: none;
-  }
-  .scroll-top.show { opacity: 1; }
-  .scroll-top:hover {
-    transform: translateY(-5px) scale(1.1);
-  }
-
   @media (max-width: 768px) {
     .slider-container { height: 180px; }
-    .grid { gap: 12px; }
-    .product-price { font-size: 14px; }
-    .product-name { font-size: 12px; }
-    .shop-name-text { font-size: 20px; }
-    .cover-shop-name { font-size: 22px; }
-    .cover { height: 160px; }
-    .avatar { width: 75px; height: 75px; font-size: 32px; }
-    .avatar-wrap { margin-top: -45px; margin-left: 18px; }
-    .contact-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .contact-tile { padding: 10px 5px; }
-    .contact-tile-icon { font-size: 22px; }
-    .contact-tile-text { font-size: 10px; }
   }
 </style>
 </head>
@@ -662,13 +350,13 @@
     <div class="search-container" id="searchContainer">
       <div class="search-input-wrapper">
         <span class="search-icon-inline">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="প্রোডাক্ট সার্চ করুন..." autocomplete="off">
+        <input type="text" id="searchInput" class="search-input" placeholder="সার্চ করুন..." autocomplete="off">
         <button class="search-clear" id="searchClearBtn" style="display: none;">✕</button>
       </div>
     </div>
   </div>
 
-  <!-- IMAGE SLIDER (Above Ticker) -->
+  <!-- IMAGE SLIDER -->
   <div class="slider-section">
     <div class="slider-container" id="sliderContainer">
       <div class="slides-wrapper" id="slidesWrapper"></div>
@@ -678,47 +366,14 @@
     </div>
   </div>
 
-  <!-- Moving Ticker (Below Slider) -->
+  <!-- Moving Ticker -->
   <div class="ticker-section">
     <div class="ticker-wrap">
       <div class="ticker" id="tickerContainer"></div>
     </div>
   </div>
 
-  <!-- Profile Card -->
-  <div class="profile-card">
-    <div class="cover" id="coverBg">
-      <div>
-        <div class="cover-shop-name" id="coverShopName">প্রিমিয়াম স্টোর</div>
-        <div class="cover-address" id="coverAddress">📍 ঠিকানা লোড হচ্ছে...</div>
-      </div>
-    </div>
-    <div class="avatar-wrap">
-      <div class="avatar" id="profileAvatar">?</div>
-    </div>
-    <div class="profile-info">
-      <div class="shop-name-text" id="shopNameText">দোকানের নাম</div>
-      <div class="owner-name"><i class="fas fa-user-circle"></i> <span id="ownerNameText">মালিকের নাম</span></div>
-      <div class="address-badge"><i class="fas fa-map-marker-alt"></i> <span id="addressText">ঠিকানা</span></div>
-    </div>
-    <div class="divider"></div>
-    <div class="description-wrap" id="descriptionWrap" style="display:none">
-      <div class="description-title"><i class="fas fa-store"></i> দোকান পরিচিতি</div>
-      <div class="description-scroll-wrap">
-        <span class="description-scroll-text" id="descriptionText"></span>
-      </div>
-    </div>
-    <div class="contact-grid" id="contactGrid"></div>
-  </div>
-
-  <!-- Products Section -->
-  <div class="container">
-    <div class="section-title"><i class="fas fa-fire"></i> হট ডিল</div>
-    <div class="grid" id="productGrid"></div>
-  </div>
 </div>
-
-<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -737,55 +392,17 @@ const urlParams = new URLSearchParams(window.location.search);
 const shopId = urlParams.get('id');
 if (!shopId) { showNotFound(); } else { loadShop(); }
 
-const gradients = ['linear-gradient(135deg, #6c2bd9, #a259f7)', 'linear-gradient(135deg, #0f3460, #16213e)', 'linear-gradient(135deg, #1a6b3c, #2ecc71)', 'linear-gradient(135deg, #e74c3c, #c0392b)', 'linear-gradient(135deg, #f39c12, #e67e22)', 'linear-gradient(135deg, #1abc9c, #16a085)', 'linear-gradient(135deg, #2980b9, #1a5276)'];
-
 async function loadShop() {
   try {
     const snap = await db.ref('shops/' + shopId).get();
     document.getElementById('loadingScreen').style.display = 'none';
     if (!snap.exists() || snap.val().status !== 'approved') { showNotFound(); return; }
     const shop = snap.val();
-    const gradIndex = (shop.shopName || '').charCodeAt(0) % gradients.length;
-    const grad = gradients[gradIndex];
-    const avatarChar = (shop.shopName || '?').charAt(0).toUpperCase();
-
-    document.getElementById('coverBg').style.background = grad;
-    document.getElementById('coverShopName').textContent = shop.shopName || '';
-    document.getElementById('storeNameHeader').textContent = shop.shopName || '';
-    let fullAddress = '';
-    if (shop.thana) fullAddress = `${shop.thana}, ${shop.district || ''}`;
-    else if (shop.area) fullAddress = `${shop.area}, ${shop.district || ''}`;
-    else fullAddress = shop.district || '';
-    document.getElementById('coverAddress').textContent = `📍 ${fullAddress}`;
-    const avatarEl = document.getElementById('profileAvatar');
-    avatarEl.textContent = avatarChar;
-    avatarEl.style.background = grad;
-    document.getElementById('shopNameText').textContent = shop.shopName || '';
-    document.getElementById('ownerNameText').textContent = shop.ownerName || '';
-    const addressBadgeText = shop.thana ? `${shop.thana}, ${shop.district}` : (shop.area ? `${shop.area}, ${shop.district}` : shop.district);
-    document.getElementById('addressText').textContent = addressBadgeText || '';
-    if (shop.description) {
-      document.getElementById('descriptionWrap').style.display = 'block';
-      document.getElementById('descriptionText').textContent = shop.description;
-    }
-    let contactHtml = '';
-    if (shop.phone) contactHtml += `<a href="tel:${shop.phone}" class="contact-tile call"><span class="contact-tile-icon">📞</span><span class="contact-tile-text">কল</span></a>`;
-    if (shop.whatsapp) {
-      let waNum = shop.whatsapp.replace(/[^0-9]/g, '');
-      if (!waNum.startsWith('88')) waNum = '88' + waNum;
-      contactHtml += `<a href="https://wa.me/${waNum}" target="_blank" class="contact-tile whatsapp"><span class="contact-tile-icon">💬</span><span class="contact-tile-text">WhatsApp</span></a>`;
-    }
-    if (shop.telegram) {
-      let tgNum = shop.telegram.replace(/[^0-9]/g, '');
-      if (!tgNum.startsWith('88')) tgNum = '88' + tgNum;
-      contactHtml += `<a href="https://t.me/+${tgNum}" target="_blank" class="contact-tile telegram"><span class="contact-tile-icon">📡</span><span class="contact-tile-text">Telegram</span></a>`;
-    }
-    document.getElementById('contactGrid').innerHTML = contactHtml;
+    document.getElementById('storeNameHeader').textContent = shop.shopName || 'প্রিমিয়াম স্টোর';
     document.title = `${shop.shopName} | প্রিমিয়াম স্টোর`;
     document.getElementById('mainContent').style.display = 'block';
     loadTickerFromStorage();
     loadSlider();
-    loadProducts();
   } catch(e) { showNotFound(); }
 }
 
@@ -846,72 +463,6 @@ function prevSlide() { if(slidesData.length) { currentSlideIndex=(currentSlideIn
 function goToSlide(i) { if(i>=0&&i<slidesData.length) { currentSlideIndex=i; updateSliderPosition(); resetAutoSlide(); } }
 function resetAutoSlide() { if(slideInterval) clearInterval(slideInterval); slideInterval=setInterval(()=>nextSlide(),5000); }
 function loadSlider() { loadSliderFromStorage(); document.getElementById('prevBtn').addEventListener('click',prevSlide); document.getElementById('nextBtn').addEventListener('click',nextSlide); const sc=document.getElementById('sliderContainer'); sc.addEventListener('mouseenter',()=>{ if(slideInterval) clearInterval(slideInterval); }); sc.addEventListener('mouseleave',()=>resetAutoSlide()); }
-
-// PRODUCTS
-let allProducts = [];
-function getProductImageUrl(url) {
-  if(!url) return "https://via.placeholder.com/400x400/ede6ff/a855f7?text=No+Image";
-  let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1];
-  if(!f) { m=url.match(/id=([a-zA-Z0-9_-]+)/); if(m) f=m[1]; }
-  if(!f) { m=url.match(/file\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; }
-  if(f) return `https://lh3.googleusercontent.com/d/${f}=w400`;
-  if(url.match(/\.(jpg|jpeg|png|gif|webp)/i)) return url;
-  return "https://via.placeholder.com/400x400/ede6ff/a855f7?text=Image+Error";
-}
-
-function renderProductGrid(prods) {
-  const g=document.getElementById('productGrid');
-  if(!prods||prods.length===0){ g.innerHTML='<div class="no-results">🔍 কোন প্রোডাক্ট খুঁজে পাওয়া যায়নি</div>'; return; }
-  g.innerHTML='';
-  prods.forEach(p=>{
-    const imgUrl=getProductImageUrl(p.image);
-    const priceDisplay=(p.price&&p.price!=="")?`৳ ${escapeHtml(p.price)}`:"মূল্য নির্ধারিত হয়নি";
-    const nameDisplay=p.name||"নামহীন প্রোডাক্ট";
-    const descDisplay=(p.desc&&p.desc!=="")?escapeHtml(p.desc):"কোনো বিবরণ নেই।";
-    const div=document.createElement('div'); div.className='product';
-    div.innerHTML=`<div class="product-img-wrapper"><img src="${imgUrl}" alt="${escapeHtml(nameDisplay)}" onerror="this.src='https://via.placeholder.com/400x400/ede6ff/a855f7?text=Error'"></div><div class="product-info"><div class="product-price">${priceDisplay}</div><div class="name-row"><div class="product-name">${escapeHtml(nameDisplay)}</div><button class="three-dots" data-desc="${escapeHtml(descDisplay)}">⋮</button></div><div class="product-desc">${escapeHtml(descDisplay)}</div></div>`;
-    g.appendChild(div);
-  });
-  document.querySelectorAll('.three-dots').forEach(btn=>{ btn.addEventListener('click',(e)=>{ e.stopPropagation(); const dd=btn.closest('.product-info').querySelector('.product-desc'); if(dd) dd.classList.toggle('show'); }); });
-}
-
-function loadProducts() {
-  const ref=firebase.database().ref("products");
-  ref.once("value").then(snapshot=>{
-    allProducts=[]; snapshot.forEach(c=>{ allProducts.push({id:c.key,...c.val()}); });
-    allProducts.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-    renderProductGrid(allProducts);
-  }).catch(()=>{ document.getElementById('productGrid').innerHTML='<div class="no-products">⚠️ প্রোডাক্ট লোড করতে সমস্যা হয়েছে</div>'; });
-}
-
-// SEARCH FUNCTIONALITY
-function performSearch() {
-  const term = document.getElementById('searchInput').value.trim().toLowerCase();
-  const clearBtn = document.getElementById('searchClearBtn');
-  if (term) clearBtn.style.display = 'flex';
-  else clearBtn.style.display = 'none';
-  if (!term) { renderProductGrid(allProducts); return; }
-  const filtered = allProducts.filter(p => (p.name && p.name.toLowerCase().includes(term)) || (p.price && p.price.toString().includes(term)) || (p.desc && p.desc.toLowerCase().includes(term)));
-  renderProductGrid(filtered);
-}
-
-// SEARCH BAR TOGGLE
-const searchContainer = document.getElementById('searchContainer');
-const searchIconBtn = document.getElementById('searchIconBtn');
-const searchInput = document.getElementById('searchInput');
-const searchClearBtn = document.getElementById('searchClearBtn');
-
-searchIconBtn.addEventListener('click', () => {
-  searchContainer.classList.toggle('open');
-  if (searchContainer.classList.contains('open')) searchInput.focus();
-  else { searchInput.value = ''; performSearch(); }
-});
-searchClearBtn.addEventListener('click', () => { searchInput.value = ''; performSearch(); searchInput.focus(); });
-searchInput.addEventListener('input', performSearch);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && searchContainer.classList.contains('open')) { searchContainer.classList.remove('open'); searchInput.value = ''; performSearch(); } });
-
-// SCROLL TOP
-window.addEventListener('scroll', () => { const btn = document.getElementById('scrollTop'); if(window.scrollY>300) btn.classList.add('show'); else btn.classList.remove('show'); });
 </script>
 </body>
 </html>
