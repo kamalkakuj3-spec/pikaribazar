@@ -1,453 +1,633 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Admin Panel | BizNest</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Admin Panel — পাইকারি বাজার</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #6c2bd9;
+    --primary-dark: #4a1a9e;
+    --primary-light: #a259f7;
+    --accent: #f0c040;
+    --bg: #f5f3ff;
+    --text: #1a1a2e;
+    --text-light: #666;
+    --success: #2ecc71;
+    --error: #e74c3c;
+    --warning: #f0c040;
+    --card-shadow: 0 20px 35px -10px rgba(108,43,217,0.25);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { 
+    font-family:'Hind Siliguri',sans-serif; 
+    background: linear-gradient(135deg, var(--bg) 0%, #ede8ff 100%);
+    min-height:100vh; 
+    padding-bottom: 30px;
+}
+.header {
+    background: linear-gradient(135deg, #1a0a3e 0%, #6c2bd9 50%, #a259f7 100%);
+    padding: 55px 20px 28px;
+    position: relative;
+}
+.h-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.h-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.h-logo-icon {
+    width: 42px; height: 42px;
+    background: var(--accent);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+.h-logo-text {
+    font-size: 18px;
+    font-weight: 800;
+    color: white;
+}
+.home-link {
+    padding: 10px 22px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 99px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+.h-sub {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    margin-top: 12px;
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 20px 16px;
+}
+.stat-tile {
+    background: white;
+    border-radius: 24px;
+    padding: 22px 18px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+}
+.stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.stat-label {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 600;
+}
+.tabs {
+    display: flex;
+    margin: 0 16px 20px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    overflow-x: auto;
+    gap: 2px;
+    padding: 4px;
+}
+.tab {
+    flex: 1;
+    min-width: 80px;
+    padding: 14px 10px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text-light);
+    border-radius: 16px;
+}
+.tab.active {
+    color: var(--primary);
+    background: white;
+    box-shadow: 0 6px 20px rgba(108,43,217,0.2);
+}
+.section { padding: 0 16px; }
+.admin-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 16px;
+}
+.ac-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+.ac-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+}
+.ac-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+}
+.ac-info {
+    font-size: 12px;
+    color: var(--text-light);
+}
+.ac-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f0ebff;
+}
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: auto;
+}
+.status-badge.pending  { background: #fffbeb; color: #d97706; }
+.status-badge.approved { background: #ecfdf5; color: #059669; }
+.status-badge.rejected { background: #fef2f2; color: #dc2626; }
+.ac-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.ac-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.btn-approve { background: #ecfdf5; color: #059669; }
+.btn-reject  { background: #fef2f2; color: #dc2626; }
+.btn-delete  { background: #fef2f2; color: #dc2626; }
+.btn-view    { background: #f0ebff; color: var(--primary); }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f3ff 0%, #e8e0ff 100%);
-            color: #0f172a;
-            overflow-x: hidden;
-            padding-bottom: 40px;
-        }
+/* ভিডিও সেকশন স্টাইল */
+.video-card-admin {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 16px;
+}
+.video-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.video-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+}
+.video-url {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    word-break: break-all;
+}
+.video-preview {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 12px;
+}
+.video-actions {
+    display: flex;
+    gap: 10px;
+}
+.video-edit-btn, .video-delete-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.video-edit-btn { background: #f0ebff; color: var(--primary); }
+.video-delete-btn { background: #fef2f2; color: #dc2626; }
 
-        /* Glassmorphic Header */
-        .admin-header {
-            background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
-            padding: 32px 24px 48px;
-            position: relative;
-            margin-bottom: 24px;
-        }
-        .admin-header::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .admin-header::after {
-            content: '';
-            position: absolute;
-            bottom: -40px;
-            left: -40px;
-            width: 150px;
-            height: 150px;
-            background: rgba(240,192,64,0.08);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            position: relative;
-            z-index: 2;
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(4px);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-        .logo-text h1 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: white;
-        }
-        .logo-text p {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.7);
-        }
-        .home-link {
-            padding: 10px 24px;
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(4px);
-            border-radius: 40px;
-            color: white;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .home-link:hover {
-            background: rgba(255,255,255,0.25);
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            max-width: 1400px;
-            margin: -24px auto 0;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            position: relative;
-            z-index: 5;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 28px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 20px 35px -12px rgba(108,43,217,0.2);
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: translateY(-4px); }
-        .stat-number {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #6c2bd9, #a259f7);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .stat-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #666;
-            margin-top: 4px;
-        }
-
-        /* Tabs */
-        .tabs-wrapper {
-            max-width: 1400px;
-            margin: 28px auto 0;
-            padding: 0 20px;
-        }
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 60px;
-            padding: 6px;
-        }
-        .tab {
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #555;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .tab.active {
-            background: white;
-            color: #6c2bd9;
-            box-shadow: 0 4px 12px rgba(108,43,217,0.15);
-        }
-        .tab:hover:not(.active) {
-            background: rgba(255,255,255,0.5);
-        }
-
-        /* Content Sections */
-        .content-section {
-            max-width: 1400px;
-            margin: 24px auto 0;
-            padding: 0 20px;
-        }
-        .admin-card {
-            background: white;
-            border-radius: 32px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(108,43,217,0.08);
-            transition: transform 0.2s;
-        }
-        .admin-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(108,43,217,0.12);
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .shop-avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-        }
-        .shop-info h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-        .shop-info p {
-            font-size: 0.75rem;
-            color: #666;
-        }
-        .status-badge {
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-        .status-badge.pending { background: #fffbeb; color: #d97706; }
-        .status-badge.approved { background: #ecfdf5; color: #059669; }
-        .status-badge.rejected { background: #fef2f2; color: #dc2626; }
-        .detail-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0ebff;
-            font-size: 0.85rem;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-        .action-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 28px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .action-btn.approve { background: #ecfdf5; color: #059669; }
-        .action-btn.reject { background: #fef2f2; color: #dc2626; }
-        .action-btn.delete { background: #fef2f2; color: #dc2626; }
-        .action-btn.view { background: #f0ebff; color: #6c2bd9; }
-        .action-btn:hover { transform: translateY(-2px); filter: brightness(0.95); }
-
-        /* Video Card */
-        .video-card-admin {
-            background: white;
-            border-radius: 28px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(108,43,217,0.08);
-        }
-        .video-preview {
-            width: 100%;
-            border-radius: 20px;
-            margin: 12px 0;
-        }
-        .video-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-        }
-        .video-edit, .video-delete {
-            flex: 1;
-            padding: 10px;
-            border-radius: 40px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-        }
-        .video-edit { background: #f0ebff; color: #6c2bd9; }
-        .video-delete { background: #fef2f2; color: #dc2626; }
-
-        /* Add Video Card */
-        .add-card {
-            background: white;
-            border-radius: 32px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 8px 32px rgba(108,43,217,0.08);
-        }
-        .input-group {
-            margin-bottom: 16px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-        .input-field {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 24px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #6c2bd9;
-            box-shadow: 0 0 0 3px rgba(108,43,217,0.1);
-        }
-        .save-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #6c2bd9, #a259f7);
-            border: none;
-            border-radius: 40px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .save-btn:hover { transform: scale(0.98); }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #94a3b8;
-        }
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 60px;
-            font-weight: 500;
-            z-index: 9999;
-            display: none;
-            animation: fadeUp 0.3s ease;
-        }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .stats-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
-            .tabs { overflow-x: auto; flex-wrap: nowrap; border-radius: 32px; }
-            .tab { white-space: nowrap; }
-        }
-    </style>
+.add-video-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+}
+.add-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+.input-group {
+    margin-bottom: 14px;
+}
+.input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text);
+}
+.input-field {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e8e0ff;
+    border-radius: 16px;
+    font-size: 14px;
+    font-family: inherit;
+}
+.input-field:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+.save-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+}
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 9999;
+    display: none;
+}
+</style>
 </head>
 <body>
 
-<div class="admin-header">
-    <div class="header-container">
-        <div class="logo-area">
-            <div class="logo-icon">🛡️</div>
-            <div class="logo-text">
-                <h1>Admin Panel</h1>
-                <p>পাইকারি বাজার — সব নিয়ন্ত্রণ এখানে</p>
-            </div>
+<div class="header">
+    <div class="h-top">
+        <div class="h-logo">
+            <div class="h-logo-icon">🛡️</div>
+            <div class="h-logo-text">Admin Panel</div>
         </div>
-        <a href="index.html" class="home-link"><i class="fas fa-home"></i> হোম</a>
+        <a href="index.html" class="home-link">🏠 হোম</a>
     </div>
+    <div class="h-sub">পাইকারি বাজার — সব নিয়ন্ত্রণ এখানে</div>
 </div>
 
 <div class="stats-grid">
-    <div class="stat-card"><div class="stat-number" id="statTotal">০</div><div class="stat-label">মোট দোকান</div></div>
-    <div class="stat-card"><div class="stat-number" id="statPending">০</div><div class="stat-label">⏳ পেন্ডিং</div></div>
-    <div class="stat-card"><div class="stat-number" id="statApproved">০</div><div class="stat-label">✅ Approved</div></div>
-    <div class="stat-card"><div class="stat-number" id="statRejected">০</div><div class="stat-label">❌ Rejected</div></div>
+    <div class="stat-tile total">
+        <div class="stat-num" id="statTotal">০</div>
+        <div class="stat-label">মোট দোকান</div>
+    </div>
+    <div class="stat-tile pending">
+        <div class="stat-num" id="statPending">০</div>
+        <div class="stat-label">⏳ পেন্ডিং</div>
+    </div>
+    <div class="stat-tile approved">
+        <div class="stat-num" id="statApproved">০</div>
+        <div class="stat-label">✅ Approved</div>
+    </div>
+    <div class="stat-tile rejected">
+        <div class="stat-num" id="statRejected">০</div>
+        <div class="stat-label">❌ Rejected</div>
+    </div>
 </div>
 
-<div class="tabs-wrapper"><div class="tabs">
-    <div class="tab active" data-tab="pending">⏳ পেন্ডিং <span id="pendingBadge" style="background:#f0c040;color:#1a1a2e;padding:2px 8px;border-radius:40px;margin-left:8px;">0</span></div>
-    <div class="tab" data-tab="approved">✅ Approved</div>
-    <div class="tab" data-tab="rejected">❌ Rejected</div>
-    <div class="tab" data-tab="videos">🎬 ভিডিও</div>
-    <div class="tab" data-tab="marquee">📢 চলন্ত লেখা</div>
-    <div class="tab" data-tab="slider">🖼️ Slider</div>
-</div></div>
+<div class="tabs">
+    <div class="tab active" onclick="switchTab('pending')">⏳ পেন্ডিং <span id="pendingBadge" style="background:var(--warning);color:white;padding:2px 8px;border-radius:20px;margin-left:5px;">0</span></div>
+    <div class="tab" onclick="switchTab('approved')">✅ Approved</div>
+    <div class="tab" onclick="switchTab('rejected')">❌ Rejected</div>
+    <div class="tab" onclick="switchTab('videos')">🎬 ভিডিও</div>
+    <div class="tab" onclick="switchTab('marquee')">📢 চলন্ত লেখা</div>
+    <div class="tab" onclick="switchTab('slider')">🖼️ Slider</div>
+</div>
 
-<div class="content-section" id="shopsSection"><div id="shopList"></div></div>
-<div class="content-section" id="videosSection" style="display:none">
-    <div class="add-card">
-        <h3 style="margin-bottom:20px;"><i class="fas fa-plus-circle"></i> নতুন ভিডিও যোগ করুন</h3>
-        <div class="input-group"><label>🎬 ভিডিও URL (MP4 লিংক)</label><input type="url" class="input-field" id="videoUrl" placeholder="https://example.com/video.mp4"></div>
-        <div class="input-group"><label>📝 টাইটেল</label><input type="text" class="input-field" id="videoTitle" placeholder="ভিডিওর টাইটেল"></div>
-        <div class="input-group"><label>📄 বিবরণ</label><input type="text" class="input-field" id="videoDesc" placeholder="ভিডিও সম্পর্কে সংক্ষিপ্ত বিবরণ"></div>
-        <div class="input-group"><label>🖼️ থাম্বনেইল URL (ঐচ্ছিক)</label><input type="url" class="input-field" id="videoThumb" placeholder="https://example.com/thumb.jpg"></div>
-        <div class="input-group"><label>🔢 অর্ডার (ছোট সংখ্যা উপরে দেখাবে)</label><input type="number" class="input-field" id="videoOrder" value="0"></div>
+<div class="section" id="shopSection">
+    <div id="shopList"></div>
+</div>
+
+<div id="videosSection" style="display:none">
+    <div class="add-video-card">
+        <div class="add-title">➕ নতুন ভিডিও যোগ করুন</div>
+        <div class="input-group">
+            <label>🎬 ভিডিও URL (MP4 লিংক)</label>
+            <input type="url" class="input-field" id="videoUrl" placeholder="https://example.com/video.mp4">
+        </div>
+        <div class="input-group">
+            <label>📝 টাইটেল</label>
+            <input type="text" class="input-field" id="videoTitle" placeholder="ভিডিওর টাইটেল">
+        </div>
+        <div class="input-group">
+            <label>📄 বিবরণ</label>
+            <input type="text" class="input-field" id="videoDesc" placeholder="ভিডিও সম্পর্কে সংক্ষিপ্ত বিবরণ">
+        </div>
+        <div class="input-group">
+            <label>🖼️ থাম্বনেইল URL (ঐচ্ছিক)</label>
+            <input type="url" class="input-field" id="videoThumb" placeholder="https://example.com/thumb.jpg">
+        </div>
+        <div class="input-group">
+            <label>🔢 অর্ডার (ছোট সংখ্যা উপরে দেখাবে)</label>
+            <input type="number" class="input-field" id="videoOrder" value="0">
+        </div>
         <button class="save-btn" onclick="addVideo()">➕ ভিডিও যোগ করুন</button>
     </div>
     <div id="videosList"></div>
 </div>
-<div class="content-section" id="marqueeSection" style="display:none">
+
+<div id="marqueeSection" style="display:none">
     <div class="admin-card">
-        <div class="marquee-preview" style="background:#f0ebff;padding:16px;border-radius:20px;margin-bottom:20px"><div style="font-size:12px;color:#666;margin-bottom:8px">প্রিভিউ:</div><div id="marqueePreview" style="background:linear-gradient(90deg,#6c2bd9,#a259f7);color:white;padding:14px;border-radius:40px;text-align:center">এখানে লেখা দেখাবে</div></div>
+        <div class="marquee-preview" style="background:#f0ebff;padding:16px;border-radius:16px;margin-bottom:16px">
+            <div style="font-size:12px;color:#666;margin-bottom:8px">প্রিভিউ:</div>
+            <div id="marqueePreview" style="background:linear-gradient(90deg,var(--primary),var(--primary-light));color:white;padding:14px;border-radius:99px;text-align:center">এখানে লেখা দেখাবে</div>
+        </div>
         <input type="text" class="input-field" id="marqueeTextInput" placeholder="চলন্ত লেখার টেক্সট লিখুন..." style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px"><input type="checkbox" id="marqueeEnableCheck"> <label>চলন্ত লেখা সক্রিয় করুন</label></div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+            <input type="checkbox" id="marqueeEnableCheck"> <label>চলন্ত লেখা সক্রিয় করুন</label>
+        </div>
         <button class="save-btn" onclick="saveMarquee()">💾 সংরক্ষণ করুন</button>
     </div>
 </div>
-<div class="content-section" id="sliderSection" style="display:none">
+
+<div id="sliderSection" style="display:none">
     <div class="admin-card">
-        <h3 style="margin-bottom:20px;">🖼️ Slider পরিচালনা</h3>
+        <div class="add-title">🖼️ Slider পরিচালনা</div>
         <div id="slideList"></div>
-        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e9e4ff"><h4 style="margin-bottom:16px;">➕ নতুন স্লাইড যোগ করুন</h4>
-        <input type="url" class="input-field" id="slideImg" placeholder="ছবির URL" style="margin-bottom:12px">
-        <input type="url" class="input-field" id="slideLink" placeholder="লিংক (ঐচ্ছিক)" style="margin-bottom:12px">
-        <button class="save-btn" onclick="addSlide()">➕ যোগ করুন</button></div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid #eee">
+            <div class="add-title" style="font-size:16px">➕ নতুন স্লাইড যোগ করুন</div>
+            <input type="url" class="input-field" id="slideImg" placeholder="ছবির URL" style="margin-bottom:10px">
+            <input type="url" class="input-field" id="slideLink" placeholder="লিংক (ঐচ্ছিক)" style="margin-bottom:10px">
+            <button class="save-btn" onclick="addSlide()">➕ যোগ করুন</button>
+        </div>
     </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
-firebase.initializeApp({apiKey:"AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",authDomain:"agls-5bd4c.firebaseapp.com",databaseURL:"https://agls-5bd4c-default-rtdb.firebaseio.com/",projectId:"agls-5bd4c"});
+firebase.initializeApp({
+    apiKey:"AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
+    authDomain:"agls-5bd4c.firebaseapp.com",
+    databaseURL:"https://agls-5bd4c-default-rtdb.firebaseio.com/",
+    projectId:"agls-5bd4c",
+});
 const db = firebase.database();
-let currentTab = 'pending', allShops = {};
-db.ref('shops').on('value', snap => { allShops={}; let total=0,pending=0,approved=0,rejected=0; if(snap.exists()) snap.forEach(c=>{allShops[c.key]=c.val(); total++; if(c.val().status==='pending')pending++; if(c.val().status==='approved')approved++; if(c.val().status==='rejected')rejected++;}); document.getElementById('statTotal').textContent=total; document.getElementById('statPending').textContent=pending; document.getElementById('statApproved').textContent=approved; document.getElementById('statRejected').textContent=rejected; document.getElementById('pendingBadge').textContent=pending; if(currentTab !=='videos' && currentTab !=='marquee' && currentTab !=='slider') renderShops(currentTab); });
-function switchTab(tab){ currentTab=tab; document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); event.target.classList.add('active'); document.getElementById('shopsSection').style.display=['pending','approved','rejected'].includes(tab)?'block':'none'; document.getElementById('videosSection').style.display=tab==='videos'?'block':'none'; document.getElementById('marqueeSection').style.display=tab==='marquee'?'block':'none'; document.getElementById('sliderSection').style.display=tab==='slider'?'block':'none'; if(tab==='videos') loadVideos(); else if(tab==='slider') loadSliderAdmin(); else if(tab==='marquee') loadMarqueeSettings(); else renderShops(tab); }
-function renderShops(status){ const list=document.getElementById('shopList'); const filtered=Object.entries(allShops).filter(([,s])=>s.status===status); if(!filtered.length){ list.innerHTML=`<div class="empty-state"><i class="fas fa-store" style="font-size:40px;opacity:0.5"></i><p>কোনো দোকান নেই</p></div>`; return; } const grads=['linear-gradient(135deg,#6c2bd9,#a259f7)','linear-gradient(135deg,#0f3460,#16213e)','linear-gradient(135deg,#1a6b3c,#2ecc71)']; list.innerHTML=filtered.map(([id,shop],i)=>`<div class="admin-card"><div class="card-header"><div style="display:flex;align-items:center;gap:16px"><div class="shop-avatar" style="background:${grads[i%grads.length]}">${(shop.shopName||'?').charAt(0)}</div><div class="shop-info"><h3>${escapeHtml(shop.shopName||'—')}</h3><p>${escapeHtml(shop.ownerName||'')}</p></div></div><div class="status-badge ${shop.status}">${shop.status==='pending'?'⏳ পেন্ডিং':shop.status==='approved'?'✅ Approved':'❌ Rejected'}</div></div><div class="detail-row"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(shop.area||'')}, ${escapeHtml(shop.district||'')}</div><div class="detail-row"><i class="fas fa-phone"></i> ${escapeHtml(shop.phone||'—')}</div><div class="action-buttons">${status==='pending'?`<button class="action-btn approve" onclick="updateStatus('${id}','approved')">✅ Approve</button><button class="action-btn reject" onclick="updateStatus('${id}','rejected')">❌ Reject</button>`:status==='approved'?`<button class="action-btn reject" onclick="updateStatus('${id}','rejected')">❌ Reject</button><button class="action-btn delete" onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button><button class="action-btn view" onclick="window.open('profile.html?id=${id}','_blank')">👁️ দেখুন</button>`:`<button class="action-btn approve" onclick="updateStatus('${id}','approved')">✅ Approve</button><button class="action-btn delete" onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button>`}</div></div>`).join(''); }
-async function updateStatus(id,status){ try{ await db.ref('shops/'+id).update({status}); showToast(status==='approved'?'✅ Approved!':'❌ Rejected!'); } catch(e){ showToast('⚠️ সমস্যা হয়েছে!'); } }
-async function deleteShop(id,name){ if(!confirm(`"${name}" Delete করবেন?`)) return; try{ await db.ref('shops/'+id).remove(); showToast('🗑️ Delete হয়েছে!'); } catch(e){ showToast('⚠️ সমস্যা হয়েছে!'); } }
-function loadVideos(){ db.ref('adminVideos').orderByChild('order').on('value',snap=>{ const container=document.getElementById('videosList'); if(!snap.exists()){ container.innerHTML='<div class="empty-state"><i class="fas fa-video"></i><p>কোনো ভিডিও নেই</p></div>'; return;} let html=''; snap.forEach(child=>{const v=child.val(); html+=`<div class="video-card-admin"><div style="display:flex;justify-content:space-between"><strong>${escapeHtml(v.title||'ভিডিও')}</strong><span style="font-size:11px;">অর্ডার: ${v.order||0}</span></div><div class="video-url" style="font-size:12px;color:#666;margin:8px 0">${escapeHtml(v.videoUrl||'')}</div>${v.thumbnail?`<img src="${v.thumbnail}" class="video-preview" onerror="this.style.display='none'">`:''}<div class="video-actions"><button class="video-edit" onclick="editVideo('${child.key}')">✏️ এডিট</button><button class="video-delete" onclick="deleteVideo('${child.key}')">🗑️ ডিলিট</button></div></div>`;}); container.innerHTML=html;}); }
-async function addVideo(){ const url=document.getElementById('videoUrl').value.trim(); if(!url){ showToast('⚠️ ভিডিও URL দিন!'); return; } try{ await db.ref('adminVideos').push({videoUrl:url,title:document.getElementById('videoTitle').value.trim()||'ভিডিও',description:document.getElementById('videoDesc').value.trim(),thumbnail:document.getElementById('videoThumb').value.trim(),order:parseInt(document.getElementById('videoOrder').value)||0,enabled:true}); document.getElementById('videoUrl').value=''; document.getElementById('videoTitle').value=''; document.getElementById('videoDesc').value=''; document.getElementById('videoThumb').value=''; document.getElementById('videoOrder').value='0'; showToast('✅ ভিডিও যোগ হয়েছে!'); } catch(e){ showToast('⚠️ সমস্যা হয়েছে!'); } }
-async function deleteVideo(key){ if(!confirm('ভিডিও ডিলিট করবেন?')) return; try{ await db.ref('adminVideos/'+key).remove(); showToast('🗑️ ভিডিও ডিলিট হয়েছে!'); } catch(e){ showToast('⚠️ সমস্যা হয়েছে!'); } }
-function editVideo(key){ const newUrl=prompt('নতুন ভিডিও URL দিন:'); if(newUrl) db.ref('adminVideos/'+key).update({videoUrl:newUrl}); }
-function loadMarqueeSettings(){ db.ref('marquee').on('value',snap=>{ if(snap.exists()){ const d=snap.val(); document.getElementById('marqueeTextInput').value=d.text||''; document.getElementById('marqueeEnableCheck').checked=d.enabled===true; updateMarqueePreview(d.text||''); } }); }
-function updateMarqueePreview(text){ const preview=document.getElementById('marqueePreview'); if(text&&text.trim()) preview.innerHTML=`<marquee>✨ ${text} ✨</marquee>`; else preview.innerHTML='🔇 চলন্ত লেখা বন্ধ আছে'; }
-async function saveMarquee(){ const text=document.getElementById('marqueeTextInput').value.trim(); const enabled=document.getElementById('marqueeEnableCheck').checked; try{ await db.ref('marquee').set({text,enabled}); updateMarqueePreview(text); showToast('💾 সংরক্ষিত!'); } catch(e){ showToast('⚠️ সমস্যা হয়েছে!'); } }
-function loadSliderAdmin(){ db.ref('slider').on('value',snap=>{ const list=document.getElementById('slideList'); if(!snap.exists()){ list.innerHTML='<div class="empty-state">কোনো স্লাইড নেই</div>'; return;} let html=''; snap.forEach(child=>{ const s=child.val(); html+=`<div style="background:#faf8ff;border-radius:20px;margin-bottom:12px;overflow:hidden"><img src="${s.image}" style="width:100%;height:120px;object-fit:cover"><div style="padding:12px;display:flex;justify-content:space-between"><span style="font-size:12px;">${s.link||'কোনো লিংক নেই'}</span><button class="action-btn delete" style="padding:6px 12px;width:auto" onclick="deleteSlide('${child.key}')">🗑️</button></div></div>`; }); list.innerHTML=html; }); }
-async function addSlide(){ const img=document.getElementById('slideImg').value.trim(); if(!img){ showToast('ছবির URL দিন!'); return; } const link=document.getElementById('slideLink').value.trim(); try{ await db.ref('slider').push({image:img,link:link||''}); document.getElementById('slideImg').value=''; document.getElementById('slideLink').value=''; showToast('✅ যোগ হয়েছে!'); } catch(e){ showToast('⚠️ সমস্যা হয়েছে!'); } }
-async function deleteSlide(key){ if(!confirm('ডিলিট করবেন?')) return; try{ await db.ref('slider/'+key).remove(); showToast('🗑️ ডিলিট হয়েছে!'); } catch(e){ showToast('⚠️ সমস্যা হয়েছে!'); } }
-function escapeHtml(str){ if(!str) return ''; return str.replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){switchTab(this.getAttribute('data-tab'));}));
+
+let currentTab = 'pending';
+let allShops = {};
+
+// ========== LOAD ALL SHOPS ==========
+db.ref('shops').on('value', snap => {
+    allShops = {};
+    let total=0, pending=0, approved=0, rejected=0;
+    if (snap.exists()) {
+        snap.forEach(c => {
+            allShops[c.key] = c.val();
+            total++;
+            const st = c.val().status;
+            if (st==='pending') pending++;
+            if (st==='approved') approved++;
+            if (st==='rejected') rejected++;
+        });
+    }
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statApproved').textContent = approved;
+    document.getElementById('statRejected').textContent = rejected;
+    document.getElementById('pendingBadge').textContent = pending;
+    
+    if (currentTab !== 'videos' && currentTab !== 'marquee' && currentTab !== 'slider') renderShops(currentTab);
+});
+
+// ========== SWITCH TAB ==========
+function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.getElementById('shopSection').style.display = ['pending','approved','rejected'].includes(tab) ? 'block' : 'none';
+    document.getElementById('videosSection').style.display = tab==='videos' ? 'block' : 'none';
+    document.getElementById('marqueeSection').style.display = tab==='marquee' ? 'block' : 'none';
+    document.getElementById('sliderSection').style.display = tab==='slider' ? 'block' : 'none';
+
+    if (tab==='videos') loadVideos();
+    else if (tab==='slider') loadSliderAdmin();
+    else if (tab==='marquee') loadMarqueeSettings();
+    else renderShops(tab);
+}
+
+// ========== VIDEO FUNCTIONS ==========
+function loadVideos() {
+    db.ref('adminVideos').orderByChild('order').on('value', snap => {
+        const container = document.getElementById('videosList');
+        if (!snap.exists()) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon">🎬</div><div>কোনো ভিডিও নেই</div></div>';
+            return;
+        }
+        let html = '';
+        snap.forEach(child => {
+            const v = child.val();
+            const key = child.key;
+            html += `
+            <div class="video-card-admin">
+                <div class="video-header">
+                    <div class="video-title">${escapeHtml(v.title || 'ভিডিও')}</div>
+                    <div style="font-size:11px;color:#666">অর্ডার: ${v.order || 0}</div>
+                </div>
+                <div class="video-url">${escapeHtml(v.videoUrl || '')}</div>
+                ${v.thumbnail ? `<img src="${v.thumbnail}" class="video-preview" onerror="this.style.display='none'">` : ''}
+                <div style="font-size:12px;color:#666;margin-bottom:12px">${escapeHtml(v.description || '')}</div>
+                <div class="video-actions">
+                    <button class="video-edit-btn" onclick="editVideo('${key}')">✏️ এডিট</button>
+                    <button class="video-delete-btn" onclick="deleteVideo('${key}')">🗑️ ডিলিট</button>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+}
+
+async function addVideo() {
+    const videoUrl = document.getElementById('videoUrl').value.trim();
+    const title = document.getElementById('videoTitle').value.trim();
+    const description = document.getElementById('videoDesc').value.trim();
+    const thumbnail = document.getElementById('videoThumb').value.trim();
+    const order = parseInt(document.getElementById('videoOrder').value) || 0;
+    
+    if (!videoUrl) { showToast('⚠️ ভিডিও URL দিন!'); return; }
+    
+    try {
+        await db.ref('adminVideos').push({
+            videoUrl: videoUrl,
+            title: title || 'ভিডিও',
+            description: description,
+            thumbnail: thumbnail,
+            order: order,
+            enabled: true
+        });
+        document.getElementById('videoUrl').value = '';
+        document.getElementById('videoTitle').value = '';
+        document.getElementById('videoDesc').value = '';
+        document.getElementById('videoThumb').value = '';
+        document.getElementById('videoOrder').value = '0';
+        showToast('✅ ভিডিও যোগ হয়েছে!');
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+async function deleteVideo(key) {
+    if (!confirm('ভিডিও ডিলিট করবেন?')) return;
+    try {
+        await db.ref('adminVideos/'+key).remove();
+        showToast('🗑️ ভিডিও ডিলিট হয়েছে!');
+    } catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+function editVideo(key) {
+    // সহজ এডিটের জন্য প্রম্পট
+    const newUrl = prompt('নতুন ভিডিও URL দিন:');
+    if (newUrl) {
+        db.ref('adminVideos/'+key).update({ videoUrl: newUrl });
+        showToast('✏️ আপডেট হয়েছে!');
+    }
+}
+
+// ========== RENDER SHOPS ==========
+function renderShops(status) {
+    const list = document.getElementById('shopList');
+    const filtered = Object.entries(allShops).filter(([,s])=>s.status===status);
+    if (!filtered.length) {
+        list.innerHTML=`<div class="empty-state"><div class="empty-icon">🏪</div><div>কোনো দোকান নেই</div></div>`;
+        return;
+    }
+    const grads = ['linear-gradient(135deg,#6c2bd9,#a259f7)','linear-gradient(135deg,#0f3460,#16213e)','linear-gradient(135deg,#1a6b3c,#2ecc71)'];
+    list.innerHTML = filtered.map(([id,shop],i) => {
+        const av = (shop.shopName||'?').charAt(0);
+        const statusLabel = shop.status==='pending'?'⏳ পেন্ডিং':shop.status==='approved'?'✅ Approved':'❌ Rejected';
+        const actionBtns = status==='pending' ? `
+            <button class="ac-btn btn-approve" onclick="updateStatus('${id}','approved')">✅ Approve</button>
+            <button class="ac-btn btn-reject" onclick="updateStatus('${id}','rejected')">❌ Reject</button>
+        ` : status==='approved' ? `
+            <button class="ac-btn btn-reject" onclick="updateStatus('${id}','rejected')">❌ Reject</button>
+            <button class="ac-btn btn-delete" onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button>
+            <button class="ac-btn btn-view" onclick="window.open('profile.html?id=${id}','_blank')">👁️ দেখুন</button>
+        ` : `
+            <button class="ac-btn btn-approve" onclick="updateStatus('${id}','approved')">✅ Approve</button>
+            <button class="ac-btn btn-delete" onclick="deleteShop('${id}','${shop.shopName}')">🗑️ Delete</button>
+        `;
+        return `<div class="admin-card"><div class="ac-top"><div class="ac-avatar" style="background:${grads[i%grads.length]}">${av}</div><div style="flex:1"><div class="ac-name">${shop.shopName||'—'}</div><div class="ac-info">${shop.ownerName||''}</div></div><div class="status-badge ${shop.status}">${statusLabel}</div></div><div class="ac-row"><span>📍</span><span>${shop.area||''}, ${shop.district||''}</span></div><div class="ac-row"><span>📱</span><span>${shop.phone||'—'}</span></div><div class="ac-actions">${actionBtns}</div></div>`;
+    }).join('');
+}
+
+async function updateStatus(id, status) {
+    try { await db.ref('shops/'+id).update({status}); showToast(status==='approved'?'✅ Approved!':'❌ Rejected!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+async function deleteShop(id, name) {
+    if (!confirm(`"${name}" Delete করবেন?`)) return;
+    try { await db.ref('shops/'+id).remove(); showToast('🗑️ Delete হয়েছে!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+// ========== MARQUEE ==========
+function loadMarqueeSettings() {
+    db.ref('marquee').on('value', snap => {
+        if (snap.exists()) {
+            const data = snap.val();
+            document.getElementById('marqueeTextInput').value = data.text || '';
+            document.getElementById('marqueeEnableCheck').checked = data.enabled === true;
+            updateMarqueePreview(data.text || '');
+        }
+    });
+}
+function updateMarqueePreview(text) {
+    const preview = document.getElementById('marqueePreview');
+    if (text && text.trim()) preview.innerHTML = `<marquee>✨ ${text} ✨</marquee>`;
+    else preview.innerHTML = '🔇 চলন্ত লেখা বন্ধ আছে';
+}
+async function saveMarquee() {
+    const text = document.getElementById('marqueeTextInput').value.trim();
+    const enabled = document.getElementById('marqueeEnableCheck').checked;
+    try { await db.ref('marquee').set({ text, enabled }); updateMarqueePreview(text); showToast('💾 সংরক্ষিত!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+// ========== SLIDER ==========
+function loadSliderAdmin() {
+    db.ref('slider').on('value', snap => {
+        const list = document.getElementById('slideList');
+        if (!snap.exists()) { list.innerHTML = '<div class="empty-state">কোনো স্লাইড নেই</div>'; return; }
+        let html = '';
+        snap.forEach(child => {
+            const s = child.val();
+            html += `<div style="background:#faf8ff;border-radius:16px;margin-bottom:12px;overflow:hidden"><img src="${s.image}" style="width:100%;height:120px;object-fit:cover"><div style="padding:12px;display:flex;justify-content:space-between"><span style="font-size:12px;color:#666">${s.link||'কোনো লিংক নেই'}</span><button class="video-delete-btn" style="padding:6px 12px" onclick="deleteSlide('${child.key}')">🗑️</button></div></div>`;
+        });
+        list.innerHTML = html;
+    });
+}
+async function addSlide() {
+    const img = document.getElementById('slideImg').value.trim();
+    if (!img) { showToast('ছবির URL দিন!'); return; }
+    const link = document.getElementById('slideLink').value.trim();
+    try { await db.ref('slider').push({image:img, link:link||''}); document.getElementById('slideImg').value=''; document.getElementById('slideLink').value=''; showToast('✅ যোগ হয়েছে!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+async function deleteSlide(key) {
+    if (!confirm('ডিলিট করবেন?')) return;
+    try { await db.ref('slider/'+key).remove(); showToast('🗑️ ডিলিট হয়েছে!'); } 
+    catch(e) { showToast('⚠️ সমস্যা হয়েছে!'); }
+}
+
+function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display='none', 3000); }
 </script>
 </body>
 </html>
