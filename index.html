@@ -3,395 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ইউটিউব প্লেয়ার | BizNest</title>
+    <title>পাইকারি বাজার | BizNest</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f3ff 0%, #e8e0ff 100%);
-            min-height: 100vh;
-            padding: 24px 16px;
+            background: #f5f3ff;
+            color: #0f172a;
+            overflow-x: hidden;
+            padding-bottom: 80px;
         }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        /* Splash Screen */
+        #splash { position:fixed; inset:0; background:linear-gradient(160deg,#1a0a3e,#6c2bd9); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9998; animation:splashOut 0.5s ease 2s forwards; }
+        @keyframes splashOut { to{opacity:0;visibility:hidden} }
+        .splash-logo { width:80px; height:80px; background:white; border-radius:24px; display:flex; align-items:center; justify-content:center; font-size:44px; margin-bottom:16px; animation:pop 0.6s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes pop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+        .splash-title { font-size:28px; font-weight:800; color:white; letter-spacing:1px; }
+        .splash-bar { width:140px; height:3px; background:rgba(255,255,255,0.2); border-radius:99px; margin-top:32px; overflow:hidden; }
+        .splash-bar-fill { width:0%; height:100%; background:#f0c040; animation:fill 2s ease 1s forwards; }
+        @keyframes fill { to{width:100%} }
+        #app { animation:appFade 0.3s ease 2.5s forwards; opacity:0; }
+        @keyframes appFade { to{opacity:1} }
 
         /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
+        .main-header {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid rgba(108,43,217,0.1);
         }
-        .header h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
+        .logo h1 {
+            font-size: 1.5rem;
             background: linear-gradient(135deg, #6c2bd9, #a259f7);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .header p {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 4px;
-        }
-
-        /* Loading State */
-        .loading-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #6c2bd9;
-        }
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e2e8f0;
-            border-top-color: #6c2bd9;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
+        .search-section {
+            padding: 12px 16px;
             background: white;
-            border-radius: 32px;
-            color: #94a3b8;
+            border-bottom: 1px solid #ede9fe;
         }
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        /* YouTube Video Card */
-        .video-card {
-            background: white;
-            border-radius: 32px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px -12px rgba(108, 43, 217, 0.25);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: fadeInUp 0.5s ease;
-        }
-        .video-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 25px 45px -12px rgba(108, 43, 217, 0.35);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* YouTube Player Container */
-        .video-container {
-            position: relative;
+        .search-input {
             width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
-        }
-        .video-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .no-video {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1rem;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .no-video i {
-            font-size: 48px;
-            opacity: 0.6;
-        }
-
-        /* Shop Info */
-        .shop-info {
-            padding: 20px;
-            text-align: center;
-        }
-        .shop-name {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: color 0.2s;
-            display: inline-block;
-        }
-        .shop-name:hover {
-            color: #6c2bd9;
-            text-decoration: underline;
-        }
-        .shop-address {
-            font-size: 0.85rem;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .shop-address i {
-            color: #6c2bd9;
-            font-size: 12px;
-        }
-
-        /* View Profile Button */
-        .view-profile-btn {
-            display: inline-block;
-            margin-top: 16px;
-            padding: 10px 24px;
-            background: linear-gradient(135deg, #6c2bd9, #a259f7);
-            color: white;
-            border: none;
+            padding: 14px 20px;
+            border: 1.5px solid #e2e8f0;
             border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: transform 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .search-input:focus { outline: none; border-color: #6c2bd9; box-shadow: 0 0 0 3px rgba(108,43,217,0.1); }
+        .marquee-container { margin: 12px 16px; background: linear-gradient(90deg, #6c2bd9, #a259f7); border-radius: 40px; padding: 10px 16px; color: white; text-align: center; }
+        .slider-section { margin: 0 16px 16px; }
+        .slider-box { border-radius: 28px; overflow: hidden; box-shadow: 0 8px 25px rgba(108,43,217,0.15); position:relative; }
+        .slider-track { display: flex; transition: transform 0.4s ease; }
+        .slide-item { min-width: 100%; height: 160px; object-fit: cover; cursor: pointer; }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.8); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 2; }
+        .slider-prev { left: 8px; }
+        .slider-next { right: 8px; }
+        .add-banner {
+            display: block;
+            margin: 12px 16px;
+            background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
+            border-radius: 28px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
             text-decoration: none;
+            color: white;
         }
-        .view-profile-btn:hover {
-            transform: scale(0.96);
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 32px;
+        .filter-wrap { padding: 0 16px; }
+        .filter-step {
+            background: white;
+            border-radius: 24px;
             padding: 16px;
-            color: #94a3b8;
-            font-size: 0.7rem;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid #ede9fe;
         }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            body {
-                padding: 16px;
-            }
-            .shop-name {
-                font-size: 1.2rem;
-            }
+        .chip-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+        .chip-scroll::-webkit-scrollbar { display: none; }
+        .f-chip {
+            padding: 8px 20px;
+            background: #f1f5f9;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
         }
+        .f-chip.active { background: #6c2bd9; color: white; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 20px; margin: 16px; }
+        .video-card { background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: 0.2s; }
+        .video-card:hover { transform: translateY(-4px); }
+        .cloudinary-video { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+        .shop-video-card { margin: 16px; background: white; border-radius: 28px; overflow: hidden; box-shadow: 0 8px 25px rgba(108,43,217,0.08); }
+        .shop-video { width: 100%; aspect-ratio: 16/9; }
+        .shop-info { padding: 16px; text-align: center; }
+        .shop-name { font-size: 1.3rem; font-weight: 700; color: #1e293b; cursor: pointer; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; }
+        .bottom-nav {
+            position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+            background: rgba(255,255,255,0.96); backdrop-filter: blur(12px);
+            border-radius: 40px; display: flex; gap: 8px; padding: 6px 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); z-index: 100;
+        }
+        .nav-item {
+            background: transparent; border: none; padding: 8px 16px;
+            border-radius: 40px; font-weight: 600; cursor: pointer;
+            transition: 0.2s; color: #475569;
+        }
+        .nav-item.active { background: #6c2bd9; color: white; }
+        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #2ecc71; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; display: none; }
+        @media (max-width:640px){ .video-grid{ gap:12px; margin:12px; } .bottom-nav{ gap:4px; padding:4px 12px; } .nav-item{ padding:6px 12px; font-size:12px; } }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="header">
-        <h1><i class="fas fa-play-circle"></i> BizNest প্লেয়ার</h1>
-        <p>দোকানের প্রোমোশনাল ভিডিও দেখুন</p>
-    </div>
-
-    <div id="content">
-        <div class="loading-state">
-            <div class="loading-spinner"></div>
-            <div>ভিডিও লোড হচ্ছে...</div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <i class="fas fa-store"></i> BizNest | পাইকারি বাজার
-    </div>
+<div id="splash"><div class="splash-logo">🏪</div><div class="splash-title">পাইকারি বাজার</div><div class="splash-bar"><div class="splash-bar-fill"></div></div></div>
+<div id="app">
+<div class="main-header"><div class="logo"><h1><i class="fas fa-store"></i> BizNest Bazar</h1></div><div><span id="userStatus"></span></div></div>
+<div class="search-section"><input class="search-input" id="searchInput" placeholder="দোকানের নাম বা এলাকা খুঁজুন..." oninput="applyFilters()"></div>
+<div id="marqueeSection"></div>
+<div class="slider-section" id="sliderSection" style="display:none"><div class="slider-box"><div class="slider-track" id="sliderTrack"></div><button class="slider-btn slider-prev" onclick="prevSlide()">‹</button><button class="slider-btn slider-next" onclick="nextSlide()">›</button></div></div>
+<a href="register.html" class="add-banner"><i class="fas fa-store" style="font-size:28px"></i><div><strong>আপনার দোকান যোগ করুন</strong><br><span style="font-size:12px;">বিনামূল্যে প্রোফাইল তৈরি করুন</span></div><i class="fas fa-arrow-right" style="margin-left:auto"></i></a>
+<div class="filter-wrap"><div id="filterSteps"></div></div>
+<div class="video-grid" id="videoGrid"></div>
+<div id="shopList"></div>
+<div class="bottom-nav"><button class="nav-item" data-page="category"><i class="fas fa-layer-group"></i> ক্যাটাগরি</button><button class="nav-item" data-page="search"><i class="fas fa-search"></i> খুঁজুন</button><button class="nav-item" data-page="profile"><i class="fas fa-user"></i> প্রোফাইল</button><button class="nav-item" data-page="help"><i class="fas fa-question-circle"></i> সাহায্য</button></div>
 </div>
-
+<div class="toast" id="toast"></div>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
-    // Firebase Configuration (আপনার বিদ্যমান কনফিগ)
-    const firebaseConfig = {
-        apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
-        authDomain: "agls-5bd4c.firebaseapp.com",
-        databaseURL: "https://agls-5bd4c-default-rtdb.firebaseio.com/",
-        projectId: "agls-5bd4c",
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // ইউটিউব লিংক থেকে ভিডিও আইডি বের করার ফাংশন
-    function getYouTubeVideoId(url) {
-        if (!url) return null;
-        
-        // প্যাটার্ন: youtube.com/watch?v=... বা youtu.be/... বা youtube.com/embed/...
-        const patterns = [
-            /(?:youtube\.com\/watch\?v=)([^&]+)/,
-            /(?:youtu\.be\/)([^?]+)/,
-            /(?:youtube\.com\/embed\/)([^?]+)/
-        ];
-        
-        for (let pattern of patterns) {
-            const match = url.match(pattern);
-            if (match) return match[1];
-        }
-        
-        return null;
-    }
-
-    // Escape HTML ফাংশন
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    // শুধুমাত্র সেই দোকানগুলোর ভিডিও দেখাবে যাদের status approved এবং youtube ভিডিও আছে
-    async function loadVideoShops() {
-        const contentDiv = document.getElementById('content');
-        
-        try {
-            const snapshot = await db.ref('shops').once('value');
-            
-            if (!snapshot.exists()) {
-                contentDiv.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">🏪</div>
-                        <div>কোনো দোকান নেই</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // শুধুমাত্র approved দোকান এবং যাদের ইউটিউব ভিডিও আছে তাদের নেওয়া হবে
-            const shopsWithVideo = [];
-            
-            snapshot.forEach(child => {
-                const shop = child.val();
-                // চেক করবো: status approved, এবং youtube বা youtubeVideoId আছে
-                if (shop.status === 'approved') {
-                    let videoId = null;
-                    
-                    // প্রথমে youtubeVideoId চেক করি
-                    if (shop.youtubeVideoId) {
-                        videoId = shop.youtubeVideoId;
-                    } 
-                    // না থাকলে youtube লিংক থেকে বের করি
-                    else if (shop.youtube) {
-                        videoId = getYouTubeVideoId(shop.youtube);
-                    }
-                    // youtubeLink থেকেও চেক করা যেতে পারে
-                    else if (shop.youtubeLink) {
-                        videoId = getYouTubeVideoId(shop.youtubeLink);
-                    }
-                    
-                    if (videoId) {
-                        shopsWithVideo.push({
-                            id: child.key,
-                            shopName: shop.shopName || 'দোকানের নাম',
-                            ownerName: shop.ownerName || '',
-                            division: shop.division || '',
-                            district: shop.district || '',
-                            thana: shop.thana || '',
-                            area: shop.area || '',
-                            videoId: videoId
-                        });
-                    }
-                }
-            });
-            
-            if (shopsWithVideo.length === 0) {
-                contentDiv.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon"><i class="fab fa-youtube"></i></div>
-                        <div>কোনো ভিডিও পাওয়া যায়নি</div>
-                        <div style="font-size: 12px; margin-top: 8px;">এখনো কোনো দোকান ইউটিউব ভিডিও যোগ করেনি</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // সব ভিডিও কার্ড তৈরি করা (একসাথে সব দেখাবে)
-            let allCardsHtml = '';
-            
-            shopsWithVideo.forEach(shop => {
-                // ঠিকানা তৈরী করা
-                let addressParts = [];
-                if (shop.thana) addressParts.push(shop.thana);
-                if (shop.district) addressParts.push(shop.district);
-                if (shop.division) addressParts.push(shop.division);
-                if (shop.area && !shop.thana) addressParts.unshift(shop.area);
-                
-                const addressText = addressParts.join(', ') || 'ঠিকানা নেই';
-                
-                allCardsHtml += `
-                    <div class="video-card" data-shop-id="${shop.id}">
-                        <div class="video-container">
-                            <iframe class="video-iframe" 
-                                    src="https://www.youtube.com/embed/${shop.videoId}?enablejsapi=1&rel=0&modestbranding=1"
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="shop-info">
-                            <div class="shop-name" onclick="viewShopProfile('${shop.id}')">
-                                ${escapeHtml(shop.shopName)}
-                            </div>
-                            <div class="shop-address">
-                                <i class="fas fa-map-marker-alt"></i>
-                                ${escapeHtml(addressText)}
-                            </div>
-                            <button class="view-profile-btn" onclick="viewShopProfile('${shop.id}')">
-                                <i class="fas fa-store"></i> প্রোফাইল দেখুন
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            contentDiv.innerHTML = allCardsHtml;
-            
-        } catch (error) {
-            console.error('Error loading videos:', error);
-            contentDiv.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">⚠️</div>
-                    <div>ডাটা লোড করতে সমস্যা হয়েছে</div>
-                    <div style="font-size: 12px; margin-top: 8px;">${error.message}</div>
-                </div>
-            `;
-        }
-    }
-
-    // প্রোফাইল পেজে যাওয়ার ফাংশন
-    window.viewShopProfile = function(shopId) {
-        if (shopId) {
-            window.location.href = `profile.html?id=${shopId}`;
-        }
-    };
-
-    // ভিডিও লোড করা শুরু করুন
-    loadVideoShops();
+firebase.initializeApp({apiKey:"AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",authDomain:"agls-5bd4c.firebaseapp.com",databaseURL:"https://agls-5bd4c-default-rtdb.firebaseio.com/",projectId:"agls-5bd4c"});
+const auth=firebase.auth(), db=firebase.database();
+let allShops=[], divisions=[], categories=[], selectedDiv='', selectedDist='', selectedThana='', selectedCats=[], slData=[], curSlide=0, slTimer;
+const DIVISIONS_URL='https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
+const CATEGORIES_URL='https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
+async function loadDivisions(){ try{ const res=await fetch(DIVISIONS_URL); const data=await res.json(); divisions=data.divisions; renderFilters(); }catch(e){ console.error(e); } }
+async function loadCategories(){ try{ const res=await fetch(CATEGORIES_URL); categories=await res.json(); }catch(e){ categories=["পোশাক ও বস্ত্র","ইলেকট্রনিক্স","গৃহস্থালি"]; } renderFilters(); }
+function renderFilters(){ let html=`<div class="filter-step"><div>বিভাগ</div><div class="chip-scroll" id="divChips"></div></div><div class="filter-step" id="distStep" style="display:none"><div>জেলা</div><div class="chip-scroll" id="distChips"></div></div><div class="filter-step" id="thanaStep" style="display:none"><div>উপজেলা</div><div class="chip-scroll" id="thanaChips"></div></div><div class="filter-step" id="catStep" style="display:none"><div>ক্যাটাগরি</div><div class="chip-scroll" id="catChips"></div></div>`; document.getElementById('filterSteps').innerHTML=html; renderDivisionChips(); renderCategoryChips(); }
+function renderDivisionChips(){ const container=document.getElementById('divChips'); if(!container) return; container.innerHTML='<div class="f-chip active" data-div="">সব বিভাগ</div>'; divisions.forEach(d=>{ const chip=document.createElement('div'); chip.className='f-chip'; chip.textContent=d.name; chip.dataset.div=d.name; chip.onclick=()=>selectDivision(d.name); container.appendChild(chip); }); }
+function selectDivision(div){ selectedDiv=div; document.querySelectorAll('#divChips .f-chip').forEach(c=>c.classList.remove('active')); document.querySelector(`#divChips .f-chip[data-div="${div}"]`)?.classList.add('active'); if(!div){ document.getElementById('distStep').style.display='none'; document.getElementById('thanaStep').style.display='none'; selectedDist=''; selectedThana=''; applyFilters(); return; } const division=divisions.find(d=>d.name===div); if(division){ const distContainer=document.getElementById('distChips'); distContainer.innerHTML='<div class="f-chip active" data-dist="">সব জেলা</div>'; division.districts.forEach(dist=>{ const chip=document.createElement('div'); chip.className='f-chip'; chip.textContent=dist.name; chip.dataset.dist=dist.name; chip.onclick=()=>selectDistrict(dist.name); distContainer.appendChild(chip); }); document.getElementById('distStep').style.display='block'; document.getElementById('thanaStep').style.display='none'; selectedDist=''; selectedThana=''; } applyFilters(); }
+function selectDistrict(dist){ selectedDist=dist; document.querySelectorAll('#distChips .f-chip').forEach(c=>c.classList.remove('active')); document.querySelector(`#distChips .f-chip[data-dist="${dist}"]`)?.classList.add('active'); if(!dist){ document.getElementById('thanaStep').style.display='none'; selectedThana=''; applyFilters(); return; } const division=divisions.find(d=>d.name===selectedDiv); const district=division?.districts.find(d=>d.name===dist); if(district && district.upazilas){ const thanaContainer=document.getElementById('thanaChips'); thanaContainer.innerHTML='<div class="f-chip active" data-thana="">সব উপজেলা</div>'; district.upazilas.forEach(u=>{ const chip=document.createElement('div'); chip.className='f-chip'; chip.textContent=u; chip.dataset.thana=u; chip.onclick=()=>selectThana(u); thanaContainer.appendChild(chip); }); document.getElementById('thanaStep').style.display='block'; } else { document.getElementById('thanaStep').style.display='none'; } selectedThana=''; applyFilters(); }
+function selectThana(thana){ selectedThana=thana; document.querySelectorAll('#thanaChips .f-chip').forEach(c=>c.classList.remove('active')); document.querySelector(`#thanaChips .f-chip[data-thana="${thana}"]`)?.classList.add('active'); applyFilters(); }
+function renderCategoryChips(){ const container=document.getElementById('catChips'); if(!container) return; container.innerHTML='<div class="f-chip active" data-cat="">সব ক্যাটাগরি</div>'; categories.forEach(cat=>{ const chip=document.createElement('div'); chip.className='f-chip'; chip.textContent=cat; chip.dataset.cat=cat; chip.onclick=()=>selectCategory(cat); container.appendChild(chip); }); document.getElementById('catStep').style.display='block'; }
+function selectCategory(cat){ if(selectedCats.includes(cat)) selectedCats=selectedCats.filter(c=>c!==cat); else selectedCats=[cat]; document.querySelectorAll('#catChips .f-chip').forEach(c=>c.classList.remove('active')); if(selectedCats.length){ document.querySelector(`#catChips .f-chip[data-cat="${selectedCats[0]}"]`)?.classList.add('active'); } else { document.querySelector('#catChips .f-chip[data-cat=""]')?.classList.add('active'); } applyFilters(); }
+function applyFilters(){ let filtered=allShops; if(selectedDiv){ const division=divisions.find(d=>d.name===selectedDiv); const distNames=division?.districts.map(d=>d.name)||[]; filtered=filtered.filter(s=>distNames.includes(s.district)); } if(selectedDist) filtered=filtered.filter(s=>s.district===selectedDist); if(selectedThana) filtered=filtered.filter(s=>s.thana===selectedThana); if(selectedCats.length) filtered=filtered.filter(s=>selectedCats.includes(s.categories)); const search=document.getElementById('searchInput').value.toLowerCase(); if(search) filtered=filtered.filter(s=>s.shopName?.toLowerCase().includes(search)||s.area?.toLowerCase().includes(search)||s.district?.toLowerCase().includes(search)); renderShops(filtered); }
+function renderShops(shops){ const container=document.getElementById('shopList'); if(!shops.length){ container.innerHTML='<div class="empty-state"><i class="fas fa-store"></i><p>কোনো দোকান নেই</p></div>'; return; } container.innerHTML=shops.map(shop=>{ let videoId=''; if(shop.youtubeVideoId) videoId=shop.youtubeVideoId; else if(shop.youtube){ const match=shop.youtube.match(/(?:youtube\.com\/watch\?v=)([^&]+)/); if(match) videoId=match[1]; } const embed=videoId?`<iframe class="shop-video" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`:`<div class="shop-video" style="background:#1a0a3e;display:flex;align-items:center;justify-content:center;color:white">🎬 কোন ভিডিও নেই</div>`; return `<div class="shop-video-card">${embed}<div class="shop-info"><h3 class="shop-name" onclick="window.location.href='profile.html?id=${shop.id}'">${escapeHtml(shop.shopName)}</h3><p>${escapeHtml(shop.thana||shop.area)}, ${escapeHtml(shop.district)}</p></div></div>`; }).join(''); }
+function loadSlider(){ db.ref('slider').on('value',snap=>{ slData=[]; snap.forEach(c=>{if(c.val().image) slData.push(c.val());}); if(!slData.length){document.getElementById('sliderSection').style.display='none'; return;} document.getElementById('sliderSection').style.display='block'; const track=document.getElementById('sliderTrack'); track.innerHTML=slData.map(s=>`<img class="slide-item" src="${s.image}" onclick="window.open('${s.link||''}','_blank')">`).join(''); if(slData.length>1){ if(slTimer) clearInterval(slTimer); slTimer=setInterval(()=>nextSlide(),4000); } }); }
+function nextSlide(){ if(!slData.length) return; curSlide=(curSlide+1)%slData.length; document.getElementById('sliderTrack').style.transform=`translateX(-${curSlide*100}%)`; }
+function prevSlide(){ if(!slData.length) return; curSlide=(curSlide-1+slData.length)%slData.length; document.getElementById('sliderTrack').style.transform=`translateX(-${curSlide*100}%)`; }
+function loadMarquee(){ db.ref('marquee').on('value',snap=>{ const container=document.getElementById('marqueeSection'); if(snap.exists() && snap.val().enabled && snap.val().text) container.innerHTML=`<div class="marquee-container"><marquee>✨ ${snap.val().text} ✨</marquee></div>`; else container.innerHTML=''; }); }
+function loadShops(){ db.ref('shops').on('value',snap=>{ allShops=[]; snap.forEach(c=>{ if(c.val().status==='approved') allShops.push({id:c.key,...c.val()}); }); applyFilters(); }); }
+function loadAdminVideos(){ db.ref('adminVideos').orderByChild('order').on('value',snap=>{ const grid=document.getElementById('videoGrid'); if(!snap.exists()){ grid.innerHTML=''; return; } let html=''; snap.forEach(child=>{ const v=child.val(); if(v.enabled!==false) html+=`<div class="video-card"><video class="cloudinary-video" src="${v.videoUrl}" autoplay muted loop playsinline></video><div style="padding:12px"><strong>${escapeHtml(v.title)}</strong><p style="font-size:12px;color:#666">${escapeHtml(v.description||'')}</p></div></div>`; }); grid.innerHTML=html; }); }
+function escapeHtml(str){ if(!str) return ''; return str.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
+document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',function(){ const page=this.dataset.page; if(page==='category'){ alert('ক্যাটাগরি ফিল্টার ইতিমধ্যেই আছে'); } else if(page==='search'){ document.getElementById('searchInput').focus(); } else if(page==='profile'){ if(auth.currentUser) window.location.href='dashboard.html'; else window.location.href='login.html'; } else if(page==='help') alert('সাহায্য: support@biznest.com'); }));
+auth.onAuthStateChanged(user=>{ if(user) document.getElementById('userStatus').innerHTML=`<i class="fas fa-user-circle"></i>`; else document.getElementById('userStatus').innerHTML='<a href="login.html" style="color:#6c2bd9">লগইন</a>'; });
+loadDivisions(); loadCategories(); loadShops(); loadSlider(); loadMarquee(); loadAdminVideos();
 </script>
 </body>
 </html>
