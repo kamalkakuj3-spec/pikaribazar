@@ -23,75 +23,61 @@
   body { font-family:'Hind Siliguri',sans-serif; background: linear-gradient(145deg, #f5f3ff 0%, #ede8ff 100%); min-height:100vh; overflow-x:hidden; }
   
   /* Loading Screen */
-  #loadingScreen { position:fixed; inset:0; background:linear-gradient(135deg,#1a0a3e,#6c2bd9,#a259f7); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; perspective:1000px; }
-  .loading-cube { width:80px; height:80px; position:relative; transform-style:preserve-3d; animation:cubeSpin 1.5s infinite cubic-bezier(0.68,-0.55,0.265,1.55); }
-  @keyframes cubeSpin { 0% { transform:rotateX(0deg) rotateY(0deg); } 100% { transform:rotateX(360deg) rotateY(360deg); } }
-  .loading-cube .face { position:absolute; width:80px; height:80px; background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.6); backdrop-filter:blur(4px); }
-  .face.front { transform:translateZ(40px); background:linear-gradient(135deg,#f0c040,#ffd966); }
-  .face.back { transform:rotateY(180deg) translateZ(40px); background:linear-gradient(135deg,#6c2bd9,#a259f7); }
-  .loading-text { margin-top:40px; font-size:20px; font-weight:600; background:linear-gradient(135deg,#f0c040,#ffffff,#c084fc); -webkit-background-clip:text; background-clip:text; color:transparent; animation:textPulse 1.5s infinite alternate; letter-spacing:2px; }
-  @keyframes textPulse { 0% { opacity:0.6; } 100% { opacity:1; text-shadow:0 0 20px rgba(240,192,64,0.8); } }
+  #loadingScreen { position:fixed; inset:0; background:linear-gradient(135deg,#1a0a3e,#6c2bd9,#a259f7); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; }
+  .loading-spinner { width:60px; height:60px; border:4px solid rgba(255,255,255,0.2); border-top-color:#f0c040; border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text { margin-top:20px; font-size:18px; font-weight:600; color:white; }
   
   /* Back Button */
   .back-btn { position:fixed; top:20px; left:20px; width:48px; height:48px; background:rgba(255,255,255,0.9); backdrop-filter:blur(10px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; cursor:pointer; z-index:100; box-shadow:0 8px 25px rgba(0,0,0,0.15); text-decoration:none; color:var(--primary); transition:all 0.3s; }
-  .back-btn:hover { transform:scale(1.1) rotate(360deg); background:var(--primary); color:white; box-shadow:var(--glow-purple); }
+  .back-btn:hover { transform:scale(1.1); background:var(--primary); color:white; }
   
-  /* Header with Menu Icon & Search */
+  /* Header */
   .header { background:linear-gradient(135deg,#ffffff,#f3eaff,#d9c8ff); padding:0.8rem 1rem; position:sticky; top:0; z-index:100; border-bottom:2px solid #b27eff; display:flex; flex-direction:column; align-items:center; gap:0.5rem; }
   .store-header-top { display:flex; align-items:center; justify-content:center; position:relative; width:100%; }
-  .menu-icon { position:absolute; left:0; background:none; border:none; cursor:pointer; font-size:1.5rem; color:#6a2be2; padding:6px; transition:all 0.2s; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; }
-  .menu-icon:hover { background:rgba(108,43,217,0.1); transform:scale(1.05); }
+  .menu-icon { position:absolute; left:0; background:none; border:none; cursor:pointer; font-size:1.5rem; color:#6a2be2; padding:6px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
+  .menu-icon:hover { background:rgba(108,43,217,0.1); }
   .store-name-header { font-weight:800; font-size:1.2rem; background:linear-gradient(135deg,var(--primary-dark),var(--primary-light)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .search-icon-btn { position:absolute; right:0; background:none; border:none; cursor:pointer; font-size:1.3rem; color:#6a2be2; padding:6px; }
-  .search-icon-btn:hover { color:#a855f7; transform:scale(1.05); }
   .search-container { width:100%; max-width:400px; overflow:hidden; transition:all 0.3s ease; max-height:0; opacity:0; visibility:hidden; }
   .search-container.open { max-height:52px; opacity:1; visibility:visible; }
   .search-input-wrapper { display:flex; align-items:center; background:#fefcff; border:1.5px solid #d9c8ff; border-radius:40px; padding:0 10px; }
   .search-input { flex:1; padding:8px 6px; border:none; font-size:0.8rem; outline:none; background:transparent; }
   .search-clear { background:none; border:none; cursor:pointer; font-size:0.9rem; color:#9b4dff; padding:4px; }
   
-  /* ========== 3D ANIMATED DRAWER ========== */
-  .drawer-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0); z-index:1000; display:none; backdrop-filter:blur(0px); transition:all 0.3s ease; }
-  .drawer-overlay.show { background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); }
-  .drawer { position:fixed; top:0; left:-360px; width:340px; height:100%; background:white; box-shadow:4px 0 30px rgba(0,0,0,0.3); z-index:1001; transition:left 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); overflow-y:auto; border-radius:0 24px 24px 0; transform:skewX(0deg); }
-  .drawer.open { left:0; animation:drawerPopIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1); }
-  .drawer.closing { animation:drawerPopOut 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
-  @keyframes drawerPopIn {
-    0% { left: -360px; opacity: 0; transform: scale(0.95) rotateY(-10deg); }
-    100% { left: 0; opacity: 1; transform: scale(1) rotateY(0deg); }
-  }
-  @keyframes drawerPopOut {
-    0% { left: 0; opacity: 1; transform: scale(1) rotateY(0deg); }
-    100% { left: -360px; opacity: 0; transform: scale(0.9) rotateY(10deg); }
-  }
-  .drawer-header { background:linear-gradient(135deg, var(--primary), var(--primary-light)); padding:20px; color:white; display:flex; justify-content:space-between; align-items:center; }
+  /* ========== DRAWER - Simple Slide ========== */
+  .drawer-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0); z-index:1000; display:none; transition:background 0.3s ease; }
+  .drawer-overlay.show { background:rgba(0,0,0,0.5); }
+  .drawer { position:fixed; top:0; left:-340px; width:320px; height:100%; background:white; box-shadow:4px 0 20px rgba(0,0,0,0.15); z-index:1001; transition:left 0.3s ease; overflow-y:auto; border-radius:0 20px 20px 0; }
+  .drawer.open { left:0; }
+  .drawer-header { background:linear-gradient(135deg, var(--primary), var(--primary-light)); padding:20px; color:white; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:10; }
   .drawer-header h3 { font-size:18px; font-weight:700; }
-  .drawer-close { background:none; border:none; color:white; font-size:24px; cursor:pointer; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:all 0.2s; }
-  .drawer-close:hover { background:rgba(255,255,255,0.2); transform:scale(1.1) rotate(90deg); }
+  .drawer-close { background:none; border:none; color:white; font-size:22px; cursor:pointer; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:all 0.2s; }
+  .drawer-close:hover { background:rgba(255,255,255,0.2); transform:rotate(90deg); }
   .drawer-content { padding:20px; }
-  .drawer-info-item { margin-bottom:20px; border-bottom:1px solid #f0ebff; padding-bottom:12px; }
+  .drawer-info-item { margin-bottom:18px; border-bottom:1px solid #f0ebff; padding-bottom:12px; }
+  .drawer-info-item:last-child { border-bottom:none; }
   .drawer-info-label { font-size:12px; font-weight:600; color:var(--primary-light); margin-bottom:5px; display:block; }
   .drawer-info-value { font-size:14px; color:var(--text); font-weight:500; line-height:1.4; }
   .drawer-divider { height:1px; background:linear-gradient(90deg, transparent, var(--primary-light), transparent); margin:15px 0; }
   
-  /* Center Close Button at Bottom */
-  .drawer-close-bottom { display:flex; justify-content:center; margin-top:20px; margin-bottom:10px; }
-  .close-bottom-btn { background:linear-gradient(135deg, #dc2626, #b91c1c); border:none; color:white; width:50px; height:50px; border-radius:50%; cursor:pointer; font-size:22px; transition:all 0.3s; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 15px rgba(220,38,38,0.3); }
-  .close-bottom-btn:hover { transform:scale(1.1) rotate(90deg); background:linear-gradient(135deg, #ef4444, #dc2626); box-shadow:0 6px 20px rgba(220,38,38,0.5); }
+  /* Bottom Close Button */
+  .drawer-close-bottom { display:flex; justify-content:center; margin-top:20px; margin-bottom:15px; }
+  .close-bottom-btn { background:linear-gradient(135deg, #dc2626, #b91c1c); border:none; color:white; width:45px; height:45px; border-radius:50%; cursor:pointer; font-size:20px; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
+  .close-bottom-btn:hover { transform:scale(1.05); background:linear-gradient(135deg, #ef4444, #dc2626); }
   
   /* Slider */
-  .slider-section { max-width:1200px; margin:15px auto 5px auto; padding:0 15px; perspective:1000px; }
-  .slider-container { position:relative; width:100%; height:260px; overflow:hidden; border-radius:28px; box-shadow:0 25px 45px -12px rgba(108,43,217,0.4); transition:transform 0.3s; }
-  .slider-container:hover { transform:translateY(-5px) rotateX(2deg); }
-  .slides-wrapper { display:flex; width:100%; height:100%; transition:transform 0.6s; }
+  .slider-section { max-width:1200px; margin:15px auto 5px auto; padding:0 15px; }
+  .slider-container { position:relative; width:100%; height:260px; overflow:hidden; border-radius:28px; box-shadow:0 25px 45px -12px rgba(108,43,217,0.4); }
+  .slides-wrapper { display:flex; width:100%; height:100%; transition:transform 0.5s ease; }
   .slide { min-width:100%; height:100%; }
   .slide img { width:100%; height:100%; object-fit:cover; }
-  .slider-btn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.9); backdrop-filter:blur(8px); border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:20px; color:var(--primary); z-index:20; }
-  .slider-btn:hover { background:var(--primary); color:white; transform:translateY(-50%) scale(1.1); }
-  .btn-prev { left:15px; } .btn-next { right:15px; }
-  .slider-dots { position:absolute; bottom:15px; left:50%; transform:translateX(-50%); display:flex; gap:12px; z-index:20; }
+  .slider-btn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.9); border:none; width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:18px; color:var(--primary); z-index:20; }
+  .slider-btn:hover { background:var(--primary); color:white; }
+  .btn-prev { left:12px; } .btn-next { right:12px; }
+  .slider-dots { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:10px; z-index:20; }
   .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; }
-  .dot.active { background:var(--accent); width:24px; border-radius:10px; box-shadow:var(--glow-gold); }
+  .dot.active { background:var(--accent); width:22px; border-radius:10px; }
   
   /* Ticker */
   .ticker-section { padding:0 15px; margin:5px 0 15px 0; }
@@ -104,34 +90,39 @@
   .container { max-width:1200px; margin:15px auto 30px; padding:0 15px; }
   .section-title { font-size:20px; font-weight:800; background:linear-gradient(135deg,var(--primary-dark),var(--primary-light)); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:18px; border-left:5px solid var(--accent); padding-left:15px; display:inline-block; }
   .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
-  .product { background:white; overflow:hidden; transition:all 0.35s; border-radius:20px; box-shadow:0 8px 25px rgba(108,43,217,0.1); border:1px solid rgba(108,43,217,0.1); }
-  .product:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 20px 35px rgba(108,43,217,0.2); }
+  .product { background:white; overflow:hidden; transition:all 0.3s; border-radius:20px; box-shadow:0 8px 25px rgba(108,43,217,0.1); border:1px solid rgba(108,43,217,0.1); }
+  .product:hover { transform:translateY(-5px); box-shadow:0 20px 35px rgba(108,43,217,0.2); }
   .product-img-wrapper { padding:6px; }
   .product img { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:16px; background:#f3edff; }
   .product-info { padding:6px 10px 12px 10px; background:white; }
   .product-price { font-size:16px; font-weight:800; color:var(--primary); margin-bottom:4px; }
   .name-row { display:flex; justify-content:space-between; align-items:center; gap:5px; }
   .product-name { font-size:13px; font-weight:600; color:var(--text); flex:1; }
-  .three-dots { font-size:16px; font-weight:bold; cursor:pointer; color:var(--primary-light); background:none; border:none; padding:4px 6px; border-radius:50%; }
-  .three-dots:hover { background:#f0ebff; color:var(--primary); }
+  .three-dots { font-size:16px; cursor:pointer; color:var(--primary-light); background:none; border:none; padding:4px 6px; border-radius:50%; }
+  .three-dots:hover { background:#f0ebff; }
   .product-desc { font-size:11px; color:var(--text-light); line-height:1.4; margin-top:6px; padding-top:5px; border-top:1px dashed #e2d5ff; display:none; }
   .product-desc.show { display:block; }
   .no-results { text-align:center; padding:35px; font-size:13px; color:var(--primary); grid-column:span 2; background:white; border-radius:20px; }
   
   /* Scroll Top */
-  .scroll-top { position:fixed; bottom:25px; right:25px; width:48px; height:48px; background:linear-gradient(135deg,var(--primary),var(--primary-light)); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:20px; opacity:0; transition:all 0.3s; box-shadow:var(--glow-purple); color:white; border:none; z-index:99; }
+  .scroll-top { position:fixed; bottom:25px; right:25px; width:45px; height:45px; background:linear-gradient(135deg,var(--primary),var(--primary-light)); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:20px; opacity:0; transition:all 0.3s; color:white; border:none; z-index:99; }
   .scroll-top.show { opacity:1; }
+  .scroll-top:hover { transform:translateY(-3px); }
   
-  @media (max-width:768px) { .slider-container { height:170px; } .grid { gap:10px; } .drawer { width:300px; left:-300px; } }
+  @media (max-width:768px) { .slider-container { height:170px; } .grid { gap:10px; } .drawer { width:280px; left:-280px; } }
 </style>
 </head>
 <body>
 
 <a class="back-btn" href="index.html">←</a>
 
-<div id="loadingScreen"><div class="loading-cube"><div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div></div><div class="loading-text">🚀 প্রোফাইল লোড হচ্ছে...</div></div>
+<div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 প্রোফাইল লোড হচ্ছে...</div></div>
 
-<div id="notFound" style="display:none; text-align:center; padding:80px 30px;"><div style="font-size:60px;">🏪</div><div style="font-size:22px; font-weight:700; margin:16px 0;">দোকান পাওয়া যায়নি!</div><a href="index.html" style="display:inline-block; margin-top:30px; padding:14px 30px; background:linear-gradient(135deg,#6c2bd9,#a259f7); color:white; border-radius:99px; text-decoration:none;">🏠 হোমে যান</a></div>
+<div id="notFound" style="display:none; text-align:center; padding:80px 30px;">
+  <div style="font-size:60px;">🏪</div>
+  <div style="font-size:22px; font-weight:700; margin:16px 0;">দোকান পাওয়া যায়নি!</div>
+  <a href="index.html" style="display:inline-block; margin-top:30px; padding:14px 30px; background:linear-gradient(135deg,#6c2bd9,#a259f7); color:white; border-radius:99px; text-decoration:none;">🏠 হোমে যান</a>
+</div>
 
 <div id="mainContent" style="display:none">
   <div class="header">
@@ -149,7 +140,7 @@
     </div>
   </div>
 
-  <!-- 3D ANIMATED DRAWER -->
+  <!-- DRAWER -->
   <div class="drawer-overlay" id="drawerOverlay"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header">
@@ -234,7 +225,7 @@ function showNotFound() {
 
 function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
 
-// ========== DRAWER FUNCTIONS (Address above Description) ==========
+// ========== DRAWER - Exact order as requested ==========
 function renderDrawerContent(shop) {
   const container = document.getElementById('drawerContent');
   if(!shop) { container.innerHTML = '<div style="text-align:center; padding:20px;">তথ্য পাওয়া যায়নি</div>'; return; }
@@ -248,6 +239,18 @@ function renderDrawerContent(shop) {
       <span class="drawer-info-label"><i class="fas fa-user-circle"></i> মালিকের নাম</span>
       <span class="drawer-info-value">${escapeHtml(shop.ownerName || '—')}</span>
     </div>
+    <div class="drawer-info-item">
+      <span class="drawer-info-label"><i class="fas fa-phone-alt"></i> 📞 কন্টাক্ট নাম্বার</span>
+      <span class="drawer-info-value">${escapeHtml(shop.phone || '—')}</span>
+    </div>
+    <div class="drawer-info-item">
+      <span class="drawer-info-label"><i class="fab fa-whatsapp"></i> 💬 WhatsApp নাম্বার</span>
+      <span class="drawer-info-value">${escapeHtml(shop.whatsapp || '—')}</span>
+    </div>
+    <div class="drawer-info-item">
+      <span class="drawer-info-label"><i class="fab fa-telegram"></i> 📡 টেলিগ্রাম নাম্বার</span>
+      <span class="drawer-info-value">${escapeHtml(shop.telegram || '—')}</span>
+    </div>
     <div class="drawer-divider"></div>
     <div class="drawer-info-item">
       <span class="drawer-info-label"><i class="fas fa-map-marker-alt"></i> 🏪 দোকানের ঠিকানা</span>
@@ -257,44 +260,23 @@ function renderDrawerContent(shop) {
       <span class="drawer-info-label"><i class="fas fa-align-left"></i> 📋 দোকানের বিবরণ</span>
       <span class="drawer-info-value">${escapeHtml(shop.description || 'কোনো বিবরণ নেই')}</span>
     </div>
-    <div class="drawer-divider"></div>
-    <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fas fa-phone-alt"></i> 📞 মোবাইল নম্বর</span>
-      <span class="drawer-info-value">${escapeHtml(shop.phone || '—')}</span>
-    </div>
-    <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fab fa-whatsapp"></i> 💬 WhatsApp</span>
-      <span class="drawer-info-value">${escapeHtml(shop.whatsapp || '—')}</span>
-    </div>
-    <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fab fa-telegram"></i> 📡 টেলিগ্রাম</span>
-      <span class="drawer-info-value">${escapeHtml(shop.telegram || '—')}</span>
-    </div>
   `;
 }
 
-// Drawer Open/Close with 3D Animation
+// Drawer Open/Close
 function openDrawer() {
-  const drawer = document.getElementById('drawer');
-  const overlay = document.getElementById('drawerOverlay');
-  drawer.classList.remove('closing');
-  drawer.classList.add('open');
-  overlay.classList.add('show');
-  overlay.style.display = 'block';
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('show');
+  document.getElementById('drawerOverlay').style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
-
 function closeDrawer() {
-  const drawer = document.getElementById('drawer');
-  const overlay = document.getElementById('drawerOverlay');
-  drawer.classList.remove('open');
-  drawer.classList.add('closing');
-  overlay.classList.remove('show');
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('show');
   setTimeout(() => {
-    overlay.style.display = 'none';
-    drawer.classList.remove('closing');
-    document.body.style.overflow = '';
+    document.getElementById('drawerOverlay').style.display = 'none';
   }, 300);
+  document.body.style.overflow = '';
 }
 
 document.getElementById('menuIconBtn').addEventListener('click', openDrawer);
@@ -302,7 +284,7 @@ document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer)
 document.getElementById('drawerCloseBottomBtn').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 
-// ========== TICKER (দোকান ভিত্তিক) ==========
+// ========== TICKER ==========
 async function loadTicker() {
   const snap = await db.ref(`tickers/${shopId}`).once('value');
   let items = [];
@@ -313,7 +295,7 @@ async function loadTicker() {
   tickerDiv.innerHTML = doubled.map(text => `<span class="ticker-item">✨ ${escapeHtml(text)}</span>`).join('');
 }
 
-// ========== SLIDER (দোকান ভিত্তিক) ==========
+// ========== SLIDER ==========
 let currentSlideIndex = 0, slideInterval = null, slidesData = [];
 async function loadSlider() {
   const snap = await db.ref(`sliders/${shopId}`).once('value');
