@@ -152,7 +152,7 @@
   .status-badge.pending { background: #fff8e5; color: #f0c040; }
   .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
   
-  /* ========== EDIT OPTIONS CONTAINER ========== */
+  /* Edit Options Container */
   .edit-options-container {
     display: none;
     margin-top: 10px;
@@ -204,7 +204,7 @@
     transition: transform 0.2s;
   }
   
-  /* Content Panel (shows when toggle icon clicked) */
+  /* Content Panel */
   .option-content-panel {
     display: none;
     margin-top: 12px;
@@ -523,7 +523,7 @@
             </div>
         </div>
         
-        <!-- Option 5: দোকানের তথ্য -->
+        <!-- Option 5: দোকানের তথ্য (YouTube Link Added Here) -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('shopInfoPanel')">
                 <div class="option-left">
@@ -540,6 +540,14 @@
                 <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div>
                 <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div>
                 <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div>
+                
+                <!-- ========== ইউটিউব ভিডিও লিংক অপশন (নতুন যোগ করা) ========== -->
+                <div class="input-group">
+                    <label class="input-label"><i class="fab fa-youtube" style="color:#ff0000;"></i> ইউটিউব ভিডিও লিংক</label>
+                    <input class="input-field" type="url" id="youtube" placeholder="https://www.youtube.com/watch?v=xxxxx">
+                    <small style="font-size: 10px; color: #888; display: block; margin-top: 4px;">💡 এই লিংকটি হোমপেজে ভিডিও আকারে দেখানো হবে</small>
+                </div>
+                <!-- ======================================================== -->
             </div>
         </div>
     </div>
@@ -573,8 +581,10 @@ let allProducts = [];
 function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
 function showToast(msg, isError=false) { let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),3500); }
 function goHome() { window.location.href = 'index.html'; }
+function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
+function logout(){ auth.signOut().then(()=>{ showToast('✅ লগআউট হয়েছে!'); setTimeout(()=>window.location.href='index.html',1500); }); }
 
-// Toggle Option Panel (for each of the 5 options)
+// Toggle Option Panel
 function toggleOptionPanel(panelId) {
     const panel = document.getElementById(panelId);
     const icon = document.getElementById('toggleIcon-' + panelId);
@@ -598,12 +608,14 @@ mainEditBtn.addEventListener('click', function() {
     }
 });
 
+// Save Shop Data (including youtube)
 async function saveShopData() {
     if(!currentShopId) return;
     const shopName=document.getElementById('shopName').value.trim();
     const ownerName=document.getElementById('ownerName').value.trim();
     const area=document.getElementById('area').value.trim();
     const phone=document.getElementById('phone').value.trim();
+    const youtube = document.getElementById('youtube').value.trim();
     if(!shopName) return showToast('দোকানের নাম দিন!',true);
     if(!ownerName) return showToast('মালিকের নাম দিন!',true);
     if(!area) return showToast('ঠিকানা দিন!',true);
@@ -613,7 +625,9 @@ async function saveShopData() {
         await db.ref('shops/'+currentShopId).update({
             shopName, ownerName, description: document.getElementById('description').value.trim(),
             area, phone, whatsapp: document.getElementById('whatsapp').value.trim(),
-            telegram: document.getElementById('telegram').value.trim(), updatedAt: Date.now()
+            telegram: document.getElementById('telegram').value.trim(),
+            youtube: youtube, // ইউটিউব লিংক সংরক্ষণ
+            updatedAt: Date.now()
         });
         document.getElementById('previewCardShopName').innerHTML=shopName;
         document.getElementById('previewCardAddress').innerHTML=area;
@@ -622,7 +636,7 @@ async function saveShopData() {
     btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; btn.disabled = false;
 }
 
-// Product Management Functions
+// Product Management
 async function loadProducts() {
     if(!currentShopId) return;
     const container=document.getElementById('productListContainer');
@@ -737,9 +751,6 @@ function updateTickerPreview(items){ document.getElementById('tickerPreview').in
 async function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showToast('কিছু লিখুন!',true); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; await db.ref(`tickers/${currentShopId}`).set(items); updateTickerPreview(items); showToast('টিকার আপডেট হয়েছে!'); }
 async function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; await db.ref(`tickers/${currentShopId}`).set(def); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
 
-function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
-function logout(){ auth.signOut().then(()=>{ showToast('✅ লগআউট হয়েছে!'); setTimeout(()=>window.location.href='index.html',1500); }); }
-
 // Initialize
 auth.onAuthStateChanged(async user=>{
     if(!user){ window.location.href='login.html'; return; }
@@ -763,6 +774,7 @@ auth.onAuthStateChanged(async user=>{
         document.getElementById('phone').value=currentShopData.phone||'';
         document.getElementById('whatsapp').value=currentShopData.whatsapp||'';
         document.getElementById('telegram').value=currentShopData.telegram||'';
+        document.getElementById('youtube').value=currentShopData.youtube||''; // ইউটিউব লিংক লোড
     }
     loadProducts();
     await loadSlides();
