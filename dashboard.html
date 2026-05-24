@@ -14,14 +14,10 @@
     --primary-light: #a259f7;
     --primary-soft: #f0ebff;
     --accent: #f0c040;
-    --accent-dark: #d4a017;
     --bg: #f8f6ff;
     --white: #ffffff;
     --text: #1a1a2e;
     --text-light: #555;
-    --text-muted: #888;
-    --success: #2ecc71;
-    --error: #e74c3c;
     --card-shadow: 0 8px 20px rgba(108,43,217,0.08);
     --hover-shadow: 0 12px 28px rgba(108,43,217,0.12);
     --border-light: #ede5ff;
@@ -49,7 +45,6 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
   
-  /* Main Content */
   .content { padding:20px 16px 100px; }
   
   /* Glass Button */
@@ -74,13 +69,12 @@
   .btn-glass:hover {
     background: var(--primary);
     color: white;
-    border-color: var(--primary);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(108,43,217,0.25);
   }
   
-  /* Gradient Button */
-  .btn-gradient {
+  /* Gradient Button - Main Edit Button */
+  .btn-gradient-main {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border: none;
     border-radius: 50px;
@@ -98,7 +92,7 @@
     margin-bottom: 20px;
     box-shadow: 0 4px 12px rgba(108,43,217,0.25);
   }
-  .btn-gradient:hover {
+  .btn-gradient-main:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(108,43,217,0.35);
   }
@@ -158,66 +152,76 @@
   .status-badge.pending { background: #fff8e5; color: #f0c040; }
   .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
   
-  /* Edit Form Container - Hidden by default, shows with animation */
-  #editFormContainer {
+  /* ========== EDIT OPTIONS CONTAINER ========== */
+  .edit-options-container {
     display: none;
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    margin-top: 10px;
+    animation: fadeInUp 0.4s ease;
   }
-  #editFormContainer.show {
+  .edit-options-container.show {
     display: block;
-    opacity: 1;
-    transform: translateY(0);
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
-  /* Premium Tile Cards */
-  .tile-card {
+  /* Option Buttons */
+  .option-btn {
     background: var(--white);
-    border-radius: 20px;
-    padding: 18px;
-    margin-bottom: 18px;
     border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     transition: var(--transition);
+    width: 100%;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
   }
-  .tile-card:hover {
-    box-shadow: var(--hover-shadow);
-    border-color: var(--primary-light);
+  .option-btn:hover {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+    transform: translateX(5px);
   }
-  .tile-header {
+  .option-left {
     display: flex;
     align-items: center;
     gap: 12px;
-    cursor: pointer;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border-light);
   }
-  .tile-icon {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, var(--primary-soft), #e8e0ff);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
+  .option-left i {
+    font-size: 18px;
     color: var(--primary);
+    width: 24px;
   }
-  .tile-title { font-size: 16px; font-weight: 700; color: var(--text); }
-  .tile-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-  .collapse-icon {
-    margin-left: auto;
+  .toggle-icon {
     font-size: 14px;
     color: var(--primary-light);
     transition: transform 0.2s;
   }
-  .tile-content {
-    max-height: 2000px;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    padding-top: 16px;
+  
+  /* Content Panel (shows when toggle icon clicked) */
+  .option-content-panel {
+    display: none;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #faf8ff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    animation: slideDown 0.3s ease;
   }
-  .tile-content.collapsed { max-height: 0; padding-top: 0; }
+  .option-content-panel.show {
+    display: block;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   
   /* Form Inputs */
   .input-group { margin-bottom: 16px; }
@@ -236,7 +240,7 @@
     font-size: 14px;
     font-family: inherit;
     color: var(--text);
-    background: #faf8ff;
+    background: var(--white);
     outline: none;
     transition: var(--transition);
   }
@@ -259,7 +263,7 @@
     transition: var(--transition);
     width: 100%;
   }
-  .btn-small-green:hover { background: #16a34a; transform: translateY(-1px); }
+  .btn-small-green:hover { background: #16a34a; }
   .btn-small-purple {
     background: #6c63a0;
     border: none;
@@ -272,18 +276,16 @@
     transition: var(--transition);
     width: 100%;
   }
-  .btn-small-purple:hover { background: #5a5290; transform: translateY(-1px); }
+  .btn-small-purple:hover { background: #5a5290; }
   
   /* Product Item */
   .product-item {
-    background: #faf8ff;
+    background: var(--white);
     border-radius: 16px;
     padding: 12px;
     margin-bottom: 12px;
     border: 1px solid #e8e0ff;
-    transition: var(--transition);
   }
-  .product-item:hover { background: var(--white); border-color: var(--primary-light); }
   .product-row {
     display: flex;
     gap: 12px;
@@ -297,7 +299,7 @@
     border: 1px solid #e0d5ff;
   }
   .product-info { flex: 1; }
-  .product-name { font-weight: 700; color: var(--primary-dark); font-size: 14px; margin-bottom: 3px; }
+  .product-name { font-weight: 700; color: var(--primary-dark); font-size: 14px; }
   .product-price { color: var(--primary); font-weight: 600; font-size: 12px; }
   .dot-btn {
     background: #f0ebff;
@@ -342,7 +344,6 @@
     margin-bottom: 8px;
     border: 1px solid #e8e0ff;
     border-radius: 12px;
-    font-size: 13px;
   }
   .edit-actions { display: flex; gap: 8px; }
   .edit-actions button { padding: 6px 14px; font-size: 12px; border-radius: 30px; border: none; cursor: pointer; }
@@ -367,7 +368,7 @@
     font-size: 12px;
   }
   
-  /* Bottom Navigation Bar */
+  /* Bottom Navigation */
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -381,7 +382,6 @@
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
   }
   .nav-home {
     background: linear-gradient(135deg, #2ecc71, #27ae60);
@@ -392,12 +392,7 @@
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: var(--transition);
   }
-  .nav-home:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(46,204,113,0.3); }
   .nav-save {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border: none;
@@ -407,13 +402,7 @@
     font-weight: 700;
     font-size: 14px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: var(--transition);
-    box-shadow: 0 4px 12px rgba(108,43,217,0.25);
   }
-  .nav-save:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(108,43,217,0.35); }
   .nav-logout {
     background: linear-gradient(135deg, #ef4444, #dc2626);
     border: none;
@@ -423,12 +412,7 @@
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: var(--transition);
   }
-  .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(220,38,38,0.3); }
   
   /* Toast */
   .custom-toast {
@@ -445,56 +429,12 @@
     align-items: center;
     gap: 10px;
     z-index: 10001;
-    animation: toastFade 0.3s ease forwards;
+    animation: fadeUp 0.3s ease forwards;
   }
   .custom-toast.error { background: #e74c3c; }
-  @keyframes toastFade {
+  @keyframes fadeUp {
     from { transform: translateY(40px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
-  }
-  
-  .toast-congrats {
-    position: fixed;
-    bottom: 90px;
-    left: 20px;
-    right: 20px;
-    background: #2ecc71;
-    color: white;
-    padding: 14px 20px;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 600;
-    z-index: 10000;
-    animation: slideUp 0.3s ease forwards;
-  }
-  @keyframes slideUp {
-    from { transform: translateY(100px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  
-  /* Category Popup */
-  .cat-popup-list {
-    max-height: 60vh;
-    overflow-y: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 8px;
-  }
-  .cat-item-multi {
-    padding: 10px 12px;
-    background: #faf8ff;
-    border-radius: 30px;
-    font-size: 13px;
-    border: 1px solid #e8e0ff;
-    cursor: pointer;
-    text-align: center;
-  }
-  .cat-item-multi.selected {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
   }
 </style>
 </head>
@@ -510,20 +450,89 @@
         <div id="cardStatusBadge" class="status-badge pending"><i class="fas fa-clock"></i> পেন্ডিং</div>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- Live Profile Button -->
     <button class="btn-glass" onclick="viewProfile()"><i class="fas fa-globe"></i> লাইভ প্রোফাইল দেখুন</button>
-    <button class="btn-gradient" id="editToggleBtn"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
+    
+    <!-- Main Edit Button -->
+    <button class="btn-gradient-main" id="mainEditBtn"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
-    <!-- Edit Form Container - Hidden by default -->
-    <div id="editFormContainer">
-        <!-- Shop Info Tile -->
-        <div class="tile-card">
-            <div class="tile-header" onclick="toggleCard('shopInfo')">
-                <div class="tile-icon"><i class="fas fa-store"></i></div>
-                <div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div>
-                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
+    <!-- Edit Options Container (5 buttons) -->
+    <div id="editOptionsContainer" class="edit-options-container">
+        
+        <!-- Option 1: প্রোডাক্ট যোগ করুন -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('addProductPanel')">
+                <div class="option-left">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>প্রোডাক্ট যোগ করুন</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-addProductPanel"></i>
             </div>
-            <div class="tile-content" id="contentShopInfo">
+            <div id="addProductPanel" class="option-content-panel">
+                <div class="input-group"><label class="input-label">প্রোডাক্টের নাম *</label><input type="text" id="prodName" class="input-field" placeholder="যেমন: Premium Headphone"></div>
+                <div class="input-group"><label class="input-label">দাম (৳)</label><input type="text" id="prodPrice" class="input-field" placeholder="যেমন: 2499"></div>
+                <div class="input-group"><label class="input-label">Google Drive ইমেজ লিংক *</label><input type="text" id="prodImage" class="input-field" placeholder="https://drive.google.com/file/d/xxxxx/view"></div>
+                <div class="input-group"><label class="input-label">বিবরণ</label><textarea id="prodDesc" class="input-field" rows="2" placeholder="প্রোডাক্টের বিবরণ..."></textarea></div>
+                <button id="addProductBtn" class="btn-small-green">➕ প্রোডাক্ট যোগ করুন</button>
+            </div>
+        </div>
+        
+        <!-- Option 2: প্রোডাক্ট ম্যানেজমেন্ট -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('productListPanel')">
+                <div class="option-left">
+                    <i class="fas fa-boxes"></i>
+                    <span>প্রোডাক্ট ম্যানেজমেন্ট</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-productListPanel"></i>
+            </div>
+            <div id="productListPanel" class="option-content-panel">
+                <div id="productListContainer" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+        
+        <!-- Option 3: চলন্ত লেখা (টিকার) -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('tickerPanel')">
+                <div class="option-left">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>চলন্ত লেখা (টিকার)</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-tickerPanel"></i>
+            </div>
+            <div id="tickerPanel" class="option-content-panel">
+                <div class="input-group"><label class="input-label">টিকারের বার্তা (কমা দিয়ে আলাদা করুন)</label><input type="text" id="tickerInput" class="input-field" placeholder="EXCLUSIVE DROP, 40% OFF, FREE SHIPPING"></div>
+                <button id="updateTickerBtn" class="btn-small-green">💾 টিকার আপডেট করুন</button>
+                <button id="resetTickerBtn" class="btn-small-purple" style="margin-top:8px;">⟳ ডিফল্ট রিসেট</button>
+                <div class="ticker-preview"><div id="tickerPreview">প্রিভিউ</div></div>
+            </div>
+        </div>
+        
+        <!-- Option 4: ইমেজ স্লাইডার -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('sliderPanel')">
+                <div class="option-left">
+                    <i class="fas fa-images"></i>
+                    <span>ইমেজ স্লাইডার</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-sliderPanel"></i>
+            </div>
+            <div id="sliderPanel" class="option-content-panel">
+                <div id="sliderListContainer"></div>
+                <button id="addNewSlideBtn" class="btn-small-green" style="margin-top:10px;">+ নতুন স্লাইড যোগ করুন</button>
+            </div>
+        </div>
+        
+        <!-- Option 5: দোকানের তথ্য -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('shopInfoPanel')">
+                <div class="option-left">
+                    <i class="fas fa-store"></i>
+                    <span>দোকানের তথ্য</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-shopInfoPanel"></i>
+            </div>
+            <div id="shopInfoPanel" class="option-content-panel">
                 <div class="input-group"><label class="input-label">দোকানের নাম *</label><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div>
                 <div class="input-group"><label class="input-label">মালিকের নাম *</label><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div>
                 <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div>
@@ -531,51 +540,6 @@
                 <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div>
                 <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div>
                 <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div>
-            </div>
-        </div>
-        
-        <!-- Product Management Tile -->
-        <div class="tile-card">
-            <div class="tile-header" onclick="toggleCard('productManage')">
-                <div class="tile-icon"><i class="fas fa-boxes"></i></div>
-                <div><div class="tile-title">প্রোডাক্ট ম্যানেজমেন্ট</div><div class="tile-subtitle">প্রোডাক্ট যোগ/এডিট/ডিলিট করুন</div></div>
-                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
-            </div>
-            <div class="tile-content" id="contentProductManage">
-                <div class="input-group"><label class="input-label">প্রোডাক্টের নাম *</label><input type="text" id="prodName" class="input-field" placeholder="যেমন: Premium Headphone"></div>
-                <div class="input-group"><label class="input-label">দাম (৳)</label><input type="text" id="prodPrice" class="input-field" placeholder="যেমন: 2499"></div>
-                <div class="input-group"><label class="input-label">Google Drive ইমেজ লিংক *</label><input type="text" id="prodImage" class="input-field" placeholder="https://drive.google.com/file/d/xxxxx/view"></div>
-                <div class="input-group"><label class="input-label">বিবরণ</label><textarea id="prodDesc" class="input-field" rows="2" placeholder="প্রোডাক্টের বিবরণ..."></textarea></div>
-                <button id="addProductBtn" class="btn-small-green" style="margin-top:0;">➕ প্রোডাক্ট যোগ করুন</button>
-                <div id="productListPanel" style="margin-top: 18px; max-height: 400px; overflow-y: auto;"></div>
-            </div>
-        </div>
-        
-        <!-- Slider Control Tile -->
-        <div class="tile-card">
-            <div class="tile-header" onclick="toggleCard('sliderControl')">
-                <div class="tile-icon"><i class="fas fa-images"></i></div>
-                <div><div class="tile-title">ইমেজ স্লাইডার কন্ট্রোল</div><div class="tile-subtitle">আপনার দোকানের স্লাইডার ছবি পরিবর্তন করুন</div></div>
-                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
-            </div>
-            <div class="tile-content" id="contentSliderControl">
-                <div id="sliderListContainer"></div>
-                <button id="addNewSlideBtn" class="btn-small-green" style="margin-top:10px;">+ নতুন স্লাইড যোগ করুন</button>
-            </div>
-        </div>
-        
-        <!-- Ticker Control Tile -->
-        <div class="tile-card">
-            <div class="tile-header" onclick="toggleCard('tickerControl')">
-                <div class="tile-icon"><i class="fas fa-comment-dots"></i></div>
-                <div><div class="tile-title">চলন্ত লেখা (টিকার) কন্ট্রোল</div><div class="tile-subtitle">আপনার দোকানের স্ক্রলিং টেক্সট পরিবর্তন করুন</div></div>
-                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
-            </div>
-            <div class="tile-content" id="contentTickerControl">
-                <div class="input-group"><label class="input-label">টিকারের বার্তা (কমা দিয়ে আলাদা করুন)</label><input type="text" id="tickerInput" class="input-field" placeholder="EXCLUSIVE DROP, 40% OFF, FREE SHIPPING"></div>
-                <button id="updateTickerBtn" class="btn-small-green">💾 টিকার আপডেট করুন</button>
-                <button id="resetTickerBtn" class="btn-small-purple" style="margin-top:8px;">⟳ ডিফল্ট রিসেট</button>
-                <div class="ticker-preview"><div id="tickerPreview">প্রিভিউ</div></div>
             </div>
         </div>
     </div>
@@ -586,14 +550,6 @@
     <button class="nav-home" onclick="goHome()"><i class="fas fa-home"></i> হোম</button>
     <button class="nav-save" id="saveBtn" onclick="saveShopData()"><i class="fas fa-save"></i> সেভ করুন</button>
     <button class="nav-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
-</div>
-
-<div id="multiCatPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:flex-end;">
-    <div style="background:white; border-radius:24px 24px 0 0; padding:20px; width:100%; max-height:75vh; overflow-y:auto;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:16px;"><span style="font-weight:700; font-size:18px;">🗂️ ক্যাটাগরি বাছাই করুন</span><button onclick="closeMultiCatPopup()" style="background:#f0ebff; border:none; border-radius:30px; padding:6px 14px; cursor:pointer;">✕ বন্ধ</button></div>
-        <div id="multiCatList" class="cat-popup-list"></div>
-        <button style="background:linear-gradient(135deg, #6c2bd9, #a259f7); color:white; padding:12px; border:none; border-radius:30px; margin-top:16px; cursor:pointer; width:100%;" onclick="closeMultiCatPopup()">✅ সেভ করুন</button>
-    </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -616,28 +572,29 @@ let allProducts = [];
 
 function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
 function showToast(msg, isError=false) { let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),3500); }
-
 function goHome() { window.location.href = 'index.html'; }
 
-// Edit Form Toggle with Animation
-const editToggleBtn = document.getElementById('editToggleBtn');
-const editFormContainer = document.getElementById('editFormContainer');
-
-editToggleBtn.addEventListener('click', function() {
-    if (editFormContainer.classList.contains('show')) {
-        // Close with animation
-        editFormContainer.classList.remove('show');
-        setTimeout(() => {
-            if (!editFormContainer.classList.contains('show')) {
-                editFormContainer.style.display = 'none';
-            }
-        }, 400);
+// Toggle Option Panel (for each of the 5 options)
+function toggleOptionPanel(panelId) {
+    const panel = document.getElementById(panelId);
+    const icon = document.getElementById('toggleIcon-' + panelId);
+    if (panel.classList.contains('show')) {
+        panel.classList.remove('show');
+        if(icon) icon.style.transform = 'rotate(0deg)';
     } else {
-        // Open with animation
-        editFormContainer.style.display = 'block';
-        setTimeout(() => {
-            editFormContainer.classList.add('show');
-        }, 10);
+        panel.classList.add('show');
+        if(icon) icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Main Edit Button Toggle
+const mainEditBtn = document.getElementById('mainEditBtn');
+const editOptionsContainer = document.getElementById('editOptionsContainer');
+mainEditBtn.addEventListener('click', function() {
+    if (editOptionsContainer.classList.contains('show')) {
+        editOptionsContainer.classList.remove('show');
+    } else {
+        editOptionsContainer.classList.add('show');
     }
 });
 
@@ -665,9 +622,10 @@ async function saveShopData() {
     btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; btn.disabled = false;
 }
 
+// Product Management Functions
 async function loadProducts() {
     if(!currentShopId) return;
-    const container=document.getElementById('productListPanel');
+    const container=document.getElementById('productListContainer');
     container.innerHTML='<div style="text-align:center; padding:20px;">🌀 লোড হচ্ছে...</div>';
     try {
         const snap=await db.ref(`products/${currentShopId}`).once('value');
@@ -679,7 +637,7 @@ async function loadProducts() {
 }
 
 function renderProductList() {
-    const container=document.getElementById('productListPanel');
+    const container=document.getElementById('productListContainer');
     if(!allProducts.length){ container.innerHTML='<div style="padding:20px; text-align:center;">✨ এখনও কোনো প্রোডাক্ট নেই</div>'; return; }
     container.innerHTML='';
     allProducts.forEach(prod=>{
@@ -748,6 +706,7 @@ async function addProduct() {
 }
 function getThumbUrl(url){ if(!url) return "https://via.placeholder.com/55x55/ede6ff/a855f7?text=No"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`; return url; }
 
+// Slider Functions
 let slidesData = [];
 async function loadSlides() {
     if(!currentShopId) return;
@@ -763,6 +722,7 @@ async function updateSlideImage(idx,url){ slidesData[idx].image=url; await db.re
 async function removeSlide(idx){ if(slidesData.length===1){ showToast('কমপক্ষে একটি স্লাইড রাখতে হবে!',true); return; } slidesData.splice(idx,1); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('স্লাইড মুছে ফেলা হয়েছে'); }
 async function addNewSlide(){ slidesData.push({image:"https://via.placeholder.com/1200x400/8b5cf6/ffffff?text=New+Slide"}); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('নতুন স্লাইড যোগ হয়েছে'); }
 
+// Ticker Functions
 let tickerItems = [];
 async function loadTicker() {
     if(!currentShopId) return;
@@ -777,10 +737,10 @@ function updateTickerPreview(items){ document.getElementById('tickerPreview').in
 async function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showToast('কিছু লিখুন!',true); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; await db.ref(`tickers/${currentShopId}`).set(items); updateTickerPreview(items); showToast('টিকার আপডেট হয়েছে!'); }
 async function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; await db.ref(`tickers/${currentShopId}`).set(def); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
 
-function toggleCard(cardId){ const content=document.getElementById(`content${cardId.charAt(0).toUpperCase()+cardId.slice(1)}`); const icon=document.querySelector(`#${cardId} .collapse-icon i`); if(content){ content.classList.toggle('collapsed'); if(icon) icon.classList.toggle('fa-chevron-down'); if(icon) icon.classList.toggle('fa-chevron-up'); } }
 function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
 function logout(){ auth.signOut().then(()=>{ showToast('✅ লগআউট হয়েছে!'); setTimeout(()=>window.location.href='index.html',1500); }); }
 
+// Initialize
 auth.onAuthStateChanged(async user=>{
     if(!user){ window.location.href='login.html'; return; }
     currentShopId=user.uid;
