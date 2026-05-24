@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>প্রিমিয়াম ড্যাশবোর্ড | দোকান ব্যবস্থাপনা</title>
+<title>ড্যাশবোর্ড | প্রিমিয়াম প্যানেল</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
 <style>
-:root {
+  :root {
     --primary: #6c2bd9;
     --primary-dark: #4a1a9e;
     --primary-light: #a259f7;
@@ -17,22 +17,22 @@
     --white: #ffffff;
     --text: #1a1a2e;
     --text-light: #666;
-    --error: #e74c3c;
-    --success: #2ecc71;
     --card-shadow: 0 20px 35px -12px rgba(108,43,217,0.25);
     --glow-purple: 0 0 20px rgba(108,43,217,0.6);
     --glow-gold: 0 0 15px rgba(240,192,64,0.5);
     --glow-success: 0 0 15px rgba(46,204,113,0.5);
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
+    --error: #e74c3c;
+    --success: #2ecc71;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
     font-family:'Hind Siliguri',sans-serif;
     background: linear-gradient(145deg, #f5f3ff 0%, #ede8ff 100%);
     min-height:100vh;
     overflow-x:hidden;
-}
-/* 3D Loading Screen */
-#loadingScreen {
+  }
+  /* 3D Loading Screen */
+  #loadingScreen {
     position:fixed;
     inset:0;
     background: linear-gradient(135deg, #1a0a3e, #6c2bd9, #a259f7);
@@ -42,8 +42,8 @@ body {
     justify-content:center;
     z-index:9999;
     perspective:1000px;
-}
-.loading-spinner {
+  }
+  .loading-spinner {
     width:70px; height:70px;
     border:5px solid rgba(255,255,255,0.2);
     border-top-color:#f0c040;
@@ -52,13 +52,13 @@ body {
     border-radius:50%;
     animation:spin3D 1.2s cubic-bezier(0.68,-0.55,0.265,1.55) infinite;
     box-shadow:0 0 25px rgba(240,192,64,0.5);
-}
-@keyframes spin3D {
+  }
+  @keyframes spin3D {
     0% { transform:rotate(0deg) scale(1); }
     50% { transform:rotate(180deg) scale(1.1); border-width:8px; }
     100% { transform:rotate(360deg) scale(1); }
-}
-.loading-text {
+  }
+  .loading-text {
     margin-top:25px;
     font-size:18px;
     font-weight:600;
@@ -68,17 +68,13 @@ body {
     color:transparent;
     animation:textGlow 1.5s ease-in-out infinite alternate;
     letter-spacing:2px;
-}
-@keyframes textGlow {
+  }
+  @keyframes textGlow {
     0% { opacity:0.6; text-shadow:0 0 0px rgba(255,255,255,0); }
     100% { opacity:1; text-shadow:0 0 20px rgba(240,192,64,0.8); }
-}
-
-/* Main Content */
-.content { padding:20px 16px 300px; }
-
-/* Shop Preview Card - Premium 3D */
-.shop-preview-card {
+  }
+  .content { padding:20px 16px 300px; }
+  .shop-preview-card {
     background:white;
     border-radius:32px;
     padding:24px 22px;
@@ -88,26 +84,9 @@ body {
     transition:all 0.4s cubic-bezier(0.2,0.9,0.4,1.1);
     position:relative;
     overflow:hidden;
-}
-.shop-preview-card::before {
-    content:'';
-    position:absolute;
-    top:-50%;
-    left:-50%;
-    width:200%;
-    height:200%;
-    background:radial-gradient(circle, rgba(108,43,217,0.05), transparent);
-    animation:rotateGlow 20s linear infinite;
-}
-@keyframes rotateGlow {
-    0% { transform:rotate(0deg); }
-    100% { transform:rotate(360deg); }
-}
-.shop-preview-card:hover {
-    transform:translateY(-8px);
-    box-shadow:0 30px 45px -12px rgba(108,43,217,0.35);
-}
-.card-shop-name {
+  }
+  .shop-preview-card:hover { transform:translateY(-8px); }
+  .card-shop-name {
     font-size:24px;
     font-weight:800;
     background:linear-gradient(135deg, var(--primary-dark), var(--primary-light));
@@ -118,8 +97,8 @@ body {
     display:flex;
     align-items:center;
     gap:10px;
-}
-.card-shop-address {
+  }
+  .card-shop-address {
     font-size:14px;
     color:#555;
     margin-top:8px;
@@ -128,8 +107,8 @@ body {
     display:flex;
     gap:12px;
     align-items:flex-start;
-}
-.small-status-badge {
+  }
+  .small-status-badge {
     display:inline-flex;
     align-items:center;
     gap:8px;
@@ -138,14 +117,11 @@ body {
     font-size:12px;
     font-weight:700;
     margin-top:12px;
-    backdrop-filter:blur(4px);
-}
-.small-status-badge.approved { background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.4); box-shadow:var(--glow-success); }
-.small-status-badge.pending { background:rgba(240,192,64,0.15); color:#f0c040; border:1px solid rgba(240,192,64,0.4); }
-.small-status-badge.rejected { background:rgba(231,76,60,0.15); color:#e74c3c; border:1px solid rgba(231,76,60,0.4); }
-
-/* Toast Animation */
-.toast-congrats {
+  }
+  .small-status-badge.approved { background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.4); box-shadow:var(--glow-success); }
+  .small-status-badge.pending { background:rgba(240,192,64,0.15); color:#f0c040; border:1px solid rgba(240,192,64,0.4); }
+  .small-status-badge.rejected { background:rgba(231,76,60,0.15); color:#e74c3c; border:1px solid rgba(231,76,60,0.4); }
+  .toast-congrats {
     position:fixed;
     bottom:30px;
     left:20px;
@@ -160,16 +136,14 @@ body {
     gap:14px;
     font-weight:700;
     z-index:10000;
-    animation:slideUpGlow 0.5s cubic-bezier(0.68,-0.55,0.265,1.55) forwards;
+    animation:slideUpGlow 0.5s forwards;
     box-shadow:0 10px 30px rgba(46,204,113,0.4);
-}
-@keyframes slideUpGlow {
+  }
+  @keyframes slideUpGlow {
     from { transform:translateY(100px); opacity:0; }
     to { transform:translateY(0); opacity:1; }
-}
-
-/* Collapsible Cards */
-.tile-card {
+  }
+  .tile-card {
     background:white;
     border-radius:24px;
     padding:20px;
@@ -177,12 +151,8 @@ body {
     border:1.5px solid rgba(108,43,217,0.08);
     margin-bottom:18px;
     transition:all 0.3s ease;
-}
-.tile-card:hover {
-    transform:translateY(-3px);
-    box-shadow:0 25px 40px -12px rgba(108,43,217,0.25);
-}
-.tile-header {
+  }
+  .tile-header {
     display:flex;
     align-items:center;
     gap:12px;
@@ -190,12 +160,8 @@ body {
     padding-bottom:12px;
     border-bottom:2px solid #f0ebff;
     cursor:pointer;
-    transition:all 0.2s;
-}
-.tile-header:hover .tile-icon {
-    transform:scale(1.05) rotate(5deg);
-}
-.tile-icon {
+  }
+  .tile-icon {
     width:44px; height:44px;
     border-radius:16px;
     background:linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -204,36 +170,24 @@ body {
     justify-content:center;
     font-size:20px;
     box-shadow:0 6px 15px rgba(108,43,217,0.3);
-    transition:all 0.3s;
-}
-.tile-title { font-size:16px; font-weight:800; color:var(--text); }
-.tile-subtitle { font-size:12px; color:var(--text-light); }
-.collapse-icon {
-    margin-left:auto;
-    font-size:18px;
-    color:var(--primary-light);
-    transition:transform 0.3s;
-}
-.tile-content {
-    max-height:2000px;
-    overflow:hidden;
-    transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-.tile-content.collapsed {
-    max-height:0;
-}
-.input-group { margin-bottom:16px; }
-.input-label { font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; display:block; }
-.input-wrap { position:relative; }
-.input-icon {
+  }
+  .tile-title { font-size:16px; font-weight:800; color:var(--text); }
+  .tile-subtitle { font-size:12px; color:var(--text-light); }
+  .collapse-icon { margin-left:auto; font-size:18px; color:var(--primary-light); transition:transform 0.3s; }
+  .tile-content { max-height:2000px; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .tile-content.collapsed { max-height:0; }
+  .input-group { margin-bottom:16px; }
+  .input-label { font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; display:block; }
+  .input-wrap { position:relative; }
+  .input-icon {
     position:absolute;
     left:14px; top:50%;
     transform:translateY(-50%);
     font-size:16px;
     color:var(--primary);
     pointer-events:none;
-}
-.input-field {
+  }
+  .input-field {
     width:100%;
     padding:13px 14px 13px 44px;
     border:2px solid #e8e0ff;
@@ -244,41 +198,15 @@ body {
     background:#faf8ff;
     outline:none;
     transition:all 0.2s;
-}
-.input-field:focus {
-    border-color:var(--primary);
-    background:white;
-    box-shadow:0 0 0 4px rgba(108,43,217,0.1);
-}
-textarea.input-field {
-    padding-top:13px;
-    resize:none;
-    height:90px;
-}
-select.input-field { cursor:pointer; appearance:none; }
-.select-arrow {
-    position:absolute;
-    right:14px; top:50%;
-    transform:translateY(-50%);
-    font-size:12px;
-    color:var(--primary);
-    pointer-events:none;
-}
-.cat-chips-wrap { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
-.cat-chip {
-    background:linear-gradient(135deg, #f0ebff, #e8e0ff);
-    border-radius:40px;
-    padding:6px 16px;
-    font-size:13px;
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    color:#4a1a9e;
-    font-weight:600;
-}
-.cat-chip i { cursor:pointer; font-size:12px; color:#6c2bd9; transition:all 0.2s; }
-.cat-chip i:hover { color:#e74c3c; transform:scale(1.1); }
-.cat-select-btn {
+  }
+  .input-field:focus { border-color:var(--primary); background:white; box-shadow:0 0 0 4px rgba(108,43,217,0.1); }
+  textarea.input-field { padding-top:13px; resize:none; height:90px; }
+  select.input-field { cursor:pointer; appearance:none; }
+  .select-arrow { position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--primary); pointer-events:none; }
+  .cat-chips-wrap { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+  .cat-chip { background:linear-gradient(135deg, #f0ebff, #e8e0ff); border-radius:40px; padding:6px 16px; font-size:13px; display:inline-flex; align-items:center; gap:10px; color:#4a1a9e; font-weight:600; }
+  .cat-chip i { cursor:pointer; font-size:12px; color:#6c2bd9; }
+  .cat-select-btn {
     width:100%;
     padding:12px 16px;
     border:2px dashed #cbbff5;
@@ -290,34 +218,9 @@ select.input-field { cursor:pointer; appearance:none; }
     color:var(--primary);
     font-weight:600;
     cursor:pointer;
-    transition:all 0.2s;
-}
-.cat-select-btn:hover { background:#f0ebff; border-color:var(--primary); }
-
-/* Multi Category Popup */
-.cat-popup-list {
-    max-height:60vh;
-    overflow-y:auto;
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
-    gap:10px;
-}
-.cat-item-multi {
-    padding:12px 14px;
-    background:#faf8ff;
-    border-radius:40px;
-    font-size:13px;
-    font-weight:500;
-    border:1.5px solid #e8e0ff;
-    cursor:pointer;
-    transition:all 0.2s;
-}
-.cat-item-multi.selected { background:linear-gradient(135deg, var(--primary), var(--primary-light)); color:white; border-color:var(--primary); box-shadow:var(--glow-purple); }
-.cat-popup-actions { display:flex; justify-content:flex-end; gap:12px; margin-top:20px; }
-.popup-btn { padding:10px 20px; border-radius:40px; border:none; font-weight:700; cursor:pointer; }
-
-/* Buttons */
-.view-profile-btn, .edit-toggle-btn {
+  }
+  .cat-select-btn:hover { background:#f0ebff; border-color:var(--primary); }
+  .view-profile-btn, .edit-toggle-btn {
     width:100%;
     padding:14px;
     border-radius:20px;
@@ -330,40 +233,19 @@ select.input-field { cursor:pointer; appearance:none; }
     gap:10px;
     transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);
     margin-bottom:12px;
-}
-.view-profile-btn {
-    background:#f0ebff;
-    color:var(--primary);
     border:none;
-}
-.view-profile-btn:hover {
-    background:var(--primary);
-    color:white;
-    transform:translateY(-3px);
-    box-shadow:var(--glow-purple);
-}
-.edit-toggle-btn {
-    background:linear-gradient(135deg, var(--primary-light), var(--primary));
-    color:white;
-    border:none;
-}
-.edit-toggle-btn:hover {
-    transform:translateY(-3px);
-    box-shadow:var(--glow-purple);
-}
-#editFormContainer {
-    display:none;
-    transition:all 0.4s ease;
-}
-#editFormContainer.show {
-    display:block;
-    animation:slideDownBounce 0.5s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-@keyframes slideDownBounce {
+  }
+  .view-profile-btn { background:#f0ebff; color:var(--primary); }
+  .view-profile-btn:hover { background:var(--primary); color:white; transform:translateY(-3px); box-shadow:var(--glow-purple); }
+  .edit-toggle-btn { background:linear-gradient(135deg, var(--primary-light), var(--primary)); color:white; }
+  .edit-toggle-btn:hover { transform:translateY(-3px); box-shadow:var(--glow-purple); }
+  #editFormContainer { display:none; transition:all 0.4s ease; }
+  #editFormContainer.show { display:block; animation:slideDownBounce 0.5s cubic-bezier(0.68,-0.55,0.265,1.55); }
+  @keyframes slideDownBounce {
     from { opacity:0; transform:translateY(-30px); }
     to { opacity:1; transform:translateY(0); }
-}
-.submit-wrap {
+  }
+  .submit-wrap {
     position:fixed;
     bottom:0;
     left:0;
@@ -374,8 +256,8 @@ select.input-field { cursor:pointer; appearance:none; }
     border-top:1px solid #f0ebff;
     box-shadow:0 -8px 30px rgba(108,43,217,0.1);
     z-index:100;
-}
-.home-btn {
+  }
+  .home-btn {
     display:block;
     text-align:center;
     background:linear-gradient(135deg, #2ecc71, #27ae60);
@@ -386,10 +268,8 @@ select.input-field { cursor:pointer; appearance:none; }
     border-radius:50px;
     margin-bottom:12px;
     text-decoration:none;
-    transition:all 0.3s;
-}
-.home-btn:hover { transform:scale(0.98); box-shadow:var(--glow-success); }
-.logout-btn {
+  }
+  .logout-btn {
     width:100%;
     padding:14px;
     background:linear-gradient(135deg, #e74c3c, #c0392b);
@@ -403,13 +283,8 @@ select.input-field { cursor:pointer; appearance:none; }
     align-items:center;
     justify-content:center;
     gap:12px;
-    transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-.logout-btn:hover {
-    transform:translateY(-3px);
-    box-shadow:0 10px 25px rgba(231,76,60,0.4);
-}
-.submit-btn {
+  }
+  .submit-btn {
     width:100%;
     padding:16px;
     background:linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -423,25 +298,21 @@ select.input-field { cursor:pointer; appearance:none; }
     align-items:center;
     justify-content:center;
     gap:10px;
-    transition:all 0.3s;
     margin-bottom:12px;
-}
-.submit-btn:hover { transform:translateY(-2px); box-shadow:var(--glow-purple); }
-.submit-btn.loading { background:#b39ddb; pointer-events:none; }
-.spinner {
+  }
+  .submit-btn.loading { background:#b39ddb; pointer-events:none; }
+  .spinner {
     width:22px; height:22px;
     border:3px solid rgba(255,255,255,0.3);
     border-top-color:white;
     border-radius:50%;
     animation:spin 0.8s linear infinite;
     display:none;
-}
-.submit-btn.loading .spinner { display:block; }
-.submit-btn.loading .btn-text { display:none; }
-@keyframes spin { to { transform:rotate(360deg); } }
-
-/* Toast Message */
-.custom-toast {
+  }
+  .submit-btn.loading .spinner { display:block; }
+  .submit-btn.loading .btn-text { display:none; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .custom-toast {
     position:fixed;
     bottom:100px;
     left:20px;
@@ -455,14 +326,58 @@ select.input-field { cursor:pointer; appearance:none; }
     align-items:center;
     gap:12px;
     z-index:10001;
-    box-shadow:0 8px 25px rgba(0,0,0,0.2);
     animation:fadeSlideUp 0.3s ease forwards;
-}
-.custom-toast.error { background:linear-gradient(135deg, #e74c3c, #c0392b); }
-@keyframes fadeSlideUp {
+  }
+  .custom-toast.error { background:linear-gradient(135deg, #e74c3c, #c0392b); }
+  @keyframes fadeSlideUp {
     from { transform:translateY(40px); opacity:0; }
     to { transform:translateY(0); opacity:1; }
-}
+  }
+  /* Product List Styles */
+  .product-item {
+    background: #f8f4ff;
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #e2d5ff;
+  }
+  .product-main-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .product-img-small {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #b980ff;
+  }
+  .product-details-small { flex: 1; }
+  .product-name-small { font-weight: 800; color: #3c1b75; font-size: 14px; }
+  .product-price-small { color: #9b4dff; font-weight: 700; font-size: 12px; }
+  .three-dots-menu { position: relative; }
+  .three-dots-btn {
+    background: none; border: none; font-size: 20px; cursor: pointer;
+    padding: 5px 10px; color: #9b4dff;
+  }
+  .dropdown-menu {
+    position: absolute; top: 100%; right: 0; background: white;
+    border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    min-width: 150px; display: none; z-index: 100;
+  }
+  .dropdown-menu.show { display: block; }
+  .dropdown-item {
+    padding: 10px 15px; cursor: pointer; font-size: 13px; display: flex;
+    align-items: center; gap: 8px; color: #2d165c;
+  }
+  .dropdown-item:hover { background: #f3edff; }
+  .dropdown-item.delete-item { color: #dc2626; }
+  .edit-form { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #c084fc; display: none; }
+  .edit-form.show { display: block; }
+  .edit-form input, .edit-form textarea { padding: 8px 12px; font-size: 13px; margin-bottom: 8px; width: 100%; border: 1.5px solid #d9c8ff; border-radius: 12px; }
+  .edit-actions { display: flex; gap: 8px; }
+  .edit-actions button { padding: 6px 12px; font-size: 12px; width: auto; margin: 0; }
 </style>
 </head>
 <body>
@@ -472,7 +387,7 @@ select.input-field { cursor:pointer; appearance:none; }
 <div class="content" id="mainContent" style="display:none">
     <div class="shop-preview-card">
         <div class="card-shop-name"><i class="fas fa-crown" style="color:#f0c040;"></i> <span id="previewCardShopName">দোকানের নাম</span></div>
-        <div class="card-shop-address"><i class="fas fa-location-dot"></i> <span id="previewCardAddress">ঠিকানা প্রদর্শিত হবে</span></div>
+        <div class="card-shop-address"><i class="fas fa-location-dot"></i> <span id="previewCardAddress">ঠিকানা</span></div>
         <div id="cardStatusBadge" class="small-status-badge pending"><i class="fas fa-clock"></i> পেন্ডিং</div>
     </div>
 
@@ -480,8 +395,8 @@ select.input-field { cursor:pointer; appearance:none; }
     <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditForm()"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
     <div id="editFormContainer">
-        <!-- Collapsible Sections -->
-        <div class="tile-card" id="cardShopInfo">
+        <!-- শপ তথ্য (সংক্ষিপ্ত) -->
+        <div class="tile-card">
             <div class="tile-header" onclick="toggleCard('shopInfo')">
                 <div class="tile-icon"><i class="fas fa-store"></i></div>
                 <div><div class="tile-title">দোকানের তথ্য</div><div class="tile-subtitle">প্রয়োজনীয় তথ্য দিন</div></div>
@@ -489,49 +404,57 @@ select.input-field { cursor:pointer; appearance:none; }
             </div>
             <div class="tile-content" id="contentShopInfo">
                 <div class="input-group"><label class="input-label">দোকানের নাম *</label><div class="input-wrap"><span class="input-icon">🏷️</span><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div></div>
-                <div class="input-group"><label class="input-label">মালিকের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম লিখুন"></div></div>
+                <div class="input-group"><label class="input-label">মালিকের নাম *</label><div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div></div>
                 <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><div class="input-wrap"><span class="input-icon" style="top:18px">📝</span><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div></div>
-            </div>
-        </div>
-
-        <div class="tile-card" id="cardAddress">
-            <div class="tile-header" onclick="toggleCard('address')">
-                <div class="tile-icon"><i class="fas fa-map-marked-alt"></i></div>
-                <div><div class="tile-title">দোকানের ঠিকানা</div><div class="tile-subtitle">বিভাগ → জেলা → উপজেলা</div></div>
-                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
-            </div>
-            <div class="tile-content" id="contentAddress">
-                <div class="input-group"><label class="input-label">বিভাগ *</label><div class="input-wrap"><span class="input-icon">🗺️</span><select class="input-field" id="division" onchange="onDivisionChange()"><option value="">বিভাগ বাছাই করুন</option></select><span class="select-arrow">▼</span></div></div>
-                <div class="input-group" id="districtGroup" style="display:none"><label class="input-label">জেলা *</label><div class="input-wrap"><span class="input-icon">📌</span><select class="input-field" id="district" onchange="onDistrictChange()"><option value="">জেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div></div>
-                <div class="input-group" id="thanaGroup" style="display:none"><label class="input-label">উপজেলা/থানা *</label><div class="input-wrap"><span class="input-icon">🏘️</span><select class="input-field" id="thana" onchange="onThanaChange()"><option value="">উপজেলা বাছাই করুন</option></select><span class="select-arrow">▼</span></div></div>
-                <div class="input-group" id="areaGroup" style="display:none"><label class="input-label">পূর্ণাঙ্গ ঠিকানা</label><div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="বিস্তারিত ঠিকানা লিখুন..." style="height:70px"></textarea></div></div>
-            </div>
-        </div>
-
-        <div class="tile-card" id="cardCategory">
-            <div class="tile-header" onclick="toggleCard('category')">
-                <div class="tile-icon"><i class="fas fa-tags"></i></div>
-                <div><div class="tile-title">পণ্যের ক্যাটাগরি</div><div class="tile-subtitle">একাধিক ক্যাটাগরি বাছাই করুন</div></div>
-                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
-            </div>
-            <div class="tile-content" id="contentCategory">
-                <div id="selectedChipsContainer" class="cat-chips-wrap"></div>
-                <button type="button" class="cat-select-btn" onclick="openMultiCategoryPopup()"><span><i class="fas fa-plus-circle"></i> ক্যাটাগরি যুক্ত করুন</span><span>▼</span></button>
-                <input type="hidden" id="categoriesHidden" value="">
-            </div>
-        </div>
-
-        <div class="tile-card" id="cardContact">
-            <div class="tile-header" onclick="toggleCard('contact')">
-                <div class="tile-icon"><i class="fas fa-phone-alt"></i></div>
-                <div><div class="tile-title">যোগাযোগের তথ্য</div><div class="tile-subtitle">গ্রাহকরা যোগাযোগ করবে</div></div>
-                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
-            </div>
-            <div class="tile-content" id="contentContact">
+                <div class="input-group"><label class="input-label">পূর্ণাঙ্গ ঠিকানা</label><div class="input-wrap"><span class="input-icon" style="top:18px">🏠</span><textarea class="input-field" id="area" placeholder="বিস্তারিত ঠিকানা" style="height:70px"></textarea></div></div>
                 <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><div class="input-wrap"><span class="input-icon">📱</span><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div></div>
                 <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><div class="input-wrap"><span class="input-icon">💬</span><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div></div>
                 <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><div class="input-wrap"><span class="input-icon">📡</span><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div></div>
-                <div class="input-group"><label class="input-label">ভিডিও লিংক (YouTube)</label><div class="input-wrap"><span class="input-icon">▶️</span><input class="input-field" type="url" id="youtube" placeholder="https://youtube.com/..."></div></div>
+            </div>
+        </div>
+        
+        <!-- প্রোডাক্ট ম্যানেজমেন্ট সেকশন -->
+        <div class="tile-card">
+            <div class="tile-header" onclick="toggleCard('productManage')">
+                <div class="tile-icon"><i class="fas fa-boxes"></i></div>
+                <div><div class="tile-title">প্রোডাক্ট ম্যানেজমেন্ট</div><div class="tile-subtitle">প্রোডাক্ট যোগ/এডিট/ডিলিট করুন</div></div>
+                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="tile-content" id="contentProductManage">
+                <div class="input-group"><label class="input-label">প্রোডাক্টের নাম *</label><input type="text" id="prodName" class="input-field" placeholder="যেমন: Premium Headphone"></div>
+                <div class="input-group"><label class="input-label">দাম (৳)</label><input type="text" id="prodPrice" class="input-field" placeholder="যেমন: 2499"></div>
+                <div class="input-group"><label class="input-label">Google Drive ইমেজ লিংক *</label><input type="text" id="prodImage" class="input-field" placeholder="https://drive.google.com/file/d/xxxxx/view"></div>
+                <div class="input-group"><label class="input-label">বিবরণ</label><textarea id="prodDesc" class="input-field" rows="2" placeholder="প্রোডাক্টের বিবরণ..."></textarea></div>
+                <button id="addProductBtn" class="submit-btn" style="margin-top:0; padding:12px;">➕ প্রোডাক্ট যোগ করুন</button>
+                <div id="productListPanel" style="margin-top: 20px; max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+        
+        <!-- স্লাইডার কন্ট্রোল -->
+        <div class="tile-card">
+            <div class="tile-header" onclick="toggleCard('sliderControl')">
+                <div class="tile-icon"><i class="fas fa-images"></i></div>
+                <div><div class="tile-title">ইমেজ স্লাইডার কন্ট্রোল</div><div class="tile-subtitle">স্লাইডার ছবি পরিবর্তন করুন</div></div>
+                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="tile-content" id="contentSliderControl">
+                <div id="sliderListContainer"></div>
+                <button id="addNewSlideBtn" style="background:linear-gradient(135deg,#22c55e,#16a34a); margin-top:10px;">+ নতুন স্লাইড যোগ করুন</button>
+            </div>
+        </div>
+        
+        <!-- টিকার কন্ট্রোল -->
+        <div class="tile-card">
+            <div class="tile-header" onclick="toggleCard('tickerControl')">
+                <div class="tile-icon"><i class="fas fa-comment-dots"></i></div>
+                <div><div class="tile-title">চলন্ত লেখা (টিকার) কন্ট্রোল</div><div class="tile-subtitle">স্ক্রলিং টেক্সট পরিবর্তন করুন</div></div>
+                <div class="collapse-icon"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="tile-content" id="contentTickerControl">
+                <div class="input-group"><label class="input-label">টিকারের বার্তা (কমা দিয়ে আলাদা করুন)</label><input type="text" id="tickerInput" class="input-field" placeholder="EXCLUSIVE DROP, 40% OFF, FREE SHIPPING"></div>
+                <div class="input-group"><button id="updateTickerBtn" class="submit-btn" style="padding:10px;">আপডেট করুন</button></div>
+                <div class="input-group"><button id="resetTickerBtn" style="background:#6c63a0;">ডিফল্ট রিসেট</button></div>
+                <div class="preview-box" style="background:#1f0a3b; padding:10px; border-radius:40px; margin-top:10px;"><div id="tickerPreview" style="color:#f0eaff; text-align:center; font-size:12px;">প্রিভিউ</div></div>
             </div>
         </div>
     </div>
@@ -539,7 +462,7 @@ select.input-field { cursor:pointer; appearance:none; }
 
 <div class="submit-wrap" id="saveWrap" style="display:none">
     <a href="index.html" class="home-btn"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</a>
-    <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 সেভ করুন</span></button>
+    <button class="submit-btn" id="saveBtn" onclick="saveShopData()"><div class="spinner"></div><span class="btn-text">💾 প্রোফাইল সেভ করুন</span></button>
     <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
 </div>
 
@@ -565,188 +488,178 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// JSON URLs
-const DIVISIONS_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
-const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
+let currentShopId = null;
+let currentShopData = null;
+let allProducts = [];
+let selectedCategories = [];
+let slidesData = [];
+let tickerItems = [];
 
-let divisionsData = [], categoriesList = [], selectedCategories = [], currentShopData = null;
-let firstApprovalFlagShown = false;
+// Helper Functions
+function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
+function showToast(msg, isError=false) { let toast=document.createElement('div'); toast.className='custom-toast'+(isError?' error':''); toast.innerHTML=`<i class="fas ${isError?'fa-exclamation-circle':'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(()=>toast.remove(),4000); }
 
-async function loadDivisionsFromJSON() {
-    try {
-        const res = await fetch(DIVISIONS_JSON_URL);
-        const data = await res.json();
-        divisionsData = data.divisions;
-        const divisionSelect = document.getElementById('division');
-        divisionSelect.innerHTML = '<option value="">বিভাগ বাছাই করুন</option>';
-        divisionsData.forEach(div => { const opt = document.createElement('option'); opt.value = div.name; opt.textContent = div.name; divisionSelect.appendChild(opt); });
-    } catch(e) { console.error('বিভাগ JSON লোড ব্যর্থ:', e); }
-}
-async function loadCategoriesFromJSON() {
-    try {
-        const res = await fetch(CATEGORIES_JSON_URL);
-        categoriesList = await res.json();
-    } catch(e) { categoriesList = ["পোশাক ও বস্ত্র", "খাদ্যপণ্য ও মসলা", "ইলেকট্রনিক্স", "গৃহস্থালি পণ্য", "হার্ডওয়্যার ও নির্মাণ", "অন্যান্য"]; }
-}
-
-window.onDivisionChange = function() {
-    const divisionName = document.getElementById('division').value;
-    const districtSelect = document.getElementById('district');
-    districtSelect.innerHTML = '<option value="">জেলা বাছাই করুন</option>';
-    document.getElementById('districtGroup').style.display = 'none';
-    document.getElementById('thanaGroup').style.display = 'none';
-    document.getElementById('areaGroup').style.display = 'none';
-    if(!divisionName) return;
-    const division = divisionsData.find(d => d.name === divisionName);
-    if(division && division.districts) {
-        division.districts.forEach(dist => { const opt = document.createElement('option'); opt.value = dist.name; opt.textContent = dist.name; districtSelect.appendChild(opt); });
-        document.getElementById('districtGroup').style.display = 'block';
-    }
-};
-window.onDistrictChange = function() {
-    const divisionName = document.getElementById('division').value;
-    const districtName = document.getElementById('district').value;
-    const thanaSelect = document.getElementById('thana');
-    thanaSelect.innerHTML = '<option value="">উপজেলা বাছাই করুন</option>';
-    document.getElementById('thanaGroup').style.display = 'none';
-    document.getElementById('areaGroup').style.display = 'none';
-    if(!divisionName || !districtName) return;
-    const division = divisionsData.find(d => d.name === divisionName);
-    const district = division?.districts.find(d => d.name === districtName);
-    if(district && district.upazilas) {
-        district.upazilas.forEach(up => { const opt = document.createElement('option'); opt.value = up; opt.textContent = up; thanaSelect.appendChild(opt); });
-        document.getElementById('thanaGroup').style.display = 'block';
-    } else if(districtName) { const opt = document.createElement('option'); opt.value = "সদর"; opt.textContent = "সদর উপজেলা"; thanaSelect.appendChild(opt); document.getElementById('thanaGroup').style.display = 'block'; }
-};
-window.onThanaChange = function() { if(document.getElementById('thana').value) document.getElementById('areaGroup').style.display = 'block'; else document.getElementById('areaGroup').style.display = 'none'; };
-
-function renderChips() {
-    const container = document.getElementById('selectedChipsContainer');
-    container.innerHTML = '';
-    selectedCategories.forEach(cat => { const chip = document.createElement('div'); chip.className = 'cat-chip'; chip.innerHTML = `${cat} <i class="fas fa-times-circle" onclick="removeCategory('${cat.replace(/'/g, "\\'")}')"></i>`; container.appendChild(chip); });
-    document.getElementById('categoriesHidden').value = selectedCategories.join(',');
-}
-function removeCategory(cat) { selectedCategories = selectedCategories.filter(c => c !== cat); renderChips(); }
-function openMultiCategoryPopup() {
-    const listDiv = document.getElementById('multiCatList');
-    listDiv.innerHTML = '';
-    categoriesList.forEach(cat => {
-        const isSelected = selectedCategories.includes(cat);
-        const div = document.createElement('div');
-        div.className = `cat-item-multi ${isSelected ? 'selected' : ''}`;
-        div.innerHTML = `${cat} ${isSelected ? '<i class="fas fa-check-circle"></i>' : ''}`;
-        div.onclick = () => {
-            if(selectedCategories.includes(cat)) selectedCategories = selectedCategories.filter(c => c !== cat);
-            else selectedCategories.push(cat);
-            renderChips();
-            openMultiCategoryPopup();
-        };
-        listDiv.appendChild(div);
-    });
-    document.getElementById('multiCatPopup').style.display = 'flex';
-}
-function closeMultiCatPopup() { document.getElementById('multiCatPopup').style.display = 'none'; renderChips(); }
-
-function toggleCard(cardId) {
-    const content = document.getElementById(`content${cardId.charAt(0).toUpperCase() + cardId.slice(1)}`);
-    const icon = document.querySelector(`#card${cardId.charAt(0).toUpperCase() + cardId.slice(1)} .collapse-icon i`);
-    if(content) {
-        content.classList.toggle('collapsed');
-        if(icon) icon.classList.toggle('fa-chevron-down'); icon.classList.toggle('fa-chevron-up');
-    }
-}
-function toggleEditForm() { const formDiv = document.getElementById('editFormContainer'); formDiv.classList.toggle('show'); }
-function viewProfile() { if(auth.currentUser) window.location.href = `profile.html?id=${auth.currentUser.uid}`; else window.location.href = 'login.html'; }
-function logout() { auth.signOut().then(() => { showFloatyToast('✅ লগআউট হয়েছে!'); setTimeout(() => { window.location.href = 'index.html'; }, 1500); }); }
-function showConfettiAndToast() {
-    canvasConfetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#6c2bd9', '#f0c040', '#2ecc71'] });
-    let end = Date.now() + 2000;
-    const frame = () => { canvasConfetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 } }); canvasConfetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 } }); if(Date.now() < end) requestAnimationFrame(frame); };
-    frame();
-    const toastDiv = document.createElement('div'); toastDiv.className = 'toast-congrats'; toastDiv.innerHTML = '<i class="fas fa-trophy"></i> অভিনন্দন! আপনার দোকান Approved হয়েছে 🎉'; document.body.appendChild(toastDiv);
-    setTimeout(() => toastDiv.remove(), 4500);
-    localStorage.setItem('congratsShown_' + auth.currentUser?.uid, 'true');
-}
-function showFloatyToast(msg, isError = false) {
-    let toast = document.createElement('div'); toast.className = 'custom-toast' + (isError ? ' error' : ''); toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(toast); setTimeout(() => toast.remove(), 4000);
-}
+// Shop Data Save
 async function saveShopData() {
-    const user = auth.currentUser; if(!user) return;
-    const shopName = document.getElementById('shopName').value.trim();
-    const ownerName = document.getElementById('ownerName').value.trim();
-    const division = document.getElementById('division').value;
-    const district = document.getElementById('district').value;
-    const thana = document.getElementById('thana').value;
-    const area = document.getElementById('area').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    if(!shopName) return showFloatyToast('দোকানের নাম দিন!', true);
-    if(!ownerName) return showFloatyToast('মালিকের নাম দিন!', true);
-    if(!division) return showFloatyToast('বিভাগ বাছাই করুন!', true);
-    if(!district) return showFloatyToast('জেলা বাছাই করুন!', true);
-    if(!thana) return showFloatyToast('উপজেলা/থানা নির্বাচন করুন!', true);
-    if(!area) return showFloatyToast('ঠিকানা দিন!', true);
-    if(!phone) return showFloatyToast('মোবাইল নম্বর দিন!', true);
-    const btn = document.getElementById('saveBtn'); btn.classList.add('loading');
+    if(!currentShopId) return;
+    const shopName=document.getElementById('shopName').value.trim();
+    const ownerName=document.getElementById('ownerName').value.trim();
+    const area=document.getElementById('area').value.trim();
+    const phone=document.getElementById('phone').value.trim();
+    if(!shopName) return showToast('দোকানের নাম দিন!',true);
+    if(!ownerName) return showToast('মালিকের নাম দিন!',true);
+    if(!area) return showToast('ঠিকানা দিন!',true);
+    if(!phone) return showToast('মোবাইল নম্বর দিন!',true);
+    const btn=document.getElementById('saveBtn'); btn.classList.add('loading');
     try {
-        await db.ref('shops/' + user.uid).update({
+        await db.ref('shops/'+currentShopId).update({
             shopName, ownerName, description: document.getElementById('description').value.trim(),
-            division, district, thana, upazila: thana, area,
-            categories: selectedCategories.join(','), phone,
-            whatsapp: document.getElementById('whatsapp').value.trim(),
-            telegram: document.getElementById('telegram').value.trim(),
-            youtube: document.getElementById('youtube').value.trim(), updatedAt: Date.now()
+            area, phone, whatsapp: document.getElementById('whatsapp').value.trim(),
+            telegram: document.getElementById('telegram').value.trim(), updatedAt: Date.now()
         });
-        document.getElementById('previewCardShopName').innerHTML = shopName;
-        document.getElementById('previewCardAddress').innerHTML = area;
-        showFloatyToast('✅ তথ্য সংরক্ষণ হয়েছে!');
-    } catch(e) { showFloatyToast('সংরক্ষণ ব্যর্থ!', true); }
+        document.getElementById('previewCardShopName').innerHTML=shopName;
+        document.getElementById('previewCardAddress').innerHTML=area;
+        showToast('✅ তথ্য সংরক্ষণ হয়েছে!');
+    } catch(e) { showToast('সংরক্ষণ ব্যর্থ!',true); }
     btn.classList.remove('loading');
 }
 
-auth.onAuthStateChanged(async user => {
-    if(!user) { window.location.href = 'login.html'; return; }
-    await loadDivisionsFromJSON();
-    await loadCategoriesFromJSON();
-    const snap = await db.ref('shops/' + user.uid).get();
-    currentShopData = snap.val();
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-    document.getElementById('saveWrap').style.display = 'block';
-    if(currentShopData) {
-        document.getElementById('previewCardShopName').innerHTML = currentShopData.shopName || 'দোকানের নাম';
-        const addrLine = `${currentShopData.thana || currentShopData.upazila || ''}, ${currentShopData.district || ''}`;
-        document.getElementById('previewCardAddress').innerHTML = currentShopData.area || addrLine || 'ঠিকানা নেই';
-        const cardBadge = document.getElementById('cardStatusBadge');
-        if(currentShopData.status === 'approved') {
-            cardBadge.className = 'small-status-badge approved'; cardBadge.innerHTML = '<i class="fas fa-check-circle"></i> Approved';
-            const alreadyShown = localStorage.getItem('congratsShown_' + user.uid);
-            if(!alreadyShown && !firstApprovalFlagShown) { firstApprovalFlagShown = true; showConfettiAndToast(); }
-        } else if(currentShopData.status === 'rejected') { cardBadge.className = 'small-status-badge rejected'; cardBadge.innerHTML = '<i class="fas fa-times-circle"></i> Rejected'; }
-        else { cardBadge.className = 'small-status-badge pending'; cardBadge.innerHTML = '<i class="fas fa-clock"></i> পেন্ডিং'; }
-        document.getElementById('shopName').value = currentShopData.shopName || '';
-        document.getElementById('ownerName').value = currentShopData.ownerName || '';
-        document.getElementById('description').value = currentShopData.description || '';
-        document.getElementById('phone').value = currentShopData.phone || '';
-        document.getElementById('whatsapp').value = currentShopData.whatsapp || '';
-        document.getElementById('telegram').value = currentShopData.telegram || '';
-        document.getElementById('youtube').value = currentShopData.youtube || '';
-        document.getElementById('area').value = currentShopData.area || '';
-        if(currentShopData.division) {
-            document.getElementById('division').value = currentShopData.division; onDivisionChange();
-            setTimeout(() => {
-                if(currentShopData.district) { document.getElementById('district').value = currentShopData.district; onDistrictChange();
-                    setTimeout(() => {
-                        if(currentShopData.thana) document.getElementById('thana').value = currentShopData.thana;
-                        if(document.getElementById('thana').value) document.getElementById('areaGroup').style.display = 'block';
-                    }, 100);
-                }
-            }, 100);
-        }
-        if(currentShopData.categories) {
-            let cats = typeof currentShopData.categories === 'string' ? currentShopData.categories.split(',').map(s=>s.trim()) : (Array.isArray(currentShopData.categories) ? currentShopData.categories : []);
-            selectedCategories = cats.filter(c=>c); renderChips();
-        } else renderChips();
-    } else renderChips();
+// ========== PRODUCT MANAGEMENT (Shop-specific) ==========
+async function loadProducts() {
+    if(!currentShopId) return;
+    const container=document.getElementById('productListPanel');
+    container.innerHTML='<div style="text-align:center; padding:20px;">🌀 লোড হচ্ছে...</div>';
+    try {
+        const snap=await db.ref(`products/${currentShopId}`).once('value');
+        allProducts=[];
+        snap.forEach(child=>{ allProducts.push({id:child.key,...child.val()}); });
+        allProducts.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+        renderProductList();
+    } catch(e) { container.innerHTML='<div style="padding:20px;">⚠️ লোড করতে সমস্যা</div>'; }
+}
+
+function renderProductList() {
+    const container=document.getElementById('productListPanel');
+    if(!allProducts.length){ container.innerHTML='<div style="padding:20px; text-align:center;">✨ এখনও কোনো প্রোডাক্ট নেই</div>'; return; }
+    container.innerHTML='';
+    allProducts.forEach(prod=>{
+        const imgUrl=getThumbUrl(prod.image);
+        const div=document.createElement('div'); div.className='product-item';
+        div.innerHTML=`
+            <div class="product-main-row">
+                <img class="product-img-small" src="${imgUrl}" onerror="this.src='https://via.placeholder.com/60x60/ede6ff/a855f7?text=No'">
+                <div class="product-details-small">
+                    <div class="product-name-small">${escapeHtml(prod.name)}</div>
+                    <div class="product-price-small">${prod.price?`৳ ${escapeHtml(prod.price)}`:'মূল্য নির্ধারিত হয়নি'}</div>
+                </div>
+                <div class="three-dots-menu">
+                    <button class="three-dots-btn" data-id="${prod.id}">⋮</button>
+                    <div class="dropdown-menu" id="dropdown-${prod.id}">
+                        <div class="dropdown-item edit-name-item" data-id="${prod.id}" data-name="${escapeHtml(prod.name)}">✏️ নাম এডিট</div>
+                        <div class="dropdown-item edit-price-item" data-id="${prod.id}" data-price="${escapeHtml(prod.price||'')}">💰 দাম এডিট</div>
+                        <div class="dropdown-item edit-desc-item" data-id="${prod.id}" data-desc="${escapeHtml(prod.desc||'')}">📝 বিবরণ এডিট</div>
+                        <div class="dropdown-item delete-item" data-id="${prod.id}">🗑 ডিলিট</div>
+                    </div>
+                </div>
+            </div>
+            <div class="edit-form" id="edit-form-${prod.id}">
+                <input type="text" id="edit-name-${prod.id}" value="${escapeHtml(prod.name)}" placeholder="নাম">
+                <input type="text" id="edit-price-${prod.id}" value="${escapeHtml(prod.price||'')}" placeholder="দাম">
+                <textarea id="edit-desc-${prod.id}" rows="2" placeholder="বিবরণ">${escapeHtml(prod.desc||'')}</textarea>
+                <div class="edit-actions">
+                    <button class="save-edit-btn" data-id="${prod.id}" style="background:#22c55e;">সেভ</button>
+                    <button class="cancel-edit-btn" data-id="${prod.id}" style="background:#6c63a0;">বাতিল</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+    attachProductEvents();
+}
+
+function attachProductEvents() {
+    document.querySelectorAll('.three-dots-btn').forEach(btn=>{
+        btn.addEventListener('click',(e)=>{ e.stopPropagation(); const id=btn.dataset.id; document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('show')); document.getElementById(`dropdown-${id}`).classList.toggle('show'); });
+    });
+    document.querySelectorAll('.edit-name-item').forEach(item=>{ item.addEventListener('click',()=>{ const id=item.dataset.id; document.getElementById(`edit-form-${id}`).classList.toggle('show'); document.getElementById(`dropdown-${id}`).classList.remove('show'); }); });
+    document.querySelectorAll('.edit-price-item').forEach(item=>{ item.addEventListener('click',()=>{ const id=item.dataset.id; document.getElementById(`edit-form-${id}`).classList.toggle('show'); document.getElementById(`dropdown-${id}`).classList.remove('show'); }); });
+    document.querySelectorAll('.edit-desc-item').forEach(item=>{ item.addEventListener('click',()=>{ const id=item.dataset.id; document.getElementById(`edit-form-${id}`).classList.toggle('show'); document.getElementById(`dropdown-${id}`).classList.remove('show'); }); });
+    document.querySelectorAll('.delete-item').forEach(item=>{ item.addEventListener('click',async()=>{ if(confirm('প্রোডাক্ট মুছতে চান?')){ await db.ref(`products/${currentShopId}/${item.dataset.id}`).remove(); showToast('✅ প্রোডাক্ট মুছে ফেলা হয়েছে'); loadProducts(); } }); });
+    document.querySelectorAll('.save-edit-btn').forEach(btn=>{ btn.addEventListener('click',async()=>{ const id=btn.dataset.id; const newName=document.getElementById(`edit-name-${id}`).value.trim(); if(!newName){ showToast('নাম খালি রাখা যাবে না!',true); return; } await db.ref(`products/${currentShopId}/${id}`).update({ name:newName, price:document.getElementById(`edit-price-${id}`).value.trim(), desc:document.getElementById(`edit-desc-${id}`).value.trim() }); showToast('✅ প্রোডাক্ট আপডেট হয়েছে'); loadProducts(); }); });
+    document.querySelectorAll('.cancel-edit-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ const id=btn.dataset.id; document.getElementById(`edit-form-${id}`).classList.remove('show'); }); });
+}
+
+async function addProduct() {
+    let name=document.getElementById('prodName').value.trim();
+    let price=document.getElementById('prodPrice').value.trim();
+    let image=document.getElementById('prodImage').value.trim();
+    let desc=document.getElementById('prodDesc').value.trim();
+    if(!name || !image){ showToast('নাম এবং ইমেজ লিংক দিন!',true); return; }
+    await db.ref(`products/${currentShopId}`).push({ name, price, image, desc, timestamp:Date.now() });
+    showToast('✅ প্রোডাক্ট যোগ হয়েছে!');
+    document.getElementById('prodName').value=''; document.getElementById('prodPrice').value=''; document.getElementById('prodImage').value=''; document.getElementById('prodDesc').value='';
+    loadProducts();
+}
+
+function getThumbUrl(url){
+    if(!url) return "https://via.placeholder.com/60x60/ede6ff/a855f7?text=No";
+    let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1];
+    if(!f) { m=url.match(/id=([a-zA-Z0-9_-]+)/); if(m) f=m[1]; }
+    if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`;
+    return url;
+}
+
+// ========== SLIDER CONTROL ==========
+function getDriveUrl(url,w=100){ if(!url) return "https://via.placeholder.com/100x60/ede6ff/a855f7"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w${w}`; return url; }
+function loadSlidesFromStorage(){ const s=localStorage.getItem('proshop_slider_images'); if(s) try{ slidesData=JSON.parse(s); if(!slidesData.length) slidesData=[{image:"https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop"}]; }catch(e){ slidesData=[{image:"https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop"}]; } else slidesData=[{image:"https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop"}]; renderSliderList(); }
+function renderSliderList(){ const c=document.getElementById('sliderListContainer'); c.innerHTML=''; slidesData.forEach((s,i)=>{ const d=document.createElement('div'); d.style.background='#f3edff'; d.style.padding='10px'; d.style.borderRadius='12px'; d.style.marginBottom='10px'; d.innerHTML=`<div style="display:flex; gap:10px; align-items:center;"><img src="${getDriveUrl(s.image,50)}" style="width:50px; height:40px; object-fit:cover; border-radius:8px;"><input type="text" value="${escapeHtml(s.image)}" placeholder="Google Drive Link" style="flex:1; padding:8px; border-radius:12px; border:1px solid #d9c8ff;" onchange="updateSlideImage(${i},this.value)"><button onclick="removeSlide(${i})" style="background:#dc2626; color:white; border:none; padding:6px 12px; border-radius:30px;">🗑</button></div>`; c.appendChild(d); }); }
+function updateSlideImage(idx,url){ slidesData[idx].image=url; localStorage.setItem('proshop_slider_images',JSON.stringify(slidesData)); showToast('স্লাইডার আপডেট হয়েছে'); }
+function removeSlide(idx){ if(slidesData.length===1){ showToast('কমপক্ষে একটি স্লাইড রাখতে হবে!',true); return; } slidesData.splice(idx,1); localStorage.setItem('proshop_slider_images',JSON.stringify(slidesData)); renderSliderList(); showToast('স্লাইড মুছে ফেলা হয়েছে'); }
+function addNewSlide(){ slidesData.push({image:"https://via.placeholder.com/1200x400/8b5cf6/ffffff?text=New+Slide"}); localStorage.setItem('proshop_slider_images',JSON.stringify(slidesData)); renderSliderList(); showToast('নতুন স্লাইড যোগ হয়েছে'); }
+
+// ========== TICKER CONTROL ==========
+function loadTickerFromStorage(){ const s=localStorage.getItem('proshop_ticker_items'); if(s) try{ tickerItems=JSON.parse(s); if(!tickerItems.length) tickerItems=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING"]; }catch(e){ tickerItems=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING"]; } else tickerItems=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING"]; document.getElementById('tickerInput').value=tickerItems.join(', '); updateTickerPreview(tickerItems); }
+function updateTickerPreview(items){ document.getElementById('tickerPreview').innerHTML=items.map(t=>`✨ ${escapeHtml(t)} ✨`).join(' '); }
+function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showToast('কিছু লিখুন!',true); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; localStorage.setItem('proshop_ticker_items',JSON.stringify(items)); updateTickerPreview(items); showToast('টিকার আপডেট হয়েছে!'); }
+function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; localStorage.setItem('proshop_ticker_items',JSON.stringify(def)); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
+
+// UI Helpers
+function toggleCard(cardId){ const content=document.getElementById(`content${cardId.charAt(0).toUpperCase()+cardId.slice(1)}`); const icon=document.querySelector(`#${cardId} .collapse-icon i`); if(content){ content.classList.toggle('collapsed'); if(icon) icon.classList.toggle('fa-chevron-down'); if(icon) icon.classList.toggle('fa-chevron-up'); } }
+function toggleEditForm(){ document.getElementById('editFormContainer').classList.toggle('show'); }
+function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
+function logout(){ auth.signOut().then(()=>{ showToast('✅ লগআউট হয়েছে!'); setTimeout(()=>window.location.href='index.html',1500); }); }
+
+// Auth & Main
+auth.onAuthStateChanged(async user=>{
+    if(!user){ window.location.href='login.html'; return; }
+    currentShopId=user.uid;
+    const snap=await db.ref('shops/'+currentShopId).get();
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+    document.getElementById('saveWrap').style.display='block';
+    if(snap.exists()){
+        currentShopData=snap.val();
+        document.getElementById('previewCardShopName').innerHTML=currentShopData.shopName||'দোকানের নাম';
+        document.getElementById('previewCardAddress').innerHTML=currentShopData.area||'ঠিকানা';
+        const badge=document.getElementById('cardStatusBadge');
+        if(currentShopData.status==='approved'){ badge.className='small-status-badge approved'; badge.innerHTML='<i class="fas fa-check-circle"></i> Approved'; }
+        else if(currentShopData.status==='rejected'){ badge.className='small-status-badge rejected'; badge.innerHTML='<i class="fas fa-times-circle"></i> Rejected'; }
+        else{ badge.className='small-status-badge pending'; badge.innerHTML='<i class="fas fa-clock"></i> পেন্ডিং'; }
+        document.getElementById('shopName').value=currentShopData.shopName||'';
+        document.getElementById('ownerName').value=currentShopData.ownerName||'';
+        document.getElementById('description').value=currentShopData.description||'';
+        document.getElementById('area').value=currentShopData.area||'';
+        document.getElementById('phone').value=currentShopData.phone||'';
+        document.getElementById('whatsapp').value=currentShopData.whatsapp||'';
+        document.getElementById('telegram').value=currentShopData.telegram||'';
+    }
+    loadProducts();
+    loadSlidesFromStorage();
+    loadTickerFromStorage();
+    document.getElementById('addProductBtn').addEventListener('click',addProduct);
+    document.getElementById('addNewSlideBtn').addEventListener('click',addNewSlide);
+    document.getElementById('updateTickerBtn').addEventListener('click',saveTicker);
+    document.getElementById('resetTickerBtn').addEventListener('click',resetTicker);
 });
 </script>
 </body>
