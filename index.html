@@ -242,7 +242,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড - ইউটিউব ডিফল্ট কন্ট্রোল সহ */
+/* দোকানের কার্ড - অটোপ্লে ছাড়া ইউটিউব ভিডিও */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -309,6 +309,34 @@ marquee {
     align-items: center;
     justify-content: center;
     gap: 6px;
+}
+/* প্লে বাটন স্টাইল */
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(108,43,217,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.play-button-overlay:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: var(--primary);
+}
+.play-button-overlay::after {
+    content: "▶";
+    color: white;
+    font-size: 24px;
+    margin-left: 4px;
 }
 @keyframes tileIn {
     from { transform: translateY(15px); opacity: 0; }
@@ -989,22 +1017,7 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-function setupYouTubeObserver(iframe, player) {
-    if (!iframe) return;
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting && player && player.pauseVideo) {
-                player.pauseVideo();
-            } else if (entry.isIntersecting && player && player.playVideo) {
-                player.playVideo();
-            }
-        });
-    }, { threshold: 0.1 });
-    observer.observe(iframe);
-    return observer;
-}
-
-// রেন্ডার শপস - ইউটিউব ডিফল্ট কন্ট্রোল সহ (controls=1)
+// রেন্ডার শপস - অটোপ্লে ছাড়া, শুধু থাম্বনেইল দেখাবে, প্লে বাটন যোগ করা হয়েছে
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -1032,14 +1045,22 @@ window.renderShops = function(shops) {
             }
         }
         
-        // ইউটিউবের ডিফল্ট কন্ট্রোল সহ ভিডিও (controls=1)
-        // ব্যবহারকারী স্পীকার আইকনে ক্লিক করে সাউন্ড অন/অফ করতে পারবেন
+        // থাম্বনেইল URL তৈরি (অটোপ্লে ছাড়া)
+        const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+        
         const videoEmbed = videoId 
-            ? `<iframe class="shop-video" 
-                        src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&playsinline=1&loop=1&playlist=${videoId}&controls=1&modestbranding=0" 
+            ? `
+            <div style="position: relative; width: 100%; height: 100%; cursor: pointer;" onclick="window.playVideo('${videoId}', this)">
+                <img src="${thumbnailUrl}" style="width: 100%; height: 100%; object-fit: cover;" alt="ভিডিও থাম্বনেইল">
+                <div class="play-button-overlay"></div>
+                <iframe class="shop-video" 
+                        src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&playsinline=1&controls=1&modestbranding=0" 
                         frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>`
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none;"></iframe>
+            </div>
+            `
             : `<div class="no-video">🎬 কোন ভিডিও নেই</div>`;
         
         const locationText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
@@ -1059,46 +1080,26 @@ window.renderShops = function(shops) {
             </div>
         </div>`;
     }).join('');
-    
-    if (typeof YT !== 'undefined' && YT.Player) {
-        initYouTubePlayers();
-    }
 };
 
-function initYouTubePlayers() {
-    const iframes = document.querySelectorAll('.shop-video');
+// ভিডিও প্লে করার ফাংশন
+window.playVideo = function(videoId, element) {
+    const container = element;
+    const img = container.querySelector('img');
+    const iframe = container.querySelector('.shop-video');
+    const playBtn = container.querySelector('.play-button-overlay');
     
-    youtubePlayers.forEach(p => { 
-        if(p.observer) p.observer.disconnect(); 
-        if(p.player && p.player.destroy) p.player.destroy();
-    });
-    youtubePlayers = [];
-    
-    iframes.forEach(iframe => {
-        const playerId = 'player_' + Math.random().toString(36).substr(2, 9);
-        iframe.id = playerId;
-        
-        try {
-            const player = new YT.Player(playerId, {
-                events: {
-                    onReady: (event) => {
-                        event.target.mute();
-                        event.target.playVideo().catch(e => console.log('Play error:', e));
-                        const observer = setupYouTubeObserver(iframe, event.target);
-                        youtubePlayers.push({ player: event.target, observer });
-                    },
-                    onStateChange: (event) => {
-                        if (event.data === YT.PlayerState.ENDED) {
-                            event.target.playVideo();
-                        }
-                    }
-                }
-            });
-        } catch(e) {
-            console.log('YouTube player init error:', e);
+    if (img) img.style.display = 'none';
+    if (playBtn) playBtn.style.display = 'none';
+    if (iframe) {
+        iframe.style.display = 'block';
+        // iframe এর src এ autoplay যোগ করে রিলোড
+        const currentSrc = iframe.src;
+        if (!currentSrc.includes('autoplay=1')) {
+            iframe.src = currentSrc + '&autoplay=1';
         }
-    });
-}
+    }
+};
 
 function escapeHtml(str) {
     if (!str) return '';
@@ -1326,20 +1327,6 @@ window.applyCategoryFilter = function() {
     if (popup) popup.remove();
     updateCategoryFilterUI();
     window.applyFilters();
-};
-
-function loadYouTubeAPI() {
-    if (document.querySelector('script[src*="youtube.com/iframe_api"]')) return;
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-}
-loadYouTubeAPI();
-
-window.onYouTubeIframeAPIReady = function() {
-    console.log('YouTube API ready');
-    initYouTubePlayers();
 };
 
 document.querySelectorAll('.nav-item').forEach(btn => {
