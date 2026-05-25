@@ -656,7 +656,7 @@ let selectedCategories = [];
 let allVideos = [];
 
 let videoObservers = [];
-let youtubePlayers = [];
+let youtubePlayers = []; // { player, observer, currentMuteState }
 let cloudinaryVideoElements = [];
 
 let curSlide = 0;
@@ -680,11 +680,10 @@ function hideLoading() {
     if (loader) loader.style.display = 'none';
 }
 
-// ইউটিউব ভিডিও আইডি এক্সট্র্যাক্ট ফাংশন (সঠিকভাবে)
+// ========== ইউটিউব ভিডিও আইডি এক্সট্র্যাক্ট ফাংশন (সব ফরম্যাট সাপোর্ট) ==========
 function extractYouTubeId(url) {
     if (!url) return null;
     
-    // যদি সরাসরি videoId থাকে (YouTube Shorts বা অন্য ফরম্যাট)
     const patterns = [
         /(?:youtube\.com\/watch\?v=)([^&]+)/,
         /(?:youtu\.be\/)([^?]+)/,
@@ -698,9 +697,10 @@ function extractYouTubeId(url) {
         if (match) return match[1];
     }
     
-    // যদি https://www.youtube.com/watch?v=VIDEO_ID&... এই ফরম্যাট হয়
-    const urlParams = new URLSearchParams(url.split('?')[1]);
-    if (urlParams.has('v')) return urlParams.get('v');
+    try {
+        const urlObj = new URL(url);
+        if (urlObj.searchParams.has('v')) return urlObj.searchParams.get('v');
+    } catch(e) {}
     
     return null;
 }
@@ -1079,17 +1079,20 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-function toggleYouTubeMute(player, button) {
+// ========== ইউটিউব আনমিউট ফাংশন (মিউট স্টেট সংরক্ষণ সহ) ==========
+function toggleYouTubeMute(player, button, playerData) {
     if (player.isMuted()) {
         player.unMute();
         button.innerHTML = '<i class="fas fa-volume-up"></i>';
+        playerData.currentMuteState = false;
     } else {
         player.mute();
         button.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        playerData.currentMuteState = true;
     }
 }
 
-function setupYouTubeObserver(iframe, player, container) {
+function setupYouTubeObserver(iframe, player, container, playerData) {
     if (!iframe) return;
     
     let muteButton = container.querySelector('.youtube-mute-btn');
@@ -1099,25 +1102,38 @@ function setupYouTubeObserver(iframe, player, container) {
         muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
         muteButton.onclick = (e) => {
             e.stopPropagation();
-            toggleYouTubeMute(player, muteButton);
+            toggleYouTubeMute(player, muteButton, playerData);
         };
         container.appendChild(muteButton);
     }
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (!entry.isIntersecting && player && player.pauseVideo) {
-                player.pauseVideo();
-            } else if (entry.isIntersecting && player && player.playVideo) {
-                player.playVideo();
+            if (!entry.isIntersecting) {
+                // ভিউ থেকে বেরিয়ে গেলে পজ করবে (মিউট স্টেট রিমেম্বার করবে)
+                if (player && player.pauseVideo) player.pauseVideo();
+            } else if (entry.isIntersecting) {
+                // ভিউতে ফিরে এলে প্লে করবে এবং আগের মিউট স্টেট রিস্টোর করবে
+                if (player && player.playVideo) {
+                    player.playVideo();
+                    // আগের মিউট স্টেট রিস্টোর করা
+                    if (playerData.currentMuteState) {
+                        player.mute();
+                        if (muteButton) muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    } else {
+                        player.unMute();
+                        if (muteButton) muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    }
+                }
             }
         });
     }, { threshold: 0.1 });
+    
     observer.observe(iframe);
     return observer;
 }
 
-// ========== রেন্ডার শপস (সঠিক ইউটিউব আইডি এক্সট্র্যাক্ট সহ) ==========
+// ========== রেন্ডার শপস ==========
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -1170,20 +1186,28 @@ window.renderShops = function(shops) {
 
 function initYouTubePlayers() {
     const iframes = document.querySelectorAll('.shop-video');
-    youtubePlayers.forEach(p => { if(p.destroy) p.destroy(); });
+    youtubePlayers.forEach(p => { 
+        if(p.observer) p.observer.disconnect();
+        if(p.player && p.player.destroy) p.player.destroy();
+    });
     youtubePlayers = [];
     
     iframes.forEach(iframe => {
         const container = iframe.closest('.video-player-card');
         const playerId = 'player_' + Math.random().toString(36).substr(2, 9);
         iframe.id = playerId;
+        
+        const playerData = {
+            currentMuteState: true  // শুরুতে মিউটেড
+        };
+        
         const player = new YT.Player(playerId, {
             events: {
                 onReady: (event) => {
                     event.target.mute();
                     event.target.playVideo();
-                    const observer = setupYouTubeObserver(iframe, event.target, container);
-                    if (observer) youtubePlayers.push({ player: event.target, observer });
+                    const observer = setupYouTubeObserver(iframe, event.target, container, playerData);
+                    youtubePlayers.push({ player: event.target, observer, playerData });
                 }
             }
         });
