@@ -285,7 +285,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড - বিবরণী হাইড করা হয়েছে */
+/* দোকানের কার্ড */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -443,7 +443,7 @@ marquee {
     transform: scale(0.95);
 }
 
-/* ক্যাটাগরি পপআপ */
+/* ========== ক্যাটাগরি পপআপ (মাল্টি-সিলেক্ট) ========== */
 .category-popup-overlay {
     position: fixed;
     top: 0;
@@ -555,6 +555,34 @@ marquee {
     color: var(--primary);
     border: none;
 }
+/* =================================================== */
+
+/* সিলেক্টেড ক্যাটাগরি চিপস (পপআপের বাইরে দেখানোর জন্য) */
+.selected-categories-badge {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 16px 0;
+}
+.selected-cat-badge {
+    background: var(--primary-soft);
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--primary-dark);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.selected-cat-badge i {
+    cursor: pointer;
+    font-size: 10px;
+    color: #999;
+}
+.selected-cat-badge i:hover {
+    color: #e74c3c;
+}
 </style>
 </head>
 <body>
@@ -609,6 +637,9 @@ marquee {
         <div class="ab-arrow">→</div>
     </a>
 
+    <!-- সিলেক্টেড ক্যাটাগরি ব্যাজ (পপআপ থেকে সিলেক্ট করলে এখানে দেখাবে) -->
+    <div id="selectedCategoriesBadge" class="selected-categories-badge"></div>
+
     <!-- FILTERS -->
     <div class="filter-wrap">
         <button class="reset-btn" id="resetBtn" onclick="window.resetFilters()">🔄 ফিল্টার রিসেট করুন</button>
@@ -640,6 +671,7 @@ marquee {
             <div class="chip-scroll" id="thanaChips"></div>
         </div>
 
+        <!-- ক্যাটাগরি ফিল্টার স্টেপ হাইড করে দেওয়া হয়েছে, কারণ এখন পপআপ দিয়ে করা হবে -->
         <div class="filter-step hidden" id="step4">
             <div class="fs-header">
                 <div class="fs-num" id="num4">৪</div>
@@ -692,7 +724,7 @@ let allShops = [];
 let selectedDivision = '';
 let selectedDistrict = '';
 let selectedThana = '';
-let selectedCategories = [];
+let selectedCategoriesArray = []; // মাল্টি-ক্যাটাগরি অ্যারে
 let allVideos = [];
 
 // সার্চ ইনডেক্সের জন্য সমস্ত ইউনিক শব্দ
@@ -725,11 +757,32 @@ function hideLoading() {
     if (loader) loader.style.display = 'none';
 }
 
+// ========== সিলেক্টেড ক্যাটাগরি ব্যাজ রেন্ডার ==========
+function renderSelectedCategoriesBadge() {
+    const container = document.getElementById('selectedCategoriesBadge');
+    if (!selectedCategoriesArray.length) {
+        container.innerHTML = '';
+        return;
+    }
+    container.innerHTML = selectedCategoriesArray.map(cat => `
+        <span class="selected-cat-badge">
+            ${escapeHtml(cat)}
+            <i class="fas fa-times-circle" onclick="removeCategoryFromFilter('${escapeHtml(cat).replace(/'/g, "\\'")}')"></i>
+        </span>
+    `).join('');
+}
+
+// ক্যাটাগরি রিমুভ ফাংশন (ব্যাজ থেকে)
+window.removeCategoryFromFilter = function(category) {
+    selectedCategoriesArray = selectedCategoriesArray.filter(c => c !== category);
+    renderSelectedCategoriesBadge();
+    window.applyFilters();
+};
+
 // ========== সার্চ ইনডেক্স বিল্ড করা ==========
 function buildSearchIndex() {
     searchIndex.clear();
     
-    // 1. ক্যাটাগরি যোগ করা
     categoriesList.forEach(cat => {
         const key = cat.toLowerCase();
         if (!searchIndex.has(key)) {
@@ -737,7 +790,6 @@ function buildSearchIndex() {
         }
     });
     
-    // 2. জিও ডাটা থেকে বিভাগ, জেলা, উপজেলা যোগ করা
     geoData.forEach(division => {
         const divKey = division.name.toLowerCase();
         if (!searchIndex.has(divKey)) {
@@ -759,7 +811,6 @@ function buildSearchIndex() {
         });
     });
     
-    // 3. দোকানের তথ্য যোগ করা (বিবরণী ইনডেক্সে থাকবে কিন্তু কার্ডে দেখাবে না)
     allShops.forEach(shop => {
         if (shop.shopName) {
             const nameKey = shop.shopName.toLowerCase();
@@ -775,7 +826,6 @@ function buildSearchIndex() {
             }
         }
         
-        // বিবরণী ইনডেক্সে থাকবে (সার্চ রেজাল্টের জন্য) কিন্তু কার্ডে দেখানো হবে না
         if (shop.description) {
             const words = shop.description.toLowerCase().split(/\s+/);
             const uniqueWords = new Set(words);
@@ -795,13 +845,6 @@ function buildSearchIndex() {
                     }
                 }
             });
-        }
-        
-        if (shop.category) {
-            const catKey = shop.category.toLowerCase();
-            if (!searchIndex.has(catKey)) {
-                searchIndex.set(catKey, { type: 'shop_category', displayText: shop.category, data: shop });
-            }
         }
         
         if (shop.district) {
@@ -868,7 +911,6 @@ function getTypeLabel(type) {
         'district': 'জেলা',
         'upazila': 'উপজেলা/থানা',
         'area': 'এলাকা',
-        'shop_category': 'দোকানের ক্যাটাগরি',
         'description': 'বিবরণী'
     };
     return labels[type] || 'অন্যান্য';
@@ -900,8 +942,13 @@ function performSearch(query) {
     if (selectedThana) {
         filtered = filtered.filter(shop => shop.thana === selectedThana);
     }
-    if (selectedCategories.length > 0) {
-        filtered = filtered.filter(shop => selectedCategories.includes(shop.category));
+    if (selectedCategoriesArray.length > 0) {
+        filtered = filtered.filter(shop => {
+            if (!shop.category) return false;
+            // shop.category কমা সেপারেটেড স্ট্রিং হতে পারে
+            const shopCategories = shop.category.split(',').map(c => c.trim());
+            return selectedCategoriesArray.some(selectedCat => shopCategories.includes(selectedCat));
+        });
     }
     
     const searchLower = query.toLowerCase();
@@ -1051,20 +1098,8 @@ async function loadGeoData() {
 }
 
 async function loadCategoryChips() {
-    const container = document.getElementById('categoryChips');
-    container.innerHTML = '<div class="f-chip active" onclick="window.selectCategory(\'\')">সব</div>';
-    
-    if (categoriesList.length === 0) {
-        await loadCategories();
-    }
-    
-    categoriesList.forEach(cat => {
-        const chip = document.createElement('div');
-        chip.className = 'f-chip';
-        chip.textContent = cat;
-        chip.onclick = () => window.selectCategory(cat);
-        container.appendChild(chip);
-    });
+    // ক্যাটাগরি চিপস আর দরকার নেই, কারণ এখন পপআপ ব্যবহার করা হবে
+    // কিন্তু ফাংশনটি রেখে দিলাম খালি
 }
 
 window.selectDivision = function(div) {
@@ -1203,44 +1238,18 @@ window.selectThana = function(thana) {
     }
 };
 
-window.selectCategory = function(cat) {
-    if (cat === '') {
-        selectedCategories = [];
-    } else {
-        selectedCategories = [cat];
-    }
-    updateCategoryFilterUI();
-    
-    const searchInput = document.getElementById('searchInput');
-    const searchQuery = searchInput ? searchInput.value.trim() : '';
-    if (searchQuery) {
-        performSearch(searchQuery.toLowerCase());
-    } else {
-        window.applyFilters();
-    }
-};
-
-function updateCategoryFilterUI() {
-    const sel4Span = document.getElementById('sel4');
-    if (sel4Span) {
-        if (selectedCategories.length === 0) sel4Span.textContent = '';
-        else sel4Span.textContent = `✅ ${selectedCategories.length}টি সিলেক্টেড`;
-    }
-    const num4Div = document.getElementById('num4');
-    if (num4Div) num4Div.className = selectedCategories.length > 0 ? 'fs-num done' : 'fs-num';
-    
-    document.querySelectorAll('#categoryChips .f-chip').forEach(c => {
-        const isActive = selectedCategories.includes(c.textContent);
-        if (isActive) c.classList.add('active');
-        else c.classList.remove('active');
-    });
+// ক্যাটাগরি ফিল্টার আপডেট (পপআপ থেকে কল হবে)
+function updateCategoryFilter(categories) {
+    selectedCategoriesArray = [...categories];
+    renderSelectedCategoriesBadge();
+    window.applyFilters();
 }
 
 window.resetFilters = function() {
     selectedDivision = '';
     selectedDistrict = '';
     selectedThana = '';
-    selectedCategories = [];
+    selectedCategoriesArray = [];
     
     document.getElementById('step2')?.classList.add('hidden');
     document.getElementById('step3')?.classList.add('hidden');
@@ -1262,7 +1271,7 @@ window.resetFilters = function() {
         else c.classList.remove('active');
     });
     
-    updateCategoryFilterUI();
+    renderSelectedCategoriesBadge();
     
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
@@ -1286,8 +1295,12 @@ window.applyFilters = function() {
     if (selectedThana) {
         filtered = filtered.filter(shop => shop.thana === selectedThana);
     }
-    if (selectedCategories.length > 0) {
-        filtered = filtered.filter(shop => selectedCategories.includes(shop.category));
+    if (selectedCategoriesArray.length > 0) {
+        filtered = filtered.filter(shop => {
+            if (!shop.category) return false;
+            const shopCategories = shop.category.split(',').map(c => c.trim());
+            return selectedCategoriesArray.some(selectedCat => shopCategories.includes(selectedCat));
+        });
     }
     
     window.renderShops(filtered);
@@ -1352,7 +1365,6 @@ window.playVideo = function(videoId, element) {
     }
 };
 
-// রেন্ডার শপস - বিবরণী হাইড করা হয়েছে (শুধু দোকানের নাম, লোকেশন, ক্যাটাগরি দেখাবে)
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -1387,7 +1399,6 @@ window.renderShops = function(shops) {
         const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
         const locationText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
         
-        // বিবরণী সম্পূর্ণ হাইড করা হয়েছে - শুধু নাম, লোকেশন ও ক্যাটাগরি দেখাবে
         if (videoId) {
             return `
             <div class="shop-card-wrapper">
@@ -1582,18 +1593,25 @@ window.addEventListener('scroll', function() {
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 
+// ========== ক্যাটাগরি পপআপ (মাল্টি-সিলেক্ট - ড্যাশবোর্ড থেকে সেভ করা ক্যাটাগরি প্রি-সিলেক্টেড) ==========
 window.openCategoryPopup = function() {
+    if (!categoriesList.length) {
+        showToast('ক্যাটাগরি লোড হয়নি, একটু পরে চেষ্টা করুন!', true);
+        return;
+    }
+    
     const existingPopup = document.querySelector('.category-popup-overlay');
     if (existingPopup) existingPopup.remove();
     
     const overlay = document.createElement('div');
     overlay.className = 'category-popup-overlay';
     
+    // বর্তমানে সিলেক্টেড ক্যাটাগরি গুলো প্রি-সিলেক্টেড দেখাবে
     const categoriesHTML = categoriesList.map(cat => {
-        const isSelected = selectedCategories.includes(cat);
+        const isSelected = selectedCategoriesArray.includes(cat);
         return `
-            <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategory('${cat.replace(/'/g, "\\'")}', this)">
-                <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategory('${cat.replace(/'/g, "\\'")}', this.parentElement)">
+            <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this)">
+                <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this.parentElement)">
                 <label>${cat}</label>
             </div>
         `;
@@ -1602,7 +1620,7 @@ window.openCategoryPopup = function() {
     overlay.innerHTML = `
         <div class="category-popup">
             <div class="popup-header">
-                <h3>📂 ক্যাটাগরি নির্বাচন করুন</h3>
+                <h3>📂 ক্যাটাগরি নির্বাচন করুন (একাধিক)</h3>
                 <button class="popup-close" onclick="this.closest('.category-popup-overlay').remove()">✕</button>
             </div>
             <div class="popup-body">
@@ -1611,8 +1629,8 @@ window.openCategoryPopup = function() {
                 </div>
             </div>
             <div class="popup-footer">
-                <button class="btn-clear" onclick="window.clearAllCategories()">সব বাদ দিন</button>
-                <button class="btn-apply" onclick="window.applyCategoryFilter()">প্রয়োগ করুন</button>
+                <button class="btn-clear" onclick="window.clearAllCategoryFromPopup()">সব বাদ দিন</button>
+                <button class="btn-apply" onclick="window.applyCategoryFromPopup()">প্রয়োগ করুন</button>
             </div>
         </div>
     `;
@@ -1623,43 +1641,43 @@ window.openCategoryPopup = function() {
     });
 };
 
-window.toggleCategory = function(category, element) {
-    const index = selectedCategories.indexOf(category);
+// পপআপের ভিতর টগল করার জন্য টেম্পোরারি অ্যারে
+let tempSelectedCategories = [];
+
+window.toggleCategoryInPopup = function(category, element) {
+    const index = tempSelectedCategories.indexOf(category);
     if (index === -1) {
-        selectedCategories.push(category);
+        tempSelectedCategories.push(category);
         element.classList.add('selected');
         const checkbox = element.querySelector('input');
         if (checkbox) checkbox.checked = true;
     } else {
-        selectedCategories.splice(index, 1);
+        tempSelectedCategories.splice(index, 1);
         element.classList.remove('selected');
         const checkbox = element.querySelector('input');
         if (checkbox) checkbox.checked = false;
     }
 };
 
-window.clearAllCategories = function() {
-    selectedCategories = [];
-    const allCatChecks = document.querySelectorAll('.cat-check');
-    allCatChecks.forEach(check => {
+window.clearAllCategoryFromPopup = function() {
+    tempSelectedCategories = [];
+    document.querySelectorAll('.cat-check').forEach(check => {
         check.classList.remove('selected');
         const cb = check.querySelector('input');
         if (cb) cb.checked = false;
     });
 };
 
-window.applyCategoryFilter = function() {
+window.applyCategoryFromPopup = function() {
     const popup = document.querySelector('.category-popup-overlay');
     if (popup) popup.remove();
-    updateCategoryFilterUI();
     
-    const searchInput = document.getElementById('searchInput');
-    const searchQuery = searchInput ? searchInput.value.trim() : '';
-    if (searchQuery) {
-        performSearch(searchQuery.toLowerCase());
-    } else {
-        window.applyFilters();
-    }
+    // টেম্পোরারি অ্যারে থেকে মূল অ্যারেতে কপি
+    selectedCategoriesArray = [...tempSelectedCategories];
+    tempSelectedCategories = [];
+    
+    renderSelectedCategoriesBadge();
+    window.applyFilters();
 };
 
 document.querySelectorAll('.nav-item').forEach(btn => {
