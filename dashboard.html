@@ -279,6 +279,34 @@
     font-size: 12px;
   }
   
+  /* সিলেক্টেড ক্যাটাগরি চিপস */
+  .selected-categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .selected-cat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-soft);
+    padding: 5px 10px 5px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary-dark);
+  }
+  .selected-cat-chip i {
+    cursor: pointer;
+    font-size: 12px;
+    color: #999;
+    transition: color 0.2s;
+  }
+  .selected-cat-chip i:hover {
+    color: #e74c3c;
+  }
+  
   /* Buttons */
   .btn-small-green {
     background: #22c55e;
@@ -307,7 +335,7 @@
   }
   .btn-small-purple:hover { background: #5a5290; }
   
-  /* ========== ক্যাটাগরি পপআপ (index.html এর মতো) ========== */
+  /* ========== ক্যাটাগরি পপআপ (মাল্টি-সিলেক্ট) ========== */
   .category-popup-overlay {
     position: fixed;
     top: 0;
@@ -674,7 +702,7 @@
             </div>
         </div>
         
-        <!-- Option 5: দোকানের তথ্য (পপআপ ক্যাটাগরি সিলেক্টর সহ) -->
+        <!-- Option 5: দোকানের তথ্য (মাল্টি-ক্যাটাগরি সিলেক্টর সহ) -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('shopInfoPanel')">
                 <div class="option-left">
@@ -687,14 +715,15 @@
                 <div class="input-group"><label class="input-label">দোকানের নাম *</label><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div>
                 <div class="input-group"><label class="input-label">মালিকের নাম *</label><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div>
                 
-                <!-- ========== পপআপ ক্যাটাগরি সিলেক্টর (index.html এর মতো) ========== -->
+                <!-- ========== মাল্টি-ক্যাটাগরি সিলেক্টর (একাধিক ক্যাটাগরি নির্বাচন) ========== -->
                 <div class="input-group">
-                    <label class="input-label"><i class="fas fa-tag"></i> ক্যাটাগরি নির্বাচন করুন</label>
+                    <label class="input-label"><i class="fas fa-tags"></i> ক্যাটাগরি নির্বাচন করুন (একাধিক)</label>
                     <div class="category-select-btn" onclick="openCategoryPopup()">
                         <span id="selectedCategoryDisplay" class="category-placeholder">ক্যাটাগরি নির্বাচন করুন</span>
                         <i class="fas fa-chevron-down category-arrow"></i>
                     </div>
-                    <input type="hidden" id="selectedCategory" value="">
+                    <div id="selectedCategoriesContainer" class="selected-categories-container"></div>
+                    <input type="hidden" id="selectedCategoriesInput" value="">
                 </div>
                 <!-- ================================================================== -->
                 
@@ -739,7 +768,7 @@ const db = firebase.database();
 // ========== ক্যাটাগরি JSON URL ==========
 const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
 let categoriesList = [];
-let selectedCategoryValue = '';
+let selectedCategoriesArray = []; // Array of selected categories (মাল্টি-সিলেক্ট)
 
 let currentShopId = null;
 let currentShopData = null;
@@ -787,7 +816,53 @@ async function loadCategoriesForDashboard() {
     }
 }
 
-// ========== পপআপ ক্যাটাগরি সিলেক্টর (index.html এর মতো) ==========
+// ========== সিলেক্টেড ক্যাটাগরি চিপস রেন্ডার ==========
+function renderSelectedCategoriesChips() {
+    const container = document.getElementById('selectedCategoriesContainer');
+    const hiddenInput = document.getElementById('selectedCategoriesInput');
+    
+    if (!selectedCategoriesArray.length) {
+        container.innerHTML = '';
+        hiddenInput.value = '';
+        return;
+    }
+    
+    container.innerHTML = selectedCategoriesArray.map(cat => `
+        <span class="selected-cat-chip">
+            ${escapeHtml(cat)}
+            <i class="fas fa-times-circle" onclick="removeCategory('${escapeHtml(cat).replace(/'/g, "\\'")}')"></i>
+        </span>
+    `).join('');
+    
+    hiddenInput.value = selectedCategoriesArray.join(',');
+}
+
+// ক্যাটাগরি রিমুভ ফাংশন
+window.removeCategory = function(category) {
+    selectedCategoriesArray = selectedCategoriesArray.filter(c => c !== category);
+    renderSelectedCategoriesChips();
+    updateCategoryDisplayText();
+};
+
+// ডিসপ্লে টেক্সট আপডেট
+function updateCategoryDisplayText() {
+    const displaySpan = document.getElementById('selectedCategoryDisplay');
+    if (selectedCategoriesArray.length === 0) {
+        displaySpan.innerHTML = 'ক্যাটাগরি নির্বাচন করুন';
+        displaySpan.classList.add('category-placeholder');
+        displaySpan.classList.remove('category-selected-text');
+    } else if (selectedCategoriesArray.length === 1) {
+        displaySpan.innerHTML = selectedCategoriesArray[0];
+        displaySpan.classList.remove('category-placeholder');
+        displaySpan.classList.add('category-selected-text');
+    } else {
+        displaySpan.innerHTML = `${selectedCategoriesArray.length} টি ক্যাটাগরি সিলেক্টেড`;
+        displaySpan.classList.remove('category-placeholder');
+        displaySpan.classList.add('category-selected-text');
+    }
+}
+
+// ========== পপআপ ক্যাটাগরি সিলেক্টর (মাল্টি-সিলেক্ট) ==========
 function openCategoryPopup() {
     if (!categoriesList.length) {
         showToast('ক্যাটাগরি লোড হয়নি, একটু পরে চেষ্টা করুন!', true);
@@ -801,10 +876,10 @@ function openCategoryPopup() {
     overlay.className = 'category-popup-overlay';
     
     const categoriesHTML = categoriesList.map(cat => {
-        const isSelected = (selectedCategoryValue === cat);
+        const isSelected = selectedCategoriesArray.includes(cat);
         return `
-            <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategoryPopup('${cat.replace(/'/g, "\\'")}', this)">
-                <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategoryPopup('${cat.replace(/'/g, "\\'")}', this.parentElement)">
+            <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this)">
+                <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this.parentElement)">
                 <label>${cat}</label>
             </div>
         `;
@@ -813,7 +888,7 @@ function openCategoryPopup() {
     overlay.innerHTML = `
         <div class="category-popup">
             <div class="popup-header">
-                <h3>📂 ক্যাটাগরি নির্বাচন করুন</h3>
+                <h3>📂 ক্যাটাগরি নির্বাচন করুন (একাধিক)</h3>
                 <button class="popup-close" onclick="this.closest('.category-popup-overlay').remove()">✕</button>
             </div>
             <div class="popup-body">
@@ -822,7 +897,7 @@ function openCategoryPopup() {
                 </div>
             </div>
             <div class="popup-footer">
-                <button class="btn-clear" onclick="window.clearCategorySelection()">সব বাদ দিন</button>
+                <button class="btn-clear" onclick="window.clearAllCategorySelection()">সব বাদ দিন</button>
                 <button class="btn-apply" onclick="window.applyCategorySelection()">প্রয়োগ করুন</button>
             </div>
         </div>
@@ -834,25 +909,25 @@ function openCategoryPopup() {
     });
 }
 
-window.toggleCategoryPopup = function(category, element) {
-    // সিঙ্গেল সিলেক্ট (রেডিও বাটনের মতো)
-    selectedCategoryValue = category;
-    
-    // পপআপের ভিতরের সব চেকবক্স আনচেক ও ক্লাস রিমুভ
-    document.querySelectorAll('.cat-check').forEach(check => {
-        check.classList.remove('selected');
-        const cb = check.querySelector('input');
-        if (cb) cb.checked = false;
-    });
-    
-    // বর্তমান এলিমেন্ট সিলেক্ট করা
-    element.classList.add('selected');
-    const checkbox = element.querySelector('input');
-    if (checkbox) checkbox.checked = true;
+window.toggleCategoryInPopup = function(category, element) {
+    const index = selectedCategoriesArray.indexOf(category);
+    if (index === -1) {
+        // যোগ করুন
+        selectedCategoriesArray.push(category);
+        element.classList.add('selected');
+        const checkbox = element.querySelector('input');
+        if (checkbox) checkbox.checked = true;
+    } else {
+        // সরান
+        selectedCategoriesArray.splice(index, 1);
+        element.classList.remove('selected');
+        const checkbox = element.querySelector('input');
+        if (checkbox) checkbox.checked = false;
+    }
 };
 
-window.clearCategorySelection = function() {
-    selectedCategoryValue = '';
+window.clearAllCategorySelection = function() {
+    selectedCategoriesArray = [];
     document.querySelectorAll('.cat-check').forEach(check => {
         check.classList.remove('selected');
         const cb = check.querySelector('input');
@@ -864,21 +939,8 @@ window.applyCategorySelection = function() {
     const popup = document.querySelector('.category-popup-overlay');
     if (popup) popup.remove();
     
-    // ডিসপ্লে আপডেট
-    const displaySpan = document.getElementById('selectedCategoryDisplay');
-    const hiddenInput = document.getElementById('selectedCategory');
-    
-    if (selectedCategoryValue) {
-        displaySpan.innerHTML = selectedCategoryValue;
-        displaySpan.classList.remove('category-placeholder');
-        displaySpan.classList.add('category-selected-text');
-        hiddenInput.value = selectedCategoryValue;
-    } else {
-        displaySpan.innerHTML = 'ক্যাটাগরি নির্বাচন করুন';
-        displaySpan.classList.add('category-placeholder');
-        displaySpan.classList.remove('category-selected-text');
-        hiddenInput.value = '';
-    }
+    renderSelectedCategoriesChips();
+    updateCategoryDisplayText();
 };
 
 // ========== ইউটিউব ভিডিও আইডি এক্সট্রাক্ট ==========
@@ -896,7 +958,7 @@ function extractYoutubeVideoId(url) {
     return null;
 }
 
-// Save Shop Data (with category and youtubeVideoId)
+// Save Shop Data (with multi-category)
 async function saveShopData() {
     if(!currentShopId) return;
     const shopName=document.getElementById('shopName').value.trim();
@@ -904,7 +966,7 @@ async function saveShopData() {
     const area=document.getElementById('area').value.trim();
     const phone=document.getElementById('phone').value.trim();
     const youtubeUrl = document.getElementById('youtube').value.trim();
-    const selectedCategory = document.getElementById('selectedCategory').value.trim();
+    const selectedCategories = selectedCategoriesArray.join(',');
     
     if(!shopName) return showToast('দোকানের নাম দিন!',true);
     if(!ownerName) return showToast('মালিকের নাম দিন!',true);
@@ -927,7 +989,7 @@ async function saveShopData() {
             telegram: document.getElementById('telegram').value.trim(),
             youtube: youtubeUrl,
             youtubeVideoId: youtubeVideoId,
-            category: selectedCategory,
+            category: selectedCategories,
             updatedAt: Date.now()
         });
         document.getElementById('previewCardShopName').innerHTML=shopName;
@@ -1082,14 +1144,15 @@ auth.onAuthStateChanged(async user=>{
         document.getElementById('telegram').value=currentShopData.telegram||'';
         document.getElementById('youtube').value=currentShopData.youtube||'';
         
-        // ক্যাটাগরি ডিসপ্লে সেট করা
+        // ক্যাটাগরি লোড করা (কমা সেপারেটেড স্ট্রিং থেকে array তে কনভার্ট)
         if(currentShopData.category){
-            selectedCategoryValue = currentShopData.category;
-            document.getElementById('selectedCategory').value = currentShopData.category;
-            const displaySpan = document.getElementById('selectedCategoryDisplay');
-            displaySpan.innerHTML = currentShopData.category;
-            displaySpan.classList.remove('category-placeholder');
-            displaySpan.classList.add('category-selected-text');
+            if(currentShopData.category.includes(',')){
+                selectedCategoriesArray = currentShopData.category.split(',').map(c => c.trim()).filter(c => c);
+            } else {
+                selectedCategoriesArray = [currentShopData.category];
+            }
+            renderSelectedCategoriesChips();
+            updateCategoryDisplayText();
         }
     }
     loadProducts();
