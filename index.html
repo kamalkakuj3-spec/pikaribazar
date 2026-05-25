@@ -26,7 +26,6 @@ body {
     padding-bottom: 80px;
 }
 
-/* NO INTERNET */
 #noInternet { display:none; position:fixed; inset:0; background:linear-gradient(160deg,#1a0a3e,#6c2bd9); flex-direction:column; align-items:center; justify-content:center; z-index:9999; padding:40px; text-align:center; }
 .ni-icon { font-size:80px; margin-bottom:20px; animation:bounce 2s ease-in-out infinite; }
 @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
@@ -34,7 +33,6 @@ body {
 .ni-msg   { font-size:14px; color:rgba(255,255,255,0.7); margin-bottom:28px; line-height:1.7; }
 .ni-btn   { padding:13px 36px; background:var(--accent); color:#1a0a3e; border:none; border-radius:99px; font-size:15px; font-weight:700; font-family:'Hind Siliguri',sans-serif; cursor:pointer; }
 
-/* SPLASH */
 #splash { position:fixed; inset:0; background:linear-gradient(160deg,#1a0a3e,#6c2bd9,#a259f7); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9998; animation:splashOut 0.5s ease 2s forwards; }
 @keyframes splashOut { to{opacity:0;pointer-events:none} }
 .sp-logo { width:80px; height:80px; background:white; border-radius:22px; display:flex; align-items:center; justify-content:center; font-size:40px; margin-bottom:15px; box-shadow:0 10px 40px rgba(0,0,0,0.3); animation:popIn 0.7s cubic-bezier(.34,1.56,.64,1) 0.3s both; }
@@ -46,11 +44,9 @@ body {
 @keyframes fillBar { 0%{width:0} 40%{width:60%} 100%{width:100%} }
 @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
 
-/* APP */
 #app { opacity:0; animation:appShow 0.3s ease 2.5s forwards; background:var(--bg); }
 @keyframes appShow { to{opacity:1} }
 
-/* লোডিং ওভারলে */
 #loadingOverlay {
     position: fixed;
     top: 0;
@@ -101,9 +97,7 @@ body {
     position: absolute;
     width: 100%;
 }
-.search-wrap {
-    position: relative;
-}
+.search-wrap { position: relative; }
 .search-input {
     width: 100%;
     padding: 12px 20px;
@@ -182,40 +176,12 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* এডমিনের ভিডিও গ্রিড */
-.video-grid-section {
-    margin: 0 16px 20px;
-}
-.video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-}
-.video-card {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: all 0.3s ease;
-    animation: tileIn 0.4s ease both;
-}
-.video-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(108,43,217,0.2);
-}
-.video-player-container {
-    position: relative;
-    background: #000;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    cursor: pointer;
-}
-.cloudinary-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+.video-grid-section { margin: 0 16px 20px; }
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.video-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s ease; animation: tileIn 0.4s ease both; }
+.video-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(108,43,217,0.2); }
+.video-player-container { position: relative; background: #000; width: 100%; aspect-ratio: 16 / 9; cursor: pointer; }
+.cloudinary-video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .video-mute-overlay {
     position: absolute;
     bottom: 10px;
@@ -233,77 +199,19 @@ marquee {
     color: white;
     font-size: 16px;
 }
-.video-mute-overlay:hover {
-    background: rgba(0,0,0,0.8);
-    transform: scale(1.05);
-}
-.video-card-info {
-    padding: 14px 16px;
-    text-align: center;
-}
-.video-card-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 6px;
-}
-.video-card-desc {
-    font-size: 12px;
-    color: var(--text-light);
-    line-height: 1.4;
-}
-.video-grid-empty {
-    text-align: center;
-    padding: 40px;
-    background: white;
-    border-radius: 20px;
-    color: var(--text-light);
-}
-.video-grid-empty-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-}
+.video-mute-overlay:hover { background: rgba(0,0,0,0.8); transform: scale(1.05); }
+.video-card-info { padding: 14px 16px; text-align: center; }
+.video-card-title { font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+.video-card-desc { font-size: 12px; color: var(--text-light); line-height: 1.4; }
+.video-grid-empty { text-align: center; padding: 40px; background: white; border-radius: 20px; color: var(--text-light); }
+.video-grid-empty-icon { font-size: 48px; margin-bottom: 12px; }
 
-/* দোকানের কার্ড */
-.shop-card-wrapper {
-    margin: 0 16px 16px;
-}
-.shop-video-card {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: all 0.3s ease;
-    animation: tileIn 0.4s ease both;
-}
-.shop-video-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(108,43,217,0.2);
-}
-.video-player-card {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    background: #000;
-}
-.shop-video {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: #000;
-    display: block;
-}
-.no-video {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #1a0a3e, #6c2bd9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 18px;
-    text-align: center;
-}
+.shop-card-wrapper { margin: 0 16px 16px; }
+.shop-video-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s ease; animation: tileIn 0.4s ease both; }
+.shop-video-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(108,43,217,0.2); }
+.video-player-card { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+.shop-video { width: 100%; height: 100%; border: none; background: #000; display: block; }
+.no-video { width: 100%; height: 100%; background: linear-gradient(135deg, #1a0a3e, #6c2bd9); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; text-align: center; }
 .youtube-mute-btn {
     position: absolute;
     bottom: 10px;
@@ -321,51 +229,19 @@ marquee {
     color: white;
     font-size: 16px;
 }
-.youtube-mute-btn:hover {
-    background: rgba(0,0,0,0.8);
-    transform: scale(1.05);
-}
-.shop-video-info {
-    padding: 14px 16px;
-    background: white;
-    text-align: center;
-}
-.shop-video-name {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--primary);
-    margin-bottom: 6px;
-    cursor: pointer;
-    transition: color 0.2s;
-    display: inline-block;
-}
-.shop-video-name:hover {
-    color: var(--primary-dark);
-    text-decoration: underline;
-}
-.shop-video-location {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.shop-video-location i {
-    color: var(--primary-light);
-}
-@keyframes tileIn {
-    from { transform: translateY(15px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
+.youtube-mute-btn:hover { background: rgba(0,0,0,0.8); transform: scale(1.05); }
+.shop-video-info { padding: 14px 16px; background: white; text-align: center; }
+.shop-video-name { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 6px; cursor: pointer; transition: color 0.2s; display: inline-block; }
+.shop-video-name:hover { color: var(--primary-dark); text-decoration: underline; }
+.shop-video-location { font-size: 13px; font-weight: 500; color: var(--text-light); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.shop-video-location i { color: var(--primary-light); }
+@keyframes tileIn { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 .empty { text-align:center; padding:50px 20px; color:var(--text-light); }
 .empty-icon  { font-size:50px; margin-bottom:12px; }
 .empty-title { font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px; }
 .empty-sub   { font-size:13px; }
 
-/* BOTTOM NAV */
 .bottom-nav {
     position: fixed;
     bottom: 5px;
@@ -395,20 +271,10 @@ marquee {
     flex: 1;
     padding: 4px 0;
 }
-.nav-item .icon {
-    display: block;
-    font-size: 20px;
-    margin-bottom: 2px;
-}
-.nav-item.active {
-    color: var(--primary);
-    transform: translateY(-3px);
-}
-.nav-item:active {
-    transform: scale(0.95);
-}
+.nav-item .icon { display: block; font-size: 20px; margin-bottom: 2px; }
+.nav-item.active { color: var(--primary); transform: translateY(-3px); }
+.nav-item:active { transform: scale(0.95); }
 
-/* ক্যাটাগরি পপআপ */
 .category-popup-overlay {
     position: fixed;
     top: 0;
@@ -433,93 +299,19 @@ marquee {
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
-.popup-header {
-    padding: 18px 20px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.popup-header h3 {
-    font-size: 18px;
-    font-weight: 700;
-}
-.popup-close {
-    background: rgba(255,255,255,0.2);
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    font-size: 20px;
-    cursor: pointer;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.popup-body {
-    padding: 16px;
-    max-height: 55vh;
-    overflow-y: auto;
-}
-.category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.cat-check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    background: #f5f3ff;
-    border-radius: 99px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 1.5px solid transparent;
-}
-.cat-check.selected {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-.cat-check input {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--primary);
-}
-.cat-check label {
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-}
-.popup-footer {
-    padding: 16px 20px;
-    border-top: 1px solid #eee;
-    display: flex;
-    gap: 12px;
-}
-.popup-footer button {
-    flex: 1;
-    padding: 12px;
-    border-radius: 99px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: 'Hind Siliguri', sans-serif;
-}
-.btn-apply {
-    background: var(--primary);
-    color: white;
-    border: none;
-}
-.btn-clear {
-    background: #f0ebff;
-    color: var(--primary);
-    border: none;
-}
+.popup-header { padding: 18px 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; display: flex; justify-content: space-between; align-items: center; }
+.popup-header h3 { font-size: 18px; font-weight: 700; }
+.popup-close { background: rgba(255,255,255,0.2); border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 20px; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; }
+.popup-body { padding: 16px; max-height: 55vh; overflow-y: auto; }
+.category-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.cat-check { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #f5f3ff; border-radius: 99px; cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; }
+.cat-check.selected { background: var(--primary); color: white; border-color: var(--primary); }
+.cat-check input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
+.cat-check label { font-size: 13px; font-weight: 500; cursor: pointer; }
+.popup-footer { padding: 16px 20px; border-top: 1px solid #eee; display: flex; gap: 12px; }
+.popup-footer button { flex: 1; padding: 12px; border-radius: 99px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', sans-serif; }
+.btn-apply { background: var(--primary); color: white; border: none; }
+.btn-clear { background: #f0ebff; color: var(--primary); border: none; }
 </style>
 </head>
 <body>
@@ -618,7 +410,6 @@ let allVideos = [];
 let youtubePlayers = [];
 let youtubeObservers = [];
 let cloudinaryVideoElements = [];
-let currentShopIdForSlider = null;
 
 let curSlide = 0;
 let slTimer = null;
@@ -659,11 +450,8 @@ async function loadCategories() {
     try {
         const res = await fetch(CATEGORIES_JSON_URL);
         categoriesList = await res.json();
-        console.log('ক্যাটাগরি লোড সফল!', categoriesList.length);
-    } catch (error) {
-        console.error('ক্যাটাগরি লোড ব্যর্থ:', error);
-        categoriesList = [];
-    }
+        console.log('✅ ক্যাটাগরি লোড সফল!', categoriesList.length);
+    } catch (error) { console.error('❌ ক্যাটাগরি লোড ব্যর্থ:', error); categoriesList = []; }
 }
 
 function loadAdminVideos() {
@@ -765,8 +553,8 @@ async function loadGeoData() {
             chip.onclick = () => window.selectDivision(div.name);
             divisionContainer.appendChild(chip);
         });
-        console.log('JSON লোড সফল!', geoData.length);
-    } catch (error) { console.error('JSON লোড ব্যর্থ:', error); }
+        console.log('✅ JSON লোড সফল!', geoData.length);
+    } catch (error) { console.error('❌ JSON লোড ব্যর্থ:', error); }
 }
 
 async function loadCategoryChips() {
@@ -919,6 +707,8 @@ window.applyFilters = function() {
 };
 
 function createYouTubePlayer(container, videoId) {
+    if (!container || !videoId) return;
+    
     const existingPlayer = container.querySelector('.youtube-player-container');
     if (existingPlayer) existingPlayer.remove();
     
@@ -934,17 +724,17 @@ function createYouTubePlayer(container, videoId) {
     muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
     
     const playerId = 'player_' + Math.random().toString(36).substr(2, 9);
-    const iframe = document.createElement('div');
-    iframe.id = playerId;
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
+    const iframeDiv = document.createElement('div');
+    iframeDiv.id = playerId;
+    iframeDiv.style.width = '100%';
+    iframeDiv.style.height = '100%';
     
-    playerContainer.appendChild(iframe);
+    playerContainer.appendChild(iframeDiv);
     playerContainer.appendChild(muteButton);
     container.innerHTML = '';
     container.appendChild(playerContainer);
     
-    const player = new YT.Player(playerId, {
+    new YT.Player(playerId, {
         videoId: videoId,
         playerVars: { autoplay: 1, mute: 1, playsinline: 1, loop: 1, playlist: videoId, controls: 1 },
         events: {
@@ -975,11 +765,9 @@ function createYouTubePlayer(container, videoId) {
                 }, { threshold: 0.1 });
                 observer.observe(container);
                 youtubeObservers.push(observer);
-                youtubePlayers.push({ player: event.target, observer, isMuted });
             }
         }
     });
-    return player;
 }
 
 window.renderShops = function(shops) {
@@ -987,7 +775,6 @@ window.renderShops = function(shops) {
     if (!container) return;
     youtubeObservers.forEach(obs => obs.disconnect());
     youtubeObservers = [];
-    youtubePlayers = [];
     
     if (shops.length === 0) {
         container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div></div>`;
@@ -999,6 +786,9 @@ window.renderShops = function(shops) {
         let videoId = null;
         if (shop.youtubeVideoId) videoId = shop.youtubeVideoId;
         else if (shop.youtube) videoId = extractYouTubeId(shop.youtube);
+        
+        console.log(`📺 Shop: ${shop.shopName}, YouTube ID: ${videoId}`);
+        
         const locationText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
         return `
         <div class="shop-card-wrapper">
@@ -1036,7 +826,6 @@ window.viewShop = function(shopId) {
     if (shopId) window.location.href = `profile.html?id=${shopId}`;
 };
 
-// ========== স্লাইডার (দোকান ভিত্তিক) ==========
 async function loadSliderForShop(shopId) {
     if (!shopId) return;
     const snap = await db.ref(`sliders/${shopId}`).once('value');
@@ -1053,7 +842,6 @@ async function loadSliderForShop(shopId) {
     }
     const sec = document.getElementById('sliderSection');
     if (!sec) return;
-    if (slData.length === 0) { sec.style.display = 'none'; return; }
     sec.style.display = 'block';
     const track = document.getElementById('sliderTrack');
     const dots = document.getElementById('sliderDots');
@@ -1090,7 +878,6 @@ window.nextSlide = function() {
     if (slData.length > 1) slTimer = setInterval(() => window.goSlide((curSlide + 1) % slData.length), 4000);
 };
 
-// ========== মার্কি (দোকান ভিত্তিক) ==========
 async function loadMarqueeForShop(shopId) {
     if (!shopId) return;
     const snap = await db.ref(`tickers/${shopId}`).once('value');
@@ -1160,16 +947,13 @@ window.navigateTo = function(page, event) {
     }
 };
 
-// URL থেকে shopId পেতে এবং স্লাইডার/মার্কি লোড করতে
 function initShopSpecificContent() {
     const urlParams = new URLSearchParams(window.location.search);
     const shopId = urlParams.get('id');
-    if (shopId) {
-        currentShopIdForSlider = shopId;
+    if (shopId && shopId !== 'null') {
         loadSliderForShop(shopId);
         loadMarqueeForShop(shopId);
     } else {
-        // ডিফল্ট স্লাইডার ও মার্কি (সব দোকানের জন্য সাধারণ)
         loadSliderForShop('default');
         loadMarqueeForShop('default');
     }
@@ -1239,7 +1023,7 @@ function loadYouTubeAPI() {
 loadYouTubeAPI();
 
 window.onYouTubeIframeAPIReady = function() {
-    console.log('YouTube API ready');
+    console.log('🎬 YouTube API ready');
     initYouTubePlayers();
 };
 
