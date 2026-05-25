@@ -50,7 +50,7 @@ body {
 #app { opacity:0; animation:appShow 0.3s ease 2.5s forwards; background:var(--bg); }
 @keyframes appShow { to{opacity:1} }
 
-/* লোডিং ওভারলে (৬ নম্বর লোডার) */
+/* লোডিং ওভারলে */
 #loadingOverlay {
     position: fixed;
     top: 0;
@@ -182,7 +182,7 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও প্লেয়ার) */
+/* এডমিনের ভিডিও গ্রিড */
 .video-grid-section {
     margin: 0 16px 20px;
 }
@@ -216,7 +216,6 @@ marquee {
     object-fit: cover;
     display: block;
 }
-/* Cloudinary ভিডিওর জন্য আনমিউট বাটন */
 .video-mute-overlay {
     position: absolute;
     bottom: 10px;
@@ -260,10 +259,6 @@ marquee {
     border-radius: 20px;
     color: var(--text-light);
 }
-.video-grid-empty-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-}
 
 /* দোকানের কার্ড */
 .shop-card-wrapper {
@@ -305,7 +300,6 @@ marquee {
     font-size: 18px;
     text-align: center;
 }
-/* YouTube ভিডিওর জন্য আনমিউট বাটন */
 .youtube-mute-btn {
     position: absolute;
     bottom: 10px;
@@ -375,13 +369,13 @@ marquee {
     transform: translateX(-50%);
     width: calc(100% - 35px);
     max-width: 430px;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255,255,255,0.85);
     backdrop-filter: blur(15px);
     border-radius: 24px;
     display: flex;
     justify-content: space-around;
     padding: 2px 0;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.10);
     z-index: 1000;
 }
 .nav-item {
@@ -616,7 +610,7 @@ marquee {
         </div>
     </div>
 
-    <!-- এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও) -->
+    <!-- এডমিনের ভিডিও গ্রিড -->
     <div class="video-grid-section" id="videoGridSection">
         <div class="video-grid" id="videoGrid"></div>
     </div>
@@ -686,6 +680,31 @@ function hideLoading() {
     if (loader) loader.style.display = 'none';
 }
 
+// ইউটিউব ভিডিও আইডি এক্সট্র্যাক্ট ফাংশন (সঠিকভাবে)
+function extractYouTubeId(url) {
+    if (!url) return null;
+    
+    // যদি সরাসরি videoId থাকে (YouTube Shorts বা অন্য ফরম্যাট)
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=)([^&]+)/,
+        /(?:youtu\.be\/)([^?]+)/,
+        /(?:youtube\.com\/embed\/)([^?]+)/,
+        /(?:youtube\.com\/shorts\/)([^?]+)/,
+        /(?:youtube\.com\/v\/)([^?]+)/
+    ];
+    
+    for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) return match[1];
+    }
+    
+    // যদি https://www.youtube.com/watch?v=VIDEO_ID&... এই ফরম্যাট হয়
+    const urlParams = new URLSearchParams(url.split('?')[1]);
+    if (urlParams.has('v')) return urlParams.get('v');
+    
+    return null;
+}
+
 // ========== ক্যাটাগরি JSON লোড ==========
 async function loadCategories() {
     try {
@@ -698,7 +717,7 @@ async function loadCategories() {
     }
 }
 
-// ========== Cloudinary ভিডিও লোড (অটোপ্লে, মিউট, লুপ, স্ক্রল পজ, + আনমিউট বাটন) ==========
+// ========== Cloudinary ভিডিও লোড ==========
 function loadAdminVideos() {
     db.ref('adminVideos').orderByChild('order').on('value', (snap) => {
         allVideos = [];
@@ -732,7 +751,6 @@ function setupCloudinaryVideo(videoElement, videoUrl, container) {
         });
     }
     
-    // আনমিউট বাটন তৈরি
     let muteButton = container.querySelector('.video-mute-overlay');
     if (!muteButton) {
         muteButton = document.createElement('div');
@@ -1061,7 +1079,6 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-// YouTube আনমিউট ফাংশন
 function toggleYouTubeMute(player, button) {
     if (player.isMuted()) {
         player.unMute();
@@ -1075,7 +1092,6 @@ function toggleYouTubeMute(player, button) {
 function setupYouTubeObserver(iframe, player, container) {
     if (!iframe) return;
     
-    // আনমিউট বাটন তৈরি
     let muteButton = container.querySelector('.youtube-mute-btn');
     if (!muteButton) {
         muteButton = document.createElement('div');
@@ -1101,7 +1117,7 @@ function setupYouTubeObserver(iframe, player, container) {
     return observer;
 }
 
-// ========== রেন্ডার শপস (ইউটিউব ভিডিও - কার্ড ভিউ + আনমিউট বাটন) ==========
+// ========== রেন্ডার শপস (সঠিক ইউটিউব আইডি এক্সট্র্যাক্ট সহ) ==========
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -1118,15 +1134,7 @@ window.renderShops = function(shops) {
         if (shop.youtubeVideoId) {
             videoId = shop.youtubeVideoId;
         } else if (shop.youtube) {
-            const patterns = [
-                /(?:youtube\.com\/watch\?v=)([^&]+)/,
-                /(?:youtu\.be\/)([^?]+)/,
-                /(?:youtube\.com\/embed\/)([^?]+)/
-            ];
-            for (let pattern of patterns) {
-                const match = shop.youtube.match(pattern);
-                if (match) { videoId = match[1]; break; }
-            }
+            videoId = extractYouTubeId(shop.youtube);
         }
         
         const videoEmbed = videoId 
