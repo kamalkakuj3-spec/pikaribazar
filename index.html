@@ -117,6 +117,49 @@ body {
 }
 .search-input::placeholder { color: #aaa; }
 
+/* সার্চ সাজেশন ড্রপডাউন */
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    z-index: 100;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    margin-top: 5px;
+}
+.search-suggestions.show {
+    display: block;
+}
+.suggestion-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+.suggestion-item:hover {
+    background: #f5f3ff;
+}
+.suggestion-item .suggestion-type {
+    font-size: 10px;
+    color: var(--primary);
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 8px;
+    background: #f0ebff;
+    padding: 2px 8px;
+    border-radius: 99px;
+}
+.suggestion-highlight {
+    background: #ffeb3b;
+    font-weight: bold;
+}
+
 .marquee-container { 
     margin: 0 16px 20px;
     padding: 8px 12px;
@@ -242,7 +285,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড - আপডেটেড প্লে আইকন */
+/* দোকানের কার্ড */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -271,7 +314,6 @@ marquee {
     object-fit: cover;
     display: block;
 }
-/* আপডেটেড প্লে আইকন - সাইজ অর্ধেক, হালকা রাউন্ড শেপ ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড */
 .play-icon {
     position: absolute;
     top: 50%;
@@ -541,7 +583,8 @@ marquee {
 
     <div class="search-section" id="searchSection" style="display: none;">
         <div class="search-wrap">
-            <input class="search-input" type="text" id="searchInput" placeholder="দোকানের নাম বা এলাকা খুঁজুন..." oninput="window.applyFilters()">
+            <input class="search-input" type="text" id="searchInput" placeholder="দোকান, এলাকা, পণ্য, ক্যাটাগরি, জেলা, উপজেলা সার্চ করুন..." oninput="window.handleSearchInput()">
+            <div class="search-suggestions" id="searchSuggestions"></div>
         </div>
     </div>
 
@@ -651,6 +694,9 @@ let selectedThana = '';
 let selectedCategories = [];
 let allVideos = [];
 
+// সার্চ ইনডেক্সের জন্য সমস্ত ইউনিক শব্দ
+let searchIndex = new Map(); // শব্দ -> { type, displayText, data }
+
 let videoObservers = [];
 let cloudinaryVideoElements = [];
 let activeVideoPlayers = new Map();
@@ -678,11 +724,217 @@ function hideLoading() {
     if (loader) loader.style.display = 'none';
 }
 
+// ========== সার্চ ইনডেক্স বিল্ড করা ==========
+function buildSearchIndex() {
+    searchIndex.clear();
+    
+    // 1. ক্যাটাগরি যোগ করা
+    categoriesList.forEach(cat => {
+        const key = cat.toLowerCase();
+        if (!searchIndex.has(key)) {
+            searchIndex.set(key, { type: 'category', displayText: cat, data: cat });
+        }
+    });
+    
+    // 2. জিও ডাটা থেকে বিভাগ, জেলা, উপজেলা যোগ করা
+    geoData.forEach(division => {
+        // বিভাগ
+        const divKey = division.name.toLowerCase();
+        if (!searchIndex.has(divKey)) {
+            searchIndex.set(divKey, { type: 'division', displayText: division.name, data: division.name });
+        }
+        
+        // জেলা ও উপজেলা
+        division.districts.forEach(district => {
+            const distKey = district.name.toLowerCase();
+            if (!searchIndex.has(distKey)) {
+                searchIndex.set(distKey, { type: 'district', displayText: district.name, data: district.name });
+            }
+            
+            district.upazilas.forEach(upazila => {
+                const upazilaKey = upazila.toLowerCase();
+                if (!searchIndex.has(upazilaKey)) {
+                    searchIndex.set(upazilaKey, { type: 'upazila', displayText: upazila, data: upazila });
+                }
+            });
+        });
+    });
+    
+    // 3. দোকানের তথ্য যোগ করা
+    allShops.forEach(shop => {
+        // দোকানের নাম
+        if (shop.shopName) {
+            const nameKey = shop.shopName.toLowerCase();
+            if (!searchIndex.has(nameKey)) {
+                searchIndex.set(nameKey, { type: 'shop', displayText: shop.shopName, data: shop });
+            }
+        }
+        
+        // এলাকা
+        if (shop.area) {
+            const areaKey = shop.area.toLowerCase();
+            if (!searchIndex.has(areaKey)) {
+                searchIndex.set(areaKey, { type: 'area', displayText: shop.area, data: shop });
+            }
+        }
+        
+        // প্রোডাক্টের নাম (যদি থাকে)
+        if (shop.products && Array.isArray(shop.products)) {
+            shop.products.forEach(product => {
+                if (product.name) {
+                    const productKey = product.name.toLowerCase();
+                    if (!searchIndex.has(productKey)) {
+                        searchIndex.set(productKey, { type: 'product', displayText: product.name, data: shop });
+                    }
+                }
+            });
+        }
+        
+        // দোকানের ক্যাটাগরি
+        if (shop.category) {
+            const catKey = shop.category.toLowerCase();
+            if (!searchIndex.has(catKey)) {
+                searchIndex.set(catKey, { type: 'shop_category', displayText: shop.category, data: shop });
+            }
+        }
+        
+        // জেলা
+        if (shop.district) {
+            const distKey = shop.district.toLowerCase();
+            if (!searchIndex.has(distKey)) {
+                searchIndex.set(distKey, { type: 'district', displayText: shop.district, data: shop.district });
+            }
+        }
+        
+        // থানা
+        if (shop.thana) {
+            const thanaKey = shop.thana.toLowerCase();
+            if (!searchIndex.has(thanaKey)) {
+                searchIndex.set(thanaKey, { type: 'upazila', displayText: shop.thana, data: shop.thana });
+            }
+        }
+    });
+    
+    console.log('সার্চ ইনডেক্স তৈরি হয়েছে:', searchIndex.size, 'টি শব্দ');
+}
+
+// ========== সার্চ হ্যান্ডলার ==========
+window.handleSearchInput = function() {
+    const input = document.getElementById('searchInput');
+    const query = input.value.trim().toLowerCase();
+    const suggestionsBox = document.getElementById('searchSuggestions');
+    
+    if (query === '') {
+        suggestionsBox.classList.remove('show');
+        window.applyFilters();
+        return;
+    }
+    
+    // ম্যাচিং শব্দ খুঁজুন
+    const matches = [];
+    for (let [word, info] of searchIndex.entries()) {
+        if (word.includes(query)) {
+            matches.push({ word, ...info });
+        }
+        if (matches.length >= 15) break; // বেশি হলে ১৫টি দেখাবে
+    }
+    
+    // সাজেশন দেখানো
+    if (matches.length > 0) {
+        suggestionsBox.innerHTML = matches.map(match => {
+            // সার্চ টার্ম হাইলাইট করা
+            const highlightedText = match.displayText.replace(new RegExp(`(${query})`, 'gi'), '<span class="suggestion-highlight">$1</span>');
+            const typeLabel = getTypeLabel(match.type);
+            return `<div class="suggestion-item" onclick="window.selectSuggestion('${escapeHtml(match.word)}')">
+                        ${highlightedText}
+                        <span class="suggestion-type">${typeLabel}</span>
+                    </div>`;
+        }).join('');
+        suggestionsBox.classList.add('show');
+    } else {
+        suggestionsBox.classList.remove('show');
+    }
+    
+    // ফিল্টার অ্যাপ্লাই করা (মূল সার্চ)
+    performSearch(query);
+};
+
+function getTypeLabel(type) {
+    const labels = {
+        'shop': 'দোকান',
+        'product': 'পণ্য',
+        'category': 'ক্যাটাগরি',
+        'division': 'বিভাগ',
+        'district': 'জেলা',
+        'upazila': 'উপজেলা/থানা',
+        'area': 'এলাকা',
+        'shop_category': 'দোকানের ক্যাটাগরি'
+    };
+    return labels[type] || 'অন্যান্য';
+}
+
+window.selectSuggestion = function(word) {
+    const input = document.getElementById('searchInput');
+    input.value = word;
+    document.getElementById('searchSuggestions').classList.remove('show');
+    performSearch(word.toLowerCase());
+};
+
+function performSearch(query) {
+    if (!query || query === '') {
+        window.applyFilters();
+        return;
+    }
+    
+    let filtered = [...allShops];
+    
+    // বিভাগ ফিল্টার (যদি থাকে)
+    if (selectedDivision) {
+        const division = geoData.find(d => d.name === selectedDivision);
+        const districtNames = division ? division.districts.map(d => d.name) : [];
+        filtered = filtered.filter(shop => districtNames.includes(shop.district));
+    }
+    if (selectedDistrict) {
+        filtered = filtered.filter(shop => shop.district === selectedDistrict);
+    }
+    if (selectedThana) {
+        filtered = filtered.filter(shop => shop.thana === selectedThana);
+    }
+    if (selectedCategories.length > 0) {
+        filtered = filtered.filter(shop => selectedCategories.includes(shop.category));
+    }
+    
+    // সার্চ কোয়েরি ম্যাচিং - সমস্ত ফিল্ডে সার্চ করবে
+    const searchLower = query.toLowerCase();
+    filtered = filtered.filter(shop => {
+        // দোকানের নাম
+        if (shop.shopName && shop.shopName.toLowerCase().includes(searchLower)) return true;
+        // এলাকা
+        if (shop.area && shop.area.toLowerCase().includes(searchLower)) return true;
+        // জেলা
+        if (shop.district && shop.district.toLowerCase().includes(searchLower)) return true;
+        // থানা
+        if (shop.thana && shop.thana.toLowerCase().includes(searchLower)) return true;
+        // ক্যাটাগরি
+        if (shop.category && shop.category.toLowerCase().includes(searchLower)) return true;
+        // প্রোডাক্টের নাম
+        if (shop.products && Array.isArray(shop.products)) {
+            for (let product of shop.products) {
+                if (product.name && product.name.toLowerCase().includes(searchLower)) return true;
+            }
+        }
+        return false;
+    });
+    
+    window.renderShops(filtered);
+}
+
 async function loadCategories() {
     try {
         const res = await fetch(CATEGORIES_JSON_URL);
         categoriesList = await res.json();
         console.log('ক্যাটাগরি লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
+        buildSearchIndex();
     } catch (error) {
         console.error('ক্যাটাগরি লোড ব্যর্থ:', error);
         categoriesList = [];
@@ -798,6 +1050,7 @@ async function loadGeoData() {
         });
         
         console.log('JSON লোড সফল!', geoData.length, 'টি বিভাগ');
+        buildSearchIndex();
     } catch (error) {
         console.error('JSON লোড ব্যর্থ:', error);
     }
@@ -867,7 +1120,14 @@ window.selectDivision = function(div) {
         document.getElementById('step3')?.classList.add('hidden');
         document.getElementById('step4')?.classList.add('hidden');
     }
-    window.applyFilters();
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchQuery = searchInput ? searchInput.value.trim() : '';
+    if (searchQuery) {
+        performSearch(searchQuery.toLowerCase());
+    } else {
+        window.applyFilters();
+    }
 };
 
 window.selectDistrict = function(dist) {
@@ -909,7 +1169,14 @@ window.selectDistrict = function(dist) {
         document.getElementById('step3')?.classList.add('hidden');
         document.getElementById('step4')?.classList.add('hidden');
     }
-    window.applyFilters();
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchQuery = searchInput ? searchInput.value.trim() : '';
+    if (searchQuery) {
+        performSearch(searchQuery.toLowerCase());
+    } else {
+        window.applyFilters();
+    }
 };
 
 window.selectThana = function(thana) {
@@ -932,7 +1199,14 @@ window.selectThana = function(thana) {
     } else {
         document.getElementById('step4')?.classList.add('hidden');
     }
-    window.applyFilters();
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchQuery = searchInput ? searchInput.value.trim() : '';
+    if (searchQuery) {
+        performSearch(searchQuery.toLowerCase());
+    } else {
+        window.applyFilters();
+    }
 };
 
 window.selectCategory = function(cat) {
@@ -942,7 +1216,14 @@ window.selectCategory = function(cat) {
         selectedCategories = [cat];
     }
     updateCategoryFilterUI();
-    window.applyFilters();
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchQuery = searchInput ? searchInput.value.trim() : '';
+    if (searchQuery) {
+        performSearch(searchQuery.toLowerCase());
+    } else {
+        window.applyFilters();
+    }
 };
 
 function updateCategoryFilterUI() {
@@ -981,9 +1262,6 @@ window.resetFilters = function() {
     if (document.getElementById('num1')) document.getElementById('num1').className = 'fs-num';
     if (document.getElementById('num4')) document.getElementById('num4').className = 'fs-num';
     
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.value = '';
-    
     document.querySelectorAll('#divisionChips .f-chip').forEach(c => {
         const isActive = c.textContent === 'সব বিভাগ';
         if (isActive) c.classList.add('active');
@@ -991,6 +1269,12 @@ window.resetFilters = function() {
     });
     
     updateCategoryFilterUI();
+    
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = '';
+        document.getElementById('searchSuggestions')?.classList.remove('show');
+    }
     window.applyFilters();
 };
 
@@ -1010,19 +1294,6 @@ window.applyFilters = function() {
     }
     if (selectedCategories.length > 0) {
         filtered = filtered.filter(shop => selectedCategories.includes(shop.category));
-    }
-    
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        const searchQuery = searchInput.value.trim().toLowerCase();
-        if (searchQuery) {
-            filtered = filtered.filter(shop =>
-                (shop.shopName || '').toLowerCase().includes(searchQuery) ||
-                (shop.area || '').toLowerCase().includes(searchQuery) ||
-                (shop.district || '').toLowerCase().includes(searchQuery) ||
-                (shop.thana || '').toLowerCase().includes(searchQuery)
-            );
-        }
     }
     
     window.renderShops(filtered);
@@ -1096,7 +1367,7 @@ window.renderShops = function(shops) {
     activeVideoPlayers.clear();
     
     if (shops.length === 0) {
-        container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার চেষ্টা করুন</div></div>`;
+        container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার বা সার্চ টার্ম চেষ্টা করুন</div></div>`;
         return;
     }
     
@@ -1135,6 +1406,7 @@ window.renderShops = function(shops) {
                         <div class="shop-video-location">
                             📍 ${escapeHtml(locationText)}
                         </div>
+                        ${shop.category ? `<div class="shop-video-location" style="font-size: 11px; margin-top: 4px;">🏷️ ${escapeHtml(shop.category)}</div>` : ''}
                     </div>
                 </div>
             </div>`;
@@ -1150,6 +1422,7 @@ window.renderShops = function(shops) {
                         <div class="shop-video-location">
                             📍 ${escapeHtml(locationText)}
                         </div>
+                        ${shop.category ? `<div class="shop-video-location" style="font-size: 11px; margin-top: 4px;">🏷️ ${escapeHtml(shop.category)}</div>` : ''}
                     </div>
                 </div>
             </div>`;
@@ -1246,6 +1519,7 @@ window.loadShops = function() {
                 }
             });
         }
+        buildSearchIndex();
         window.applyFilters();
     });
 };
@@ -1382,7 +1656,14 @@ window.applyCategoryFilter = function() {
     const popup = document.querySelector('.category-popup-overlay');
     if (popup) popup.remove();
     updateCategoryFilterUI();
-    window.applyFilters();
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchQuery = searchInput ? searchInput.value.trim() : '';
+    if (searchQuery) {
+        performSearch(searchQuery.toLowerCase());
+    } else {
+        window.applyFilters();
+    }
 };
 
 document.querySelectorAll('.nav-item').forEach(btn => {
@@ -1390,6 +1671,15 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         const page = btn.getAttribute('data-page');
         window.navigateTo(page, e);
     });
+});
+
+// ক্লিক করলে সাজেশন বক্স বন্ধ
+document.addEventListener('click', function(e) {
+    const suggestionsBox = document.getElementById('searchSuggestions');
+    const searchInput = document.getElementById('searchInput');
+    if (suggestionsBox && !suggestionsBox.contains(e.target) && e.target !== searchInput) {
+        suggestionsBox.classList.remove('show');
+    }
 });
 
 auth.onAuthStateChanged((user) => {
