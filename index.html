@@ -285,7 +285,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড */
+/* দোকানের কার্ড - নাম ও ঠিকানা সাইজ বড় করা */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -357,10 +357,10 @@ marquee {
     text-align: center;
 }
 .shop-video-name {
-    font-size: 18px;
+    font-size: 20px;     /* বড় করা হয়েছে (আগে 18px) */
     font-weight: 800;
     color: var(--primary);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     cursor: pointer;
     transition: color 0.2s;
     display: inline-block;
@@ -370,7 +370,7 @@ marquee {
     text-decoration: underline;
 }
 .shop-video-location {
-    font-size: 13px;
+    font-size: 15px;     /* বড় করা হয়েছে (আগে 13px) */
     font-weight: 500;
     color: var(--text-light);
     display: flex;
@@ -379,27 +379,27 @@ marquee {
     gap: 6px;
     flex-wrap: wrap;
 }
-/* নতুন: ক্যাটাগরি ব্যাজ স্টাইল */
+/* ক্যাটাগরি ব্যাজ স্টাইল - সাইজ একটু বড় */
 .shop-categories {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 .category-badge {
     background: linear-gradient(135deg, #f0ebff, #e8e0ff);
     color: var(--primary-dark);
-    padding: 4px 12px;
+    padding: 5px 14px;   /* প্যাডিং বড় */
     border-radius: 99px;
-    font-size: 11px;
+    font-size: 12px;     /* বড় করা হয়েছে (আগে 11px) */
     font-weight: 600;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 }
 .category-badge i {
-    font-size: 10px;
+    font-size: 11px;     /* বড় করা হয়েছে (আগে 10px) */
     color: var(--primary);
 }
 .no-video {
@@ -830,7 +830,6 @@ function buildSearchIndex() {
             }
         }
         
-        // ক্যাটাগরি ইনডেক্সে যোগ করা (সার্চের জন্য)
         if (shop.categories && Array.isArray(shop.categories)) {
             shop.categories.forEach(cat => {
                 const catKey = cat.toLowerCase();
@@ -1079,7 +1078,6 @@ async function loadGeoData() {
 }
 
 async function loadCategoryChips() {
-    // ক্যাটাগরি চিপস - ফিল্টার স্টেপের জন্য
     const container = document.getElementById('categoryChips');
     if (container) {
         container.innerHTML = '<div class="f-chip active" onclick="window.selectCategoryFilter(\'\')">সব</div>';
@@ -1408,7 +1406,6 @@ window.renderShops = function(shops) {
         const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
         const locationText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
         
-        // ক্যাটাগরি ব্যাজ তৈরি (নতুন যোগ করা)
         let categoriesHtml = '';
         if (shop.categories && Array.isArray(shop.categories) && shop.categories.length > 0) {
             categoriesHtml = `
@@ -1612,7 +1609,6 @@ window.addEventListener('scroll', function() {
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 
-// ========== ক্যাটাগরি পপআপ ==========
 window.openCategoryPopup = function() {
     if (!categoriesList.length) {
         showToast('ক্যাটাগরি লোড হয়নি, একটু পরে চেষ্টা করুন!', true);
