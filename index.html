@@ -49,7 +49,7 @@ body {
 #app { opacity:0; animation:appShow 0.3s ease 2.5s forwards; background:var(--bg); }
 @keyframes appShow { to{opacity:1} }
 
-/* লোডিং ওভারলে (৬ নম্বর লোডার) */
+/* লোডিং ওভারলে */
 #loadingOverlay {
     position: fixed;
     top: 0;
@@ -181,7 +181,7 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও প্লেয়ার) */
+/* এডমিনের ভিডিও গ্রিড */
 .video-grid-section {
     margin: 0 16px 20px;
 }
@@ -242,7 +242,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড - নতুন কার্ড ভিউ (ইউটিউব ভিডিও সহ) */
+/* দোকানের কার্ড - ইউটিউব ডিফল্ট কন্ট্রোল সহ */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -270,6 +270,7 @@ marquee {
     border: none;
     background: #000;
     display: block;
+    pointer-events: auto;
 }
 .no-video {
     width: 100%;
@@ -308,9 +309,6 @@ marquee {
     align-items: center;
     justify-content: center;
     gap: 6px;
-}
-.shop-video-location i {
-    color: var(--primary-light);
 }
 @keyframes tileIn {
     from { transform: translateY(15px); opacity: 0; }
@@ -495,7 +493,6 @@ marquee {
     <div class="sp-bar-wrap"><div class="sp-bar"></div></div>
 </div>
 
-<!-- লোডিং ওভারলে (৬ নম্বর লোডার) -->
 <div id="loadingOverlay" style="display: none;">
     <div style="text-align: center;">
         <div class="loader-6"></div>
@@ -572,7 +569,7 @@ marquee {
         </div>
     </div>
 
-    <!-- এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও) -->
+    <!-- এডমিনের ভিডিও গ্রিড -->
     <div class="video-grid-section" id="videoGridSection">
         <div class="video-grid" id="videoGrid"></div>
     </div>
@@ -642,7 +639,6 @@ function hideLoading() {
     if (loader) loader.style.display = 'none';
 }
 
-// ========== ক্যাটাগরি JSON লোড ==========
 async function loadCategories() {
     try {
         const res = await fetch(CATEGORIES_JSON_URL);
@@ -654,7 +650,6 @@ async function loadCategories() {
     }
 }
 
-// ========== Cloudinary ভিডিও লোড (অটোপ্লে, মিউট, লুপ, স্ক্রল পজ) ==========
 function loadAdminVideos() {
     db.ref('adminVideos').orderByChild('order').on('value', (snap) => {
         allVideos = [];
@@ -746,7 +741,6 @@ function renderVideoGrid() {
     });
 }
 
-// ========== JSON লোড ==========
 async function loadGeoData() {
     try {
         const res = await fetch(DIVISIONS_JSON_URL);
@@ -770,7 +764,6 @@ async function loadGeoData() {
     }
 }
 
-// ========== ক্যাটাগরি চিপ লোড ==========
 async function loadCategoryChips() {
     const container = document.getElementById('categoryChips');
     container.innerHTML = '<div class="f-chip active" onclick="window.selectCategory(\'\')">সব</div>';
@@ -788,7 +781,6 @@ async function loadCategoryChips() {
     });
 }
 
-// ========== ফিল্টার ফাংশন ==========
 window.selectDivision = function(div) {
     selectedDivision = div;
     selectedDistrict = '';
@@ -997,7 +989,6 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-// ইউটিউব প্লেয়ার অবজারভার (স্ক্রল আউট হলে পজ)
 function setupYouTubeObserver(iframe, player) {
     if (!iframe) return;
     const observer = new IntersectionObserver((entries) => {
@@ -1013,7 +1004,7 @@ function setupYouTubeObserver(iframe, player) {
     return observer;
 }
 
-// ========== রেন্ডার শপস (ইউটিউব ভিডিও - কার্ড ভিউ) ==========
+// রেন্ডার শপস - ইউটিউব ডিফল্ট কন্ট্রোল সহ (controls=1)
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -1041,9 +1032,11 @@ window.renderShops = function(shops) {
             }
         }
         
+        // ইউটিউবের ডিফল্ট কন্ট্রোল সহ ভিডিও (controls=1)
+        // ব্যবহারকারী স্পীকার আইকনে ক্লিক করে সাউন্ড অন/অফ করতে পারবেন
         const videoEmbed = videoId 
             ? `<iframe class="shop-video" 
-                        src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&playsinline=1&loop=1&playlist=${videoId}" 
+                        src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&playsinline=1&loop=1&playlist=${videoId}&controls=1&modestbranding=0" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen></iframe>`
@@ -1060,14 +1053,13 @@ window.renderShops = function(shops) {
                 <div class="shop-video-info">
                     <h3 class="shop-video-name" onclick="window.viewShop('${shop.id}')">${escapeHtml(shop.shopName) || 'নাম নেই'}</h3>
                     <div class="shop-video-location">
-                        <i class="fas fa-map-marker-alt"></i> ${escapeHtml(locationText)}
+                        📍 ${escapeHtml(locationText)}
                     </div>
                 </div>
             </div>
         </div>`;
     }).join('');
     
-    // ইউটিউব API রেডি হলে প্লেয়ার ইনিশিয়ালাইজ করুন
     if (typeof YT !== 'undefined' && YT.Player) {
         initYouTubePlayers();
     }
@@ -1075,22 +1067,36 @@ window.renderShops = function(shops) {
 
 function initYouTubePlayers() {
     const iframes = document.querySelectorAll('.shop-video');
-    youtubePlayers.forEach(p => { if(p.destroy) p.destroy(); });
+    
+    youtubePlayers.forEach(p => { 
+        if(p.observer) p.observer.disconnect(); 
+        if(p.player && p.player.destroy) p.player.destroy();
+    });
     youtubePlayers = [];
     
     iframes.forEach(iframe => {
         const playerId = 'player_' + Math.random().toString(36).substr(2, 9);
         iframe.id = playerId;
-        const player = new YT.Player(playerId, {
-            events: {
-                onReady: (event) => {
-                    event.target.mute();
-                    event.target.playVideo();
-                    const observer = setupYouTubeObserver(iframe, event.target);
-                    if (observer) youtubePlayers.push({ player: event.target, observer });
+        
+        try {
+            const player = new YT.Player(playerId, {
+                events: {
+                    onReady: (event) => {
+                        event.target.mute();
+                        event.target.playVideo().catch(e => console.log('Play error:', e));
+                        const observer = setupYouTubeObserver(iframe, event.target);
+                        youtubePlayers.push({ player: event.target, observer });
+                    },
+                    onStateChange: (event) => {
+                        if (event.data === YT.PlayerState.ENDED) {
+                            event.target.playVideo();
+                        }
+                    }
                 }
-            }
-        });
+            });
+        } catch(e) {
+            console.log('YouTube player init error:', e);
+        }
     });
 }
 
@@ -1206,7 +1212,6 @@ window.checkNet = function() {
     }
 };
 
-// নেভিগেশন ফাংশন
 window.navigateTo = function(page, event) {
     if (event && event.currentTarget) {
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -1236,7 +1241,6 @@ window.navigateTo = function(page, event) {
     }
 };
 
-// স্ক্রল ইভেন্ট (সার্চ সেকশন হাইড করার জন্য)
 let lastScrollTop = 0;
 const searchSectionEl = document.getElementById('searchSection');
 window.addEventListener('scroll', function() {
@@ -1251,7 +1255,6 @@ window.addEventListener('scroll', function() {
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 
-// ক্যাটাগরি পপআপ
 window.openCategoryPopup = function() {
     const existingPopup = document.querySelector('.category-popup-overlay');
     if (existingPopup) existingPopup.remove();
@@ -1325,7 +1328,6 @@ window.applyCategoryFilter = function() {
     window.applyFilters();
 };
 
-// ইউটিউব API লোড
 function loadYouTubeAPI() {
     if (document.querySelector('script[src*="youtube.com/iframe_api"]')) return;
     const tag = document.createElement('script');
@@ -1340,7 +1342,6 @@ window.onYouTubeIframeAPIReady = function() {
     initYouTubePlayers();
 };
 
-// নেভিগেশন বাটনে ইভেন্ট লিসেনার
 document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const page = btn.getAttribute('data-page');
@@ -1348,7 +1349,6 @@ document.querySelectorAll('.nav-item').forEach(btn => {
     });
 });
 
-// অথ পরিবর্তন
 auth.onAuthStateChanged((user) => {
     const profileBtn = document.querySelector('.nav-item[data-page="profile"]');
     if (profileBtn) {
