@@ -182,7 +182,7 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও প্লেয়ার) */
+/* এডমিনের ভিডিও গ্রিড */
 .video-grid-section {
     margin: 0 16px 20px;
 }
@@ -216,7 +216,6 @@ marquee {
     object-fit: cover;
     display: block;
 }
-/* Cloudinary ভিডিওর জন্য আনমিউট বাটন */
 .video-mute-overlay {
     position: absolute;
     bottom: 10px;
@@ -265,7 +264,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড - কার্ড ভিউ (ইউটিউব ভিডিও সহ) */
+/* দোকানের কার্ড */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -305,7 +304,6 @@ marquee {
     font-size: 18px;
     text-align: center;
 }
-/* ইউটিউব ভিডিওর জন্য আনমিউট বাটন */
 .youtube-mute-btn {
     position: absolute;
     bottom: 10px;
@@ -548,7 +546,6 @@ marquee {
 </div>
 
 <div id="app">
-
     <div class="search-section" id="searchSection" style="display: none;">
         <div class="search-wrap">
             <input class="search-input" type="text" id="searchInput" placeholder="দোকানের নাম বা এলাকা খুঁজুন..." oninput="window.applyFilters()">
@@ -575,58 +572,18 @@ marquee {
         <div class="ab-arrow">→</div>
     </a>
 
-    <!-- FILTERS -->
     <div class="filter-wrap">
         <button class="reset-btn" id="resetBtn" onclick="window.resetFilters()">🔄 ফিল্টার রিসেট করুন</button>
-
-        <div class="filter-step" id="step1">
-            <div class="fs-header">
-                <div class="fs-num" id="num1">১</div>
-                <div class="fs-title">বিভাগ বাছাই করুন</div>
-                <div class="fs-sel" id="sel1"></div>
-            </div>
-            <div class="chip-scroll" id="divisionChips"></div>
-        </div>
-
-        <div class="filter-step hidden" id="step2">
-            <div class="fs-header">
-                <div class="fs-num" id="num2">২</div>
-                <div class="fs-title">জেলা বাছাই করুন</div>
-                <div class="fs-sel" id="sel2"></div>
-            </div>
-            <div class="chip-scroll" id="districtChips"></div>
-        </div>
-
-        <div class="filter-step hidden" id="step3">
-            <div class="fs-header">
-                <div class="fs-num" id="num3">৩</div>
-                <div class="fs-title">থানা/উপজেলা বাছাই করুন</div>
-                <div class="fs-sel" id="sel3"></div>
-            </div>
-            <div class="chip-scroll" id="thanaChips"></div>
-        </div>
-
-        <div class="filter-step hidden" id="step4">
-            <div class="fs-header">
-                <div class="fs-num" id="num4">৪</div>
-                <div class="fs-title">ক্যাটাগরি বাছাই করুন</div>
-                <div class="fs-sel" id="sel4"></div>
-            </div>
-            <div class="chip-scroll" id="categoryChips"></div>
-        </div>
+        <div class="filter-step" id="step1"><div class="fs-header"><div class="fs-num" id="num1">১</div><div class="fs-title">বিভাগ বাছাই করুন</div><div class="fs-sel" id="sel1"></div></div><div class="chip-scroll" id="divisionChips"></div></div>
+        <div class="filter-step hidden" id="step2"><div class="fs-header"><div class="fs-num" id="num2">২</div><div class="fs-title">জেলা বাছাই করুন</div><div class="fs-sel" id="sel2"></div></div><div class="chip-scroll" id="districtChips"></div></div>
+        <div class="filter-step hidden" id="step3"><div class="fs-header"><div class="fs-num" id="num3">৩</div><div class="fs-title">থানা/উপজেলা বাছাই করুন</div><div class="fs-sel" id="sel3"></div></div><div class="chip-scroll" id="thanaChips"></div></div>
+        <div class="filter-step hidden" id="step4"><div class="fs-header"><div class="fs-num" id="num4">৪</div><div class="fs-title">ক্যাটাগরি বাছাই করুন</div><div class="fs-sel" id="sel4"></div></div><div class="chip-scroll" id="categoryChips"></div></div>
     </div>
 
-    <!-- এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও) -->
-    <div class="video-grid-section" id="videoGridSection">
-        <div class="video-grid" id="videoGrid"></div>
-    </div>
-
-    <!-- দোকানের লিস্ট -->
+    <div class="video-grid-section" id="videoGridSection"><div class="video-grid" id="videoGrid"></div></div>
     <div id="shopList"></div>
-
 </div>
 
-<!-- নেভিগেশন বার -->
 <div class="bottom-nav">
     <button class="nav-item" data-page="category"><span class="icon">📂</span>ক্যাটাগরি</button>
     <button class="nav-item" data-page="searchFocus"><span class="icon">🔍</span>খুঁজুন</button>
@@ -638,7 +595,6 @@ marquee {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
-// Firebase configuration
 firebase.initializeApp({
     apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
     authDomain: "agls-5bd4c.firebaseapp.com",
@@ -648,7 +604,6 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const db = firebase.database();
 
-// ========== JSON URL ==========
 const DIVISIONS_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/divisions.json';
 const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
 
@@ -660,10 +615,10 @@ let selectedDistrict = '';
 let selectedThana = '';
 let selectedCategories = [];
 let allVideos = [];
-
 let youtubePlayers = [];
 let youtubeObservers = [];
 let cloudinaryVideoElements = [];
+let currentShopIdForSlider = null;
 
 let curSlide = 0;
 let slTimer = null;
@@ -677,19 +632,11 @@ function shuffleArray(array) {
     return array;
 }
 
-function showLoading() {
-    const loader = document.getElementById('loadingOverlay');
-    if (loader) loader.style.display = 'flex';
-}
-function hideLoading() {
-    const loader = document.getElementById('loadingOverlay');
-    if (loader) loader.style.display = 'none';
-}
+function showLoading() { document.getElementById('loadingOverlay').style.display = 'flex'; }
+function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
 
-// ========== ইউটিউব ভিডিও আইডি এক্সট্র্যাক্ট ফাংশন (সব ফরম্যাট সাপোর্ট) ==========
 function extractYouTubeId(url) {
     if (!url) return null;
-    
     const patterns = [
         /(?:youtube\.com\/watch\?v=)([^&]+)/,
         /(?:youtu\.be\/)([^?]+)/,
@@ -697,42 +644,35 @@ function extractYouTubeId(url) {
         /(?:youtube\.com\/shorts\/)([^?]+)/,
         /(?:youtube\.com\/v\/)([^?]+)/
     ];
-    
     for (let pattern of patterns) {
         const match = url.match(pattern);
         if (match) return match[1];
     }
-    
     try {
         const urlObj = new URL(url);
         if (urlObj.searchParams.has('v')) return urlObj.searchParams.get('v');
     } catch(e) {}
-    
     return null;
 }
 
-// ========== ক্যাটাগরি JSON লোড ==========
 async function loadCategories() {
     try {
         const res = await fetch(CATEGORIES_JSON_URL);
         categoriesList = await res.json();
-        console.log('ক্যাটাগরি লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
+        console.log('ক্যাটাগরি লোড সফল!', categoriesList.length);
     } catch (error) {
         console.error('ক্যাটাগরি লোড ব্যর্থ:', error);
         categoriesList = [];
     }
 }
 
-// ========== Cloudinary ভিডিও লোড ==========
 function loadAdminVideos() {
     db.ref('adminVideos').orderByChild('order').on('value', (snap) => {
         allVideos = [];
         if (snap.exists()) {
             snap.forEach(child => {
                 const video = child.val();
-                if (video.enabled !== false) {
-                    allVideos.push({ id: child.key, ...video });
-                }
+                if (video.enabled !== false) allVideos.push({ id: child.key, ...video });
             });
         }
         renderVideoGrid();
@@ -741,21 +681,12 @@ function loadAdminVideos() {
 
 function setupCloudinaryVideo(videoElement, videoUrl, container) {
     if (!videoElement) return;
-    
     videoElement.src = videoUrl;
     videoElement.muted = true;
     videoElement.loop = true;
     videoElement.playsInline = true;
     videoElement.autoplay = true;
-    
-    const playPromise = videoElement.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            console.log("Autoplay prevented:", error);
-            videoElement.muted = true;
-            videoElement.play();
-        });
-    }
+    videoElement.play().catch(e => console.log("Autoplay prevented:", e));
     
     let isMuted = true;
     let muteButton = container.querySelector('.video-mute-overlay');
@@ -781,20 +712,12 @@ function setupCloudinaryVideo(videoElement, videoUrl, container) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                videoElement.play().catch(e => console.log("Play on view error:", e));
-                if (isMuted) {
-                    videoElement.muted = true;
-                    if (muteButton) muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                } else {
-                    videoElement.muted = false;
-                    if (muteButton) muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
-                }
-            } else {
-                videoElement.pause();
-            }
+                videoElement.play();
+                if (isMuted) { videoElement.muted = true; muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>'; }
+                else { videoElement.muted = false; muteButton.innerHTML = '<i class="fas fa-volume-up"></i>'; }
+            } else { videoElement.pause(); }
         });
     }, { threshold: 0.1 });
-    
     observer.observe(videoElement);
     cloudinaryVideoElements.push({ element: videoElement, observer, isMuted, muteButton });
 }
@@ -802,23 +725,14 @@ function setupCloudinaryVideo(videoElement, videoUrl, container) {
 function renderVideoGrid() {
     const container = document.getElementById('videoGrid');
     if (!container) return;
-    
-    cloudinaryVideoElements.forEach(item => {
-        if (item.observer) item.observer.disconnect();
-    });
+    cloudinaryVideoElements.forEach(item => { if (item.observer) item.observer.disconnect(); });
     cloudinaryVideoElements = [];
-    
     if (allVideos.length === 0) {
-        container.innerHTML = `<div class="video-grid-empty">
-            <div class="video-grid-empty-icon">🎬</div>
-            <div>কোনো ভিডিও নেই</div>
-            <div style="font-size: 11px; margin-top: 5px;">এডমিন প্যানেল থেকে ভিডিও যোগ করুন</div>
-        </div>`;
+        container.innerHTML = `<div class="video-grid-empty"><div class="video-grid-empty-icon">🎬</div><div>কোনো ভিডিও নেই</div></div>`;
         return;
     }
-    
     container.innerHTML = allVideos.map(video => `
-        <div class="video-card" data-video-id="${video.id}">
+        <div class="video-card">
             <div class="video-player-container" id="cloudinary-container-${video.id}">
                 <video class="cloudinary-video" preload="metadata" playsinline></video>
             </div>
@@ -828,32 +742,22 @@ function renderVideoGrid() {
             </div>
         </div>
     `).join('');
-    
-    const videoCards = document.querySelectorAll('.video-card');
-    videoCards.forEach((card, idx) => {
+    document.querySelectorAll('.video-card').forEach((card, idx) => {
         const videoElement = card.querySelector('.cloudinary-video');
         const containerDiv = card.querySelector('.video-player-container');
-        if (videoElement && allVideos[idx]) {
-            let videoUrl = allVideos[idx].videoUrl;
-            if (videoUrl && videoUrl.trim() !== '') {
-                setupCloudinaryVideo(videoElement, videoUrl, containerDiv);
-            } else {
-                videoElement.style.background = "#1a0a3e";
-            }
+        if (videoElement && allVideos[idx] && allVideos[idx].videoUrl) {
+            setupCloudinaryVideo(videoElement, allVideos[idx].videoUrl, containerDiv);
         }
     });
 }
 
-// ========== JSON লোড ==========
 async function loadGeoData() {
     try {
         const res = await fetch(DIVISIONS_JSON_URL);
         const data = await res.json();
         geoData = data.divisions;
-        
         const divisionContainer = document.getElementById('divisionChips');
         divisionContainer.innerHTML = '<div class="f-chip active" onclick="window.selectDivision(\'\')">সব বিভাগ</div>';
-        
         geoData.forEach(div => {
             const chip = document.createElement('div');
             chip.className = 'f-chip';
@@ -861,22 +765,14 @@ async function loadGeoData() {
             chip.onclick = () => window.selectDivision(div.name);
             divisionContainer.appendChild(chip);
         });
-        
-        console.log('JSON লোড সফল!', geoData.length, 'টি বিভাগ');
-    } catch (error) {
-        console.error('JSON লোড ব্যর্থ:', error);
-    }
+        console.log('JSON লোড সফল!', geoData.length);
+    } catch (error) { console.error('JSON লোড ব্যর্থ:', error); }
 }
 
-// ========== ক্যাটাগরি চিপ লোড ==========
 async function loadCategoryChips() {
     const container = document.getElementById('categoryChips');
     container.innerHTML = '<div class="f-chip active" onclick="window.selectCategory(\'\')">সব</div>';
-    
-    if (categoriesList.length === 0) {
-        await loadCategories();
-    }
-    
+    if (categoriesList.length === 0) await loadCategories();
     categoriesList.forEach(cat => {
         const chip = document.createElement('div');
         chip.className = 'f-chip';
@@ -886,33 +782,22 @@ async function loadCategoryChips() {
     });
 }
 
-// ========== ফিল্টার ফাংশন ==========
 window.selectDivision = function(div) {
     selectedDivision = div;
     selectedDistrict = '';
     selectedThana = '';
-    
     document.querySelectorAll('#divisionChips .f-chip').forEach(c => {
-        const isActive = c.textContent === (div || 'সব বিভাগ');
-        if (isActive) c.classList.add('active');
-        else c.classList.remove('active');
+        c.classList.toggle('active', c.textContent === (div || 'সব বিভাগ'));
     });
-    
-    const sel1Span = document.getElementById('sel1');
-    if (sel1Span) sel1Span.textContent = div ? `✅ ${div}` : '';
-    
-    const num1Div = document.getElementById('num1');
-    if (num1Div) num1Div.className = div ? 'fs-num done' : 'fs-num';
-    
-    const resetBtn = document.getElementById('resetBtn');
-    if (resetBtn) resetBtn.style.display = div ? 'block' : 'none';
+    document.getElementById('sel1').textContent = div ? `✅ ${div}` : '';
+    document.getElementById('num1').className = div ? 'fs-num done' : 'fs-num';
+    document.getElementById('resetBtn').style.display = div ? 'block' : 'none';
     
     if (div) {
         const division = geoData.find(d => d.name === div);
         const districts = division ? division.districts : [];
         const districtContainer = document.getElementById('districtChips');
         districtContainer.innerHTML = `<div class="f-chip active" onclick="window.selectDistrict('')">সব জেলা</div>`;
-        
         districts.forEach(d => {
             const chip = document.createElement('div');
             chip.className = 'f-chip';
@@ -920,15 +805,13 @@ window.selectDivision = function(div) {
             chip.onclick = () => window.selectDistrict(d.name);
             districtContainer.appendChild(chip);
         });
-        
         document.getElementById('step2')?.classList.remove('hidden');
         document.getElementById('step3')?.classList.add('hidden');
         document.getElementById('step4')?.classList.add('hidden');
-        
-        if (document.getElementById('sel2')) document.getElementById('sel2').textContent = '';
-        if (document.getElementById('sel3')) document.getElementById('sel3').textContent = '';
-        if (document.getElementById('num2')) document.getElementById('num2').className = 'fs-num';
-        if (document.getElementById('num3')) document.getElementById('num3').className = 'fs-num';
+        document.getElementById('sel2').textContent = '';
+        document.getElementById('sel3').textContent = '';
+        document.getElementById('num2').className = 'fs-num';
+        document.getElementById('num3').className = 'fs-num';
     } else {
         document.getElementById('step2')?.classList.add('hidden');
         document.getElementById('step3')?.classList.add('hidden');
@@ -940,18 +823,11 @@ window.selectDivision = function(div) {
 window.selectDistrict = function(dist) {
     selectedDistrict = dist;
     selectedThana = '';
-    
     document.querySelectorAll('#districtChips .f-chip').forEach(c => {
-        const isActive = c.textContent === (dist || 'সব জেলা');
-        if (isActive) c.classList.add('active');
-        else c.classList.remove('active');
+        c.classList.toggle('active', c.textContent === (dist || 'সব জেলা'));
     });
-    
-    const sel2Span = document.getElementById('sel2');
-    if (sel2Span) sel2Span.textContent = dist ? `✅ ${dist}` : '';
-    
-    const num2Div = document.getElementById('num2');
-    if (num2Div) num2Div.className = dist ? 'fs-num done' : 'fs-num';
+    document.getElementById('sel2').textContent = dist ? `✅ ${dist}` : '';
+    document.getElementById('num2').className = dist ? 'fs-num done' : 'fs-num';
     
     if (dist) {
         const division = geoData.find(d => d.name === selectedDivision);
@@ -959,7 +835,6 @@ window.selectDistrict = function(dist) {
         const upazilas = district ? district.upazilas : [];
         const thanaContainer = document.getElementById('thanaChips');
         thanaContainer.innerHTML = `<div class="f-chip active" onclick="window.selectThana('')">সব উপজেলা</div>`;
-        
         upazilas.forEach(u => {
             const chip = document.createElement('div');
             chip.className = 'f-chip';
@@ -967,11 +842,10 @@ window.selectDistrict = function(dist) {
             chip.onclick = () => window.selectThana(u);
             thanaContainer.appendChild(chip);
         });
-        
         document.getElementById('step3')?.classList.remove('hidden');
         document.getElementById('step4')?.classList.add('hidden');
-        if (document.getElementById('sel3')) document.getElementById('sel3').textContent = '';
-        if (document.getElementById('num3')) document.getElementById('num3').className = 'fs-num';
+        document.getElementById('sel3').textContent = '';
+        document.getElementById('num3').className = 'fs-num';
     } else {
         document.getElementById('step3')?.classList.add('hidden');
         document.getElementById('step4')?.classList.add('hidden');
@@ -981,142 +855,84 @@ window.selectDistrict = function(dist) {
 
 window.selectThana = function(thana) {
     selectedThana = thana;
-    
     document.querySelectorAll('#thanaChips .f-chip').forEach(c => {
-        const isActive = c.textContent === (thana || 'সব উপজেলা');
-        if (isActive) c.classList.add('active');
-        else c.classList.remove('active');
+        c.classList.toggle('active', c.textContent === (thana || 'সব উপজেলা'));
     });
-    
-    const sel3Span = document.getElementById('sel3');
-    if (sel3Span) sel3Span.textContent = thana ? `✅ ${thana}` : '';
-    
-    const num3Div = document.getElementById('num3');
-    if (num3Div) num3Div.className = thana ? 'fs-num done' : 'fs-num';
-    
-    if (thana) {
-        document.getElementById('step4')?.classList.remove('hidden');
-    } else {
-        document.getElementById('step4')?.classList.add('hidden');
-    }
+    document.getElementById('sel3').textContent = thana ? `✅ ${thana}` : '';
+    document.getElementById('num3').className = thana ? 'fs-num done' : 'fs-num';
+    if (thana) document.getElementById('step4')?.classList.remove('hidden');
+    else document.getElementById('step4')?.classList.add('hidden');
     window.applyFilters();
 };
 
 window.selectCategory = function(cat) {
-    if (cat === '') {
-        selectedCategories = [];
-    } else {
-        selectedCategories = [cat];
-    }
+    selectedCategories = (cat === '') ? [] : [cat];
     updateCategoryFilterUI();
     window.applyFilters();
 };
 
 function updateCategoryFilterUI() {
-    const sel4Span = document.getElementById('sel4');
-    if (sel4Span) {
-        if (selectedCategories.length === 0) sel4Span.textContent = '';
-        else sel4Span.textContent = `✅ ${selectedCategories.length}টি সিলেক্টেড`;
-    }
-    const num4Div = document.getElementById('num4');
-    if (num4Div) num4Div.className = selectedCategories.length > 0 ? 'fs-num done' : 'fs-num';
-    
+    document.getElementById('sel4').textContent = selectedCategories.length ? `✅ ${selectedCategories.length}টি সিলেক্টেড` : '';
+    document.getElementById('num4').className = selectedCategories.length ? 'fs-num done' : 'fs-num';
     document.querySelectorAll('#categoryChips .f-chip').forEach(c => {
-        const isActive = selectedCategories.includes(c.textContent);
-        if (isActive) c.classList.add('active');
-        else c.classList.remove('active');
+        c.classList.toggle('active', selectedCategories.includes(c.textContent));
     });
 }
 
 window.resetFilters = function() {
-    selectedDivision = '';
-    selectedDistrict = '';
-    selectedThana = '';
-    selectedCategories = [];
-    
+    selectedDivision = ''; selectedDistrict = ''; selectedThana = ''; selectedCategories = [];
     document.getElementById('step2')?.classList.add('hidden');
     document.getElementById('step3')?.classList.add('hidden');
     document.getElementById('step4')?.classList.add('hidden');
-    const resetBtn = document.getElementById('resetBtn');
-    if (resetBtn) resetBtn.style.display = 'none';
-    
-    if (document.getElementById('sel1')) document.getElementById('sel1').textContent = '';
-    if (document.getElementById('sel2')) document.getElementById('sel2').textContent = '';
-    if (document.getElementById('sel3')) document.getElementById('sel3').textContent = '';
-    if (document.getElementById('sel4')) document.getElementById('sel4').textContent = '';
-    
-    if (document.getElementById('num1')) document.getElementById('num1').className = 'fs-num';
-    if (document.getElementById('num4')) document.getElementById('num4').className = 'fs-num';
-    
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.value = '';
-    
+    document.getElementById('resetBtn').style.display = 'none';
+    document.getElementById('sel1').textContent = ''; document.getElementById('sel2').textContent = '';
+    document.getElementById('sel3').textContent = ''; document.getElementById('sel4').textContent = '';
+    document.getElementById('num1').className = 'fs-num'; document.getElementById('num4').className = 'fs-num';
+    document.getElementById('searchInput').value = '';
     document.querySelectorAll('#divisionChips .f-chip').forEach(c => {
-        const isActive = c.textContent === 'সব বিভাগ';
-        if (isActive) c.classList.add('active');
-        else c.classList.remove('active');
+        c.classList.toggle('active', c.textContent === 'সব বিভাগ');
     });
-    
     updateCategoryFilterUI();
     window.applyFilters();
 };
 
 window.applyFilters = function() {
     let filtered = [...allShops];
-    
     if (selectedDivision) {
         const division = geoData.find(d => d.name === selectedDivision);
         const districtNames = division ? division.districts.map(d => d.name) : [];
         filtered = filtered.filter(shop => districtNames.includes(shop.district));
     }
-    if (selectedDistrict) {
-        filtered = filtered.filter(shop => shop.district === selectedDistrict);
+    if (selectedDistrict) filtered = filtered.filter(shop => shop.district === selectedDistrict);
+    if (selectedThana) filtered = filtered.filter(shop => shop.thana === selectedThana);
+    if (selectedCategories.length) filtered = filtered.filter(shop => selectedCategories.includes(shop.category));
+    const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+    if (searchQuery) {
+        filtered = filtered.filter(shop =>
+            (shop.shopName || '').toLowerCase().includes(searchQuery) ||
+            (shop.area || '').toLowerCase().includes(searchQuery) ||
+            (shop.district || '').toLowerCase().includes(searchQuery) ||
+            (shop.thana || '').toLowerCase().includes(searchQuery)
+        );
     }
-    if (selectedThana) {
-        filtered = filtered.filter(shop => shop.thana === selectedThana);
-    }
-    if (selectedCategories.length > 0) {
-        filtered = filtered.filter(shop => selectedCategories.includes(shop.category));
-    }
-    
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        const searchQuery = searchInput.value.trim().toLowerCase();
-        if (searchQuery) {
-            filtered = filtered.filter(shop =>
-                (shop.shopName || '').toLowerCase().includes(searchQuery) ||
-                (shop.area || '').toLowerCase().includes(searchQuery) ||
-                (shop.district || '').toLowerCase().includes(searchQuery) ||
-                (shop.thana || '').toLowerCase().includes(searchQuery)
-            );
-        }
-    }
-    
     window.renderShops(filtered);
 };
 
-// ========== ইউটিউব প্লেয়ার তৈরি (মিউট স্টেট সংরক্ষণ সহ) ==========
 function createYouTubePlayer(container, videoId) {
-    // আগের প্লেয়ার থাকলে রিমুভ করুন
     const existingPlayer = container.querySelector('.youtube-player-container');
-    if (existingPlayer) {
-        existingPlayer.remove();
-    }
+    if (existingPlayer) existingPlayer.remove();
     
-    // প্লেয়ার কন্টেইনার তৈরি
     const playerContainer = document.createElement('div');
     playerContainer.className = 'youtube-player-container';
     playerContainer.style.width = '100%';
     playerContainer.style.height = '100%';
     playerContainer.style.position = 'relative';
     
-    // আনমিউট বাটন তৈরি
     let isMuted = true;
     const muteButton = document.createElement('div');
     muteButton.className = 'youtube-mute-btn';
     muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
     
-    // প্লেয়ার আইডি
     const playerId = 'player_' + Math.random().toString(36).substr(2, 9);
     const iframe = document.createElement('div');
     iframe.id = playerId;
@@ -1128,23 +944,13 @@ function createYouTubePlayer(container, videoId) {
     container.innerHTML = '';
     container.appendChild(playerContainer);
     
-    // প্লেয়ার তৈরি
     const player = new YT.Player(playerId, {
         videoId: videoId,
-        playerVars: {
-            autoplay: 1,
-            mute: 1,
-            playsinline: 1,
-            loop: 1,
-            playlist: videoId,
-            controls: 1
-        },
+        playerVars: { autoplay: 1, mute: 1, playsinline: 1, loop: 1, playlist: videoId, controls: 1 },
         events: {
             onReady: (event) => {
                 event.target.mute();
                 event.target.playVideo();
-                
-                // আনমিউট বাটনের ক্লিক ইভেন্ট
                 muteButton.onclick = (e) => {
                     e.stopPropagation();
                     if (event.target.isMuted()) {
@@ -1157,22 +963,13 @@ function createYouTubePlayer(container, videoId) {
                         isMuted = true;
                     }
                 };
-                
-                // স্ক্রল অবজারভার
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
-                        if (!entry.isIntersecting) {
-                            event.target.pauseVideo();
-                        } else if (entry.isIntersecting) {
+                        if (!entry.isIntersecting) event.target.pauseVideo();
+                        else {
                             event.target.playVideo();
-                            // আগের মিউট স্টেট রিস্টোর করা
-                            if (isMuted) {
-                                event.target.mute();
-                                muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                            } else {
-                                event.target.unMute();
-                                muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
-                            }
+                            if (isMuted) { event.target.mute(); muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>'; }
+                            else { event.target.unMute(); muteButton.innerHTML = '<i class="fas fa-volume-up"></i>'; }
                         }
                     });
                 }, { threshold: 0.1 });
@@ -1182,39 +979,27 @@ function createYouTubePlayer(container, videoId) {
             }
         }
     });
-    
     return player;
 }
 
-// ========== রেন্ডার শপস (ইউটিউব ভিডিও) ==========
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
-    
-    // আগের অবজারভার গুলো ক্লিনআপ
     youtubeObservers.forEach(obs => obs.disconnect());
     youtubeObservers = [];
     youtubePlayers = [];
     
     if (shops.length === 0) {
-        container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div><div class="empty-sub">অন্য ফিল্টার চেষ্টা করুন</div></div>`;
+        container.innerHTML = `<div class="empty"><div class="empty-icon">🏪</div><div class="empty-title">কোনো দোকান নেই</div></div>`;
         return;
     }
     
     const shuffledShops = shuffleArray([...shops]);
-    
     container.innerHTML = shuffledShops.map(shop => {
         let videoId = null;
-        if (shop.youtubeVideoId) {
-            videoId = shop.youtubeVideoId;
-        } else if (shop.youtube) {
-            videoId = extractYouTubeId(shop.youtube);
-            // ডিবাগিং জন্য কনসোল লগ
-            console.log(`Shop: ${shop.shopName}, YouTube URL: ${shop.youtube}, Extracted ID: ${videoId}`);
-        }
-        
+        if (shop.youtubeVideoId) videoId = shop.youtubeVideoId;
+        else if (shop.youtube) videoId = extractYouTubeId(shop.youtube);
         const locationText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
-        
         return `
         <div class="shop-card-wrapper">
             <div class="shop-video-card">
@@ -1223,23 +1008,17 @@ window.renderShops = function(shops) {
                 </div>
                 <div class="shop-video-info">
                     <h3 class="shop-video-name" onclick="window.viewShop('${shop.id}')">${escapeHtml(shop.shopName) || 'নাম নেই'}</h3>
-                    <div class="shop-video-location">
-                        <i class="fas fa-map-marker-alt"></i> ${escapeHtml(locationText)}
-                    </div>
+                    <div class="shop-video-location"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(locationText)}</div>
                 </div>
             </div>
         </div>`;
     }).join('');
     
-    // ইউটিউব API লোড হলে প্লেয়ার তৈরি করুন
-    if (typeof YT !== 'undefined' && YT.Player) {
-        initYouTubePlayers();
-    }
+    if (typeof YT !== 'undefined' && YT.Player) initYouTubePlayers();
 };
 
 function initYouTubePlayers() {
-    const containers = document.querySelectorAll('.video-player-card');
-    containers.forEach(container => {
+    document.querySelectorAll('.video-player-card').forEach(container => {
         const videoId = container.getAttribute('data-video-id');
         if (videoId && videoId !== 'null' && videoId !== '' && !container.hasAttribute('data-player-initialized')) {
             container.setAttribute('data-player-initialized', 'true');
@@ -1250,57 +1029,43 @@ function initYouTubePlayers() {
 
 function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
+    return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
 }
 
 window.viewShop = function(shopId) {
     if (shopId) window.location.href = `profile.html?id=${shopId}`;
 };
 
-window.loadMarquee = function() {
-    db.ref('marquee').on('value', snap => {
-        const container = document.getElementById('marqueeSection');
-        if (!container) return;
-        if (snap.exists()) {
-            const data = snap.val();
-            if (data.enabled === true && data.text && data.text.trim() !== '') {
-                container.innerHTML = `<div class="marquee-container"><marquee behavior="scroll" direction="left" scrollamount="4" onmouseover="this.stop()" onmouseout="this.start()">✨ ${data.text} ✨</marquee></div>`;
-            } else {
-                container.innerHTML = `<div class="marquee-container marquee-disabled">🔇 কোনো ঘোষণা নেই</div>`;
-            }
-        } else {
-            container.innerHTML = `<div class="marquee-container marquee-disabled">🔇 কোনো ঘোষণা নেই</div>`;
+// ========== স্লাইডার (দোকান ভিত্তিক) ==========
+async function loadSliderForShop(shopId) {
+    if (!shopId) return;
+    const snap = await db.ref(`sliders/${shopId}`).once('value');
+    slData = [];
+    if (snap.exists()) {
+        const slides = snap.val();
+        if (Array.isArray(slides)) slData = slides;
+        else if (slides && typeof slides === 'object') {
+            Object.values(slides).forEach(s => { if (s.image) slData.push(s); });
         }
-    });
-};
-
-window.loadSlider = function() {
-    db.ref('slider').on('value', snap => {
-        slData = [];
-        if (snap.exists()) {
-            snap.forEach(c => { if (c.val().image) slData.push(c.val()); });
-        }
-        const sec = document.getElementById('sliderSection');
-        if (!sec) return;
-        if (slData.length === 0) { sec.style.display = 'none'; return; }
-        sec.style.display = 'block';
-        const track = document.getElementById('sliderTrack');
-        const dots = document.getElementById('sliderDots');
-        if (!track || !dots) return;
-        track.innerHTML = slData.map(s => `<div class="slide-item" onclick="${s.link ? `window.open('${s.link}','_blank')` : ''}"><img src="${s.image}" onerror="this.outerHTML='<div class=slide-placeholder>🏪</div>'"></div>`).join('');
-        dots.innerHTML = slData.map((_, i) => `<div class="sl-dot${i === 0 ? ' active' : ''}" id="d${i}" onclick="window.goSlide(${i})"></div>`).join('');
-        window.goSlide(0);
-        if (slData.length > 1) {
-            if (slTimer) clearInterval(slTimer);
-            slTimer = setInterval(() => window.goSlide((curSlide + 1) % slData.length), 4000);
-        }
-    });
-};
+    }
+    if (slData.length === 0) {
+        slData = [{ image: "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop" }];
+    }
+    const sec = document.getElementById('sliderSection');
+    if (!sec) return;
+    if (slData.length === 0) { sec.style.display = 'none'; return; }
+    sec.style.display = 'block';
+    const track = document.getElementById('sliderTrack');
+    const dots = document.getElementById('sliderDots');
+    if (!track || !dots) return;
+    track.innerHTML = slData.map(s => `<div class="slide-item"><img src="${s.image}" onerror="this.outerHTML='<div class=slide-placeholder>🏪</div>'"></div>`).join('');
+    dots.innerHTML = slData.map((_, i) => `<div class="sl-dot${i === 0 ? ' active' : ''}" id="d${i}" onclick="window.goSlide(${i})"></div>`).join('');
+    window.goSlide(0);
+    if (slData.length > 1) {
+        if (slTimer) clearInterval(slTimer);
+        slTimer = setInterval(() => window.goSlide((curSlide + 1) % slData.length), 4000);
+    }
+}
 
 window.goSlide = function(n) {
     if (!slData.length) return;
@@ -1325,15 +1090,31 @@ window.nextSlide = function() {
     if (slData.length > 1) slTimer = setInterval(() => window.goSlide((curSlide + 1) % slData.length), 4000);
 };
 
+// ========== মার্কি (দোকান ভিত্তিক) ==========
+async function loadMarqueeForShop(shopId) {
+    if (!shopId) return;
+    const snap = await db.ref(`tickers/${shopId}`).once('value');
+    let items = [];
+    if (snap.exists()) {
+        items = snap.val();
+        if (!Array.isArray(items)) items = [];
+    }
+    if (!items.length) {
+        items = ["✨ EXCLUSIVE DROP : AI COLLECTION", "🚀 UP TO 40% OFF", "💜 FREE SHIPPING", "⚡ LIMITED EDITION"];
+    }
+    const container = document.getElementById('marqueeSection');
+    if (!container) return;
+    const marqueeText = items.join(' ✨ ');
+    container.innerHTML = `<div class="marquee-container"><marquee behavior="scroll" direction="left" scrollamount="4" onmouseover="this.stop()" onmouseout="this.start()">✨ ${marqueeText} ✨</marquee></div>`;
+}
+
 window.loadShops = function() {
     db.ref('shops').on('value', snap => {
         allShops = [];
         if (snap.exists()) {
             snap.forEach(c => {
                 const shop = c.val();
-                if (shop.status === 'approved') {
-                    allShops.push({ id: c.key, ...shop });
-                }
+                if (shop.status === 'approved') allShops.push({ id: c.key, ...shop });
             });
         }
         window.applyFilters();
@@ -1348,8 +1129,6 @@ window.checkNet = function() {
         Promise.all([loadGeoData(), loadCategories()]).then(() => {
             loadCategoryChips();
             loadAdminVideos();
-            window.loadMarquee();
-            window.loadSlider();
             window.loadShops();
             hideLoading();
         }).catch(() => hideLoading());
@@ -1359,91 +1138,69 @@ window.checkNet = function() {
     }
 };
 
-// নেভিগেশন ফাংশন
 window.navigateTo = function(page, event) {
     if (event && event.currentTarget) {
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
         event.currentTarget.classList.add('active');
     }
     switch(page) {
-        case 'category': 
-            window.openCategoryPopup();
-            break;
+        case 'category': window.openCategoryPopup(); break;
         case 'searchFocus':
             const searchSec = document.getElementById('searchSection');
             if (searchSec) {
                 searchSec.style.display = 'block';
                 searchSec.classList.remove('hide');
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) searchInput.focus();
+                document.getElementById('searchInput').focus();
                 setTimeout(() => searchSec?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
             }
             break;
-        case 'profile': 
-            window.location.href = 'login.html'; 
-            break;
-        case 'help':
-            window.location.href = 'help.html';
-            break;
+        case 'profile': window.location.href = 'login.html'; break;
+        case 'help': window.location.href = 'help.html'; break;
         default: console.log('Navigate to:', page);
     }
 };
 
-// স্ক্রল ইভেন্ট
+// URL থেকে shopId পেতে এবং স্লাইডার/মার্কি লোড করতে
+function initShopSpecificContent() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shopId = urlParams.get('id');
+    if (shopId) {
+        currentShopIdForSlider = shopId;
+        loadSliderForShop(shopId);
+        loadMarqueeForShop(shopId);
+    } else {
+        // ডিফল্ট স্লাইডার ও মার্কি (সব দোকানের জন্য সাধারণ)
+        loadSliderForShop('default');
+        loadMarqueeForShop('default');
+    }
+}
+
 let lastScrollTop = 0;
 const searchSectionEl = document.getElementById('searchSection');
 window.addEventListener('scroll', function() {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (searchSectionEl && searchSectionEl.style.display !== 'none') {
-        if (scrollTop > lastScrollTop && scrollTop > 50) {
-            searchSectionEl.classList.add('hide');
-        } else if (scrollTop < lastScrollTop) {
-            searchSectionEl.classList.remove('hide');
-        }
+        if (scrollTop > lastScrollTop && scrollTop > 50) searchSectionEl.classList.add('hide');
+        else if (scrollTop < lastScrollTop) searchSectionEl.classList.remove('hide');
     }
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 
-// ক্যাটাগরি পপআপ
 window.openCategoryPopup = function() {
     const existingPopup = document.querySelector('.category-popup-overlay');
     if (existingPopup) existingPopup.remove();
-    
     const overlay = document.createElement('div');
     overlay.className = 'category-popup-overlay';
-    
     const categoriesHTML = categoriesList.map(cat => {
         const isSelected = selectedCategories.includes(cat);
-        return `
-            <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategory('${cat.replace(/'/g, "\\'")}', this)">
-                <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategory('${cat.replace(/'/g, "\\'")}', this.parentElement)">
-                <label>${cat}</label>
-            </div>
-        `;
+        return `<div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategory('${cat.replace(/'/g, "\\'")}', this)">
+            <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategory('${cat.replace(/'/g, "\\'")}', this.parentElement)">
+            <label>${cat}</label>
+        </div>`;
     }).join('');
-    
-    overlay.innerHTML = `
-        <div class="category-popup">
-            <div class="popup-header">
-                <h3>📂 ক্যাটাগরি নির্বাচন করুন</h3>
-                <button class="popup-close" onclick="this.closest('.category-popup-overlay').remove()">✕</button>
-            </div>
-            <div class="popup-body">
-                <div class="category-grid">
-                    ${categoriesHTML}
-                </div>
-            </div>
-            <div class="popup-footer">
-                <button class="btn-clear" onclick="window.clearAllCategories()">সব বাদ দিন</button>
-                <button class="btn-apply" onclick="window.applyCategoryFilter()">প্রয়োগ করুন</button>
-            </div>
-        </div>
-    `;
-    
+    overlay.innerHTML = `<div class="category-popup"><div class="popup-header"><h3>📂 ক্যাটাগরি নির্বাচন করুন</h3><button class="popup-close" onclick="this.closest('.category-popup-overlay').remove()">✕</button></div><div class="popup-body"><div class="category-grid">${categoriesHTML}</div></div><div class="popup-footer"><button class="btn-clear" onclick="window.clearAllCategories()">সব বাদ দিন</button><button class="btn-apply" onclick="window.applyCategoryFilter()">প্রয়োগ করুন</button></div></div>`;
     document.body.appendChild(overlay);
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.remove();
-    });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
 };
 
 window.toggleCategory = function(category, element) {
@@ -1451,40 +1208,33 @@ window.toggleCategory = function(category, element) {
     if (index === -1) {
         selectedCategories.push(category);
         element.classList.add('selected');
-        const checkbox = element.querySelector('input');
-        if (checkbox) checkbox.checked = true;
+        element.querySelector('input').checked = true;
     } else {
         selectedCategories.splice(index, 1);
         element.classList.remove('selected');
-        const checkbox = element.querySelector('input');
-        if (checkbox) checkbox.checked = false;
+        element.querySelector('input').checked = false;
     }
 };
 
 window.clearAllCategories = function() {
     selectedCategories = [];
-    const allCatChecks = document.querySelectorAll('.cat-check');
-    allCatChecks.forEach(check => {
+    document.querySelectorAll('.cat-check').forEach(check => {
         check.classList.remove('selected');
-        const cb = check.querySelector('input');
-        if (cb) cb.checked = false;
+        check.querySelector('input').checked = false;
     });
 };
 
 window.applyCategoryFilter = function() {
-    const popup = document.querySelector('.category-popup-overlay');
-    if (popup) popup.remove();
+    document.querySelector('.category-popup-overlay')?.remove();
     updateCategoryFilterUI();
     window.applyFilters();
 };
 
-// ইউটিউব API লোড
 function loadYouTubeAPI() {
     if (document.querySelector('script[src*="youtube.com/iframe_api"]')) return;
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    document.getElementsByTagName('script')[0].parentNode.insertBefore(tag, document.getElementsByTagName('script')[0]);
 }
 loadYouTubeAPI();
 
@@ -1493,15 +1243,12 @@ window.onYouTubeIframeAPIReady = function() {
     initYouTubePlayers();
 };
 
-// নেভিগেশন বাটনে ইভেন্ট লিসেনার
 document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
-        const page = btn.getAttribute('data-page');
-        window.navigateTo(page, e);
+        window.navigateTo(btn.getAttribute('data-page'), e);
     });
 });
 
-// অথ পরিবর্তন
 auth.onAuthStateChanged((user) => {
     const profileBtn = document.querySelector('.nav-item[data-page="profile"]');
     if (profileBtn) {
@@ -1510,34 +1257,29 @@ auth.onAuthStateChanged((user) => {
             profileBtn.setAttribute('data-page', 'dashboard');
             const newBtn = profileBtn.cloneNode(true);
             profileBtn.parentNode.replaceChild(newBtn, profileBtn);
-            newBtn.addEventListener('click', (e) => {
-                window.location.href = 'dashboard.html';
-            });
+            newBtn.addEventListener('click', () => window.location.href = 'dashboard.html');
         } else {
             profileBtn.innerHTML = '<span class="icon">👤</span>প্রোফাইল';
             profileBtn.setAttribute('data-page', 'profile');
             const newBtn = profileBtn.cloneNode(true);
             profileBtn.parentNode.replaceChild(newBtn, profileBtn);
-            newBtn.addEventListener('click', (e) => {
-                window.location.href = 'login.html';
-            });
+            newBtn.addEventListener('click', () => window.location.href = 'login.html');
         }
     }
 });
 
 window.addEventListener('load', () => {
     window.checkNet();
+    initShopSpecificContent();
 });
 
 window.addEventListener('offline', () => {
-    const noInternetDiv = document.getElementById('noInternet');
-    if (noInternetDiv) noInternetDiv.style.display = 'flex';
+    document.getElementById('noInternet').style.display = 'flex';
     hideLoading();
 });
 
 window.addEventListener('online', () => {
-    const noInternetDiv = document.getElementById('noInternet');
-    if (noInternetDiv) noInternetDiv.style.display = 'none';
+    document.getElementById('noInternet').style.display = 'none';
     window.checkNet();
 });
 </script>
