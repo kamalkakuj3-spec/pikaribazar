@@ -182,7 +182,7 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* এডমিনের ভিডিও গ্রিড */
+/* এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও প্লেয়ার) */
 .video-grid-section {
     margin: 0 16px 20px;
 }
@@ -216,6 +216,7 @@ marquee {
     object-fit: cover;
     display: block;
 }
+/* Cloudinary ভিডিওর জন্য আনমিউট বাটন */
 .video-mute-overlay {
     position: absolute;
     bottom: 10px;
@@ -259,8 +260,12 @@ marquee {
     border-radius: 20px;
     color: var(--text-light);
 }
+.video-grid-empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
 
-/* দোকানের কার্ড */
+/* দোকানের কার্ড - কার্ড ভিউ (ইউটিউব ভিডিও সহ) */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -300,6 +305,7 @@ marquee {
     font-size: 18px;
     text-align: center;
 }
+/* ইউটিউব ভিডিওর জন্য আনমিউট বাটন */
 .youtube-mute-btn {
     position: absolute;
     bottom: 10px;
@@ -369,13 +375,13 @@ marquee {
     transform: translateX(-50%);
     width: calc(100% - 35px);
     max-width: 430px;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(15px);
     border-radius: 24px;
     display: flex;
     justify-content: space-around;
     padding: 2px 0;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
     z-index: 1000;
 }
 .nav-item {
@@ -610,7 +616,7 @@ marquee {
         </div>
     </div>
 
-    <!-- এডমিনের ভিডিও গ্রিড -->
+    <!-- এডমিনের ভিডিও গ্রিড (Cloudinary ভিডিও) -->
     <div class="video-grid-section" id="videoGridSection">
         <div class="video-grid" id="videoGrid"></div>
     </div>
@@ -655,7 +661,6 @@ let selectedThana = '';
 let selectedCategories = [];
 let allVideos = [];
 
-let videoObservers = [];
 let youtubePlayers = [];
 let cloudinaryVideoElements = [];
 
@@ -717,7 +722,7 @@ async function loadCategories() {
     }
 }
 
-// ========== Cloudinary ভিডিও লোড ==========
+// ========== Cloudinary ভিডিও লোড (অটোপ্লে, মিউট, লুপ, স্ক্রল পজ + মিউট স্টেট সংরক্ষণ) ==========
 function loadAdminVideos() {
     db.ref('adminVideos').orderByChild('order').on('value', (snap) => {
         allVideos = [];
@@ -751,10 +756,8 @@ function setupCloudinaryVideo(videoElement, videoUrl, container) {
         });
     }
     
-    // Cloudinary ভিডিওর জন্য মিউট বাটন (মিউট স্টেট সংরক্ষণ সহ)
+    let isMuted = true;
     let muteButton = container.querySelector('.video-mute-overlay');
-    let isMuted = true; // শুরুতে মিউটেড
-    
     if (!muteButton) {
         muteButton = document.createElement('div');
         muteButton.className = 'video-mute-overlay';
@@ -778,7 +781,6 @@ function setupCloudinaryVideo(videoElement, videoUrl, container) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 videoElement.play().catch(e => console.log("Play on view error:", e));
-                // আগের মিউট স্টেট রিস্টোর করা
                 if (isMuted) {
                     videoElement.muted = true;
                     if (muteButton) muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
@@ -793,7 +795,7 @@ function setupCloudinaryVideo(videoElement, videoUrl, container) {
     }, { threshold: 0.1 });
     
     observer.observe(videoElement);
-    cloudinaryVideoElements.push({ element: videoElement, observer, isMuted });
+    cloudinaryVideoElements.push({ element: videoElement, observer, isMuted, muteButton });
 }
 
 function renderVideoGrid() {
@@ -1092,38 +1094,24 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-// ========== ইউটিউব ভিডিও ফাংশন (মিউট স্টেট সংরক্ষণ সহ) ==========
-function setupYouTubePlayer(iframe, container, videoId) {
-    if (!iframe) return;
+// ========== ইউটিউব প্লেয়ার তৈরি (মিউট স্টেট সংরক্ষণ সহ) ==========
+function createYouTubePlayer(container, videoId, placeholderDiv) {
+    let isMuted = true;
+    let player = null;
     
-    const playerId = 'player_' + Math.random().toString(36).substr(2, 9);
-    iframe.id = playerId;
-    
-    let isMuted = true; // শুরুতে মিউটেড
+    // আনমিউট বাটন তৈরি
     let muteButton = container.querySelector('.youtube-mute-btn');
     if (!muteButton) {
         muteButton = document.createElement('div');
         muteButton.className = 'youtube-mute-btn';
         muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-        muteButton.onclick = (e) => {
-            e.stopPropagation();
-            if (window.players && window.players[playerId]) {
-                const player = window.players[playerId];
-                if (player.isMuted()) {
-                    player.unMute();
-                    muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
-                    isMuted = false;
-                } else {
-                    player.mute();
-                    muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    isMuted = true;
-                }
-            }
-        };
         container.appendChild(muteButton);
     }
     
-    const player = new YT.Player(playerId, {
+    const playerId = 'player_' + Math.random().toString(36).substr(2, 9);
+    placeholderDiv.id = playerId;
+    
+    player = new YT.Player(playerId, {
         videoId: videoId,
         playerVars: {
             autoplay: 1,
@@ -1137,37 +1125,45 @@ function setupYouTubePlayer(iframe, container, videoId) {
             onReady: (event) => {
                 event.target.mute();
                 event.target.playVideo();
-                if (!window.players) window.players = {};
-                window.players[playerId] = event.target;
+                
+                // আনমিউট বাটনের ইভেন্ট
+                muteButton.onclick = (e) => {
+                    e.stopPropagation();
+                    if (event.target.isMuted()) {
+                        event.target.unMute();
+                        muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        isMuted = false;
+                    } else {
+                        event.target.mute();
+                        muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                        isMuted = true;
+                    }
+                };
+                
+                // স্ক্রল অবজারভার
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) {
+                            event.target.pauseVideo();
+                        } else if (entry.isIntersecting) {
+                            event.target.playVideo();
+                            if (isMuted) {
+                                event.target.mute();
+                                muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                            } else {
+                                event.target.unMute();
+                                muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                            }
+                        }
+                    });
+                }, { threshold: 0.1 });
+                observer.observe(placeholderDiv);
+                youtubePlayers.push(observer);
             }
         }
     });
     
-    // স্ক্রল অবজারভার - ভিউতে ফিরে এলে আগের মিউট স্টেট রিস্টোর করে
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) {
-                if (window.players && window.players[playerId]) {
-                    window.players[playerId].pauseVideo();
-                }
-            } else if (entry.isIntersecting) {
-                if (window.players && window.players[playerId]) {
-                    window.players[playerId].playVideo();
-                    // আগের মিউট স্টেট রিস্টোর করা
-                    if (isMuted) {
-                        window.players[playerId].mute();
-                        if (muteButton) muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    } else {
-                        window.players[playerId].unMute();
-                        if (muteButton) muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
-                    }
-                }
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    observer.observe(iframe);
-    return observer;
+    return player;
 }
 
 // ========== রেন্ডার শপস (ইউটিউব ভিডিও) ==========
@@ -1190,13 +1186,8 @@ window.renderShops = function(shops) {
             videoId = extractYouTubeId(shop.youtube);
         }
         
-        // ডিবাগিং জন্য কনসোল লগ
-        if (shop.shopName && shop.youtube) {
-            console.log(`Shop: ${shop.shopName}, YouTube URL: ${shop.youtube}, Extracted ID: ${videoId}`);
-        }
-        
         const videoEmbed = videoId 
-            ? `<div id="youtube-placeholder-${shop.id}" class="shop-video" data-video-id="${videoId}"></div>`
+            ? `<div class="shop-video youtube-placeholder" data-video-id="${videoId}"></div>`
             : `<div class="no-video">🎬 কোন ভিডিও নেই</div>`;
         
         const locationText = shop.thana ? `${shop.thana}, ${shop.district}` : `${shop.area || ''}, ${shop.district || ''}`;
@@ -1217,23 +1208,20 @@ window.renderShops = function(shops) {
         </div>`;
     }).join('');
     
-    // ইউটিউব API লোড হওয়ার পর প্লেয়ার ইনিশিয়ালাইজ করুন
+    // ইউটিউব API লোড হলে প্লেয়ার তৈরি করুন
     if (typeof YT !== 'undefined' && YT.Player) {
         initYouTubePlayers();
-    } else {
-        // API লোড না হলে অপেক্ষা করুন
-        window.youTubeReadyCallback = initYouTubePlayers;
     }
 };
 
 function initYouTubePlayers() {
-    const containers = document.querySelectorAll('.video-player-card');
-    containers.forEach(container => {
-        const placeholder = container.querySelector('.shop-video');
-        if (placeholder && placeholder.dataset.videoId) {
-            const videoId = placeholder.dataset.videoId;
-            const observer = setupYouTubePlayer(placeholder, container, videoId);
-            if (observer) youtubePlayers.push(observer);
+    const placeholders = document.querySelectorAll('.youtube-placeholder');
+    placeholders.forEach(placeholder => {
+        const container = placeholder.closest('.video-player-card');
+        const videoId = placeholder.dataset.videoId;
+        if (videoId && container && !container.hasAttribute('data-player-initialized')) {
+            container.setAttribute('data-player-initialized', 'true');
+            createYouTubePlayer(container, videoId, placeholder);
         }
     });
 }
@@ -1480,10 +1468,7 @@ loadYouTubeAPI();
 
 window.onYouTubeIframeAPIReady = function() {
     console.log('YouTube API ready');
-    if (window.youTubeReadyCallback) {
-        window.youTubeReadyCallback();
-        window.youTubeReadyCallback = null;
-    }
+    initYouTubePlayers();
 };
 
 // নেভিগেশন বাটনে ইভেন্ট লিসেনার
