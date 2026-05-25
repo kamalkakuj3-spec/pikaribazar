@@ -250,6 +250,40 @@
   }
   textarea.input-field { resize: none; height: 80px; }
   
+  /* Category Select Styles */
+  .category-select-wrapper {
+    margin-bottom: 16px;
+  }
+  .category-chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .category-chip {
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 2px solid #e0d9f7;
+    background: white;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .category-chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(108,43,217,0.3);
+  }
+  .category-chip.loading {
+    opacity: 0.5;
+    cursor: wait;
+  }
+  
   /* Buttons */
   .btn-small-green {
     background: #22c55e;
@@ -523,7 +557,7 @@
             </div>
         </div>
         
-        <!-- Option 5: দোকানের তথ্য (YouTube Link Added Here) -->
+        <!-- Option 5: দোকানের তথ্য (ক্যাটাগরি নির্বাচন সহ - দোকান পরিচিতির উপরে) -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('shopInfoPanel')">
                 <div class="option-left">
@@ -535,19 +569,29 @@
             <div id="shopInfoPanel" class="option-content-panel">
                 <div class="input-group"><label class="input-label">দোকানের নাম *</label><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div>
                 <div class="input-group"><label class="input-label">মালিকের নাম *</label><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div>
+                
+                <!-- ========== নতুন যোগ করা: ক্যাটাগরি নির্বাচন অপশন (দোকান পরিচিতির উপরে) ========== -->
+                <div class="category-select-wrapper">
+                    <label class="input-label"><i class="fas fa-tag"></i> ক্যাটাগরি নির্বাচন করুন</label>
+                    <div id="categoryChipsContainer" class="category-chip-container">
+                        <div class="category-chip loading">লোড হচ্ছে...</div>
+                    </div>
+                    <input type="hidden" id="selectedCategory" value="">
+                </div>
+                <!-- ======================================================================== -->
+                
                 <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div>
                 <div class="input-group"><label class="input-label">পূর্ণাঙ্গ ঠিকানা</label><textarea class="input-field" id="area" placeholder="বিস্তারিত ঠিকানা" style="height:70px"></textarea></div>
                 <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div>
                 <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div>
                 <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div>
                 
-                <!-- ========== ইউটিউব ভিডিও লিংক অপশন (নতুন যোগ করা) ========== -->
+                <!-- ইউটিউব ভিডিও লিংক অপশন -->
                 <div class="input-group">
                     <label class="input-label"><i class="fab fa-youtube" style="color:#ff0000;"></i> ইউটিউব ভিডিও লিংক</label>
                     <input class="input-field" type="url" id="youtube" placeholder="https://www.youtube.com/watch?v=xxxxx">
                     <small style="font-size: 10px; color: #888; display: block; margin-top: 4px;">💡 এই লিংকটি হোমপেজে ভিডিও আকারে দেখানো হবে</small>
                 </div>
-                <!-- ======================================================== -->
             </div>
         </div>
     </div>
@@ -573,6 +617,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
+
+// ========== ক্যাটাগরি JSON URL ==========
+const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
+let categoriesList = [];
+let selectedCategoryValue = '';
 
 let currentShopId = null;
 let currentShopData = null;
@@ -608,32 +657,115 @@ mainEditBtn.addEventListener('click', function() {
     }
 });
 
-// Save Shop Data (including youtube)
+// ========== ক্যাটাগরি JSON লোড ফাংশন ==========
+async function loadCategoriesForDashboard() {
+    const container = document.getElementById('categoryChipsContainer');
+    container.innerHTML = '<div class="category-chip loading">লোড হচ্ছে...</div>';
+    try {
+        const res = await fetch(CATEGORIES_JSON_URL);
+        categoriesList = await res.json();
+        console.log('ক্যাটাগরি লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
+        renderCategoryChips();
+    } catch (error) {
+        console.error('ক্যাটাগরি লোড ব্যর্থ:', error);
+        container.innerHTML = '<div class="category-chip" style="background:#fee8e8; border-color:#e74c3c;">⚠️ লোড করতে সমস্যা</div>';
+    }
+}
+
+function renderCategoryChips() {
+    const container = document.getElementById('categoryChipsContainer');
+    if (!container) return;
+    if (!categoriesList.length) {
+        container.innerHTML = '<div class="category-chip">কোনো ক্যাটাগরি নেই</div>';
+        return;
+    }
+    container.innerHTML = '';
+    // "সব" অপশন না রেখে সরাসরি ক্যাটাগরি গুলো দেখানো
+    categoriesList.forEach(cat => {
+        const chip = document.createElement('div');
+        chip.className = 'category-chip';
+        chip.textContent = cat;
+        chip.onclick = () => selectCategory(cat);
+        if (selectedCategoryValue === cat) {
+            chip.classList.add('active');
+        }
+        container.appendChild(chip);
+    });
+}
+
+function selectCategory(category) {
+    selectedCategoryValue = category;
+    // সব চিপ থেকে active ক্লাস রিমুভ
+    document.querySelectorAll('#categoryChipsContainer .category-chip').forEach(chip => {
+        chip.classList.remove('active');
+    });
+    // সিলেক্টেড চিপে active যোগ
+    const chips = document.querySelectorAll('#categoryChipsContainer .category-chip');
+    for (let chip of chips) {
+        if (chip.textContent === category) {
+            chip.classList.add('active');
+            break;
+        }
+    }
+    document.getElementById('selectedCategory').value = category;
+    console.log('সিলেক্টেড ক্যাটাগরি:', category);
+}
+
+// ========== ইউটিউব ভিডিও আইডি এক্সট্রাক্ট ==========
+function extractYoutubeVideoId(url) {
+    if (!url) return null;
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=)([^&]+)/,
+        /(?:youtu\.be\/)([^?]+)/,
+        /(?:youtube\.com\/embed\/)([^?]+)/
+    ];
+    for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) return match[1];
+    }
+    return null;
+}
+
+// Save Shop Data (with category and youtubeVideoId)
 async function saveShopData() {
     if(!currentShopId) return;
     const shopName=document.getElementById('shopName').value.trim();
     const ownerName=document.getElementById('ownerName').value.trim();
     const area=document.getElementById('area').value.trim();
     const phone=document.getElementById('phone').value.trim();
-    const youtube = document.getElementById('youtube').value.trim();
+    const youtubeUrl = document.getElementById('youtube').value.trim();
+    const selectedCategory = document.getElementById('selectedCategory').value.trim();
+    
     if(!shopName) return showToast('দোকানের নাম দিন!',true);
     if(!ownerName) return showToast('মালিকের নাম দিন!',true);
     if(!area) return showToast('ঠিকানা দিন!',true);
     if(!phone) return showToast('মোবাইল নম্বর দিন!',true);
-    const btn=document.getElementById('saveBtn'); btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> সেভ হচ্ছে...'; btn.disabled = true;
+    
+    const youtubeVideoId = extractYoutubeVideoId(youtubeUrl);
+    
+    const btn=document.getElementById('saveBtn'); 
+    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> সেভ হচ্ছে...'; 
+    btn.disabled = true;
     try {
         await db.ref('shops/'+currentShopId).update({
-            shopName, ownerName, description: document.getElementById('description').value.trim(),
-            area, phone, whatsapp: document.getElementById('whatsapp').value.trim(),
+            shopName, 
+            ownerName, 
+            description: document.getElementById('description').value.trim(),
+            area, 
+            phone, 
+            whatsapp: document.getElementById('whatsapp').value.trim(),
             telegram: document.getElementById('telegram').value.trim(),
-            youtube: youtube, // ইউটিউব লিংক সংরক্ষণ
+            youtube: youtubeUrl,
+            youtubeVideoId: youtubeVideoId,
+            category: selectedCategory,
             updatedAt: Date.now()
         });
         document.getElementById('previewCardShopName').innerHTML=shopName;
         document.getElementById('previewCardAddress').innerHTML=area;
         showToast('✅ তথ্য সংরক্ষণ হয়েছে!');
     } catch(e) { showToast('সংরক্ষণ ব্যর্থ!',true); }
-    btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; 
+    btn.disabled = false;
 }
 
 // Product Management
@@ -759,6 +891,10 @@ auth.onAuthStateChanged(async user=>{
     document.getElementById('loadingScreen').style.display='none';
     document.getElementById('mainContent').style.display='block';
     document.getElementById('saveWrap').style.display='flex';
+    
+    // ক্যাটাগরি JSON লোড করা
+    await loadCategoriesForDashboard();
+    
     if(snap.exists()){
         currentShopData=snap.val();
         document.getElementById('previewCardShopName').innerHTML=currentShopData.shopName||'দোকানের নাম';
@@ -774,7 +910,13 @@ auth.onAuthStateChanged(async user=>{
         document.getElementById('phone').value=currentShopData.phone||'';
         document.getElementById('whatsapp').value=currentShopData.whatsapp||'';
         document.getElementById('telegram').value=currentShopData.telegram||'';
-        document.getElementById('youtube').value=currentShopData.youtube||''; // ইউটিউব লিংক লোড
+        document.getElementById('youtube').value=currentShopData.youtube||'';
+        // ক্যাটাগরি সিলেক্ট করা
+        if(currentShopData.category){
+            selectedCategoryValue = currentShopData.category;
+            document.getElementById('selectedCategory').value = currentShopData.category;
+            renderCategoryChips();
+        }
     }
     loadProducts();
     await loadSlides();
