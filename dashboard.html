@@ -30,7 +30,6 @@
     min-height:100vh;
   }
   
-  /* Loading Screen */
   #loadingScreen {
     position:fixed; inset:0; background:linear-gradient(135deg,#1a0a3e,#4a1a9e,#6c2bd9);
     display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999;
@@ -47,7 +46,6 @@
   
   .content { padding:20px 16px 100px; }
   
-  /* Glass Button */
   .btn-glass {
     background: rgba(255,255,255,0.9);
     backdrop-filter: blur(10px);
@@ -73,7 +71,6 @@
     box-shadow: 0 8px 20px rgba(108,43,217,0.25);
   }
   
-  /* Gradient Button - Main Edit Button */
   .btn-gradient-main {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border: none;
@@ -97,7 +94,6 @@
     box-shadow: 0 8px 20px rgba(108,43,217,0.35);
   }
   
-  /* Shop Card */
   .shop-card {
     background: linear-gradient(135deg, var(--white), #fefcff);
     border-radius: 28px;
@@ -152,7 +148,6 @@
   .status-badge.pending { background: #fff8e5; color: #f0c040; }
   .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
   
-  /* Edit Options Container */
   .edit-options-container {
     display: none;
     margin-top: 10px;
@@ -166,7 +161,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
   
-  /* Option Buttons */
   .option-btn {
     background: var(--white);
     border: 1px solid var(--border-light);
@@ -204,7 +198,6 @@
     transition: transform 0.2s;
   }
   
-  /* Content Panel */
   .option-content-panel {
     display: none;
     margin-top: 12px;
@@ -223,7 +216,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
   
-  /* Form Inputs */
   .input-group { margin-bottom: 16px; }
   .input-label {
     font-size: 12px;
@@ -250,7 +242,6 @@
   }
   textarea.input-field { resize: none; height: 80px; }
   
-  /* Buttons */
   .btn-small-green {
     background: #22c55e;
     border: none;
@@ -278,7 +269,6 @@
   }
   .btn-small-purple:hover { background: #5a5290; }
   
-  /* Product Item */
   .product-item {
     background: var(--white);
     border-radius: 16px;
@@ -348,7 +338,6 @@
   .edit-actions { display: flex; gap: 8px; }
   .edit-actions button { padding: 6px 14px; font-size: 12px; border-radius: 30px; border: none; cursor: pointer; }
   
-  /* Slider Item */
   .slider-item {
     background: #faf8ff;
     padding: 12px;
@@ -357,7 +346,6 @@
     border: 1px solid #e8e0ff;
   }
   
-  /* Ticker Preview */
   .ticker-preview {
     background: linear-gradient(135deg, #1f0a3b, #2d1a5e);
     padding: 12px;
@@ -368,7 +356,6 @@
     font-size: 12px;
   }
   
-  /* Bottom Navigation */
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -414,7 +401,6 @@
     cursor: pointer;
   }
   
-  /* Toast */
   .custom-toast {
     position: fixed;
     bottom: 90px;
@@ -437,7 +423,6 @@
     to { transform: translateY(0); opacity: 1; }
   }
   
-  /* YouTube Preview */
   .youtube-preview {
     margin-top: 10px;
     padding: 10px;
@@ -460,29 +445,21 @@
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
 <div class="content" id="mainContent" style="display:none">
-    <!-- Shop Card -->
     <div class="shop-card">
         <div class="shop-name"><i class="fas fa-crown" style="color:#f0c040;"></i> <span id="previewCardShopName">দোকানের নাম</span></div>
         <div class="shop-address"><i class="fas fa-location-dot"></i> <span id="previewCardAddress">ঠিকানা</span></div>
         <div id="cardStatusBadge" class="status-badge pending"><i class="fas fa-clock"></i> পেন্ডিং</div>
     </div>
 
-    <!-- Live Profile Button -->
     <button class="btn-glass" onclick="viewProfile()"><i class="fas fa-globe"></i> লাইভ প্রোফাইল দেখুন</button>
     
-    <!-- Main Edit Button -->
     <button class="btn-gradient-main" id="mainEditBtn"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
-    <!-- Edit Options Container -->
     <div id="editOptionsContainer" class="edit-options-container">
         
-        <!-- Option 1: প্রোডাক্ট যোগ করুন -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('addProductPanel')">
-                <div class="option-left">
-                    <i class="fas fa-plus-circle"></i>
-                    <span>প্রোডাক্ট যোগ করুন</span>
-                </div>
+                <div class="option-left"><i class="fas fa-plus-circle"></i><span>প্রোডাক্ট যোগ করুন</span></div>
                 <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-addProductPanel"></i>
             </div>
             <div id="addProductPanel" class="option-content-panel">
@@ -494,13 +471,9 @@
             </div>
         </div>
         
-        <!-- Option 2: প্রোডাক্ট ম্যানেজমেন্ট -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('productListPanel')">
-                <div class="option-left">
-                    <i class="fas fa-boxes"></i>
-                    <span>প্রোডাক্ট ম্যানেজমেন্ট</span>
-                </div>
+                <div class="option-left"><i class="fas fa-boxes"></i><span>প্রোডাক্ট ম্যানেজমেন্ট</span></div>
                 <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-productListPanel"></i>
             </div>
             <div id="productListPanel" class="option-content-panel">
@@ -508,13 +481,9 @@
             </div>
         </div>
         
-        <!-- Option 3: চলন্ত লেখা (টিকার) -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('tickerPanel')">
-                <div class="option-left">
-                    <i class="fas fa-comment-dots"></i>
-                    <span>চলন্ত লেখা (টিকার)</span>
-                </div>
+                <div class="option-left"><i class="fas fa-comment-dots"></i><span>চলন্ত লেখা (টিকার)</span></div>
                 <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-tickerPanel"></i>
             </div>
             <div id="tickerPanel" class="option-content-panel">
@@ -525,13 +494,9 @@
             </div>
         </div>
         
-        <!-- Option 4: ইমেজ স্লাইডার -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('sliderPanel')">
-                <div class="option-left">
-                    <i class="fas fa-images"></i>
-                    <span>ইমেজ স্লাইডার</span>
-                </div>
+                <div class="option-left"><i class="fas fa-images"></i><span>ইমেজ স্লাইডার</span></div>
                 <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-sliderPanel"></i>
             </div>
             <div id="sliderPanel" class="option-content-panel">
@@ -540,13 +505,9 @@
             </div>
         </div>
         
-        <!-- Option 5: দোকানের তথ্য (YouTube Link Added Here) -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('shopInfoPanel')">
-                <div class="option-left">
-                    <i class="fas fa-store"></i>
-                    <span>দোকানের তথ্য</span>
-                </div>
+                <div class="option-left"><i class="fas fa-store"></i><span>দোকানের তথ্য</span></div>
                 <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-shopInfoPanel"></i>
             </div>
             <div id="shopInfoPanel" class="option-content-panel">
@@ -558,14 +519,12 @@
                 <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div>
                 <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div>
                 
-                <!-- ইউটিউব ভিডিও লিংক অপশন -->
                 <div class="input-group">
                     <label class="input-label"><i class="fab fa-youtube" style="color:#ff0000;"></i> ইউটিউব ভিডিও লিংক</label>
                     <input class="input-field" type="url" id="youtube" placeholder="https://www.youtube.com/watch?v=xxxxx" oninput="previewYouTubeVideo()">
                     <small style="font-size: 10px; color: #888; display: block; margin-top: 4px;">💡 এই লিংকটি হোমপেজে ভিডিও আকারে দেখানো হবে</small>
                 </div>
                 
-                <!-- ইউটিউব প্রিভিউ -->
                 <div class="youtube-preview" id="youtubePreview">
                     <iframe id="youtubePreviewIframe" frameborder="0" allowfullscreen></iframe>
                 </div>
@@ -574,7 +533,6 @@
     </div>
 </div>
 
-<!-- Bottom Navigation Bar -->
 <div class="bottom-nav" id="saveWrap" style="display:none">
     <button class="nav-home" onclick="goHome()"><i class="fas fa-home"></i> হোম</button>
     <button class="nav-save" id="saveBtn" onclick="saveShopData()"><i class="fas fa-save"></i> সেভ করুন</button>
@@ -605,18 +563,11 @@ function goHome() { window.location.href = 'index.html'; }
 function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
 function logout(){ auth.signOut().then(()=>{ showToast('✅ লগআউট হয়েছে!'); setTimeout(()=>window.location.href='index.html',1500); }); }
 
-// ইউটিউব প্রিভিউ ফাংশন
 function previewYouTubeVideo() {
     const youtubeUrl = document.getElementById('youtube').value.trim();
     const previewDiv = document.getElementById('youtubePreview');
     const iframe = document.getElementById('youtubePreviewIframe');
-    
-    if (!youtubeUrl) {
-        previewDiv.classList.remove('show');
-        return;
-    }
-    
-    // ইউটিউব ভিডিও আইডি এক্সট্র্যাক্ট
+    if (!youtubeUrl) { previewDiv.classList.remove('show'); return; }
     let videoId = null;
     const patterns = [
         /(?:youtube\.com\/watch\?v=)([^&]+)/,
@@ -624,12 +575,10 @@ function previewYouTubeVideo() {
         /(?:youtube\.com\/embed\/)([^?]+)/,
         /(?:youtube\.com\/shorts\/)([^?]+)/
     ];
-    
     for (let pattern of patterns) {
         const match = youtubeUrl.match(pattern);
         if (match) { videoId = match[1]; break; }
     }
-    
     if (videoId) {
         iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&mute=1&playsinline=1`;
         previewDiv.classList.add('show');
@@ -638,7 +587,6 @@ function previewYouTubeVideo() {
     }
 }
 
-// Toggle Option Panel
 function toggleOptionPanel(panelId) {
     const panel = document.getElementById(panelId);
     const icon = document.getElementById('toggleIcon-' + panelId);
@@ -651,7 +599,6 @@ function toggleOptionPanel(panelId) {
     }
 }
 
-// Main Edit Button Toggle
 const mainEditBtn = document.getElementById('mainEditBtn');
 const editOptionsContainer = document.getElementById('editOptionsContainer');
 mainEditBtn.addEventListener('click', function() {
@@ -662,7 +609,6 @@ mainEditBtn.addEventListener('click', function() {
     }
 });
 
-// Save Shop Data (including youtube)
 async function saveShopData() {
     if(!currentShopId) return;
     const shopName=document.getElementById('shopName').value.trim();
@@ -680,7 +626,7 @@ async function saveShopData() {
     btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> সেভ হচ্ছে...'; 
     btn.disabled = true;
     
-    console.log('সেভ হচ্ছে ইউটিউব লিংক:', youtube);
+    console.log('📺 সেভ হচ্ছে ইউটিউব লিংক:', youtube);
     
     try {
         await db.ref('shops/'+currentShopId).update({
@@ -693,15 +639,15 @@ async function saveShopData() {
         document.getElementById('previewCardShopName').innerHTML=shopName;
         document.getElementById('previewCardAddress').innerHTML=area;
         showToast('✅ তথ্য সংরক্ষণ হয়েছে!');
+        console.log('✅ ইউটিউব লিংক সেভ হয়েছে:', youtube);
     } catch(e) { 
         showToast('সংরক্ষণ ব্যর্থ!',true); 
-        console.error('সেভ করতে সমস্যা:', e);
+        console.error('❌ সেভ করতে সমস্যা:', e);
     }
     btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; 
     btn.disabled = false;
 }
 
-// Product Management
 async function loadProducts() {
     if(!currentShopId) return;
     const container=document.getElementById('productListContainer');
@@ -785,7 +731,6 @@ async function addProduct() {
 }
 function getThumbUrl(url){ if(!url) return "https://via.placeholder.com/55x55/ede6ff/a855f7?text=No"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`; return url; }
 
-// Slider Functions
 let slidesData = [];
 async function loadSlides() {
     if(!currentShopId) return;
@@ -801,7 +746,6 @@ async function updateSlideImage(idx,url){ slidesData[idx].image=url; await db.re
 async function removeSlide(idx){ if(slidesData.length===1){ showToast('কমপক্ষে একটি স্লাইড রাখতে হবে!',true); return; } slidesData.splice(idx,1); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('স্লাইড মুছে ফেলা হয়েছে'); }
 async function addNewSlide(){ slidesData.push({image:"https://via.placeholder.com/1200x400/8b5cf6/ffffff?text=New+Slide"}); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('নতুন স্লাইড যোগ হয়েছে'); }
 
-// Ticker Functions
 let tickerItems = [];
 async function loadTicker() {
     if(!currentShopId) return;
@@ -816,7 +760,6 @@ function updateTickerPreview(items){ document.getElementById('tickerPreview').in
 async function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showToast('কিছু লিখুন!',true); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; await db.ref(`tickers/${currentShopId}`).set(items); updateTickerPreview(items); showToast('টিকার আপডেট হয়েছে!'); }
 async function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; await db.ref(`tickers/${currentShopId}`).set(def); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
 
-// Initialize
 auth.onAuthStateChanged(async user=>{
     if(!user){ window.location.href='login.html'; return; }
     currentShopId=user.uid;
@@ -840,11 +783,7 @@ auth.onAuthStateChanged(async user=>{
         document.getElementById('whatsapp').value=currentShopData.whatsapp||'';
         document.getElementById('telegram').value=currentShopData.telegram||'';
         document.getElementById('youtube').value=currentShopData.youtube||'';
-        
-        // ইউটিউব প্রিভিউ দেখানো
-        if(currentShopData.youtube) {
-            setTimeout(() => previewYouTubeVideo(), 100);
-        }
+        if(currentShopData.youtube) { setTimeout(() => previewYouTubeVideo(), 100); }
     }
     loadProducts();
     await loadSlides();
