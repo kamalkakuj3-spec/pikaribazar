@@ -242,7 +242,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড - শুধু সাদা প্লে আইকন (কোন ব্যাকগ্রাউন্ড বা বর্ডার নেই) */
+/* দোকানের কার্ড - আপডেটেড প্লে আইকন */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -271,29 +271,34 @@ marquee {
     object-fit: cover;
     display: block;
 }
-/* শুধু সাদা প্লে আইকন - কোন ব্যাকগ্রাউন্ড, কোন বর্ডার নেই */
+/* আপডেটেড প্লে আইকন - সাইজ অর্ধেক, হালকা রাউন্ড শেপ ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড */
 .play-icon {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 68px;
+    font-size: 34px;
     cursor: pointer;
     z-index: 10;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    transition: transform 0.2s ease;
-    font-family: Arial, sans-serif;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease, background 0.2s ease;
+    background: rgba(0, 0, 0, 0.25);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    backdrop-filter: blur(2px);
 }
 .play-icon:hover {
-    transform: translate(-50%, -50%) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.05);
+    background: rgba(0, 0, 0, 0.35);
 }
-/* "▶" ক্যারেক্টার ব্যবহার করে প্লে আইকন */
 .play-icon::before {
     content: "▶";
+    margin-left: 4px;
 }
 .shop-video-frame {
     position: absolute;
@@ -1023,7 +1028,6 @@ window.applyFilters = function() {
     window.renderShops(filtered);
 };
 
-// ভিডিও প্লে করার ফাংশন - সাউন্ড সহ
 window.playVideo = function(videoId, element) {
     const container = element.closest('.video-player-card');
     if (!container) return;
@@ -1032,7 +1036,6 @@ window.playVideo = function(videoId, element) {
     const playIcon = container.querySelector('.play-icon');
     const iframe = container.querySelector('.shop-video-frame');
     
-    // আগের চালানো ভিডিও বন্ধ করুন
     if (activeVideoPlayers.size > 0) {
         activeVideoPlayers.forEach((playerContainer, vid) => {
             if (vid !== videoId) {
@@ -1062,7 +1065,6 @@ window.playVideo = function(videoId, element) {
         }
         iframe.style.display = 'block';
         
-        // Intersection Observer - ভিডিও স্ক্রিনের বাইরে গেলে পজ হবে
         if (videoIntersectionObservers.has(videoId)) {
             videoIntersectionObservers.get(videoId).disconnect();
         }
@@ -1085,7 +1087,6 @@ window.playVideo = function(videoId, element) {
     }
 };
 
-// রেন্ডার শপস - শুধু থাম্বনেইল + সাদা প্লে আইকন
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
