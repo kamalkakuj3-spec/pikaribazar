@@ -146,7 +146,7 @@ body {
     background: #e8e0ff;
 }
 
-/* ========== ক্যাটাগরি পপআপ (মাল্টি-সিলেক্ট) ========== */
+/* ========== ক্যাটাগরি পপআপ ========== */
 .category-popup-overlay {
     position: fixed;
     top: 0;
@@ -316,6 +316,10 @@ body {
 .category-selected-text {
     font-size: 14px;
     color: var(--text);
+}
+.category-arrow {
+    color: var(--primary-light);
+    font-size: 12px;
 }
 
 /* HEADER */
@@ -1060,6 +1064,9 @@ function openCategoryPopup() {
         return;
     }
     
+    // টেম্পোরারি অ্যারেতে বর্তমান সিলেক্টেড ক্যাটাগরি কপি
+    window.tempSelectedCategories = [...selectedCategoriesArray];
+    
     const existingPopup = document.querySelector('.category-popup-overlay');
     if (existingPopup) existingPopup.remove();
     
@@ -1067,7 +1074,7 @@ function openCategoryPopup() {
     overlay.className = 'category-popup-overlay';
     
     const categoriesHTML = categoriesList.map(cat => {
-        const isSelected = selectedCategoriesArray.includes(cat);
+        const isSelected = window.tempSelectedCategories.includes(cat);
         return `
             <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this)">
                 <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this.parentElement)">
@@ -1100,17 +1107,15 @@ function openCategoryPopup() {
     });
 }
 
-let tempSelectedCategories = [];
-
 window.toggleCategoryInPopup = function(category, element) {
-    const index = tempSelectedCategories.indexOf(category);
+    const index = window.tempSelectedCategories.indexOf(category);
     if (index === -1) {
-        tempSelectedCategories.push(category);
+        window.tempSelectedCategories.push(category);
         element.classList.add('selected');
         const checkbox = element.querySelector('input');
         if (checkbox) checkbox.checked = true;
     } else {
-        tempSelectedCategories.splice(index, 1);
+        window.tempSelectedCategories.splice(index, 1);
         element.classList.remove('selected');
         const checkbox = element.querySelector('input');
         if (checkbox) checkbox.checked = false;
@@ -1118,7 +1123,7 @@ window.toggleCategoryInPopup = function(category, element) {
 };
 
 window.clearAllCategorySelection = function() {
-    tempSelectedCategories = [];
+    window.tempSelectedCategories = [];
     document.querySelectorAll('.cat-check').forEach(check => {
         check.classList.remove('selected');
         const cb = check.querySelector('input');
@@ -1130,11 +1135,12 @@ window.applyCategorySelection = function() {
     const popup = document.querySelector('.category-popup-overlay');
     if (popup) popup.remove();
     
-    selectedCategoriesArray = [...tempSelectedCategories];
-    tempSelectedCategories = [];
+    selectedCategoriesArray = [...window.tempSelectedCategories];
+    window.tempSelectedCategories = [];
     
     renderSelectedCategoriesChips();
     updateCategoryDisplayText();
+    console.log('Selected Categories:', selectedCategoriesArray);
 };
 
 function renderSelectedCategoriesChips() {
@@ -1155,6 +1161,7 @@ function renderSelectedCategoriesChips() {
     `).join('');
     
     hiddenInput.value = selectedCategoriesArray.join(',');
+    console.log('Hidden Input Value:', hiddenInput.value);
 }
 
 function removeCategory(category) {
@@ -1326,6 +1333,8 @@ function goToLogin() {
 
 // ========== রেজিস্ট্রেশন ==========
 async function registerShop() {
+    console.log('registerShop function called');
+    
     const shopName = document.getElementById('shopName').value.trim();
     const ownerName = document.getElementById('ownerName').value.trim();
     const description = document.getElementById('description').value.trim();
@@ -1341,6 +1350,8 @@ async function registerShop() {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const confirm = document.getElementById('confirmPassword').value;
+
+    console.log('Form Data:', {shopName, ownerName, division, district, thana, area, categories, phone, email});
 
     // Validation
     if (!shopName) return showError('দোকানের নাম দিন!');
@@ -1361,6 +1372,7 @@ async function registerShop() {
     try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const uid = userCredential.user.uid;
+        console.log('User created:', uid);
 
         let youtubeVideoId = '';
         if (youtube) {
@@ -1376,7 +1388,7 @@ async function registerShop() {
             if (!youtubeVideoId && youtube.length > 0) youtubeVideoId = youtube;
         }
 
-        await db.ref('shops/' + uid).set({
+        const shopData = {
             shopName,
             ownerName,
             description,
@@ -1393,7 +1405,11 @@ async function registerShop() {
             email,
             status: 'pending',
             createdAt: Date.now(),
-        });
+        };
+        
+        console.log('Saving shop data:', shopData);
+        await db.ref('shops/' + uid).set(shopData);
+        console.log('Shop data saved successfully');
 
         await auth.signOut();
         
@@ -1405,6 +1421,7 @@ async function registerShop() {
 
     } catch (error) {
         btn.classList.remove('loading');
+        console.error('Registration error:', error);
 
         if (error.code === 'auth/email-already-in-use') {
             showError('এই ইমেইল দিয়ে আগেই একাউন্ট আছে!');
@@ -1420,6 +1437,7 @@ async function registerShop() {
 
 // ========== পেজ লোড ==========
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOM Content Loaded');
     await loadDivisionsFromJSON();
     await loadCategoriesFromJSON();
 });
