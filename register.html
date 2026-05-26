@@ -655,7 +655,7 @@ textarea.input-field {
 
 .msg-box.show { display: flex; }
 
-/* ========== নেভিগেশন বার (শুধুমাত্র সেভ বাটন - ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড) ========== */
+/* ========== নেভিগেশন বার (শুধুমাত্র সেভ বাটন - ট্রান্সপারেন্ট) ========== */
 .bottom-navbar {
     position: fixed;
     bottom: 0;
@@ -665,11 +665,11 @@ textarea.input-field {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 12px 20px 20px;
+    padding: 12px 20px 25px;
     z-index: 1000;
 }
 
-/* সেভ বাটন স্টাইল (নেভিগেশন বারের মধ্যে) */
+/* সেভ বাটন স্টাইল */
 .save-nav-btn {
     display: flex;
     align-items: center;
@@ -828,7 +828,7 @@ textarea.input-field {
         </div>
     </div>
 
-    <!-- ২. ঠিকানা — JSON থেকে লোড -->
+    <!-- ২. ঠিকানা -- JSON থেকে লোড -->
     <div class="tile-section">
         <div class="tile-card">
             <div class="tile-header">
@@ -883,7 +883,7 @@ textarea.input-field {
         </div>
     </div>
 
-    <!-- ৩. ক্যাটাগরি — পপআপ উইন্ডো আকারে -->
+    <!-- ৩. ক্যাটাগরি -- পপআপ উইন্ডো আকারে -->
     <div class="tile-section" id="categorySection" style="display:none">
         <div class="tile-card">
             <div class="tile-header">
@@ -994,7 +994,7 @@ textarea.input-field {
 
 </div>
 
-<!-- ========== নেভিগেশন বার (শুধুমাত্র সেভ বাটন - ট্রান্সপারেন্ট) ========== -->
+<!-- ========== নেভিগেশন বার (শুধুমাত্র সেভ বাটন) ========== -->
 <div class="bottom-navbar">
     <button class="save-nav-btn" id="saveBtn">
         <i class="fas fa-save"></i>
@@ -1357,7 +1357,7 @@ function getFormValues() {
     confirm = document.getElementById('confirmPassword')?.value || '';
 }
 
-// ========== ভ্যালিডেশন ফাংশন ==========
+// ========== ভ্যালিডেশন ফাংশন (প্রথম ফাইলের মতোই) ==========
 function validateForm() {
     if (!shopName) { showError('দোকানের নাম দিন!'); return false; }
     if (!ownerName) { showError('মালিকের নাম দিন!'); return false; }
@@ -1373,7 +1373,7 @@ function validateForm() {
     return true;
 }
 
-// ========== রেজিস্ট্রেশন ফাংশন (আগের মতোই কাজ করবে) ==========
+// ========== রেজিস্ট্রেশন ফাংশন (প্রথম ফাইলের মতোই 100% একই) ==========
 async function registerShop() {
     console.log('registerShop function called');
     
