@@ -657,7 +657,9 @@ textarea.input-field {
 /* SUBMIT BUTTON */
 .submit-wrap {
     position: fixed;
-    bottom: 0; left: 0; right: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 16px 20px;
     background: white;
     border-top: 1px solid #f0ebff;
@@ -711,14 +713,6 @@ textarea.input-field {
     pointer-events: none;
 }
 
-/* বাটনের টেক্সটে ক্লিকযোগ্য করার জন্য */
-.submit-btn .btn-text {
-    pointer-events: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
 .spinner {
     width: 20px;
     height: 20px;
@@ -731,6 +725,12 @@ textarea.input-field {
 
 .submit-btn.loading .spinner { display: block; }
 .submit-btn.loading .btn-text { display: none; }
+
+.submit-btn .btn-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
 
 @keyframes spin {
     to { transform: rotate(360deg); }
@@ -997,12 +997,9 @@ textarea.input-field {
 
 </div>
 
-<!-- SUBMIT BUTTON - বাটনের পুরো জায়গায় ক্লিকযোগ্য -->
+<!-- SUBMIT BUTTON - ID সঠিকভাবে দেওয়া হয়েছে -->
 <div class="submit-wrap">
-    <button class="submit-btn" id="submitBtn" onclick="registerShop()">
-        <div class="spinner"></div>
-        <span class="btn-text">💾 তথ্য সেভ করুন</span>
-    </button>
+    <button type="button" class="submit-btn" id="submitBtn">💾 তথ্য সেভ করুন</button>
 </div>
 
 <!-- Firebase -->
@@ -1337,25 +1334,26 @@ function goToLogin() {
     window.location.href = 'login.html';
 }
 
-// ========== রেজিস্ট্রেশন ==========
+// ========== রেজিস্ট্রেশন ফাংশন ==========
 async function registerShop() {
     console.log('registerShop function called');
     
-    const shopName = document.getElementById('shopName').value.trim();
-    const ownerName = document.getElementById('ownerName').value.trim();
-    const description = document.getElementById('description').value.trim();
-    const division = document.getElementById('division').value;
-    const district = document.getElementById('district').value;
-    const thana = document.getElementById('thana').value;
-    const area = document.getElementById('area').value.trim();
-    const categories = document.getElementById('categoriesInput').value;
-    const phone = document.getElementById('phone').value.trim();
-    const whatsapp = document.getElementById('whatsapp').value.trim();
-    const telegram = document.getElementById('telegram').value.trim();
-    const youtube = document.getElementById('youtube').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const confirm = document.getElementById('confirmPassword').value;
+    // Get all form values
+    const shopName = document.getElementById('shopName')?.value.trim() || '';
+    const ownerName = document.getElementById('ownerName')?.value.trim() || '';
+    const description = document.getElementById('description')?.value.trim() || '';
+    const division = document.getElementById('division')?.value || '';
+    const district = document.getElementById('district')?.value || '';
+    const thana = document.getElementById('thana')?.value || '';
+    const area = document.getElementById('area')?.value.trim() || '';
+    const categories = document.getElementById('categoriesInput')?.value || '';
+    const phone = document.getElementById('phone')?.value.trim() || '';
+    const whatsapp = document.getElementById('whatsapp')?.value.trim() || '';
+    const telegram = document.getElementById('telegram')?.value.trim() || '';
+    const youtube = document.getElementById('youtube')?.value.trim() || '';
+    const email = document.getElementById('email')?.value.trim() || '';
+    const password = document.getElementById('password')?.value || '';
+    const confirm = document.getElementById('confirmPassword')?.value || '';
 
     console.log('Form Data:', {shopName, ownerName, division, district, thana, area, categories, phone, email});
 
@@ -1374,6 +1372,7 @@ async function registerShop() {
 
     const btn = document.getElementById('submitBtn');
     btn.classList.add('loading');
+    btn.disabled = true;
 
     try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
@@ -1427,6 +1426,7 @@ async function registerShop() {
 
     } catch (error) {
         btn.classList.remove('loading');
+        btn.disabled = false;
         console.error('Registration error:', error);
 
         if (error.code === 'auth/email-already-in-use') {
@@ -1441,11 +1441,25 @@ async function registerShop() {
     }
 }
 
-// ========== পেজ লোড ==========
+// বাটনে ক্লিক ইভেন্ট যোগ করা হচ্ছে
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM Content Loaded');
+    
+    // JSON লোড
     await loadDivisionsFromJSON();
     await loadCategoriesFromJSON();
+    
+    // বাটনে ক্লিক ইভেন্ট যোগ করা
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            registerShop();
+        });
+        console.log('Submit button event attached');
+    } else {
+        console.error('Submit button not found!');
+    }
 });
 </script>
 </body>
