@@ -470,7 +470,7 @@ body {
 
 /* FORM CONTAINER */
 .form-container {
-    padding: 0 16px 100px;
+    padding: 0 16px 20px;
 }
 
 .tile-section {
@@ -655,64 +655,85 @@ textarea.input-field {
 
 .msg-box.show { display: flex; }
 
-/* ========== শুধুমাত্র সেভ টেক্সট (কোনো ব্যাকগ্রাউন্ড নেই) ========== */
-.save-text-container {
-    text-align: center;
-    margin: 30px 0 40px;
-    padding: 0;
+/* ========== নেভিগেশন বার (শুধুমাত্র সেভ বাটন) ========== */
+.bottom-navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    z-index: 1000;
+    border-top: 1px solid rgba(108, 43, 217, 0.1);
 }
 
-.save-text-btn {
-    display: inline-block;
+/* সেভ বাটন স্টাইল (নেভিগেশন বারের মধ্যে) */
+.save-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
     font-size: 16px;
     font-weight: 600;
-    color: var(--primary);
     cursor: pointer;
-    transition: color 0.2s ease;
-    background: transparent;
-    border: none;
-    padding: 0;
-    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(108, 43, 217, 0.3);
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
-.save-text-btn i {
-    margin-right: 8px;
-    font-size: 14px;
+.save-nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(108, 43, 217, 0.4);
 }
 
-.save-text-btn:hover {
-    color: var(--primary-dark);
-    text-decoration: underline;
+.save-nav-btn:active {
+    transform: translateY(0);
 }
 
-/* লোডিং স্টেট */
-.save-text-btn.loading {
-    color: #b39ddb;
-    pointer-events: none;
+.save-nav-btn i {
+    font-size: 18px;
 }
 
-.save-text-btn.loading i {
+.save-nav-btn .spinner-small {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.save-nav-btn.loading i {
     display: none;
 }
 
-.save-text-btn.loading .spinner-small {
+.save-nav-btn.loading .spinner-small {
     display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(108,43,217,0.3);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    margin-left: 8px;
-    vertical-align: middle;
 }
 
-.save-text-btn.loading span {
-    opacity: 0.7;
+.save-nav-btn.loading {
+    opacity: 0.8;
+    cursor: wait;
 }
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* Hide old save text container */
+.save-text-container {
+    display: none;
 }
 
 </style>
@@ -976,13 +997,13 @@ textarea.input-field {
 
 </div>
 
-<!-- ========== শুধুমাত্র টেক্সট (কোনো ব্যাকগ্রাউন্ড, বাটন, লাইনার নেই) ========== -->
-<div class="save-text-container">
-    <div class="save-text-btn" id="saveBtn">
+<!-- ========== নেভিগেশন বার (শুধুমাত্র সেভ বাটন) ========== -->
+<div class="bottom-navbar">
+    <button class="save-nav-btn" id="saveBtn">
         <i class="fas fa-save"></i>
         <span>তথ্য সেভ করুন</span>
-        <span class="spinner-small" style="display: none;"></span>
-    </div>
+        <span class="spinner-small"></span>
+    </button>
 </div>
 
 <!-- Firebase -->
