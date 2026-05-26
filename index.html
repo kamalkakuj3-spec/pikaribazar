@@ -285,7 +285,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড */
+/* দোকানের কার্ড - নাম ও ঠিকানা বাম দিক থেকে শুরু */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -354,17 +354,18 @@ marquee {
 .shop-video-info {
     padding: 14px 16px;
     background: white;
-    text-align: center;
+    text-align: left;  /* সেন্টার থেকে বামে পরিবর্তন */
 }
-/* দোকানের নামের সারি - নাম + ড্রপডাউন আইকন */
+
+/* দোকানের নামের সারি - বাম দিকে */
 .shop-name-row {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
     margin-bottom: 8px;
-    flex-wrap: wrap;
+    justify-content: flex-start;  /* বাম দিকে */
 }
+
 .shop-video-name {
     font-size: 20px;
     font-weight: 800;
@@ -373,7 +374,8 @@ marquee {
     transition: color 0.2s;
     display: inline-block;
 }
-/* ড্রপডাউন আইকন - নির্দিষ্ট প্রস্থ ও উচ্চতা */
+
+/* ড্রপডাউন আইকন */
 .dropdown-icon {
     background: none;
     border: none;
@@ -394,23 +396,28 @@ marquee {
     color: var(--primary);
     transform: scale(1.1);
 }
+
+/* ঠিকানা - বাম দিকে */
 .shop-video-location {
     font-size: 13px;
     font-weight: 500;
     color: var(--text-light);
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 6px;
     flex-wrap: wrap;
+    justify-content: flex-start;  /* বাম দিকে */
+    margin-left: 0;
 }
-/* ক্যাটাগরি ড্রপডাউন কন্টেন্ট */
+
+/* ক্যাটাগরি ড্রপডাউন - বাম দিকে */
 .categories-dropdown {
     margin-top: 10px;
     padding-top: 10px;
     border-top: 1px solid #f0ebff;
     display: none;
     animation: slideDown 0.3s ease;
+    text-align: left;  /* বাম দিকে */
 }
 .categories-dropdown.show {
     display: block;
