@@ -104,11 +104,11 @@
   .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; }
   .dot.active { background:var(--accent); width:22px; border-radius:10px; }
   
-  /* Ticker - ব্যাকগ্রাউন্ড দোকানের নামের কালারের মতো, স্পিড 20s */
+  /* Ticker - ব্যাকগ্রাউন্ড দোকানের নামের কালারের মতো, স্পিড দ্রুত 8s, টেক্সট ব্যাকগ্রাউন্ড ট্রান্সপারেন্ট */
   .ticker-section { padding:0 15px; margin:5px 0 15px 0; }
   .ticker-wrap { background:linear-gradient(135deg, var(--primary-dark), var(--primary-light)); padding:8px 0; overflow:hidden; border-radius:40px; }
-  .ticker { display:flex; white-space:nowrap; animation:scrollTicker 20s linear infinite; gap:1.5rem; }
-  .ticker-item { font-size:0.85rem; font-weight:600; color:#f0eaff; background:rgba(160,120,255,0.2); padding:0.2rem 1rem; border-radius:40px; }
+  .ticker { display:flex; white-space:nowrap; animation:scrollTicker 8s linear infinite; gap:1.5rem; }
+  .ticker-item { font-size:0.85rem; font-weight:600; color:white; background:transparent; padding:0.2rem 1rem; border-radius:40px; }
   @keyframes scrollTicker { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
   
   /* Products */
