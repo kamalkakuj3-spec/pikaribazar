@@ -91,7 +91,7 @@
   .close-bottom-btn { background:linear-gradient(135deg, #dc2626, #b91c1c); border:none; color:white; width:48px; height:48px; border-radius:50%; cursor:pointer; font-size:22px; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
   .close-bottom-btn:hover { transform:scale(1.05); background:linear-gradient(135deg, #ef4444, #dc2626); }
   
-  /* Slider - border radius কম করা হয়েছে */
+  /* Slider */
   .slider-section { max-width:1200px; margin:15px auto 5px auto; padding:0 15px; }
   .slider-container { position:relative; width:100%; height:260px; overflow:hidden; border-radius:6px; box-shadow:0 25px 45px -12px rgba(108,43,217,0.4); }
   .slides-wrapper { display:flex; width:100%; height:100%; transition:transform 0.5s ease; }
@@ -104,14 +104,23 @@
   .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; }
   .dot.active { background:var(--accent); width:22px; border-radius:10px; }
   
-  /* Ticker - border radius কম করা হয়েছে, ব্যাকগ্রাউন্ড ট্রান্সপারেন্ট, স্পিড 28s */
-  .ticker-section { padding:0 15px; margin:5px 0 15px 0; }
-  .ticker-wrap { background:transparent; padding:8px 0; overflow:hidden; border-radius:6px; }
-  .ticker { display:flex; white-space:nowrap; animation:scrollTicker 28s linear infinite; gap:1.5rem; }
-  .ticker-item { font-size:0.85rem; font-weight:600; color:#1a0a3e; background:rgba(108,43,217,0.1); padding:0.2rem 1rem; border-radius:40px; }
-  @keyframes scrollTicker { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+  /* Ticker - index.html এর মতো স্টাইল */
+  .ticker-section { margin: 0 16px 20px; }
+  .marquee-container { 
+    margin: 0 16px 20px;
+    padding: 8px 12px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(108,43,217,0.15);
+    color: white;
+  }
+  marquee { 
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
   
-  /* Products - card border radius কম করা হয়েছে */
+  /* Products */
   .container { max-width:1200px; margin:15px auto 30px; padding:0 15px; }
   .section-title { font-size:22px; font-weight:800; background:linear-gradient(135deg,var(--primary-dark),var(--primary-light)); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:18px; border-left:5px solid var(--accent); padding-left:15px; display:inline-block; }
   .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
@@ -225,12 +234,8 @@
     </div>
   </div>
 
-  <!-- TICKER -->
-  <div class="ticker-section">
-    <div class="ticker-wrap">
-      <div class="ticker" id="tickerContainer"></div>
-    </div>
-  </div>
+  <!-- TICKER - index.html এর মতো মার্কি ট্যাগ ব্যবহার করা হয়েছে -->
+  <div id="marqueeSection"></div>
 
   <!-- PRODUCTS -->
   <div class="container">
@@ -260,6 +265,29 @@ if (!shopId) { showPendingMessage(); } else { loadShop(); }
 
 let currentShopData = null;
 
+// ========== টিকার জন্য ফাংশন (index.html এর মতো) ==========
+async function loadMarquee() {
+  const container = document.getElementById('marqueeSection');
+  if (!container) return;
+  
+  try {
+    const snap = await db.ref('marquee').once('value');
+    if (snap.exists()) {
+      const data = snap.val();
+      if (data.enabled === true && data.text && data.text.trim() !== '') {
+        container.innerHTML = `<div class="marquee-container"><marquee behavior="scroll" direction="left" scrollamount="4" onmouseover="this.stop()" onmouseout="this.start()">✨ ${data.text} ✨</marquee></div>`;
+      } else {
+        container.innerHTML = `<div class="marquee-container" style="background: #ccc; color: #666;">🔇 কোনো ঘোষণা নেই</div>`;
+      }
+    } else {
+      container.innerHTML = `<div class="marquee-container" style="background: #ccc; color: #666;">🔇 কোনো ঘোষণা নেই</div>`;
+    }
+  } catch(e) {
+    console.error('Marquee load error:', e);
+    container.innerHTML = `<div class="marquee-container" style="background: #ccc; color: #666;">⚠️ টিকার লোড করতে সমস্যা</div>`;
+  }
+}
+
 async function loadShop() {
   try {
     const snap = await db.ref('shops/' + shopId).get();
@@ -278,7 +306,7 @@ async function loadShop() {
     
     renderDrawerContent(currentShopData);
     
-    await loadTicker();
+    await loadMarquee();  // index.html এর মতো মার্কি লোড
     await loadSlider();
     await loadProducts();
   } catch(e) { 
@@ -370,17 +398,6 @@ document.getElementById('menuIconBtn').addEventListener('click', openDrawer);
 document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer);
 document.getElementById('drawerCloseBottomBtn').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
-
-// ========== TICKER ==========
-async function loadTicker() {
-  const snap = await db.ref(`tickers/${shopId}`).once('value');
-  let items = [];
-  if(snap.exists()){ items = snap.val(); }
-  if(!items || items.length===0){ items = ["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; }
-  const tickerDiv = document.getElementById('tickerContainer');
-  const doubled = [...items, ...items];
-  tickerDiv.innerHTML = doubled.map(text => `<span class="ticker-item">✨ ${escapeHtml(text)}</span>`).join('');
-}
 
 // ========== SLIDER ==========
 let currentSlideIndex = 0, slideInterval = null, slidesData = [];
