@@ -711,6 +711,14 @@ textarea.input-field {
     pointer-events: none;
 }
 
+/* বাটনের টেক্সটে ক্লিকযোগ্য করার জন্য */
+.submit-btn .btn-text {
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .spinner {
     width: 20px;
     height: 20px;
@@ -989,7 +997,7 @@ textarea.input-field {
 
 </div>
 
-<!-- SUBMIT BUTTON -->
+<!-- SUBMIT BUTTON - বাটনের পুরো জায়গায় ক্লিকযোগ্য -->
 <div class="submit-wrap">
     <button class="submit-btn" id="submitBtn" onclick="registerShop()">
         <div class="spinner"></div>
@@ -1064,7 +1072,6 @@ function openCategoryPopup() {
         return;
     }
     
-    // টেম্পোরারি অ্যারেতে বর্তমান সিলেক্টেড ক্যাটাগরি কপি
     window.tempSelectedCategories = [...selectedCategoriesArray];
     
     const existingPopup = document.querySelector('.category-popup-overlay');
@@ -1161,7 +1168,6 @@ function renderSelectedCategoriesChips() {
     `).join('');
     
     hiddenInput.value = selectedCategoriesArray.join(',');
-    console.log('Hidden Input Value:', hiddenInput.value);
 }
 
 function removeCategory(category) {
