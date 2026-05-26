@@ -29,6 +29,7 @@ body {
     background: linear-gradient(135deg, #f5f3ff 0%, #e8e0ff 100%);
     min-height: 100vh;
     overflow-x: hidden;
+    padding-bottom: 80px;
 }
 
 /* Toast Message */
@@ -654,53 +655,47 @@ textarea.input-field {
 
 .msg-box.show { display: flex; }
 
-/* ========== নিচের সেভ লাইনার (clickable bar) ========== */
-.save-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    padding: 16px 20px;
+/* ========== ক্লিকযোগ্য টেক্সট লিংক (সেভ লেখা) ========== */
+.save-text-link {
     text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding: 15px;
+}
+
+.save-link {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 40px;
+    border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 100;
-    box-shadow: 0 -4px 20px rgba(108,43,217,0.3);
+    box-shadow: 0 4px 15px rgba(108,43,217,0.3);
+    text-decoration: none;
+    border: none;
 }
 
-.save-bar:hover {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+.save-link:hover {
     transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(108,43,217,0.4);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
 }
 
-.save-bar:active {
+.save-link:active {
     transform: translateY(0);
 }
 
-.save-bar-text {
-    font-size: 18px;
-    font-weight: 700;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    letter-spacing: 1px;
-}
-
-.save-bar-text i {
-    font-size: 20px;
-}
-
 /* লোডিং স্টেট */
-.save-bar.loading {
+.save-link.loading {
     background: #b39ddb;
     pointer-events: none;
     transform: none;
 }
 
-.save-bar.loading .save-bar-text .spinner-small {
+.save-link.loading .spinner-small {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -708,9 +703,14 @@ textarea.input-field {
     border-top-color: white;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+    margin-left: 10px;
 }
 
-.save-bar.loading .save-bar-text i {
+.save-link.loading i {
+    display: none;
+}
+
+.save-link.loading span {
     display: none;
 }
 
@@ -979,11 +979,11 @@ textarea.input-field {
 
 </div>
 
-<!-- ========== সেভ লাইনার (ক্লিকযোগ্য বার) ========== -->
-<div class="save-bar" id="saveBar" onclick="registerShop()">
-    <div class="save-bar-text">
+<!-- ========== ক্লিকযোগ্য টেক্সট লিংক (সেভ লেখা) ========== -->
+<div class="save-text-link">
+    <div class="save-link" id="saveLink" onclick="registerShop()">
         <i class="fas fa-save"></i>
-        <span>💾 তথ্য সেভ করুন</span>
+        <span>তথ্য সেভ করুন</span>
         <span class="spinner-small" style="display: none;"></span>
     </div>
 </div>
@@ -1324,7 +1324,7 @@ function goToLogin() {
 async function registerShop() {
     console.log('registerShop function called');
     
-    const saveBar = document.getElementById('saveBar');
+    const saveLink = document.getElementById('saveLink');
     
     // Get all form values
     const shopName = document.getElementById('shopName')?.value.trim() || '';
@@ -1359,12 +1359,12 @@ async function registerShop() {
     if (password !== confirm) return showError('পাসওয়ার্ড মিলছে না!');
 
     // Show loading state
-    saveBar.classList.add('loading');
-    const textSpan = saveBar.querySelector('.save-bar-text span');
-    const iconSpan = saveBar.querySelector('.save-bar-text i');
-    const spinnerSpan = saveBar.querySelector('.spinner-small');
-    if (textSpan) textSpan.style.display = 'none';
+    saveLink.classList.add('loading');
+    const iconSpan = saveLink.querySelector('i');
+    const textSpan = saveLink.querySelector('span:not(.spinner-small)');
+    const spinnerSpan = saveLink.querySelector('.spinner-small');
     if (iconSpan) iconSpan.style.display = 'none';
+    if (textSpan) textSpan.style.display = 'none';
     if (spinnerSpan) spinnerSpan.style.display = 'inline-block';
 
     try {
@@ -1419,9 +1419,9 @@ async function registerShop() {
 
     } catch (error) {
         console.error('Registration error:', error);
-        saveBar.classList.remove('loading');
+        saveLink.classList.remove('loading');
+        if (iconSpan) iconSpan.style.display = 'inline-block';
         if (textSpan) textSpan.style.display = 'inline';
-        if (iconSpan) iconSpan.style.display = 'inline-flex';
         if (spinnerSpan) spinnerSpan.style.display = 'none';
 
         if (error.code === 'auth/email-already-in-use') {
@@ -1442,14 +1442,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadDivisionsFromJSON();
     await loadCategoriesFromJSON();
     
-    // সেভ বারে ক্লিক ইভেন্ট নিশ্চিত করা
-    const saveBar = document.getElementById('saveBar');
-    if (saveBar) {
-        saveBar.addEventListener('click', function(e) {
+    // সেভ লিংকে ক্লিক ইভেন্ট নিশ্চিত করা
+    const saveLink = document.getElementById('saveLink');
+    if (saveLink) {
+        saveLink.addEventListener('click', function(e) {
             e.preventDefault();
             registerShop();
         });
-        console.log('Save bar click event attached');
+        console.log('Save link click event attached');
     }
 });
 </script>
