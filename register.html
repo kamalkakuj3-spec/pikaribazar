@@ -117,6 +117,7 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
     background: transparent;
     padding: 12px 20px 25px;
     text-align: center;
+    z-index: 1000;
 }
 .save-btn {
     background: linear-gradient(135deg, #6c2bd9, #a259f7);
@@ -128,12 +129,61 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(108,43,217,0.3);
+    position: relative;
 }
 .save-btn.loading { opacity: 0.7; cursor: wait; }
 .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-left: 10px; }
 .save-btn.loading .spinner { display: inline-block; }
 .save-btn.loading i { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* টোস্ট মেসেজ - বাটনের উপর দেখাবে */
+.toast-error {
+    position: fixed;
+    bottom: 85px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 1001;
+    opacity: 0;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(231,76,60,0.3);
+    pointer-events: none;
+}
+.toast-error.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* সাকসেস টোস্ট - বাটনের উপর */
+.toast-success {
+    position: fixed;
+    bottom: 85px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #2ecc71;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 1001;
+    opacity: 0;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+    pointer-events: none;
+}
+.toast-success.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
 
 .header {
     background: linear-gradient(135deg, #1a0a3e 0%, #6c2bd9 100%);
@@ -144,26 +194,6 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
 .header h1 { color: white; font-size: 24px; }
 .header p { color: rgba(255,255,255,0.7); }
 
-.error-msg {
-    background: #fdf0ef;
-    color: #e74c3c;
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    display: none;
-}
-.toast {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #2ecc71;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
-    z-index: 1000;
-    display: none;
-}
 .modal {
     position: fixed;
     top: 0;
@@ -174,7 +204,7 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 1001;
+    z-index: 2000;
 }
 .modal-content {
     background: white;
@@ -203,8 +233,10 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
 </div>
 
 <div class="container">
-    <div class="error-msg" id="errorMsg"></div>
-    <div class="toast" id="toast">✅ তথ্য সেভ হয়েছে!</div>
+    <!-- টোস্ট মেসেজ (বাটনের উপর দেখাবে) -->
+    <div id="toastError" class="toast-error">⚠️ দোকানের নাম দিন!</div>
+    <div id="toastSuccess" class="toast-success">✅ তথ্য সেভ হয়েছে!</div>
+
     <div class="modal" id="modal">
         <div class="modal-content">
             <div style="font-size: 50px;">✅</div>
@@ -340,6 +372,25 @@ let divisionsData = [];
 let categoriesList = [];
 let selectedCategories = [];
 
+// Toast functions (বাটনের উপর দেখাবে)
+function showErrorToast(msg) {
+    const toast = document.getElementById('toastError');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+function showSuccessToast(msg) {
+    const toast = document.getElementById('toastSuccess');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2000);
+}
+
 // Load Divisions
 async function loadDivisions() {
     try {
@@ -470,18 +521,6 @@ document.getElementById('password').oninput = function() {
     else { b1.classList.add('strong'); b2.classList.add('strong'); b3.classList.add('strong'); }
 };
 
-// UI Functions
-function showError(msg) {
-    const box = document.getElementById('errorMsg');
-    box.textContent = msg;
-    box.style.display = 'block';
-    setTimeout(() => box.style.display = 'none', 4000);
-}
-function showToast() {
-    const t = document.getElementById('toast');
-    t.style.display = 'block';
-    setTimeout(() => t.style.display = 'none', 2000);
-}
 function showModal() { document.getElementById('modal').style.display = 'flex'; }
 window.goToLogin = function() { window.location.href = 'login.html'; };
 
@@ -503,17 +542,17 @@ async function registerShop() {
     const password = document.getElementById('password').value;
     const confirm = document.getElementById('confirmPassword').value;
 
-    if(!shopName) { showError('দোকানের নাম দিন'); return; }
-    if(!ownerName) { showError('মালিকের নাম দিন'); return; }
-    if(!division) { showError('বিভাগ দিন'); return; }
-    if(!district) { showError('জেলা দিন'); return; }
-    if(!thana) { showError('থানা দিন'); return; }
-    if(!area) { showError('ঠিকানা দিন'); return; }
-    if(!categories) { showError('ক্যাটাগরি নির্বাচন করুন'); return; }
-    if(!phone) { showError('মোবাইল নম্বর দিন'); return; }
-    if(!email) { showError('ইমেইল দিন'); return; }
-    if(password.length < 6) { showError('পাসওয়ার্ড ৬ অক্ষরের বেশি হতে হবে'); return; }
-    if(password !== confirm) { showError('পাসওয়ার্ড মিলছে না'); return; }
+    if(!shopName) { showErrorToast('⚠️ দোকানের নাম দিন!'); return; }
+    if(!ownerName) { showErrorToast('⚠️ মালিকের নাম দিন!'); return; }
+    if(!division) { showErrorToast('⚠️ বিভাগ নির্বাচন করুন!'); return; }
+    if(!district) { showErrorToast('⚠️ জেলা নির্বাচন করুন!'); return; }
+    if(!thana) { showErrorToast('⚠️ থানা নির্বাচন করুন!'); return; }
+    if(!area) { showErrorToast('⚠️ বিস্তারিত ঠিকানা দিন!'); return; }
+    if(!categories) { showErrorToast('⚠️ কমপক্ষে একটি ক্যাটাগরি নির্বাচন করুন!'); return; }
+    if(!phone) { showErrorToast('⚠️ মোবাইল নম্বর দিন!'); return; }
+    if(!email) { showErrorToast('⚠️ ইমেইল দিন!'); return; }
+    if(password.length < 6) { showErrorToast('⚠️ পাসওয়ার্ড ৬ অক্ষরের বেশি হতে হবে!'); return; }
+    if(password !== confirm) { showErrorToast('⚠️ পাসওয়ার্ড মিলছে না!'); return; }
 
     const btn = document.getElementById('saveBtn');
     btn.classList.add('loading');
@@ -537,14 +576,19 @@ async function registerShop() {
         });
 
         await auth.signOut();
-        showToast();
-        setTimeout(() => showModal(), 1000);
+        showSuccessToast('✅ নিবন্ধন সফল!');
+        setTimeout(() => showModal(), 1500);
+        
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        
     } catch(err) {
         btn.classList.remove('loading');
         btn.disabled = false;
-        if(err.code === 'auth/email-already-in-use') showError('এই ইমেইল আগেই আছে');
-        else if(err.code === 'auth/invalid-email') showError('সঠিক ইমেইল দিন');
-        else showError(err.message);
+        if(err.code === 'auth/email-already-in-use') showErrorToast('⚠️ এই ইমেইল আগেই নিবন্ধিত!');
+        else if(err.code === 'auth/invalid-email') showErrorToast('⚠️ সঠিক ইমেইল দিন!');
+        else if(err.code === 'auth/weak-password') showErrorToast('⚠️ পাসওয়ার্ড দুর্বল!');
+        else showErrorToast('⚠️ ' + err.message);
     }
 }
 
