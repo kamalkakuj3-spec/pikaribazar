@@ -35,6 +35,34 @@ input, select, textarea {
 }
 input:focus, select:focus { border-color: #6c2bd9; outline: none; }
 
+/* পাসওয়ার্ড ফিল্ডের জন্য স্পেশাল */
+.password-wrapper {
+    position: relative;
+}
+.password-wrapper input {
+    padding-right: 75px;
+}
+.pass-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--primary);
+    background: #f0ebff;
+    padding: 5px 10px;
+    border-radius: 30px;
+    transition: all 0.2s;
+    font-family: 'Hind Siliguri', sans-serif;
+    white-space: nowrap;
+}
+.pass-toggle:hover {
+    background: #6c2bd9;
+    color: white;
+}
+
 .password-strength { display: flex; gap: 4px; margin-top: 8px; }
 .strength-bar { flex: 1; height: 4px; border-radius: 99px; background: #e8e0ff; }
 .strength-bar.weak { background: #e74c3c; }
@@ -129,7 +157,6 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(108,43,217,0.3);
-    position: relative;
 }
 .save-btn.loading { opacity: 0.7; cursor: wait; }
 .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-left: 10px; }
@@ -137,7 +164,7 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
 .save-btn.loading i { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* টোস্ট মেসেজ - বাটনের উপর দেখাবে */
+/* টোস্ট মেসেজ - বাটনের উপর */
 .toast-error {
     position: fixed;
     bottom: 85px;
@@ -160,8 +187,6 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
     transform: translateX(-50%) translateY(0);
     opacity: 1;
 }
-
-/* সাকসেস টোস্ট - বাটনের উপর */
 .toast-success {
     position: fixed;
     bottom: 85px;
@@ -223,6 +248,22 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
     margin-top: 15px;
     cursor: pointer;
 }
+
+@media (max-width: 480px) {
+    .toast-error, .toast-success {
+        white-space: normal;
+        text-align: center;
+        max-width: 85%;
+        bottom: 75px;
+    }
+    .pass-toggle {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+    .password-wrapper input {
+        padding-right: 65px;
+    }
+}
 </style>
 </head>
 <body>
@@ -233,9 +274,8 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
 </div>
 
 <div class="container">
-    <!-- টোস্ট মেসেজ (বাটনের উপর দেখাবে) -->
-    <div id="toastError" class="toast-error">⚠️ দোকানের নাম দিন!</div>
-    <div id="toastSuccess" class="toast-success">✅ তথ্য সেভ হয়েছে!</div>
+    <div class="toast-error" id="toastError">⚠️ দোকানের নাম দিন!</div>
+    <div class="toast-success" id="toastSuccess">✅ তথ্য সেভ হয়েছে!</div>
 
     <div class="modal" id="modal">
         <div class="modal-content">
@@ -254,12 +294,12 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
             <input type="text" id="shopName" placeholder="যেমন: রহিম স্টোর">
         </div>
         <div class="input-group">
-            <label>মালিকের নাম *</label>
+            <label>প্রোপাইটরের নাম *</label>
             <input type="text" id="ownerName" placeholder="আপনার নাম">
         </div>
         <div class="input-group">
-            <label>দোকান পরিচিতি</label>
-            <textarea id="description" rows="2" placeholder="দোকান সম্পর্কে লিখুন..."></textarea>
+            <label>আপনার দোকানের পণ্য সমূহ</label>
+            <textarea id="description" rows="2" placeholder="আপনার দোকানে যে সমস্ত পণ্য পাওয়া যায় সংক্ষেপে লিখুন..."></textarea>
         </div>
     </div>
 
@@ -286,7 +326,7 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
         </div>
         <div class="input-group" id="areaGroup" style="display:none">
             <label>বিস্তারিত ঠিকানা *</label>
-            <textarea id="area" rows="2" placeholder="বাড়ি, রোড, এলাকা"></textarea>
+            <textarea id="area" rows="2" placeholder="দোকানের ঠিকানা এখানে লিখুন"></textarea>
         </div>
     </div>
 
@@ -331,7 +371,10 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
         </div>
         <div class="input-group">
             <label>পাসওয়ার্ড *</label>
-            <input type="password" id="password" placeholder="কমপক্ষে ৬ অক্ষর">
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="কমপক্ষে ৬ অক্ষর">
+                <span class="pass-toggle" onclick="togglePassword()">দেখুন</span>
+            </div>
         </div>
         <div class="password-strength">
             <div class="strength-bar" id="bar1"></div>
@@ -340,7 +383,10 @@ input:focus, select:focus { border-color: #6c2bd9; outline: none; }
         </div>
         <div class="input-group">
             <label>পাসওয়ার্ড নিশ্চিত করুন *</label>
-            <input type="password" id="confirmPassword" placeholder="আবার লিখুন">
+            <div class="password-wrapper">
+                <input type="password" id="confirmPassword" placeholder="আবার লিখুন">
+                <span class="pass-toggle" onclick="toggleConfirmPassword()">দেখুন</span>
+            </div>
         </div>
     </div>
 </div>
@@ -372,7 +418,7 @@ let divisionsData = [];
 let categoriesList = [];
 let selectedCategories = [];
 
-// Toast functions (বাটনের উপর দেখাবে)
+// Toast functions
 function showErrorToast(msg) {
     const toast = document.getElementById('toastError');
     toast.textContent = msg;
@@ -390,6 +436,31 @@ function showSuccessToast(msg) {
         toast.classList.remove('show');
     }, 2000);
 }
+
+// Toggle Password functions
+window.togglePassword = function() {
+    const passInput = document.getElementById('password');
+    const toggleBtn = event.target;
+    if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.textContent = 'লুকান';
+    } else {
+        passInput.type = 'password';
+        toggleBtn.textContent = 'দেখুন';
+    }
+};
+
+window.toggleConfirmPassword = function() {
+    const passInput = document.getElementById('confirmPassword');
+    const toggleBtn = event.target;
+    if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.textContent = 'লুকান';
+    } else {
+        passInput.type = 'password';
+        toggleBtn.textContent = 'দেখুন';
+    }
+};
 
 // Load Divisions
 async function loadDivisions() {
