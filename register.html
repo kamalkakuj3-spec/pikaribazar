@@ -655,63 +655,66 @@ textarea.input-field {
 
 .msg-box.show { display: flex; }
 
-/* ========== ক্লিকযোগ্য টেক্সট লিংক (সেভ লেখা) ========== */
+/* ========== শুধুমাত্র টেক্সট লিংক (কোনো ব্যাকগ্রাউন্ড নেই) ========== */
 .save-text-link {
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    padding: 15px;
+    margin: 30px 0 40px;
+    padding: 0;
 }
 
-.save-link {
+.save-text {
     display: inline-block;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
     font-size: 18px;
     font-weight: 700;
-    padding: 14px 40px;
-    border-radius: 50px;
+    color: var(--primary);
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(108,43,217,0.3);
+    transition: all 0.2s ease;
     text-decoration: none;
+    background: transparent;
     border: none;
+    padding: 0;
+    letter-spacing: 0.5px;
 }
 
-.save-link:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(108,43,217,0.4);
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+.save-text i {
+    margin-right: 8px;
+    font-size: 16px;
 }
 
-.save-link:active {
-    transform: translateY(0);
+.save-text:hover {
+    color: var(--primary-dark);
+    transform: scale(1.02);
+}
+
+.save-text:active {
+    transform: scale(0.98);
 }
 
 /* লোডিং স্টেট */
-.save-link.loading {
-    background: #b39ddb;
+.save-text.loading {
+    color: #b39ddb;
     pointer-events: none;
     transform: none;
 }
 
-.save-link.loading .spinner-small {
+.save-text.loading .spinner-small {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255,255,255,0.3);
-    border-top-color: white;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(108,43,217,0.3);
+    border-top-color: var(--primary);
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-left: 10px;
+    animation: spin 0.6s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
 }
 
-.save-link.loading i {
+.save-text.loading i {
     display: none;
 }
 
-.save-link.loading span {
-    display: none;
+.save-text.loading span {
+    opacity: 0.7;
 }
 
 @keyframes spin {
@@ -979,9 +982,9 @@ textarea.input-field {
 
 </div>
 
-<!-- ========== ক্লিকযোগ্য টেক্সট লিংক (সেভ লেখা) ========== -->
+<!-- ========== শুধুমাত্র টেক্সট লিংক (কোনো ব্যাকগ্রাউন্ড, বাটন, লাইনার নেই) ========== -->
 <div class="save-text-link">
-    <div class="save-link" id="saveLink" onclick="registerShop()">
+    <div class="save-text" id="saveText" onclick="registerShop()">
         <i class="fas fa-save"></i>
         <span>তথ্য সেভ করুন</span>
         <span class="spinner-small" style="display: none;"></span>
@@ -1324,7 +1327,7 @@ function goToLogin() {
 async function registerShop() {
     console.log('registerShop function called');
     
-    const saveLink = document.getElementById('saveLink');
+    const saveText = document.getElementById('saveText');
     
     // Get all form values
     const shopName = document.getElementById('shopName')?.value.trim() || '';
@@ -1359,12 +1362,12 @@ async function registerShop() {
     if (password !== confirm) return showError('পাসওয়ার্ড মিলছে না!');
 
     // Show loading state
-    saveLink.classList.add('loading');
-    const iconSpan = saveLink.querySelector('i');
-    const textSpan = saveLink.querySelector('span:not(.spinner-small)');
-    const spinnerSpan = saveLink.querySelector('.spinner-small');
+    saveText.classList.add('loading');
+    const iconSpan = saveText.querySelector('i');
+    const textSpan = saveText.querySelector('span:not(.spinner-small)');
+    const spinnerSpan = saveText.querySelector('.spinner-small');
     if (iconSpan) iconSpan.style.display = 'none';
-    if (textSpan) textSpan.style.display = 'none';
+    if (textSpan) textSpan.style.opacity = '0.7';
     if (spinnerSpan) spinnerSpan.style.display = 'inline-block';
 
     try {
@@ -1419,9 +1422,9 @@ async function registerShop() {
 
     } catch (error) {
         console.error('Registration error:', error);
-        saveLink.classList.remove('loading');
+        saveText.classList.remove('loading');
         if (iconSpan) iconSpan.style.display = 'inline-block';
-        if (textSpan) textSpan.style.display = 'inline';
+        if (textSpan) textSpan.style.opacity = '1';
         if (spinnerSpan) spinnerSpan.style.display = 'none';
 
         if (error.code === 'auth/email-already-in-use') {
@@ -1442,14 +1445,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadDivisionsFromJSON();
     await loadCategoriesFromJSON();
     
-    // সেভ লিংকে ক্লিক ইভেন্ট নিশ্চিত করা
-    const saveLink = document.getElementById('saveLink');
-    if (saveLink) {
-        saveLink.addEventListener('click', function(e) {
+    // সেভ টেক্সটে ক্লিক ইভেন্ট নিশ্চিত করা
+    const saveText = document.getElementById('saveText');
+    if (saveText) {
+        saveText.addEventListener('click', function(e) {
             e.preventDefault();
             registerShop();
         });
-        console.log('Save link click event attached');
+        console.log('Save text click event attached');
     }
 });
 </script>
