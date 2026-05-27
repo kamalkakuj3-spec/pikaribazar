@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>ড্যাশবোর্ড | প্রিমিয়াম প্যানেল</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+<style>
+  :root {
+    --primary: #6c2bd9;
+    --primary-dark: #4a1a9e;
+    --primary-light: #a259f7;
+    --primary-soft: #f0ebff;
+    --accent: #f0c040;
+    --bg: #f8f6ff;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #555;
+    --card-shadow: 0 8px 20px rgba(108,43,217,0.08);
+    --hover-shadow: 0 12px 28px rgba(108,43,217,0.12);
+    --border-light: #ede5ff;
+    --transition: all 0.25s ease;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Hind Siliguri',sans-serif;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede8ff 100%);
+    min-height:100vh;
+  }
+  
+  /* Loading Screen */
+  #loadingScreen {
+    position:fixed; inset:0; background:linear-gradient(135deg,#1a0a3e,#4a1a9e,#6c2bd9);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999;
+  }
+  .loading-spinner {
+    width:50px; height:50px;
+    border:3px solid rgba(255,255,255,0.2);
+    border-top-color:#f0c040;
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
+  
+  .content { padding:20px 16px 100px; }
+  
+  /* Glass Button */
+  .btn-glass {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(108,43,217,0.2);
+    border-radius: 50px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    transition: var(--transition);
+    margin-bottom: 12px;
+  }
+  .btn-glass:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108,43,217,0.25);
+  }
+  
+  /* Gradient Button - Main Edit Button */
+  .btn-gradient-main {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border: none;
+    border-radius: 50px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    transition: var(--transition);
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(108,43,217,0.25);
+  }
+  .btn-gradient-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108,43,217,0.35);
+  }
+  
+  /* Shop Card */
+  .shop-card {
+    background: linear-gradient(135deg, var(--white), #fefcff);
+    border-radius: 28px;
+    padding: 22px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .shop-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary-light));
+  }
+  .shop-name {
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .shop-address {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-light);
+    display: flex;
+    gap: 8px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  .status-badge.approved { background: #e8faf0; color: #2ecc71; }
+  .status-badge.pending { background: #fff8e5; color: #f0c040; }
+  .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
+  
+  /* Edit Options Container */
+  .edit-options-container {
+    display: none;
+    margin-top: 10px;
+    animation: fadeInUp 0.4s ease;
+  }
+  .edit-options-container.show {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Option Buttons */
+  .option-btn {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: var(--transition);
+    width: 100%;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .option-btn:hover {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+    transform: translateX(5px);
+  }
+  .option-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .option-left i {
+    font-size: 18px;
+    color: var(--primary);
+    width: 24px;
+  }
+  .toggle-icon {
+    font-size: 14px;
+    color: var(--primary-light);
+    transition: transform 0.2s;
+  }
+  
+  /* Content Panel */
+  .option-content-panel {
+    display: none;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #faf8ff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    animation: slideDown 0.3s ease;
+  }
+  .option-content-panel.show {
+    display: block;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Form Inputs */
+  .input-group { margin-bottom: 16px; }
+  .input-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .input-field {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e8e0ff;
+    border-radius: 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    transition: var(--transition);
+  }
+  .input-field:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(108,43,217,0.08);
+  }
+  textarea.input-field { resize: none; height: 80px; }
+  
+  /* Category Select Button */
+  .category-select-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+    border: 1.5px solid #e8e0ff;
+    border-radius: 14px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .category-select-btn:hover {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+  }
+  .category-selected-text {
+    font-size: 14px;
+    color: var(--text);
+  }
+  .category-placeholder {
+    color: #aaa;
+    font-size: 14px;
+  }
+  .category-arrow {
+    color: var(--primary-light);
+    font-size: 12px;
+  }
+  
+  /* সিলেক্টেড ক্যাটাগরি চিপস */
+  .selected-categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .selected-cat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-soft);
+    padding: 5px 10px 5px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary-dark);
+  }
+  .selected-cat-chip i {
+    cursor: pointer;
+    font-size: 12px;
+    color: #999;
+    transition: color 0.2s;
+  }
+  .selected-cat-chip i:hover {
+    color: #e74c3c;
+  }
+  
+  /* Buttons */
+  .btn-small-green {
+    background: #22c55e;
+    border: none;
+    padding: 10px;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+  }
+  .btn-small-green:hover { background: #16a34a; }
+  .btn-small-purple {
+    background: #6c63a0;
+    border: none;
+    padding: 10px;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+  }
+  .btn-small-purple:hover { background: #5a5290; }
+  
+  /* ========== ক্যাটাগরি পপআপ (মাল্টি-সিলেক্ট) ========== */
+  .category-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+  .category-popup {
+    background: white;
+    border-radius: 28px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .popup-header {
+    padding: 18px 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .popup-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .popup-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .popup-body {
+    padding: 16px;
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+  .category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .cat-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f5f3ff;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+  }
+  .cat-check.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .cat-check input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary);
+  }
+  .cat-check label {
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .popup-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 12px;
+  }
+  .popup-footer button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Hind Siliguri', sans-serif;
+  }
+  .btn-apply {
+    background: var(--primary);
+    color: white;
+    border: none;
+  }
+  .btn-clear {
+    background: #f0ebff;
+    color: var(--primary);
+    border: none;
+  }
+  /* =================================================== */
+  
+  /* Product Item */
+  .product-item {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #e8e0ff;
+  }
+  .product-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .product-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid #e0d5ff;
+  }
+  .product-info { flex: 1; }
+  .product-name { font-weight: 700; color: var(--primary-dark); font-size: 14px; }
+  .product-price { color: var(--primary); font-weight: 600; font-size: 12px; }
+  .dot-btn {
+    background: #f0ebff;
+    border: none;
+    font-size: 16px;
+    padding: 6px 12px;
+    border-radius: 30px;
+    color: var(--primary);
+    cursor: pointer;
+  }
+  .dropdown-menu {
+    position: absolute;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    min-width: 140px;
+    display: none;
+    z-index: 100;
+    border: 1px solid #e8e0ff;
+  }
+  .dropdown-menu.show { display: block; }
+  .dropdown-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dropdown-item:hover { background: #f3edff; }
+  .delete-item { color: #e74c3c; }
+  .edit-form {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #e0d5ff;
+    display: none;
+  }
+  .edit-form.show { display: block; }
+  .edit-form input, .edit-form textarea {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border: 1px solid #e8e0ff;
+    border-radius: 12px;
+  }
+  .edit-actions { display: flex; gap: 8px; }
+  .edit-actions button { padding: 6px 14px; font-size: 12px; border-radius: 30px; border: none; cursor: pointer; }
+  
+  /* Slider Item */
+  .slider-item {
+    background: #faf8ff;
+    padding: 12px;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    border: 1px solid #e8e0ff;
+  }
+  
+  /* Ticker Preview */
+  .ticker-preview {
+    background: linear-gradient(135deg, #1f0a3b, #2d1a5e);
+    padding: 12px;
+    border-radius: 40px;
+    margin-top: 12px;
+    text-align: center;
+    color: #f0eaff;
+    font-size: 12px;
+  }
+  
+  /* Bottom Navigation */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-light);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+  }
+  .nav-home {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .nav-save {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .nav-logout {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  /* Logout Toast Message - সবুজ ব্যাকগ্রাউন্ড, উপরে, কোন শ্যাডো নেই */
+  .logout-toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2ecc71;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 60px;
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10001;
+    animation: logoutToastFade 2.5s ease forwards;
+    white-space: nowrap;
+    box-shadow: none;
+    border: none;
+  }
+  
+  @keyframes logoutToastFade {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+    }
+    15% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    85% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+      visibility: hidden;
+    }
+  }
+  
+  .logout-toast i {
+    font-size: 20px;
+  }
+  
+  /* অন্যান্য টোস্টের জন্য সাধারণ স্টাইল */
+  .custom-toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2ecc71;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 60px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10001;
+    animation: logoutToastFade 2.5s ease forwards;
+    white-space: nowrap;
+    box-shadow: none;
+  }
+  .custom-toast.error { background: #e74c3c; }
+</style>
+</head>
+<body>
+
+<div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
+
+<div class="content" id="mainContent" style="display:none">
+    <!-- Shop Card -->
+    <div class="shop-card">
+        <div class="shop-name"><i class="fas fa-crown" style="color:#f0c040;"></i> <span id="previewCardShopName">দোকানের নাম</span></div>
+        <div class="shop-address"><i class="fas fa-location-dot"></i> <span id="previewCardAddress">ঠিকানা</span></div>
+        <div id="cardStatusBadge" class="status-badge pending"><i class="fas fa-clock"></i> পেন্ডিং</div>
+    </div>
+
+    <!-- Live Profile Button -->
+    <button class="btn-glass" onclick="viewProfile()"><i class="fas fa-globe"></i> লাইভ প্রোফাইল দেখুন</button>
+    
+    <!-- Main Edit Button -->
+    <button class="btn-gradient-main" id="mainEditBtn"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
+
+    <!-- Edit Options Container -->
+    <div id="editOptionsContainer" class="edit-options-container">
+        
+        <!-- Option 1: প্রোডাক্ট যোগ করুন -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('addProductPanel')">
+                <div class="option-left">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>প্রোডাক্ট যোগ করুন</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-addProductPanel"></i>
+            </div>
+            <div id="addProductPanel" class="option-content-panel">
+                <div class="input-group"><label class="input-label">প্রোডাক্টের নাম *</label><input type="text" id="prodName" class="input-field" placeholder="যেমন: Premium Headphone"></div>
+                <div class="input-group"><label class="input-label">দাম (৳)</label><input type="text" id="prodPrice" class="input-field" placeholder="যেমন: 2499"></div>
+                <div class="input-group"><label class="input-label">Google Drive ইমেজ লিংক *</label><input type="text" id="prodImage" class="input-field" placeholder="https://drive.google.com/file/d/xxxxx/view"></div>
+                <div class="input-group"><label class="input-label">বিবরণ</label><textarea id="prodDesc" class="input-field" rows="2" placeholder="প্রোডাক্টের বিবরণ..."></textarea></div>
+                <button id="addProductBtn" class="btn-small-green">➕ প্রোডাক্ট যোগ করুন</button>
+            </div>
+        </div>
+        
+        <!-- Option 2: প্রোডাক্ট ম্যানেজমেন্ট -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('productListPanel')">
+                <div class="option-left">
+                    <i class="fas fa-boxes"></i>
+                    <span>প্রোডাক্ট ম্যানেজমেন্ট</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-productListPanel"></i>
+            </div>
+            <div id="productListPanel" class="option-content-panel">
+                <div id="productListContainer" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+        
+        <!-- Option 3: চলন্ত লেখা (টিকার) -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('tickerPanel')">
+                <div class="option-left">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>চলন্ত লেখা</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-tickerPanel"></i>
+            </div>
+            <div id="tickerPanel" class="option-content-panel">
+                <div class="input-group"><label class="input-label">চলন্ত লেখা (কমা দিয়ে আলাদা করুন)</label><input type="text" id="tickerInput" class="input-field" placeholder="আসসালামু আলাইকুম, এখানে আপনি আপনার দোকান সম্পর্কে যেকোনো লেখা লিখতে পারেন, এখানে যা লিখবেন ভিউয়ার তাই দেখতে পাবে"></div>
+                <button id="updateTickerBtn" class="btn-small-green">💾 চলন্ত লেখা আপডেট করুন</button>
+                <button id="resetTickerBtn" class="btn-small-purple" style="margin-top:8px;">⟳ ডিফল্ট রিসেট</button>
+                <div class="ticker-preview"><div id="tickerPreview">প্রিভিউ</div></div>
+            </div>
+        </div>
+        
+        <!-- Option 4: ইমেজ স্লাইডার -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('sliderPanel')">
+                <div class="option-left">
+                    <i class="fas fa-images"></i>
+                    <span>ইমেজ স্লাইডার</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-sliderPanel"></i>
+            </div>
+            <div id="sliderPanel" class="option-content-panel">
+                <div id="sliderListContainer"></div>
+                <button id="addNewSlideBtn" class="btn-small-green" style="margin-top:10px;">+ নতুন স্লাইড যোগ করুন</button>
+            </div>
+        </div>
+        
+        <!-- Option 5: দোকানের তথ্য (মাল্টি-ক্যাটাগরি সিলেক্টর সহ) -->
+        <div>
+            <div class="option-btn" onclick="toggleOptionPanel('shopInfoPanel')">
+                <div class="option-left">
+                    <i class="fas fa-store"></i>
+                    <span>দোকানের তথ্য</span>
+                </div>
+                <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-shopInfoPanel"></i>
+            </div>
+            <div id="shopInfoPanel" class="option-content-panel">
+                <div class="input-group"><label class="input-label">দোকানের নাম *</label><input class="input-field" type="text" id="shopName" placeholder="দোকানের নাম"></div>
+                <div class="input-group"><label class="input-label">মালিকের নাম *</label><input class="input-field" type="text" id="ownerName" placeholder="মালিকের নাম"></div>
+                
+                <div class="input-group">
+                    <label class="input-label"><i class="fas fa-tags"></i> ক্যাটাগরি নির্বাচন করুন (একাধিক)</label>
+                    <div class="category-select-btn" onclick="openCategoryPopup()">
+                        <span id="selectedCategoryDisplay" class="category-placeholder">ক্যাটাগরি নির্বাচন করুন</span>
+                        <i class="fas fa-chevron-down category-arrow"></i>
+                    </div>
+                    <div id="selectedCategoriesContainer" class="selected-categories-container"></div>
+                    <input type="hidden" id="selectedCategoriesInput" value="">
+                </div>
+                
+                <div class="input-group"><label class="input-label">দোকান পরিচিতি</label><textarea class="input-field" id="description" placeholder="দোকান সম্পর্কে লিখুন..."></textarea></div>
+                <div class="input-group"><label class="input-label">পূর্ণাঙ্গ ঠিকানা</label><textarea class="input-field" id="area" placeholder="বিস্তারিত ঠিকানা" style="height:70px"></textarea></div>
+                <div class="input-group"><label class="input-label">মোবাইল নম্বর *</label><input class="input-field" type="tel" id="phone" placeholder="01XXXXXXXXX"></div>
+                <div class="input-group"><label class="input-label">WhatsApp নম্বর</label><input class="input-field" type="tel" id="whatsapp" placeholder="01XXXXXXXXX"></div>
+                <div class="input-group"><label class="input-label">টেলিগ্রাম নম্বর</label><input class="input-field" type="tel" id="telegram" placeholder="01XXXXXXXXX"></div>
+                
+                <div class="input-group">
+                    <label class="input-label"><i class="fab fa-youtube" style="color:#ff0000;"></i> ইউটিউব ভিডিও লিংক</label>
+                    <input class="input-field" type="url" id="youtube" placeholder="https://www.youtube.com/watch?v=xxxxx">
+                    <small style="font-size: 10px; color: #888; display: block; margin-top: 4px;">💡 এই লিংকটি হোমপেজে ভিডিও আকারে দেখানো হবে</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Navigation Bar -->
+<div class="bottom-nav" id="saveWrap" style="display:none">
+    <button class="nav-home" onclick="goHome()"><i class="fas fa-home"></i> হোম</button>
+    <button class="nav-save" id="saveBtn" onclick="saveShopData()"><i class="fas fa-save"></i> সেভ করুন</button>
+    <button class="nav-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyA1CzQX9tgbLd46QfvCK6Rwqa0z9CRWoMs",
+    authDomain: "agls-5bd4c.firebaseapp.com",
+    databaseURL: "https://agls-5bd4c-default-rtdb.firebaseio.com/",
+    projectId: "agls-5bd4c",
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+// ========== ক্যাটাগরি JSON URL ==========
+const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
+let categoriesList = [];
+let selectedCategoriesArray = [];
+
+let currentShopId = null;
+let currentShopData = null;
+let allProducts = [];
+
+function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
+
+// অন্যান্য টোস্টের জন্য ফাংশন
+function showToast(msg, isError=false) { 
+    let toast = document.createElement('div'); 
+    toast.className = 'custom-toast' + (isError ? ' error' : ''); 
+    toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`; 
+    document.body.appendChild(toast); 
+    setTimeout(() => {
+        if(toast && toast.remove) toast.remove();
+    }, 2500); 
+}
+
+function goHome() { window.location.href = 'index.html'; }
+function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
+
+// ========== লগআউট ফাংশন (সবুজ টোস্ট, উপরে, কোন শ্যাডো নেই) ==========
+function logout(){ 
+    auth.signOut().then(()=>{ 
+        // লগআউট টোস্ট - সবুজ ব্যাকগ্রাউন্ড, উপরে
+        let toast = document.createElement('div'); 
+        toast.className = 'logout-toast'; 
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ✅ লগআউট সফল হয়েছে!`; 
+        document.body.appendChild(toast); 
+        setTimeout(() => {
+            if(toast && toast.remove) toast.remove();
+        }, 2500);
+        
+        setTimeout(()=>{
+            window.location.href = 'index.html';
+        }, 1200);
+    }).catch((error)=>{
+        console.error('Logout error:', error);
+        showToast('❌ লগআউট ব্যর্থ হয়েছে!', true);
+    });
+}
+
+// Toggle Option Panel
+function toggleOptionPanel(panelId) {
+    const panel = document.getElementById(panelId);
+    const icon = document.getElementById('toggleIcon-' + panelId);
+    if (panel.classList.contains('show')) {
+        panel.classList.remove('show');
+        if(icon) icon.style.transform = 'rotate(0deg)';
+    } else {
+        panel.classList.add('show');
+        if(icon) icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Main Edit Button Toggle
+const mainEditBtn = document.getElementById('mainEditBtn');
+const editOptionsContainer = document.getElementById('editOptionsContainer');
+mainEditBtn.addEventListener('click', function() {
+    if (editOptionsContainer.classList.contains('show')) {
+        editOptionsContainer.classList.remove('show');
+    } else {
+        editOptionsContainer.classList.add('show');
+    }
+});
+
+// ========== ক্যাটাগরি JSON লোড ফাংশন ==========
+async function loadCategoriesForDashboard() {
+    try {
+        const res = await fetch(CATEGORIES_JSON_URL);
+        categoriesList = await res.json();
+        console.log('ক্যাটাগরি লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
+    } catch (error) {
+        console.error('ক্যাটাগরি লোড ব্যর্থ:', error);
+        categoriesList = [];
+    }
+}
+
+// ========== সিলেক্টেড ক্যাটাগরি চিপস রেন্ডার ==========
+function renderSelectedCategoriesChips() {
+    const container = document.getElementById('selectedCategoriesContainer');
+    const hiddenInput = document.getElementById('selectedCategoriesInput');
+    
+    if (!selectedCategoriesArray.length) {
+        container.innerHTML = '';
+        hiddenInput.value = '';
+        return;
+    }
+    
+    container.innerHTML = selectedCategoriesArray.map(cat => `
+        <span class="selected-cat-chip">
+            ${escapeHtml(cat)}
+            <i class="fas fa-times-circle" onclick="removeCategory('${escapeHtml(cat).replace(/'/g, "\\'")}')"></i>
+        </span>
+    `).join('');
+    
+    hiddenInput.value = selectedCategoriesArray.join(',');
+}
+
+function removeCategory(category) {
+    selectedCategoriesArray = selectedCategoriesArray.filter(c => c !== category);
+    renderSelectedCategoriesChips();
+    updateCategoryDisplayText();
+}
+
+function updateCategoryDisplayText() {
+    const displaySpan = document.getElementById('selectedCategoryDisplay');
+    if (selectedCategoriesArray.length === 0) {
+        displaySpan.innerHTML = 'ক্যাটাগরি নির্বাচন করুন';
+        displaySpan.classList.add('category-placeholder');
+        displaySpan.classList.remove('category-selected-text');
+    } else if (selectedCategoriesArray.length === 1) {
+        displaySpan.innerHTML = selectedCategoriesArray[0];
+        displaySpan.classList.remove('category-placeholder');
+        displaySpan.classList.add('category-selected-text');
+    } else {
+        displaySpan.innerHTML = `${selectedCategoriesArray.length} টি ক্যাটাগরি সিলেক্টেড`;
+        displaySpan.classList.remove('category-placeholder');
+        displaySpan.classList.add('category-selected-text');
+    }
+}
+
+// ========== পপআপ ক্যাটাগরি সিলেক্টর ==========
+function openCategoryPopup() {
+    if (!categoriesList.length) {
+        showToast('ক্যাটাগরি লোড হয়নি, একটু পরে চেষ্টা করুন!', true);
+        return;
+    }
+    
+    const existingPopup = document.querySelector('.category-popup-overlay');
+    if (existingPopup) existingPopup.remove();
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'category-popup-overlay';
+    
+    const categoriesHTML = categoriesList.map(cat => {
+        const isSelected = selectedCategoriesArray.includes(cat);
+        return `
+            <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this)">
+                <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this.parentElement)">
+                <label>${cat}</label>
+            </div>
+        `;
+    }).join('');
+    
+    overlay.innerHTML = `
+        <div class="category-popup">
+            <div class="popup-header">
+                <h3>📂 ক্যাটাগরি নির্বাচন করুন (একাধিক)</h3>
+                <button class="popup-close" onclick="this.closest('.category-popup-overlay').remove()">✕</button>
+            </div>
+            <div class="popup-body">
+                <div class="category-grid">
+                    ${categoriesHTML}
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn-clear" onclick="window.clearAllCategorySelection()">সব বাদ দিন</button>
+                <button class="btn-apply" onclick="window.applyCategorySelection()">প্রয়োগ করুন</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+window.toggleCategoryInPopup = function(category, element) {
+    const index = selectedCategoriesArray.indexOf(category);
+    if (index === -1) {
+        selectedCategoriesArray.push(category);
+        element.classList.add('selected');
+        const checkbox = element.querySelector('input');
+        if (checkbox) checkbox.checked = true;
+    } else {
+        selectedCategoriesArray.splice(index, 1);
+        element.classList.remove('selected');
+        const checkbox = element.querySelector('input');
+        if (checkbox) checkbox.checked = false;
+    }
+};
+
+window.clearAllCategorySelection = function() {
+    selectedCategoriesArray = [];
+    document.querySelectorAll('.cat-check').forEach(check => {
+        check.classList.remove('selected');
+        const cb = check.querySelector('input');
+        if (cb) cb.checked = false;
+    });
+};
+
+window.applyCategorySelection = function() {
+    const popup = document.querySelector('.category-popup-overlay');
+    if (popup) popup.remove();
+    
+    renderSelectedCategoriesChips();
+    updateCategoryDisplayText();
+};
+
+// ========== ইউটিউব ভিডিও আইডি এক্সট্রাক্ট ==========
+function extractYoutubeVideoId(url) {
+    if (!url) return null;
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=)([^&]+)/,
+        /(?:youtu\.be\/)([^?]+)/,
+        /(?:youtube\.com\/embed\/)([^?]+)/
+    ];
+    for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) return match[1];
+    }
+    return null;
+}
+
+// Save Shop Data
+async function saveShopData() {
+    if(!currentShopId) return;
+    const shopName=document.getElementById('shopName').value.trim();
+    const ownerName=document.getElementById('ownerName').value.trim();
+    const area=document.getElementById('area').value.trim();
+    const phone=document.getElementById('phone').value.trim();
+    const youtubeUrl = document.getElementById('youtube').value.trim();
+    const selectedCategories = selectedCategoriesArray.join(',');
+    
+    if(!shopName) return showToast('দোকানের নাম দিন!',true);
+    if(!ownerName) return showToast('মালিকের নাম দিন!',true);
+    if(!area) return showToast('ঠিকানা দিন!',true);
+    if(!phone) return showToast('মোবাইল নম্বর দিন!',true);
+    
+    const youtubeVideoId = extractYoutubeVideoId(youtubeUrl);
+    
+    const btn=document.getElementById('saveBtn'); 
+    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> সেভ হচ্ছে...'; 
+    btn.disabled = true;
+    try {
+        await db.ref('shops/'+currentShopId).update({
+            shopName, 
+            ownerName, 
+            description: document.getElementById('description').value.trim(),
+            area, 
+            phone, 
+            whatsapp: document.getElementById('whatsapp').value.trim(),
+            telegram: document.getElementById('telegram').value.trim(),
+            youtube: youtubeUrl,
+            youtubeVideoId: youtubeVideoId,
+            category: selectedCategories,
+            updatedAt: Date.now()
+        });
+        document.getElementById('previewCardShopName').innerHTML=shopName;
+        document.getElementById('previewCardAddress').innerHTML=area;
+        showToast('✅ তথ্য সংরক্ষণ হয়েছে!');
+    } catch(e) { showToast('সংরক্ষণ ব্যর্থ!',true); }
+    btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; 
+    btn.disabled = false;
+}
+
+// Product Management
+async function loadProducts() {
+    if(!currentShopId) return;
+    const container=document.getElementById('productListContainer');
+    container.innerHTML='<div style="text-align:center; padding:20px;">🌀 লোড হচ্ছে...</div>';
+    try {
+        const snap=await db.ref(`products/${currentShopId}`).once('value');
+        allProducts=[];
+        snap.forEach(child=>{ allProducts.push({id:child.key,...child.val()}); });
+        allProducts.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+        renderProductList();
+    } catch(e) { container.innerHTML='<div style="padding:20px;">⚠️ লোড করতে সমস্যা</div>'; }
+}
+
+function renderProductList() {
+    const container=document.getElementById('productListContainer');
+    if(!allProducts.length){ container.innerHTML='<div style="padding:20px; text-align:center;">✨ এখনও কোনো প্রোডাক্ট নেই</div>'; return; }
+    container.innerHTML='';
+    allProducts.forEach(prod=>{
+        const imgUrl=getThumbUrl(prod.image);
+        const div=document.createElement('div'); div.className='product-item';
+        div.innerHTML=`
+            <div class="product-row">
+                <img class="product-img" src="${imgUrl}" onerror="this.src='https://via.placeholder.com/55x55/ede6ff/a855f7?text=No'">
+                <div class="product-info">
+                    <div class="product-name">${escapeHtml(prod.name)}</div>
+                    <div class="product-price">${prod.price?`৳ ${escapeHtml(prod.price)}`:'মূল্য নির্ধারিত হয়নি'}</div>
+                </div>
+                <div style="position:relative;">
+                    <button class="dot-btn" data-id="${prod.id}">⋮</button>
+                    <div class="dropdown-menu" id="dropdown-${prod.id}">
+                        <div class="dropdown-item edit-name-item" data-id="${prod.id}" data-name="${escapeHtml(prod.name)}">✏️ নাম এডিট</div>
+                        <div class="dropdown-item edit-price-item" data-id="${prod.id}" data-price="${escapeHtml(prod.price||'')}">💰 দাম এডিট</div>
+                        <div class="dropdown-item edit-desc-item" data-id="${prod.id}" data-desc="${escapeHtml(prod.desc||'')}">📝 বিবরণ এডিট</div>
+                        <div class="dropdown-item delete-item" data-id="${prod.id}">🗑 ডিলিট</div>
+                    </div>
+                </div>
+            </div>
+            <div class="edit-form" id="edit-form-${prod.id}">
+                <input type="text" id="edit-name-${prod.id}" value="${escapeHtml(prod.name)}" placeholder="নাম">
+                <input type="text" id="edit-price-${prod.id}" value="${escapeHtml(prod.price||'')}" placeholder="দাম">
+                <textarea id="edit-desc-${prod.id}" rows="2" placeholder="বিবরণ">${escapeHtml(prod.desc||'')}</textarea>
+                <div class="edit-actions">
+                    <button class="save-edit-btn" data-id="${prod.id}" style="background:#22c55e; color:white;">সেভ</button>
+                    <button class="cancel-edit-btn" data-id="${prod.id}" style="background:#6c63a0; color:white;">বাতিল</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+    attachProductEvents();
+}
+
+function attachProductEvents() {
+    document.querySelectorAll('.dot-btn').forEach(btn=>{
+        btn.addEventListener('click',(e)=>{ e.stopPropagation(); const id=btn.dataset.id; document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('show')); document.getElementById(`dropdown-${id}`).classList.toggle('show'); });
+    });
+    document.querySelectorAll('.edit-name-item, .edit-price-item, .edit-desc-item').forEach(item=>{
+        item.addEventListener('click',()=>{ const id=item.dataset.id; document.getElementById(`edit-form-${id}`).classList.toggle('show'); document.getElementById(`dropdown-${id}`).classList.remove('show'); });
+    });
+    document.querySelectorAll('.delete-item').forEach(item=>{
+        item.addEventListener('click',async()=>{ if(confirm('প্রোডাক্ট মুছতে চান?')){ await db.ref(`products/${currentShopId}/${item.dataset.id}`).remove(); showToast('✅ প্রোডাক্ট মুছে ফেলা হয়েছে'); loadProducts(); } });
+    });
+    document.querySelectorAll('.save-edit-btn').forEach(btn=>{
+        btn.addEventListener('click',async()=>{ const id=btn.dataset.id; const newName=document.getElementById(`edit-name-${id}`).value.trim(); if(!newName){ showToast('নাম খালি রাখা যাবে না!',true); return; } await db.ref(`products/${currentShopId}/${id}`).update({ name:newName, price:document.getElementById(`edit-price-${id}`).value.trim(), desc:document.getElementById(`edit-desc-${id}`).value.trim() }); showToast('✅ প্রোডাক্ট আপডেট হয়েছে'); loadProducts(); });
+    });
+    document.querySelectorAll('.cancel-edit-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{ const id=btn.dataset.id; document.getElementById(`edit-form-${id}`).classList.remove('show'); });
+    });
+}
+
+async function addProduct() {
+    let name=document.getElementById('prodName').value.trim();
+    let price=document.getElementById('prodPrice').value.trim();
+    let image=document.getElementById('prodImage').value.trim();
+    let desc=document.getElementById('prodDesc').value.trim();
+    if(!name || !image){ showToast('নাম এবং ইমেজ লিংক দিন!',true); return; }
+    await db.ref(`products/${currentShopId}`).push({ name, price, image, desc, timestamp:Date.now() });
+    showToast('✅ প্রোডাক্ট যোগ হয়েছে!');
+    document.getElementById('prodName').value=''; document.getElementById('prodPrice').value=''; document.getElementById('prodImage').value=''; document.getElementById('prodDesc').value='';
+    loadProducts();
+}
+function getThumbUrl(url){ if(!url) return "https://via.placeholder.com/55x55/ede6ff/a855f7?text=No"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`; return url; }
+
+// Slider Functions
+let slidesData = [];
+async function loadSlides() {
+    if(!currentShopId) return;
+    const snap = await db.ref(`sliders/${currentShopId}`).once('value');
+    if(snap.exists()){ slidesData = snap.val(); if(!slidesData.length) slidesData=[]; }
+    else { slidesData = []; }
+    if(slidesData.length===0){ slidesData = [{image:"https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop"}]; }
+    renderSliderList();
+}
+function renderSliderList(){ const c=document.getElementById('sliderListContainer'); c.innerHTML=''; slidesData.forEach((s,i)=>{ const d=document.createElement('div'); d.className='slider-item'; d.innerHTML=`<div style="display:flex; gap:10px; align-items:center;"><img src="${getDriveUrl(s.image,50)}" style="width:50px; height:40px; object-fit:cover; border-radius:8px;"><input type="text" value="${escapeHtml(s.image)}" placeholder="Google Drive Link" style="flex:1; padding:8px; border-radius:12px; border:1px solid #d9c8ff;" onchange="updateSlideImage(${i},this.value)"><button onclick="removeSlide(${i})" style="background:#dc2626; color:white; border:none; padding:6px 12px; border-radius:30px;">🗑</button></div>`; c.appendChild(d); }); }
+function getDriveUrl(url,w=100){ if(!url) return "https://via.placeholder.com/50x40/ede6ff/a855f7"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w${w}`; return url; }
+async function updateSlideImage(idx,url){ slidesData[idx].image=url; await db.ref(`sliders/${currentShopId}`).set(slidesData); showToast('স্লাইডার আপডেট হয়েছে'); }
+async function removeSlide(idx){ if(slidesData.length===1){ showToast('কমপক্ষে একটি স্লাইড রাখতে হবে!',true); return; } slidesData.splice(idx,1); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('স্লাইড মুছে ফেলা হয়েছে'); }
+async function addNewSlide(){ slidesData.push({image:"https://via.placeholder.com/1200x400/8b5cf6/ffffff?text=New+Slide"}); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('নতুন স্লাইড যোগ হয়েছে'); }
+
+// Ticker Functions
+let tickerItems = [];
+async function loadTicker() {
+    if(!currentShopId) return;
+    const snap = await db.ref(`tickers/${currentShopId}`).once('value');
+    if(snap.exists()){ tickerItems = snap.val(); if(!tickerItems.length) tickerItems=[]; }
+    else { tickerItems = []; }
+    if(tickerItems.length===0){ tickerItems = ["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; }
+    document.getElementById('tickerInput').value=tickerItems.join(', ');
+    updateTickerPreview(tickerItems);
+}
+function updateTickerPreview(items){ document.getElementById('tickerPreview').innerHTML=items.map(t=>`✨ ${escapeHtml(t)} ✨`).join(' • '); }
+async function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showToast('কিছু লিখুন!',true); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; await db.ref(`tickers/${currentShopId}`).set(items); updateTickerPreview(items); showToast('টিকার আপডেট হয়েছে!'); }
+async function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; await db.ref(`tickers/${currentShopId}`).set(def); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
+
+// ========== ইনিশিয়ালাইজ ==========
+auth.onAuthStateChanged(async user=>{
+    if(!user){ 
+        return;
+    }
+    currentShopId=user.uid;
+    const snap=await db.ref('shops/'+currentShopId).get();
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+    document.getElementById('saveWrap').style.display='flex';
+    
+    await loadCategoriesForDashboard();
+    
+    if(snap.exists()){
+        currentShopData=snap.val();
+        document.getElementById('previewCardShopName').innerHTML=currentShopData.shopName||'দোকানের নাম';
+        document.getElementById('previewCardAddress').innerHTML=currentShopData.area||'ঠিকানা';
+        const badge=document.getElementById('cardStatusBadge');
+        if(currentShopData.status==='approved'){ badge.className='status-badge approved'; badge.innerHTML='<i class="fas fa-check-circle"></i> Approved'; }
+        else if(currentShopData.status==='rejected'){ badge.className='status-badge rejected'; badge.innerHTML='<i class="fas fa-times-circle"></i> Rejected'; }
+        else{ badge.className='status-badge pending'; badge.innerHTML='<i class="fas fa-clock"></i> পেন্ডিং'; }
+        document.getElementById('shopName').value=currentShopData.shopName||'';
+        document.getElementById('ownerName').value=currentShopData.ownerName||'';
+        document.getElementById('description').value=currentShopData.description||'';
+        document.getElementById('area').value=currentShopData.area||'';
+        document.getElementById('phone').value=currentShopData.phone||'';
+        document.getElementById('whatsapp').value=currentShopData.whatsapp||'';
+        document.getElementById('telegram').value=currentShopData.telegram||'';
+        document.getElementById('youtube').value=currentShopData.youtube||'';
+        
+        if(currentShopData.category){
+            if(currentShopData.category.includes(',')){
+                selectedCategoriesArray = currentShopData.category.split(',').map(c => c.trim()).filter(c => c);
+            } else {
+                selectedCategoriesArray = [currentShopData.category];
+            }
+            renderSelectedCategoriesChips();
+            updateCategoryDisplayText();
+        }
+    }
+    loadProducts();
+    await loadSlides();
+    await loadTicker();
+    document.getElementById('addProductBtn').addEventListener('click',addProduct);
+    document.getElementById('addNewSlideBtn').addEventListener('click',addNewSlide);
+    document.getElementById('updateTickerBtn').addEventListener('click',saveTicker);
+    document.getElementById('resetTickerBtn').addEventListener('click',resetTicker);
+});
+</script>
+</body>
+</html>
