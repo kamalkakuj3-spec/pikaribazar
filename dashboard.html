@@ -6,7 +6,6 @@
 <title>ড্যাশবোর্ড | প্রিমিয়াম প্যানেল</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
 <style>
   :root {
     --primary: #6c2bd9;
@@ -45,57 +44,110 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
   
-  /* Dashboard Header with Menu Icon and Shop Name */
+  /* Dashboard Header - No Menu Icon */
   .dashboard-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
+    justify-content: center;
+    padding: 20px 20px;
     background: white;
     border-bottom: 1px solid var(--border-light);
     position: sticky;
     top: 0;
     z-index: 100;
   }
-  .menu-icon-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: var(--primary);
-    cursor: pointer;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-  }
-  .menu-icon-btn:hover {
-    background: var(--primary-soft);
-  }
   .dashboard-header h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary);
-  }
-  .dashboard-header .shop-name-header {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 800;
     background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    max-width: 60%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .dashboard-header .placeholder {
-    width: 42px;
+    text-align: center;
   }
   
-  .content { padding:20px 16px 100px; }
+  /* Shop ID Banner */
+  .shop-id-banner {
+    background: linear-gradient(135deg, var(--primary-soft), #e8e0ff);
+    margin: 16px;
+    padding: 16px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid rgba(108,43,217,0.2);
+  }
+  .shop-id-label {
+    font-size: 13px;
+    color: var(--primary-dark);
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .shop-id-label i {
+    font-size: 16px;
+  }
+  .shop-id-value {
+    font-family: monospace;
+    font-size: 14px;
+    background: white;
+    padding: 12px 16px;
+    border-radius: 14px;
+    word-break: break-all;
+    color: var(--text);
+    border: 1px solid #d9c8ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .shop-id-value span {
+    flex: 1;
+    font-size: 13px;
+  }
+  .copy-id-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .copy-id-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.02);
+  }
+  .shop-id-message {
+    font-size: 11px;
+    color: var(--primary);
+    margin-top: 10px;
+    font-weight: 500;
+  }
+  
+  .content { padding:0 16px 100px; }
+  
+  /* Status Badge */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .status-badge.approved { background: #e8faf0; color: #2ecc71; }
+  .status-badge.pending { background: #fff8e5; color: #f0c040; }
+  .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
   
   /* Glass Button */
   .btn-glass {
@@ -330,7 +382,7 @@
   }
   .btn-small-purple:hover { background: #5a5290; }
   
-  /* ========== ক্যাটাগরি পপআপ (মাল্টি-সিলেক্ট) ========== */
+  /* ========== ক্যাটাগরি পপআপ ========== */
   .category-popup-overlay {
     position: fixed;
     top: 0;
@@ -542,21 +594,6 @@
     font-size: 12px;
   }
   
-  /* Status Badge */
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 30px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 16px;
-  }
-  .status-badge.approved { background: #e8faf0; color: #2ecc71; }
-  .status-badge.pending { background: #fff8e5; color: #f0c040; }
-  .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
-  
   /* Bottom Navigation */
   .bottom-nav {
     position: fixed;
@@ -645,11 +682,7 @@
     }
   }
   
-  .logout-toast i {
-    font-size: 20px;
-  }
-  
-  /* অন্যান্য টোস্টের জন্য সাধারণ স্টাইল */
+  /* অন্যান্য টোস্ট */
   .custom-toast {
     position: fixed;
     top: 80px;
@@ -670,154 +703,36 @@
     box-shadow: none;
   }
   .custom-toast.error { background: #e74c3c; }
-  
-  /* Drawer Styles */
-  .drawer-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0);
-    z-index: 1000;
-    display: none;
-    transition: background 0.3s ease;
-  }
-  .drawer-overlay.show {
-    background: rgba(0,0,0,0.5);
-    display: block;
-  }
-  .drawer {
-    position: fixed;
-    top: 0;
-    left: -340px;
-    width: 340px;
-    height: 100%;
-    background: white;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
-    z-index: 1001;
-    transition: left 0.3s ease;
-    overflow-y: auto;
-    border-radius: 0 20px 20px 0;
-  }
-  .drawer.open {
-    left: 0;
-  }
-  .drawer-header {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    padding: 22px 20px;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .drawer-header h3 {
-    font-size: 20px;
-    font-weight: 800;
-  }
-  .drawer-close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s;
-  }
-  .drawer-close:hover {
-    background: rgba(255,255,255,0.2);
-    transform: rotate(90deg);
-  }
-  .drawer-content {
-    padding: 20px;
-  }
-  .drawer-info-item {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #f0ebff;
-    padding-bottom: 14px;
-  }
-  .drawer-info-item:last-child {
-    border-bottom: none;
-  }
-  .drawer-info-label {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--primary-light);
-    margin-bottom: 6px;
-    display: block;
-    letter-spacing: 0.5px;
-  }
-  .drawer-info-value {
-    font-size: 17px;
-    color: var(--text);
-    font-weight: 600;
-    line-height: 1.4;
-    display: block;
-  }
-  .drawer-info-value a {
-    color: var(--text);
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.2s;
-  }
-  .drawer-info-value a:hover {
-    color: var(--primary);
-    transform: translateX(3px);
-  }
-  .drawer-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-    margin: 15px 0;
-  }
-  .drawer-close-bottom {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 15px;
-  }
-  .close-bottom-btn {
-    background: linear-gradient(135deg, #dc2626, #b91c1c);
-    border: none;
-    color: white;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 22px;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .close-bottom-btn:hover {
-    transform: scale(1.05);
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-  }
 </style>
 </head>
 <body>
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
-<!-- Dashboard Header with Menu Icon and Shop Name -->
+<!-- Dashboard Header - Without Menu Icon -->
 <div class="dashboard-header">
-    <button class="menu-icon-btn" id="menuIconBtn">
-        <i class="fas fa-bars"></i>
-    </button>
-    <div class="shop-name-header" id="headerShopName">ড্যাশবোর্ড</div>
-    <div class="placeholder"></div>
+    <h2 id="headerShopName">ড্যাশবোর্ড</h2>
 </div>
 
 <div class="content" id="mainContent" style="display:none">
     
+    <!-- Shop ID Banner -->
+    <div class="shop-id-banner">
+        <div class="shop-id-label">
+            <i class="fas fa-fingerprint"></i>
+            <span>🆔 আপনার প্রোফাইল আইডি</span>
+        </div>
+        <div class="shop-id-value">
+            <span id="shopIdDisplay">লোড হচ্ছে...</span>
+            <button class="copy-id-btn" onclick="copyShopId()">
+                <i class="fas fa-copy"></i> কপি করুন
+            </button>
+        </div>
+        <div class="shop-id-message">
+            <i class="fas fa-rocket"></i> আপনার প্রোফাইল প্রমোট করানোর জন্য এই Shop ID কপি করে অ্যাডমিনকে পাঠান
+        </div>
+    </div>
+
     <!-- Status Badge -->
     <div id="cardStatusBadge" class="status-badge pending"><i class="fas fa-clock"></i> পেন্ডিং</div>
 
@@ -872,7 +787,7 @@
                 <i class="fas fa-chevron-down toggle-icon" id="toggleIcon-tickerPanel"></i>
             </div>
             <div id="tickerPanel" class="option-content-panel">
-                <div class="input-group"><label class="input-label">চলন্ত লেখা (কমা দিয়ে আলাদা করুন)</label><input type="text" id="tickerInput" class="input-field" placeholder="আসসালামু আলাইকুম, এখানে আপনি আপনার দোকান সম্পর্কে যেকোনো লেখা লিখতে পারেন, এখানে যা লিখবেন ভিউয়ার তাই দেখতে পাবে"></div>
+                <div class="input-group"><label class="input-label">চলন্ত লেখা (কমা দিয়ে আলাদা করুন)</label><input type="text" id="tickerInput" class="input-field" placeholder="আসসালামু আলাইকুম, এখানে আপনি আপনার দোকান সম্পর্কে যেকোনো লেখা লিখতে পারেন"></div>
                 <button id="updateTickerBtn" class="btn-small-green">💾 চলন্ত লেখা আপডেট করুন</button>
                 <button id="resetTickerBtn" class="btn-small-purple" style="margin-top:8px;">⟳ ডিফল্ট রিসেট</button>
                 <div class="ticker-preview"><div id="tickerPreview">প্রিভিউ</div></div>
@@ -894,7 +809,7 @@
             </div>
         </div>
         
-        <!-- Option 5: দোকানের তথ্য (মাল্টি-ক্যাটাগরি সিলেক্টর সহ) -->
+        <!-- Option 5: দোকানের তথ্য -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('shopInfoPanel')">
                 <div class="option-left">
@@ -940,21 +855,6 @@
     <button class="nav-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
 </div>
 
-<!-- Drawer Menu -->
-<div class="drawer-overlay" id="drawerOverlay"></div>
-<div class="drawer" id="drawer">
-    <div class="drawer-header">
-        <h3><i class="fas fa-store"></i> দোকানের তথ্য</h3>
-        <button class="drawer-close" id="drawerCloseBtn"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="drawer-content" id="drawerContent">
-        <div style="text-align:center; padding:20px;">🌀 লোড হচ্ছে...</div>
-    </div>
-    <div class="drawer-close-bottom">
-        <button class="close-bottom-btn" id="drawerCloseBottomBtn"><i class="fas fa-times"></i></button>
-    </div>
-</div>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -969,7 +869,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// ========== ক্যাটাগরি JSON URL ==========
 const CATEGORIES_JSON_URL = 'https://raw.githubusercontent.com/kamalkakuj3-spec/my-app/main/categories.json';
 let categoriesList = [];
 let selectedCategoriesArray = [];
@@ -980,38 +879,18 @@ let allProducts = [];
 
 function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
 
-// অন্যান্য টোস্টের জন্য ফাংশন
 function showToast(msg, isError=false) { 
     let toast = document.createElement('div'); 
     toast.className = 'custom-toast' + (isError ? ' error' : ''); 
     toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`; 
     document.body.appendChild(toast); 
-    setTimeout(() => {
-        if(toast && toast.remove) toast.remove();
-    }, 2500); 
+    setTimeout(() => { if(toast && toast.remove) toast.remove(); }, 2500); 
 }
 
 function goHome() { window.location.href = 'index.html'; }
 function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
 
-// ========== ড্রয়ার ফাংশন ==========
-function openDrawer() {
-    document.getElementById('drawer').classList.add('open');
-    document.getElementById('drawerOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-function closeDrawer() {
-    document.getElementById('drawer').classList.remove('open');
-    document.getElementById('drawerOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-document.getElementById('menuIconBtn')?.addEventListener('click', openDrawer);
-document.getElementById('drawerCloseBtn')?.addEventListener('click', closeDrawer);
-document.getElementById('drawerCloseBottomBtn')?.addEventListener('click', closeDrawer);
-document.getElementById('drawerOverlay')?.addEventListener('click', closeDrawer);
-
-// ========== Shop ID কপি ফাংশন ==========
+// Shop ID Copy Function
 window.copyShopId = function() {
     const shopId = currentShopId;
     if (shopId) {
@@ -1025,92 +904,17 @@ window.copyShopId = function() {
     }
 };
 
-// ========== ড্রয়ার কন্টেন্ট রেন্ডার (Shop ID সহ) ==========
-function renderDrawerContent(shop) {
-    const container = document.getElementById('drawerContent');
-    if(!shop) { container.innerHTML = '<div style="text-align:center; padding:20px;">তথ্য পাওয়া যায়নি</div>'; return; }
-    
-    const phoneLink = shop.phone ? `<a href="tel:${shop.phone}"><i class="fas fa-phone-alt" style="margin-right:8px; color:#6c2bd9;"></i> ${escapeHtml(shop.phone)}</a>` : '—';
-    
-    let whatsappLink = '—';
-    if(shop.whatsapp) {
-        let waNum = shop.whatsapp.replace(/[^0-9]/g, '');
-        if (!waNum.startsWith('88')) waNum = '88' + waNum;
-        whatsappLink = `<a href="https://wa.me/${waNum}" target="_blank"><i class="fab fa-whatsapp" style="margin-right:8px; color:#25D366;"></i> ${escapeHtml(shop.whatsapp)}</a>`;
-    }
-    
-    let telegramLink = '—';
-    if(shop.telegram) {
-        let tgNum = shop.telegram.replace(/[^0-9]/g, '');
-        if (!tgNum.startsWith('88')) tgNum = '88' + tgNum;
-        telegramLink = `<a href="https://t.me/+${tgNum}" target="_blank"><i class="fab fa-telegram" style="margin-right:8px; color:#0088cc;"></i> ${escapeHtml(shop.telegram)}</a>`;
-    }
-    
-    container.innerHTML = `
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fas fa-store"></i> দোকানের নাম</span>
-            <span class="drawer-info-value">${escapeHtml(shop.shopName || '—')}</span>
-        </div>
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fas fa-user-circle"></i> প্রোপাইটরের নাম</span>
-            <span class="drawer-info-value">${escapeHtml(shop.ownerName || '—')}</span>
-        </div>
-        <!-- 🔴 Shop ID - শুধুমাত্র দোকান মালিক দেখতে পাবে 🔴 -->
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fas fa-fingerprint"></i> 🆔 আপনার Shop ID (প্রমোশনের জন্য)</span>
-            <span class="drawer-info-value" style="font-family: monospace; font-size: 12px; word-break: break-all; background: #f0ebff; padding: 8px; border-radius: 12px;">
-                ${currentShopId}
-                <button onclick="copyShopId()" style="background: var(--primary); color: white; border: none; padding: 4px 12px; border-radius: 20px; margin-left: 8px; cursor: pointer; font-size: 11px;">
-                    <i class="fas fa-copy"></i> কপি
-                </button>
-            </span>
-        </div>
-        <!-- 🔴 🔴 🔴 -->
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fas fa-phone-alt"></i> 📞 কন্টাক্ট নাম্বার</span>
-            <span class="drawer-info-value">${phoneLink}</span>
-        </div>
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fab fa-whatsapp"></i> 💬 WhatsApp নাম্বার</span>
-            <span class="drawer-info-value">${whatsappLink}</span>
-        </div>
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fab fa-telegram"></i> 📡 টেলিগ্রাম নাম্বার</span>
-            <span class="drawer-info-value">${telegramLink}</span>
-        </div>
-        <div class="drawer-divider"></div>
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fas fa-map-marker-alt"></i> 🏪 দোকানের ঠিকানা</span>
-            <span class="drawer-info-value">${escapeHtml(shop.area || shop.district || '—')}</span>
-        </div>
-        <div class="drawer-info-item">
-            <span class="drawer-info-label"><i class="fas fa-align-left"></i> 📋 দোকানের বিবরণ</span>
-            <span class="drawer-info-value">${escapeHtml(shop.description || 'কোনো বিবরণ নেই')}</span>
-        </div>
-    `;
-}
-
-// ========== লগআউট ফাংশন ==========
 function logout(){ 
     auth.signOut().then(()=>{ 
         let toast = document.createElement('div'); 
         toast.className = 'logout-toast'; 
         toast.innerHTML = `<i class="fas fa-check-circle"></i> ✅ লগআউট সফল হয়েছে!`; 
         document.body.appendChild(toast); 
-        setTimeout(() => {
-            if(toast && toast.remove) toast.remove();
-        }, 2500);
-        
-        setTimeout(()=>{
-            window.location.href = 'index.html';
-        }, 1200);
-    }).catch((error)=>{
-        console.error('Logout error:', error);
-        showToast('❌ লগআউট ব্যর্থ হয়েছে!', true);
-    });
+        setTimeout(() => { if(toast && toast.remove) toast.remove(); }, 2500);
+        setTimeout(()=>{ window.location.href = 'index.html'; }, 1200);
+    }).catch((error)=>{ showToast('❌ লগআউট ব্যর্থ হয়েছে!', true); });
 }
 
-// Toggle Option Panel
 function toggleOptionPanel(panelId) {
     const panel = document.getElementById(panelId);
     const icon = document.getElementById('toggleIcon-' + panelId);
@@ -1123,7 +927,6 @@ function toggleOptionPanel(panelId) {
     }
 }
 
-// Main Edit Button Toggle
 const mainEditBtn = document.getElementById('mainEditBtn');
 const editOptionsContainer = document.getElementById('editOptionsContainer');
 if (mainEditBtn) {
@@ -1136,36 +939,29 @@ if (mainEditBtn) {
     });
 }
 
-// ========== ক্যাটাগরি JSON লোড ফাংশন ==========
 async function loadCategoriesForDashboard() {
     try {
         const res = await fetch(CATEGORIES_JSON_URL);
         categoriesList = await res.json();
-        console.log('ক্যাটাগরি লোড সফল!', categoriesList.length, 'টি ক্যাটাগরি');
     } catch (error) {
-        console.error('ক্যাটাগরি লোড ব্যর্থ:', error);
         categoriesList = [];
     }
 }
 
-// ========== সিলেক্টেড ক্যাটাগরি চিপস রেন্ডার ==========
 function renderSelectedCategoriesChips() {
     const container = document.getElementById('selectedCategoriesContainer');
     const hiddenInput = document.getElementById('selectedCategoriesInput');
-    
     if (!selectedCategoriesArray.length) {
         container.innerHTML = '';
         hiddenInput.value = '';
         return;
     }
-    
     container.innerHTML = selectedCategoriesArray.map(cat => `
         <span class="selected-cat-chip">
             ${escapeHtml(cat)}
             <i class="fas fa-times-circle" onclick="removeCategory('${escapeHtml(cat).replace(/'/g, "\\'")}')"></i>
         </span>
     `).join('');
-    
     hiddenInput.value = selectedCategoriesArray.join(',');
 }
 
@@ -1192,101 +988,42 @@ function updateCategoryDisplayText() {
     }
 }
 
-// ========== পপআপ ক্যাটাগরি সিলেক্টর ==========
 function openCategoryPopup() {
-    if (!categoriesList.length) {
-        showToast('ক্যাটাগরি লোড হয়নি, একটু পরে চেষ্টা করুন!', true);
-        return;
-    }
-    
+    if (!categoriesList.length) { showToast('ক্যাটাগরি লোড হয়নি!', true); return; }
     const existingPopup = document.querySelector('.category-popup-overlay');
     if (existingPopup) existingPopup.remove();
-    
     const overlay = document.createElement('div');
     overlay.className = 'category-popup-overlay';
-    
     const categoriesHTML = categoriesList.map(cat => {
         const isSelected = selectedCategoriesArray.includes(cat);
-        return `
-            <div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this)">
-                <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this.parentElement)">
-                <label>${cat}</label>
-            </div>
-        `;
+        return `<div class="cat-check ${isSelected ? 'selected' : ''}" onclick="window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this)">
+            <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCategoryInPopup('${cat.replace(/'/g, "\\'")}', this.parentElement)">
+            <label>${cat}</label>
+        </div>`;
     }).join('');
-    
-    overlay.innerHTML = `
-        <div class="category-popup">
-            <div class="popup-header">
-                <h3>📂 ক্যাটাগরি নির্বাচন করুন (একাধিক)</h3>
-                <button class="popup-close" onclick="this.closest('.category-popup-overlay').remove()">✕</button>
-            </div>
-            <div class="popup-body">
-                <div class="category-grid">
-                    ${categoriesHTML}
-                </div>
-            </div>
-            <div class="popup-footer">
-                <button class="btn-clear" onclick="window.clearAllCategorySelection()">সব বাদ দিন</button>
-                <button class="btn-apply" onclick="window.applyCategorySelection()">প্রয়োগ করুন</button>
-            </div>
-        </div>
-    `;
-    
+    overlay.innerHTML = `<div class="category-popup"><div class="popup-header"><h3>📂 ক্যাটাগরি নির্বাচন করুন</h3><button class="popup-close" onclick="this.closest('.category-popup-overlay').remove()">✕</button></div>
+        <div class="popup-body"><div class="category-grid">${categoriesHTML}</div></div>
+        <div class="popup-footer"><button class="btn-clear" onclick="window.clearAllCategorySelection()">সব বাদ দিন</button>
+        <button class="btn-apply" onclick="window.applyCategorySelection()">প্রয়োগ করুন</button></div></div>`;
     document.body.appendChild(overlay);
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.remove();
-    });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
 }
 
 window.toggleCategoryInPopup = function(category, element) {
     const index = selectedCategoriesArray.indexOf(category);
-    if (index === -1) {
-        selectedCategoriesArray.push(category);
-        element.classList.add('selected');
-        const checkbox = element.querySelector('input');
-        if (checkbox) checkbox.checked = true;
-    } else {
-        selectedCategoriesArray.splice(index, 1);
-        element.classList.remove('selected');
-        const checkbox = element.querySelector('input');
-        if (checkbox) checkbox.checked = false;
-    }
+    if (index === -1) { selectedCategoriesArray.push(category); element.classList.add('selected'); const cb = element.querySelector('input'); if(cb) cb.checked = true; }
+    else { selectedCategoriesArray.splice(index, 1); element.classList.remove('selected'); const cb = element.querySelector('input'); if(cb) cb.checked = false; }
 };
+window.clearAllCategorySelection = function() { selectedCategoriesArray = []; document.querySelectorAll('.cat-check').forEach(c => { c.classList.remove('selected'); const cb = c.querySelector('input'); if(cb) cb.checked = false; }); };
+window.applyCategorySelection = function() { const popup = document.querySelector('.category-popup-overlay'); if(popup) popup.remove(); renderSelectedCategoriesChips(); updateCategoryDisplayText(); };
 
-window.clearAllCategorySelection = function() {
-    selectedCategoriesArray = [];
-    document.querySelectorAll('.cat-check').forEach(check => {
-        check.classList.remove('selected');
-        const cb = check.querySelector('input');
-        if (cb) cb.checked = false;
-    });
-};
-
-window.applyCategorySelection = function() {
-    const popup = document.querySelector('.category-popup-overlay');
-    if (popup) popup.remove();
-    
-    renderSelectedCategoriesChips();
-    updateCategoryDisplayText();
-};
-
-// ========== ইউটিউব ভিডিও আইডি এক্সট্রাক্ট ==========
 function extractYoutubeVideoId(url) {
     if (!url) return null;
-    const patterns = [
-        /(?:youtube\.com\/watch\?v=)([^&]+)/,
-        /(?:youtu\.be\/)([^?]+)/,
-        /(?:youtube\.com\/embed\/)([^?]+)/
-    ];
-    for (let pattern of patterns) {
-        const match = url.match(pattern);
-        if (match) return match[1];
-    }
+    const patterns = [/(?:youtube\.com\/watch\?v=)([^&]+)/, /(?:youtu\.be\/)([^?]+)/, /(?:youtube\.com\/embed\/)([^?]+)/];
+    for (let pattern of patterns) { const match = url.match(pattern); if (match) return match[1]; }
     return null;
 }
 
-// Save Shop Data
 async function saveShopData() {
     if(!currentShopId) return;
     const shopName=document.getElementById('shopName').value.trim();
@@ -1295,43 +1032,21 @@ async function saveShopData() {
     const phone=document.getElementById('phone').value.trim();
     const youtubeUrl = document.getElementById('youtube').value.trim();
     const selectedCategories = selectedCategoriesArray.join(',');
-    
     if(!shopName) return showToast('দোকানের নাম দিন!',true);
     if(!ownerName) return showToast('মালিকের নাম দিন!',true);
     if(!area) return showToast('ঠিকানা দিন!',true);
     if(!phone) return showToast('মোবাইল নম্বর দিন!',true);
-    
     const youtubeVideoId = extractYoutubeVideoId(youtubeUrl);
-    
     const btn=document.getElementById('saveBtn'); 
-    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> সেভ হচ্ছে...'; 
-    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> সেভ হচ্ছে...'; btn.disabled = true;
     try {
-        await db.ref('shops/'+currentShopId).update({
-            shopName, 
-            ownerName, 
-            description: document.getElementById('description').value.trim(),
-            area, 
-            phone, 
-            whatsapp: document.getElementById('whatsapp').value.trim(),
-            telegram: document.getElementById('telegram').value.trim(),
-            youtube: youtubeUrl,
-            youtubeVideoId: youtubeVideoId,
-            category: selectedCategories,
-            updatedAt: Date.now()
-        });
-        
-        // হেডারের দোকানের নাম আপডেট করুন
+        await db.ref('shops/'+currentShopId).update({ shopName, ownerName, description: document.getElementById('description').value.trim(), area, phone, whatsapp: document.getElementById('whatsapp').value.trim(), telegram: document.getElementById('telegram').value.trim(), youtube: youtubeUrl, youtubeVideoId: youtubeVideoId, category: selectedCategories, updatedAt: Date.now() });
         document.getElementById('headerShopName').innerHTML = shopName;
-        document.getElementById('previewCardAddress')?.remove(); // কার্ড না থাকায় এটা কাজ করবে না
-        
         showToast('✅ তথ্য সংরক্ষণ হয়েছে!');
     } catch(e) { showToast('সংরক্ষণ ব্যর্থ!',true); }
-    btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; 
-    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; btn.disabled = false;
 }
 
-// Product Management
 async function loadProducts() {
     if(!currentShopId) return;
     const container=document.getElementById('productListContainer');
@@ -1352,54 +1067,18 @@ function renderProductList() {
     allProducts.forEach(prod=>{
         const imgUrl=getThumbUrl(prod.image);
         const div=document.createElement('div'); div.className='product-item';
-        div.innerHTML=`
-            <div class="product-row">
-                <img class="product-img" src="${imgUrl}" onerror="this.src='https://via.placeholder.com/55x55/ede6ff/a855f7?text=No'">
-                <div class="product-info">
-                    <div class="product-name">${escapeHtml(prod.name)}</div>
-                    <div class="product-price">${prod.price?`৳ ${escapeHtml(prod.price)}`:'মূল্য নির্ধারিত হয়নি'}</div>
-                </div>
-                <div style="position:relative;">
-                    <button class="dot-btn" data-id="${prod.id}">⋮</button>
-                    <div class="dropdown-menu" id="dropdown-${prod.id}">
-                        <div class="dropdown-item edit-name-item" data-id="${prod.id}" data-name="${escapeHtml(prod.name)}">✏️ নাম এডিট</div>
-                        <div class="dropdown-item edit-price-item" data-id="${prod.id}" data-price="${escapeHtml(prod.price||'')}">💰 দাম এডিট</div>
-                        <div class="dropdown-item edit-desc-item" data-id="${prod.id}" data-desc="${escapeHtml(prod.desc||'')}">📝 বিবরণ এডিট</div>
-                        <div class="dropdown-item delete-item" data-id="${prod.id}">🗑 ডিলিট</div>
-                    </div>
-                </div>
-            </div>
-            <div class="edit-form" id="edit-form-${prod.id}">
-                <input type="text" id="edit-name-${prod.id}" value="${escapeHtml(prod.name)}" placeholder="নাম">
-                <input type="text" id="edit-price-${prod.id}" value="${escapeHtml(prod.price||'')}" placeholder="দাম">
-                <textarea id="edit-desc-${prod.id}" rows="2" placeholder="বিবরণ">${escapeHtml(prod.desc||'')}</textarea>
-                <div class="edit-actions">
-                    <button class="save-edit-btn" data-id="${prod.id}" style="background:#22c55e; color:white;">সেভ</button>
-                    <button class="cancel-edit-btn" data-id="${prod.id}" style="background:#6c63a0; color:white;">বাতিল</button>
-                </div>
-            </div>
-        `;
+        div.innerHTML=`<div class="product-row"><img class="product-img" src="${imgUrl}" onerror="this.src='https://via.placeholder.com/55x55/ede6ff/a855f7?text=No'"><div class="product-info"><div class="product-name">${escapeHtml(prod.name)}</div><div class="product-price">${prod.price?`৳ ${escapeHtml(prod.price)}`:'মূল্য নির্ধারিত হয়নি'}</div></div><div style="position:relative;"><button class="dot-btn" data-id="${prod.id}">⋮</button><div class="dropdown-menu" id="dropdown-${prod.id}"><div class="dropdown-item edit-name-item" data-id="${prod.id}">✏️ নাম এডিট</div><div class="dropdown-item edit-price-item" data-id="${prod.id}">💰 দাম এডিট</div><div class="dropdown-item edit-desc-item" data-id="${prod.id}">📝 বিবরণ এডিট</div><div class="dropdown-item delete-item" data-id="${prod.id}">🗑 ডিলিট</div></div></div></div><div class="edit-form" id="edit-form-${prod.id}"><input type="text" id="edit-name-${prod.id}" value="${escapeHtml(prod.name)}" placeholder="নাম"><input type="text" id="edit-price-${prod.id}" value="${escapeHtml(prod.price||'')}" placeholder="দাম"><textarea id="edit-desc-${prod.id}" rows="2" placeholder="বিবরণ">${escapeHtml(prod.desc||'')}</textarea><div class="edit-actions"><button class="save-edit-btn" data-id="${prod.id}" style="background:#22c55e; color:white;">সেভ</button><button class="cancel-edit-btn" data-id="${prod.id}" style="background:#6c63a0; color:white;">বাতিল</button></div></div>`;
         container.appendChild(div);
     });
     attachProductEvents();
 }
 
 function attachProductEvents() {
-    document.querySelectorAll('.dot-btn').forEach(btn=>{
-        btn.addEventListener('click',(e)=>{ e.stopPropagation(); const id=btn.dataset.id; document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('show')); document.getElementById(`dropdown-${id}`).classList.toggle('show'); });
-    });
-    document.querySelectorAll('.edit-name-item, .edit-price-item, .edit-desc-item').forEach(item=>{
-        item.addEventListener('click',()=>{ const id=item.dataset.id; document.getElementById(`edit-form-${id}`).classList.toggle('show'); document.getElementById(`dropdown-${id}`).classList.remove('show'); });
-    });
-    document.querySelectorAll('.delete-item').forEach(item=>{
-        item.addEventListener('click',async()=>{ if(confirm('প্রোডাক্ট মুছতে চান?')){ await db.ref(`products/${currentShopId}/${item.dataset.id}`).remove(); showToast('✅ প্রোডাক্ট মুছে ফেলা হয়েছে'); loadProducts(); } });
-    });
-    document.querySelectorAll('.save-edit-btn').forEach(btn=>{
-        btn.addEventListener('click',async()=>{ const id=btn.dataset.id; const newName=document.getElementById(`edit-name-${id}`).value.trim(); if(!newName){ showToast('নাম খালি রাখা যাবে না!',true); return; } await db.ref(`products/${currentShopId}/${id}`).update({ name:newName, price:document.getElementById(`edit-price-${id}`).value.trim(), desc:document.getElementById(`edit-desc-${id}`).value.trim() }); showToast('✅ প্রোডাক্ট আপডেট হয়েছে'); loadProducts(); });
-    });
-    document.querySelectorAll('.cancel-edit-btn').forEach(btn=>{
-        btn.addEventListener('click',()=>{ const id=btn.dataset.id; document.getElementById(`edit-form-${id}`).classList.remove('show'); });
-    });
+    document.querySelectorAll('.dot-btn').forEach(btn=>{ btn.addEventListener('click',(e)=>{ e.stopPropagation(); const id=btn.dataset.id; document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('show')); document.getElementById(`dropdown-${id}`).classList.toggle('show'); }); });
+    document.querySelectorAll('.edit-name-item, .edit-price-item, .edit-desc-item').forEach(item=>{ item.addEventListener('click',()=>{ const id=item.dataset.id; document.getElementById(`edit-form-${id}`).classList.toggle('show'); document.getElementById(`dropdown-${id}`).classList.remove('show'); }); });
+    document.querySelectorAll('.delete-item').forEach(item=>{ item.addEventListener('click',async()=>{ if(confirm('প্রোডাক্ট মুছতে চান?')){ await db.ref(`products/${currentShopId}/${item.dataset.id}`).remove(); showToast('✅ প্রোডাক্ট মুছে ফেলা হয়েছে'); loadProducts(); } }); });
+    document.querySelectorAll('.save-edit-btn').forEach(btn=>{ btn.addEventListener('click',async()=>{ const id=btn.dataset.id; const newName=document.getElementById(`edit-name-${id}`).value.trim(); if(!newName){ showToast('নাম খালি রাখা যাবে না!',true); return; } await db.ref(`products/${currentShopId}/${id}`).update({ name:newName, price:document.getElementById(`edit-price-${id}`).value.trim(), desc:document.getElementById(`edit-desc-${id}`).value.trim() }); showToast('✅ প্রোডাক্ট আপডেট হয়েছে'); loadProducts(); }); });
+    document.querySelectorAll('.cancel-edit-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ const id=btn.dataset.id; document.getElementById(`edit-form-${id}`).classList.remove('show'); }); });
 }
 
 async function addProduct() {
@@ -1415,7 +1094,6 @@ async function addProduct() {
 }
 function getThumbUrl(url){ if(!url) return "https://via.placeholder.com/55x55/ede6ff/a855f7?text=No"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`; return url; }
 
-// Slider Functions
 let slidesData = [];
 async function loadSlides() {
     if(!currentShopId) return;
@@ -1431,7 +1109,6 @@ async function updateSlideImage(idx,url){ slidesData[idx].image=url; await db.re
 async function removeSlide(idx){ if(slidesData.length===1){ showToast('কমপক্ষে একটি স্লাইড রাখতে হবে!',true); return; } slidesData.splice(idx,1); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('স্লাইড মুছে ফেলা হয়েছে'); }
 async function addNewSlide(){ slidesData.push({image:"https://via.placeholder.com/1200x400/8b5cf6/ffffff?text=New+Slide"}); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showToast('নতুন স্লাইড যোগ হয়েছে'); }
 
-// Ticker Functions
 let tickerItems = [];
 async function loadTicker() {
     if(!currentShopId) return;
@@ -1446,34 +1123,26 @@ function updateTickerPreview(items){ document.getElementById('tickerPreview').in
 async function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showToast('কিছু লিখুন!',true); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; await db.ref(`tickers/${currentShopId}`).set(items); updateTickerPreview(items); showToast('টিকার আপডেট হয়েছে!'); }
 async function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; await db.ref(`tickers/${currentShopId}`).set(def); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
 
-// ========== ইনিশিয়ালাইজ ==========
 auth.onAuthStateChanged(async user=>{
-    if(!user){ 
-        window.location.href = 'login.html';
-        return;
-    }
+    if(!user){ window.location.href = 'login.html'; return; }
     currentShopId=user.uid;
     const snap=await db.ref('shops/'+currentShopId).get();
     document.getElementById('loadingScreen').style.display='none';
     document.getElementById('mainContent').style.display='block';
     document.getElementById('saveWrap').style.display='flex';
     
-    await loadCategoriesForDashboard();
+    // Shop ID Display
+    document.getElementById('shopIdDisplay').innerHTML = currentShopId;
     
+    await loadCategoriesForDashboard();
     if(snap.exists()){
         currentShopData=snap.val();
-        
-        // হেডারে দোকানের নাম সেট করুন
-        const shopName = currentShopData.shopName || 'দোকানের নাম';
-        document.getElementById('headerShopName').innerHTML = shopName;
-        
-        // স্ট্যাটাস ব্যাজ সেট করুন
+        document.getElementById('headerShopName').innerHTML = currentShopData.shopName || 'দোকানের নাম';
         const badge=document.getElementById('cardStatusBadge');
         if(currentShopData.status==='approved'){ badge.className='status-badge approved'; badge.innerHTML='<i class="fas fa-check-circle"></i> Approved'; }
         else if(currentShopData.status==='rejected'){ badge.className='status-badge rejected'; badge.innerHTML='<i class="fas fa-times-circle"></i> Rejected'; }
         else{ badge.className='status-badge pending'; badge.innerHTML='<i class="fas fa-clock"></i> পেন্ডিং'; }
         
-        // ফর্ম ফিল্ডে মান সেট করুন
         document.getElementById('shopName').value=currentShopData.shopName||'';
         document.getElementById('ownerName').value=currentShopData.ownerName||'';
         document.getElementById('description').value=currentShopData.description||'';
@@ -1484,21 +1153,12 @@ auth.onAuthStateChanged(async user=>{
         document.getElementById('youtube').value=currentShopData.youtube||'';
         
         if(currentShopData.category){
-            if(currentShopData.category.includes(',')){
-                selectedCategoriesArray = currentShopData.category.split(',').map(c => c.trim()).filter(c => c);
-            } else {
-                selectedCategoriesArray = [currentShopData.category];
-            }
-            renderSelectedCategoriesChips();
-            updateCategoryDisplayText();
+            if(currentShopData.category.includes(',')){ selectedCategoriesArray = currentShopData.category.split(',').map(c => c.trim()).filter(c => c); }
+            else { selectedCategoriesArray = [currentShopData.category]; }
+            renderSelectedCategoriesChips(); updateCategoryDisplayText();
         }
-        
-        // ড্রয়ার কন্টেন্ট রেন্ডার করুন
-        renderDrawerContent(currentShopData);
     }
-    loadProducts();
-    await loadSlides();
-    await loadTicker();
+    loadProducts(); await loadSlides(); await loadTicker();
     document.getElementById('addProductBtn').addEventListener('click',addProduct);
     document.getElementById('addNewSlideBtn').addEventListener('click',addNewSlide);
     document.getElementById('updateTickerBtn').addEventListener('click',saveTicker);
