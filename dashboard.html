@@ -44,27 +44,68 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
   
-  /* Dashboard Header - Without Menu Icon */
+  /* Dashboard Header - 3D Animated Text */
   .dashboard-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 20px;
+    padding: 25px 20px;
     background: white;
     border-bottom: 1px solid var(--border-light);
     position: sticky;
     top: 0;
     z-index: 100;
+    background: linear-gradient(135deg, #ffffff, #faf8ff);
   }
-  .dashboard-header h2 {
-    font-size: 22px;
+  
+  /* 3D Animated Text Styles */
+  .animated-shop-name {
+    font-size: 24px;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light), var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-align: center;
+    position: relative;
+    display: inline-block;
+    animation: float3D 2s ease-in-out infinite;
+    text-shadow: 0 2px 5px rgba(108,43,217,0.2);
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
   }
+  
+  .animated-shop-name:hover {
+    animation: float3D 0.8s ease-in-out infinite;
+    text-shadow: 0 0 15px rgba(108,43,217,0.5);
+  }
+  
+  @keyframes float3D {
+    0% {
+      transform: translateY(0px) rotateX(0deg);
+      text-shadow: 0 2px 5px rgba(108,43,217,0.2);
+    }
+    50% {
+      transform: translateY(-8px) rotateX(5deg);
+      text-shadow: 0 8px 15px rgba(108,43,217,0.4), 0 0 10px rgba(162,89,247,0.3);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    100% {
+      transform: translateY(0px) rotateX(0deg);
+      text-shadow: 0 2px 5px rgba(108,43,217,0.2);
+    }
+  }
+  
+  /* Add 3D perspective effect */
+  .dashboard-header h2 {
+    perspective: 500px;
+    transform-style: preserve-3d;
+  }
+  
+  .content { padding:0 16px 100px; }
   
   /* Shop ID Banner */
   .shop-id-banner {
@@ -132,8 +173,6 @@
     font-weight: 500;
     line-height: 1.5;
   }
-  
-  .content { padding:0 16px 100px; }
   
   /* Glass Button */
   .btn-glass {
@@ -733,9 +772,9 @@
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
-<!-- Dashboard Header - Without Menu Icon -->
+<!-- Dashboard Header - 3D Animated Shop Name -->
 <div class="dashboard-header">
-    <h2 id="headerShopName">ড্যাশবোর্ড</h2>
+    <h2><span class="animated-shop-name" id="headerShopName">ড্যাশবোর্ড</span></h2>
 </div>
 
 <div class="content" id="mainContent" style="display:none">
@@ -910,7 +949,6 @@ function showErrorToast(msg) {
 
 // Popup Style Success Toast
 function showSuccessPopup() {
-    // Remove existing popup if any
     const existingPopup = document.querySelector('.success-toast');
     if (existingPopup) existingPopup.remove();
     
@@ -928,7 +966,6 @@ function showSuccessPopup() {
     `;
     document.body.appendChild(popup);
     
-    // Auto remove after 5 seconds
     setTimeout(() => {
         if (popup && popup.remove) popup.remove();
     }, 5000);
