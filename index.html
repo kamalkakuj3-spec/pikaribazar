@@ -160,9 +160,9 @@ body {
     font-weight: bold;
 }
 
-/* ========== MARQUEE - profile.html এর টিকারের মতো গ্যাপ ========== */
+/* MARQUEE */
 .marquee-container { 
-    margin: 5px 16px 10px;  /* উপরে 5px, নিচে 10px */
+    margin: 5px 16px 10px;
     padding: 8px 12px;
     background: linear-gradient(90deg, var(--primary), var(--primary-light));
     border-radius: 14px;
@@ -184,6 +184,7 @@ marquee {
     border-radius: 14px;
 }
 
+/* SLIDER SECTION */
 .slider-section { margin:0 16px 20px; }
 .slider-box {
     position: relative;
@@ -204,9 +205,9 @@ marquee {
 .sl-dot { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; width: 6px; }
 .sl-dot.active { width: 20px; background: white; }
 
-/* ========== ADD BANNER - profile.html এর টিকারের মতো গ্যাপ ========== */
+/* ADD BANNER */
 .add-banner { 
-    margin: 5px 16px 10px;  /* উপরে 5px, নিচে 10px */
+    margin: 5px 16px 10px;
     background: linear-gradient(135deg,#1a0a3e,#6c2bd9);
     border-radius: 20px;
     padding: 18px 16px;
@@ -235,7 +236,7 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* এডমিনের ভিডিও গ্রিড */
+/* ========== ভিডিও গ্রিড - আপডেটেড স্টাইল ========== */
 .video-grid-section {
     margin: 0 16px 20px;
 }
@@ -262,12 +263,15 @@ marquee {
     width: 100%;
     aspect-ratio: 16 / 9;
     cursor: pointer;
+    padding: 5px;
+    border-radius: 12px;
 }
 .cloudinary-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 8px;
 }
 .video-card-info {
     padding: 14px 16px;
@@ -296,7 +300,7 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* দোকানের কার্ড */
+/* ========== দোকানের কার্ড - ইউটিউব ভিডিও স্টাইল আপডেটেড ========== */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
@@ -318,12 +322,15 @@ marquee {
     aspect-ratio: 16 / 9;
     background: #000;
     cursor: pointer;
+    padding: 5px;
+    border-radius: 12px;
 }
 .video-thumbnail {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 8px;
 }
 .play-icon {
     position: absolute;
@@ -355,12 +362,13 @@ marquee {
 }
 .shop-video-frame {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
     border: none;
     display: none;
+    border-radius: 8px;
 }
 .shop-video-info {
     padding: 14px 16px;
@@ -469,6 +477,7 @@ marquee {
     color: white;
     font-size: 18px;
     text-align: center;
+    border-radius: 8px;
 }
 @keyframes tileIn {
     from { transform: translateY(15px); opacity: 0; }
@@ -479,6 +488,38 @@ marquee {
 .empty-icon  { font-size:50px; margin-bottom:12px; }
 .empty-title { font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px; }
 .empty-sub   { font-size:13px; }
+
+/* TICKER SECTION - গ্যাপ 3px (3 ভাগের 1 ভাগ) */
+.ticker-section { 
+    margin: 3px 16px 10px;
+}
+.ticker-wrap {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 14px;
+    padding: 8px 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(108,43,217,0.15);
+}
+.ticker {
+    display: flex;
+    white-space: nowrap;
+    animation: scrollTicker 8s linear infinite;
+    gap: 1.5rem;
+    width: fit-content;
+}
+.ticker-item {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    letter-spacing: 0.5px;
+}
+@keyframes scrollTicker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
 
 /* BOTTOM NAV */
 .bottom-nav {
@@ -1083,7 +1124,7 @@ function renderVideoGrid() {
     container.innerHTML = allVideos.map(video => `
         <div class="video-card" data-video-id="${video.id}">
             <div class="video-player-container">
-                <video class="cloudinary-video" preload="metadata" playsinline></video>
+                <video class="cloudinary-video" preload="metadata" playsinline muted loop autoplay></video>
             </div>
             <div class="video-card-info">
                 <div class="video-card-title" onclick="${video.shopId ? `window.location.href='profile.html?id=${video.shopId}'` : 'return false'}" style="cursor: ${video.shopId ? 'pointer' : 'default'}; ${video.shopId ? '' : 'opacity: 0.7;'}">
