@@ -116,7 +116,7 @@
   .sl-dot { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; width: 6px; }
   .sl-dot.active { width: 20px; background: white; }
   
-  /* ========== TICKER - index.html এর মতো স্টাইল ========== */
+  /* ========== TICKER - index.html এর মতো স্টাইল (সঠিক অ্যানিমেশন সহ) ========== */
   .ticker-section { margin:0 16px 20px; }
   .ticker-wrap {
     background: linear-gradient(90deg, var(--primary), var(--primary-light));
@@ -125,9 +125,26 @@
     overflow: hidden;
     box-shadow: 0 3px 12px rgba(108,43,217,0.15);
   }
-  .ticker { display: flex; white-space: nowrap; animation: scrollTicker 4s linear infinite; gap: 1.5rem; }
-  .ticker-item { font-size: 14px; font-weight: 500; color: white; background: transparent; padding: 0; border-radius: 0; letter-spacing: 0.5px; }
-  @keyframes scrollTicker { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+  .ticker { 
+    display: flex; 
+    white-space: nowrap; 
+    animation: scrollTicker 4s linear infinite; 
+    gap: 1.5rem; 
+    width: fit-content;
+  }
+  .ticker-item { 
+    font-size: 14px; 
+    font-weight: 500; 
+    color: white; 
+    background: transparent; 
+    padding: 0; 
+    border-radius: 0; 
+    letter-spacing: 0.5px; 
+  }
+  @keyframes scrollTicker { 
+    0% { transform: translateX(0); } 
+    100% { transform: translateX(-50%); } 
+  }
   .ticker-disabled {
     background: #ccc;
     border-radius: 14px;
@@ -225,7 +242,7 @@
     </div>
   </div>
 
-  <!-- TICKER SECTION - index.html এর মতো স্টাইল -->
+  <!-- TICKER SECTION - index.html এর মতো স্টাইল (সঠিক অ্যানিমেশন সহ) -->
   <div class="ticker-section" id="tickerSection" style="display:none">
     <div class="ticker-wrap">
       <div class="ticker" id="tickerContainer"></div>
@@ -372,17 +389,19 @@ document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer)
 document.getElementById('drawerCloseBottomBtn').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 
-// ========== TICKER - index.html এর মতো স্টাইল ==========
+// ========== TICKER - index.html এর মতো ডাবল আইটেম কৌশল (সঠিক অ্যানিমেশন) ==========
 async function loadTicker() {
   const snap = await db.ref(`tickers/${shopId}`).once('value');
   let items = [];
   if(snap.exists()){ items = snap.val(); }
-  if(!items || items.length===0){ 
+  if(!items || items.length === 0){ 
     document.getElementById('tickerSection').style.display = 'none';
     return; 
   }
   document.getElementById('tickerSection').style.display = 'block';
   const tickerDiv = document.getElementById('tickerContainer');
+  
+  // 🔴 গুরুত্বপূর্ণ: আইটেমগুলিকে ডাবল করছি যাতে অ্যানিমেশন সঠিকভাবে লুপ হয় 🔴
   const doubled = [...items, ...items];
   tickerDiv.innerHTML = doubled.map(text => `<span class="ticker-item">✨ ${escapeHtml(text)}</span>`).join('');
 }
