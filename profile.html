@@ -32,29 +32,33 @@
   .back-btn { position:fixed; top:20px; left:20px; width:48px; height:48px; background:rgba(255,255,255,0.9); backdrop-filter:blur(10px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; cursor:pointer; z-index:100; box-shadow:0 8px 25px rgba(0,0,0,0.15); text-decoration:none; color:var(--primary); transition:all 0.3s; }
   .back-btn:hover { transform:scale(1.1); background:var(--primary); color:white; }
   
-  /* Pending Message Card */
-  .pending-card {
-    background: linear-gradient(135deg, #fff9e6, #fff4d6);
+  /* Not Found Card - সরল মেসেজ */
+  .notfound-card {
+    background: white;
     border-radius: 28px;
     margin: 80px 20px 20px 20px;
-    padding: 32px 24px;
+    padding: 50px 24px;
     text-align: center;
     box-shadow: 0 25px 45px -12px rgba(108,43,217,0.3);
-    border: 1px solid rgba(240,192,64,0.3);
     animation: fadeInUp 0.6s ease;
   }
-  .pending-icon { font-size: 70px; margin-bottom: 16px; display: inline-block; animation: bounce 2s ease-in-out infinite; }
-  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  .pending-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 20px; }
-  .pending-message { font-size: 15px; line-height: 1.7; color: #4a4a5a; margin-bottom: 20px; text-align: left; }
-  .pending-message p { margin-bottom: 12px; }
-  .pending-features { background: white; border-radius: 20px; padding: 20px; margin: 20px 0; text-align: left; border: 1px solid #f0ebff; }
-  .feature-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0ebff; }
-  .feature-item:last-child { border-bottom: none; }
-  .feature-icon { width: 36px; height: 36px; background: #f0ebff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--primary); }
-  .feature-text { font-size: 13px; color: var(--text); font-weight: 500; }
-  .pending-contact { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 50px; padding: 14px 28px; color: white; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.2s; }
-  .pending-contact:hover { transform: translateY(-2px); }
+  .notfound-icon { font-size: 70px; margin-bottom: 16px; display: inline-block; }
+  .notfound-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 20px; }
+  .notfound-message { font-size: 15px; line-height: 1.7; color: #4a4a5a; margin-bottom: 25px; }
+  .back-home-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 50px;
+    padding: 14px 28px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: transform 0.2s;
+  }
+  .back-home-btn:hover { transform: translateY(-2px); }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   
   /* Header */
@@ -70,7 +74,7 @@
   .search-input { flex:1; padding:8px 6px; border:none; font-size:0.85rem; outline:none; background:transparent; }
   .search-clear { background:none; border:none; cursor:pointer; font-size:0.9rem; color:#9b4dff; padding:4px; }
   
-  /* ========== DRAWER ========== */
+  /* DRAWER */
   .drawer-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0); z-index:1000; display:none; transition:background 0.3s ease; }
   .drawer-overlay.show { background:rgba(0,0,0,0.5); }
   .drawer { position:fixed; top:0; left:-340px; width:340px; height:100%; background:white; box-shadow:4px 0 20px rgba(0,0,0,0.15); z-index:1001; transition:left 0.3s ease; overflow-y:auto; border-radius:0 20px 20px 0; }
@@ -104,7 +108,7 @@
   .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; }
   .dot.active { background:var(--accent); width:22px; border-radius:10px; }
   
-  /* Ticker - স্পিড আরও দ্রুত 4s, রাউন্ড সাইজ অর্ধেক (20px) */
+  /* Ticker */
   .ticker-section { padding:0 15px; margin:5px 0 15px 0; }
   .ticker-wrap { background:linear-gradient(135deg, var(--primary-dark), var(--primary-light)); padding:8px 0; overflow:hidden; border-radius:20px; }
   .ticker { display:flex; white-space:nowrap; animation:scrollTicker 4s linear infinite; gap:1.5rem; }
@@ -143,43 +147,17 @@
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 প্রোফাইল লোড হচ্ছে...</div></div>
 
-<!-- PENDING / NOT FOUND MESSAGE -->
+<!-- NOT FOUND MESSAGE (পেন্ডিং মেসেজ বাদ) -->
 <div id="notFound" style="display:none;">
-  <div class="pending-card">
-    <div class="pending-icon">🎉</div>
-    <div class="pending-title">প্রোফাইল পেইজে আপনাকে স্বাগতম!</div>
-    
-    <div class="pending-message">
-      <p>🌟 <strong>পাইকারি বাজার অ্যাপসে আপনার নিবন্ধন এখনো পেন্ডিং অবস্থায় আছে।</strong></p>
-      <p>যখনই আমাদের ম্যানেজমেন্ট কর্তৃপক্ষ আপনাকে এপ্রুভ করে দিবেন, তখনই আপনি আপনার দোকান আমাদের অ্যাপসের হোমপেজে দেখতে পাবেন এবং এখানে আপনি আপনার দোকানের একটি পেজ পেয়ে যাবেন।</p>
+  <div class="notfound-card">
+    <div class="notfound-icon">🔍</div>
+    <div class="notfound-title">দোকানটি পাওয়া যায়নি</div>
+    <div class="notfound-message">
+      <p>আপনার অনুরোধ করা দোকানটি আমাদের প্ল্যাটফর্মে নেই।</p>
+      <p>দয়া করে সঠিক লিংক ব্যবহার করুন অথবা হোমপেজ থেকে অন্য দোকান খুঁজুন।</p>
     </div>
-
-    <div class="pending-features">
-      <div class="feature-item">
-        <div class="feature-icon">🏪</div>
-        <div class="feature-text">দোকানের ব্যানার ও প্রোফাইল ছবি কাস্টমাইজ করতে পারবেন</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">📝</div>
-        <div class="feature-text">দোকানের বিস্তারিত বিবরণী ও ঠিকানা যোগ করতে পারবেন</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">📦</div>
-        <div class="feature-text">পণ্য তালিকা তৈরি ও ম্যানেজ করতে পারবেন</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">📞</div>
-        <div class="feature-text">কাস্টমাররা আপনার সাথে যোগাযোগের জন্য বাম পাশে মেনু বারে আপনার সাথে সকল যোগাযোগের তথ্য দেখতে পাবেন</div>
-      </div>
-    </div>
-
-    <div class="pending-message">
-      <p>✨ শুভকামনা আপনার জন্য। পাইকারি বাজার আপনাকে নিয়ে গর্বিত!</p>
-      <p>📞 আর যে কোন সমস্যায় আমাদের সাথে কন্টাক্ট করুন। কন্টাক্ট নাম্বার হোম পেজে সাহায্য বাটনে ক্লিক করলে পেয়ে যাবেন।</p>
-    </div>
-
-    <a href="index.html" class="pending-contact">
-      <i class="fas fa-home"></i> 🏠 হোমপেজে যান
+    <a href="index.html" class="back-home-btn">
+      <i class="fas fa-home"></i> হোমপেজে যান
     </a>
   </div>
 </div>
@@ -256,7 +234,7 @@ const db = firebase.database();
 
 const urlParams = new URLSearchParams(window.location.search);
 const shopId = urlParams.get('id');
-if (!shopId) { showPendingMessage(); } else { loadShop(); }
+if (!shopId) { showNotFoundMessage(); } else { loadShop(); }
 
 let currentShopData = null;
 
@@ -265,8 +243,9 @@ async function loadShop() {
     const snap = await db.ref('shops/' + shopId).get();
     document.getElementById('loadingScreen').style.display = 'none';
     
+    // দোকান না থাকলে বা status approved না হলে not found মেসেজ দেখাবে
     if (!snap.exists() || snap.val().status !== 'approved') { 
-      showPendingMessage(); 
+      showNotFoundMessage(); 
       return; 
     }
     
@@ -283,15 +262,15 @@ async function loadShop() {
     await loadProducts();
   } catch(e) { 
     console.error(e);
-    showPendingMessage(); 
+    showNotFoundMessage(); 
   }
 }
 
-function showPendingMessage() {
+function showNotFoundMessage() {
   document.getElementById('loadingScreen').style.display = 'none';
   document.getElementById('notFound').style.display = 'block';
   document.getElementById('mainContent').style.display = 'none';
-  document.title = 'অপেক্ষমান | পাইকারি বাজার';
+  document.title = 'দোকান পাওয়া যায়নি | পাইকারি বাজার';
 }
 
 function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
