@@ -45,7 +45,7 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
   
-  /* Dashboard Header with Menu Icon */
+  /* Dashboard Header with Menu Icon and Shop Name */
   .dashboard-header {
     display: flex;
     align-items: center;
@@ -78,6 +78,18 @@
     font-size: 18px;
     font-weight: 700;
     color: var(--primary);
+  }
+  .dashboard-header .shop-name-header {
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    max-width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .dashboard-header .placeholder {
     width: 42px;
@@ -134,61 +146,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(108,43,217,0.35);
   }
-  
-  /* Shop Card */
-  .shop-card {
-    background: linear-gradient(135deg, var(--white), #fefcff);
-    border-radius: 28px;
-    padding: 22px;
-    margin-bottom: 24px;
-    border: 1px solid var(--border-light);
-    box-shadow: var(--card-shadow);
-    position: relative;
-    overflow: hidden;
-  }
-  .shop-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary-light));
-  }
-  .shop-name {
-    font-size: 22px;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .shop-address {
-    font-size: 13px;
-    color: var(--text-light);
-    margin-top: 8px;
-    padding-top: 10px;
-    border-top: 1px dashed var(--border-light);
-    display: flex;
-    gap: 8px;
-  }
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 30px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-top: 10px;
-  }
-  .status-badge.approved { background: #e8faf0; color: #2ecc71; }
-  .status-badge.pending { background: #fff8e5; color: #f0c040; }
-  .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
   
   /* Edit Options Container */
   .edit-options-container {
@@ -585,6 +542,21 @@
     font-size: 12px;
   }
   
+  /* Status Badge */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .status-badge.approved { background: #e8faf0; color: #2ecc71; }
+  .status-badge.pending { background: #fff8e5; color: #f0c040; }
+  .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
+  
   /* Bottom Navigation */
   .bottom-nav {
     position: fixed;
@@ -835,22 +807,19 @@
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
-<!-- Dashboard Header with Menu Icon -->
+<!-- Dashboard Header with Menu Icon and Shop Name -->
 <div class="dashboard-header">
     <button class="menu-icon-btn" id="menuIconBtn">
         <i class="fas fa-bars"></i>
     </button>
-    <h2><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</h2>
+    <div class="shop-name-header" id="headerShopName">ড্যাশবোর্ড</div>
     <div class="placeholder"></div>
 </div>
 
 <div class="content" id="mainContent" style="display:none">
-    <!-- Shop Card -->
-    <div class="shop-card">
-        <div class="shop-name"><i class="fas fa-crown" style="color:#f0c040;"></i> <span id="previewCardShopName">দোকানের নাম</span></div>
-        <div class="shop-address"><i class="fas fa-location-dot"></i> <span id="previewCardAddress">ঠিকানা</span></div>
-        <div id="cardStatusBadge" class="status-badge pending"><i class="fas fa-clock"></i> পেন্ডিং</div>
-    </div>
+    
+    <!-- Status Badge -->
+    <div id="cardStatusBadge" class="status-badge pending"><i class="fas fa-clock"></i> পেন্ডিং</div>
 
     <!-- Live Profile Button -->
     <button class="btn-glass" onclick="viewProfile()"><i class="fas fa-globe"></i> লাইভ প্রোফাইল দেখুন</button>
@@ -1351,8 +1320,11 @@ async function saveShopData() {
             category: selectedCategories,
             updatedAt: Date.now()
         });
-        document.getElementById('previewCardShopName').innerHTML=shopName;
-        document.getElementById('previewCardAddress').innerHTML=area;
+        
+        // হেডারের দোকানের নাম আপডেট করুন
+        document.getElementById('headerShopName').innerHTML = shopName;
+        document.getElementById('previewCardAddress')?.remove(); // কার্ড না থাকায় এটা কাজ করবে না
+        
         showToast('✅ তথ্য সংরক্ষণ হয়েছে!');
     } catch(e) { showToast('সংরক্ষণ ব্যর্থ!',true); }
     btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; 
@@ -1490,12 +1462,18 @@ auth.onAuthStateChanged(async user=>{
     
     if(snap.exists()){
         currentShopData=snap.val();
-        document.getElementById('previewCardShopName').innerHTML=currentShopData.shopName||'দোকানের নাম';
-        document.getElementById('previewCardAddress').innerHTML=currentShopData.area||'ঠিকানা';
+        
+        // হেডারে দোকানের নাম সেট করুন
+        const shopName = currentShopData.shopName || 'দোকানের নাম';
+        document.getElementById('headerShopName').innerHTML = shopName;
+        
+        // স্ট্যাটাস ব্যাজ সেট করুন
         const badge=document.getElementById('cardStatusBadge');
         if(currentShopData.status==='approved'){ badge.className='status-badge approved'; badge.innerHTML='<i class="fas fa-check-circle"></i> Approved'; }
         else if(currentShopData.status==='rejected'){ badge.className='status-badge rejected'; badge.innerHTML='<i class="fas fa-times-circle"></i> Rejected'; }
         else{ badge.className='status-badge pending'; badge.innerHTML='<i class="fas fa-clock"></i> পেন্ডিং'; }
+        
+        // ফর্ম ফিল্ডে মান সেট করুন
         document.getElementById('shopName').value=currentShopData.shopName||'';
         document.getElementById('ownerName').value=currentShopData.ownerName||'';
         document.getElementById('description').value=currentShopData.description||'';
