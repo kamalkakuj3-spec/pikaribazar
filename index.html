@@ -185,7 +185,7 @@ marquee {
 }
 
 /* SLIDER SECTION */
-.slider-section { margin:0 16px 5px; } /* নিচের গ্যাপ 20px থেকে 5px করা হয়েছে */
+.slider-section { margin:0 16px 5px; }
 .slider-box {
     position: relative;
     border-radius: 20px;
@@ -205,7 +205,7 @@ marquee {
 .sl-dot { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; width: 6px; }
 .sl-dot.active { width: 20px; background: white; }
 
-/* TICKER SECTION - উপরের গ্যাপ 3px (3 ভাগের 1 ভাগ) */
+/* TICKER SECTION */
 .ticker-section { 
     margin: 3px 16px 10px;
 }
@@ -268,7 +268,7 @@ marquee {
 .hidden { display:none; }
 .reset-btn { width:100%; padding:8px; background:#f0ebff; color:var(--primary); border:none; border-radius:12px; font-size:13px; font-weight:600; font-family:'Hind Siliguri',sans-serif; cursor:pointer; margin-bottom:8px; display:none; }
 
-/* ========== ভিডিও গ্রিড - আপডেটেড স্টাইল (কালো বর্ডার বাদ) ========== */
+/* ========== ভিডিও গ্রিড - আপডেটেড স্টাইল (কার্ড রাউন্ড 12px) ========== */
 .video-grid-section {
     margin: 0 16px 20px;
 }
@@ -279,7 +279,7 @@ marquee {
 }
 .video-card {
     background: white;
-    border-radius: 16px;  /* কার্ডের চারপাশে 16px রাউন্ড */
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
@@ -291,9 +291,9 @@ marquee {
 }
 .video-player-container {
     position: relative;
-    background: transparent;  /* কালো বর্ডার বাদ */
+    background: #000;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height: 230px;
     cursor: pointer;
 }
 .cloudinary-video {
@@ -301,7 +301,6 @@ marquee {
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 12px;  /* ভিডিওর চারপাশে 12px রাউন্ড */
 }
 .video-card-info {
     padding: 14px 16px;
@@ -312,6 +311,7 @@ marquee {
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 6px;
+    cursor: pointer;
 }
 .video-card-desc {
     font-size: 12px;
@@ -330,13 +330,13 @@ marquee {
     margin-bottom: 12px;
 }
 
-/* ========== দোকানের কার্ড - ইউটিউব ভিডিও স্টাইল আপডেটেড ========== */
+/* ========== দোকানের কার্ড - ইউটিউব ভিডিও স্টাইল ========== */
 .shop-card-wrapper {
     margin: 0 16px 16px;
 }
 .shop-video-card {
     background: white;
-    border-radius: 16px;  /* কার্ডের চারপাশে 16px রাউন্ড */
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
@@ -349,8 +349,8 @@ marquee {
 .video-player-card {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    background: transparent;  /* কালো বর্ডার বাদ */
+    height: 230px;
+    background: #000;
     cursor: pointer;
 }
 .video-thumbnail {
@@ -358,7 +358,6 @@ marquee {
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 12px;  /* থাম্বনেইলের চারপাশে 12px রাউন্ড */
 }
 .play-icon {
     position: absolute;
@@ -396,7 +395,6 @@ marquee {
     height: 100%;
     border: none;
     display: none;
-    border-radius: 12px;  /* ইউটিউব ফ্রেমের চারপাশে 12px রাউন্ড */
 }
 .shop-video-info {
     padding: 14px 16px;
@@ -505,7 +503,6 @@ marquee {
     color: white;
     font-size: 18px;
     text-align: center;
-    border-radius: 12px;
 }
 @keyframes tileIn {
     from { transform: translateY(15px); opacity: 0; }
@@ -1075,6 +1072,7 @@ function setupCloudinaryVideo(videoElement, videoUrl) {
     videoElement.loop = true;
     videoElement.playsInline = true;
     videoElement.autoplay = true;
+    videoElement.controls = true;
     
     const playPromise = videoElement.play();
     if (playPromise !== undefined) {
@@ -1120,7 +1118,7 @@ function renderVideoGrid() {
     container.innerHTML = allVideos.map(video => `
         <div class="video-card" data-video-id="${video.id}">
             <div class="video-player-container">
-                <video class="cloudinary-video" preload="metadata" playsinline muted loop autoplay></video>
+                <video class="cloudinary-video" preload="metadata" playsinline muted loop autoplay controls></video>
             </div>
             <div class="video-card-info">
                 <div class="video-card-title" onclick="${video.shopId ? `window.location.href='profile.html?id=${video.shopId}'` : 'return false'}" style="cursor: ${video.shopId ? 'pointer' : 'default'}; ${video.shopId ? '' : 'opacity: 0.7;'}">
