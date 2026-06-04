@@ -44,7 +44,7 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
   
-  /* Dashboard Header - 3D Animated Text */
+  /* Dashboard Header - 3D Animated Text (Slower Animation) */
   .dashboard-header {
     display: flex;
     align-items: center;
@@ -58,7 +58,7 @@
     background: linear-gradient(135deg, #ffffff, #faf8ff);
   }
   
-  /* 3D Animated Text Styles */
+  /* 3D Animated Text Styles - Slower Speed (6s instead of 2s) */
   .animated-shop-name {
     font-size: 24px;
     font-weight: 800;
@@ -69,7 +69,7 @@
     color: transparent;
     position: relative;
     display: inline-block;
-    animation: float3D 2s ease-in-out infinite;
+    animation: float3D 6s ease-in-out infinite;
     text-shadow: 0 2px 5px rgba(108,43,217,0.2);
     letter-spacing: 1px;
     cursor: pointer;
@@ -77,7 +77,7 @@
   }
   
   .animated-shop-name:hover {
-    animation: float3D 0.8s ease-in-out infinite;
+    animation: float3D 2s ease-in-out infinite;
     text-shadow: 0 0 15px rgba(108,43,217,0.5);
   }
   
@@ -407,205 +407,71 @@
   }
   .btn-small-purple:hover { background: #5a5290; }
   
-  /* ========== ক্যাটাগরি পপআপ ========== */
-  .category-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(5px);
-    z-index: 2000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-  }
-  .category-popup {
-    background: white;
-    border-radius: 28px;
-    width: 90%;
-    max-width: 400px;
-    max-height: 80vh;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  }
-  @keyframes popIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  .popup-header {
-    padding: 18px 20px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .popup-header h3 {
-    font-size: 18px;
-    font-weight: 700;
-  }
-  .popup-close {
-    background: rgba(255,255,255,0.2);
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    font-size: 20px;
-    cursor: pointer;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .popup-body {
-    padding: 16px;
-    max-height: 55vh;
-    overflow-y: auto;
-  }
-  .category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .cat-check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    background: #f5f3ff;
-    border-radius: 99px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 1.5px solid transparent;
-  }
-  .cat-check.selected {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-  }
-  .cat-check input {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--primary);
-  }
-  .cat-check label {
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  .popup-footer {
-    padding: 16px 20px;
-    border-top: 1px solid #eee;
-    display: flex;
-    gap: 12px;
-  }
-  .popup-footer button {
-    flex: 1;
-    padding: 12px;
-    border-radius: 99px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: 'Hind Siliguri', sans-serif;
-  }
-  .btn-apply {
-    background: var(--primary);
-    color: white;
-    border: none;
-  }
-  .btn-clear {
-    background: #f0ebff;
-    color: var(--primary);
-    border: none;
-  }
-  /* =================================================== */
-  
-  /* Product Item */
-  .product-item {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 12px;
-    margin-bottom: 12px;
-    border: 1px solid #e8e0ff;
-  }
-  .product-row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-  .product-img {
-    width: 55px;
-    height: 55px;
-    border-radius: 12px;
-    object-fit: cover;
-    border: 1px solid #e0d5ff;
-  }
-  .product-info { flex: 1; }
-  .product-name { font-weight: 700; color: var(--primary-dark); font-size: 14px; }
-  .product-price { color: var(--primary); font-weight: 600; font-size: 12px; }
-  .dot-btn {
-    background: #f0ebff;
-    border: none;
-    font-size: 16px;
-    padding: 6px 12px;
-    border-radius: 30px;
-    color: var(--primary);
-    cursor: pointer;
-  }
-  .dropdown-menu {
-    position: absolute;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    min-width: 140px;
-    display: none;
-    z-index: 100;
-    border: 1px solid #e8e0ff;
-  }
-  .dropdown-menu.show { display: block; }
-  .dropdown-item {
-    padding: 10px 14px;
-    cursor: pointer;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .dropdown-item:hover { background: #f3edff; }
-  .delete-item { color: #e74c3c; }
-  .edit-form {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px dashed #e0d5ff;
-    display: none;
-  }
-  .edit-form.show { display: block; }
-  .edit-form input, .edit-form textarea {
-    width: 100%;
-    padding: 8px 12px;
-    margin-bottom: 8px;
-    border: 1px solid #e8e0ff;
-    border-radius: 12px;
-  }
-  .edit-actions { display: flex; gap: 8px; }
-  .edit-actions button { padding: 6px 14px; font-size: 12px; border-radius: 30px; border: none; cursor: pointer; }
-  
-  /* Slider Item */
+  /* Slider Item with Save Button */
   .slider-item {
     background: #faf8ff;
     padding: 12px;
     border-radius: 16px;
     margin-bottom: 10px;
     border: 1px solid #e8e0ff;
+  }
+  .slider-image-preview {
+    width: 60px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #ede6ff;
+  }
+  .slider-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .slider-input-group input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid #e8e0ff;
+    border-radius: 12px;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  .slider-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .slider-save-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .slider-save-btn:hover {
+    background: var(--primary-dark);
+  }
+  .slider-delete-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .slider-delete-btn:hover {
+    background: #b91c1c;
+  }
+  .slider-info {
+    font-size: 11px;
+    color: #888;
+    margin-top: 6px;
   }
   
   /* Ticker Preview */
@@ -772,7 +638,7 @@
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
-<!-- Dashboard Header - 3D Animated Shop Name -->
+<!-- Dashboard Header - 3D Animated Shop Name (Slower) -->
 <div class="dashboard-header">
     <h2><span class="animated-shop-name" id="headerShopName">ড্যাশবোর্ড</span></h2>
 </div>
@@ -854,7 +720,7 @@
             </div>
         </div>
         
-        <!-- Option 4: ইমেজ স্লাইডার -->
+        <!-- Option 4: ইমেজ স্লাইডার (Updated with Save Button) -->
         <div>
             <div class="option-btn" onclick="toggleOptionPanel('sliderPanel')">
                 <div class="option-left">
@@ -1178,21 +1044,119 @@ async function addProduct() {
 }
 function getThumbUrl(url){ if(!url) return "https://via.placeholder.com/55x55/ede6ff/a855f7?text=No"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w100`; return url; }
 
+// ========== SLIDER FUNCTIONS (UPDATED with Save Button) ==========
 let slidesData = [];
+
 async function loadSlides() {
     if(!currentShopId) return;
     const snap = await db.ref(`sliders/${currentShopId}`).once('value');
-    if(snap.exists()){ slidesData = snap.val(); if(!slidesData.length) slidesData=[]; }
-    else { slidesData = []; }
-    if(slidesData.length===0){ slidesData = [{image:"https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=1200&h=400&fit=crop"}]; }
+    slidesData = [];
+    if(snap.exists()){ 
+        const data = snap.val();
+        if(Array.isArray(data)) {
+            slidesData = data;
+        } else if(typeof data === 'object') {
+            slidesData = Object.values(data);
+        }
+    }
+    if(!slidesData.length){ 
+        slidesData = []; // No default image, empty array
+    }
     renderSliderList();
 }
-function renderSliderList(){ const c=document.getElementById('sliderListContainer'); c.innerHTML=''; slidesData.forEach((s,i)=>{ const d=document.createElement('div'); d.className='slider-item'; d.innerHTML=`<div style="display:flex; gap:10px; align-items:center;"><img src="${getDriveUrl(s.image,50)}" style="width:50px; height:40px; object-fit:cover; border-radius:8px;"><input type="text" value="${escapeHtml(s.image)}" placeholder="Google Drive Link" style="flex:1; padding:8px; border-radius:12px; border:1px solid #d9c8ff;" onchange="updateSlideImage(${i},this.value)"><button onclick="removeSlide(${i})" style="background:#dc2626; color:white; border:none; padding:6px 12px; border-radius:30px;">🗑</button></div>`; c.appendChild(d); }); }
-function getDriveUrl(url,w=100){ if(!url) return "https://via.placeholder.com/50x40/ede6ff/a855f7"; let f=null,m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); if(m) f=m[1]; if(f) return `https://lh3.googleusercontent.com/d/${f}=w${w}`; return url; }
-async function updateSlideImage(idx,url){ slidesData[idx].image=url; await db.ref(`sliders/${currentShopId}`).set(slidesData); showErrorToast('স্লাইডার আপডেট হয়েছে'); }
-async function removeSlide(idx){ if(slidesData.length===1){ showErrorToast('কমপক্ষে একটি স্লাইড রাখতে হবে!'); return; } slidesData.splice(idx,1); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showErrorToast('স্লাইড মুছে ফেলা হয়েছে'); }
-async function addNewSlide(){ slidesData.push({image:"https://via.placeholder.com/1200x400/8b5cf6/ffffff?text=New+Slide"}); await db.ref(`sliders/${currentShopId}`).set(slidesData); renderSliderList(); showErrorToast('নতুন স্লাইড যোগ হয়েছে'); }
 
+function renderSliderList() { 
+    const container = document.getElementById('sliderListContainer'); 
+    if(!container) return;
+    
+    if(slidesData.length === 0) {
+        container.innerHTML = '<div class="slider-item" style="text-align:center; color:#888;">➕ নতুন স্লাইড যোগ করুন</div>';
+        return;
+    }
+    
+    container.innerHTML = ''; 
+    slidesData.forEach((s, idx) => { 
+        const imageUrl = s.image || '';
+        const div = document.createElement('div'); 
+        div.className = 'slider-item'; 
+        div.innerHTML = `
+            <div style="display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;">
+                <img src="${getDriveUrl(imageUrl, 80)}" class="slider-image-preview" onerror="this.src='https://via.placeholder.com/60x50/ede6ff/a855f7?text=No+Image'">
+                <div style="flex:1; min-width:200px;">
+                    <div class="slider-input-group">
+                        <input type="text" id="slide-input-${idx}" value="${escapeHtml(imageUrl)}" placeholder="Google Drive ইমেজ লিংক" style="flex:2;">
+                    </div>
+                    <div class="slider-actions">
+                        <button class="slider-save-btn" onclick="saveSingleSlide(${idx})"><i class="fas fa-save"></i> সেভ করুন</button>
+                        <button class="slider-delete-btn" onclick="deleteSingleSlide(${idx})"><i class="fas fa-trash"></i> ডিলিট</button>
+                    </div>
+                    <div class="slider-info">
+                        <i class="fas fa-info-circle"></i> লিংক পরিবর্তন করে "সেভ করুন" বাটনে ক্লিক করুন
+                    </div>
+                </div>
+            </div>
+        `; 
+        container.appendChild(div); 
+    }); 
+}
+
+// Save single slide (update specific index)
+async function saveSingleSlide(index) {
+    const inputField = document.getElementById(`slide-input-${index}`);
+    if(!inputField) return;
+    
+    const newImageUrl = inputField.value.trim();
+    if(!newImageUrl) {
+        showErrorToast('⚠️ ইমেজ লিংক দিন!');
+        return;
+    }
+    
+    slidesData[index] = { image: newImageUrl };
+    await db.ref(`sliders/${currentShopId}`).set(slidesData);
+    renderSliderList();
+    showErrorToast('✅ স্লাইড আপডেট হয়েছে!');
+}
+
+// Delete single slide
+async function deleteSingleSlide(index) {
+    if(slidesData.length === 1) {
+        if(confirm('শেষ স্লাইডটি ডিলিট করলে স্লাইডার খালি হয়ে যাবে। আপনি কি নিশ্চিত?')) {
+            slidesData = [];
+            await db.ref(`sliders/${currentShopId}`).set(slidesData);
+            renderSliderList();
+            showErrorToast('🗑️ স্লাইড ডিলিট হয়েছে!');
+        }
+        return;
+    }
+    
+    if(confirm('এই স্লাইডটি ডিলিট করবেন?')) {
+        slidesData.splice(index, 1);
+        await db.ref(`sliders/${currentShopId}`).set(slidesData);
+        renderSliderList();
+        showErrorToast('🗑️ স্লাইড ডিলিট হয়েছে!');
+    }
+}
+
+// Add new slide
+async function addNewSlide() { 
+    slidesData.push({ image: "" }); 
+    await db.ref(`sliders/${currentShopId}`).set(slidesData); 
+    renderSliderList(); 
+    showErrorToast('➕ নতুন স্লাইড যোগ হয়েছে! এখন লিংক দিন এবং সেভ করুন'); 
+}
+
+function getDriveUrl(url, w=100){ 
+    if(!url) return "https://via.placeholder.com/60x50/ede6ff/a855f7?text=No+Image"; 
+    let f=null;
+    let m=url.match(/\/d\/([a-zA-Z0-9_-]+)/); 
+    if(m) f=m[1];
+    if(!f) { m=url.match(/id=([a-zA-Z0-9_-]+)/); if(m) f=m[1]; }
+    if(f) return `https://lh3.googleusercontent.com/d/${f}=w${w}`;
+    if(url.match(/\.(jpg|jpeg|png|gif|webp)/i)) return url;
+    return "https://via.placeholder.com/60x50/ede6ff/a855f7?text=No+Image"; 
+}
+
+// ========== TICKER FUNCTIONS ==========
 let tickerItems = [];
 async function loadTicker() {
     if(!currentShopId) return;
@@ -1207,6 +1171,7 @@ function updateTickerPreview(items){ document.getElementById('tickerPreview').in
 async function saveTicker(){ let val=document.getElementById('tickerInput').value.trim(); if(!val){ showErrorToast('কিছু লিখুন!'); return; } let items=val.includes(',')?val.split(',').map(s=>s.trim()).filter(s=>s):[val]; if(!items.length) return; await db.ref(`tickers/${currentShopId}`).set(items); updateTickerPreview(items); showErrorToast('টিকার আপডেট হয়েছে!'); }
 async function resetTicker(){ const def=["✨ EXCLUSIVE DROP : AI COLLECTION","🚀 UP TO 40% OFF","💜 FREE SHIPPING","⚡ LIMITED EDITION"]; await db.ref(`tickers/${currentShopId}`).set(def); document.getElementById('tickerInput').value=def.join(', '); updateTickerPreview(def); showErrorToast('ডিফল্ট টিকার রিসেট হয়েছে!'); }
 
+// ========== INITIALIZATION ==========
 auth.onAuthStateChanged(async user=>{
     if(!user){ window.location.href = 'login.html'; return; }
     currentShopId=user.uid;
@@ -1237,7 +1202,9 @@ auth.onAuthStateChanged(async user=>{
             renderSelectedCategoriesChips(); updateCategoryDisplayText();
         }
     }
-    loadProducts(); await loadSlides(); await loadTicker();
+    loadProducts(); 
+    await loadSlides(); 
+    await loadTicker();
     document.getElementById('addProductBtn').addEventListener('click',addProduct);
     document.getElementById('addNewSlideBtn').addEventListener('click',addNewSlide);
     document.getElementById('updateTickerBtn').addEventListener('click',saveTicker);
