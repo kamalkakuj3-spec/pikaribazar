@@ -264,7 +264,7 @@ marquee {
     background: white;
 }
 
-/* ========== স্টার ডিসপ্লে স্টাইল (চমক বাদ, নিচে মার্জিন) ========== */
+/* ========== স্টার ডিসপ্লে স্টাইল ========== */
 .shop-stars {
     display: flex;
     align-items: center;
@@ -1547,7 +1547,7 @@ window.toggleCategoriesDropdown = function(shopId, event) {
     }
 };
 
-// ========== আপডেটেড renderShops ফাংশন (চমক বাদ, লোকেশন আইকন বাদ) ==========
+// ========== আপডেটেড renderShops ফাংশন (স্টারযুক্ত দোকান ফিক্সড + ০ স্টার দোকান এলোমেলো) ==========
 window.renderShops = function(shops) {
     const container = document.getElementById('shopList');
     if (!container) return;
@@ -1561,8 +1561,12 @@ window.renderShops = function(shops) {
         return;
     }
     
-    // স্টার সংখ্যা অনুযায়ী সাজান
-    const sortedShops = [...shops].sort((a, b) => {
+    // স্টার অনুযায়ী আলাদা করুন
+    const starShops = shops.filter(shop => (shop.stars || 0) > 0);
+    const zeroStarShops = shops.filter(shop => (shop.stars || 0) === 0);
+    
+    // স্টারযুক্ত দোকান সাজান (বেশি স্টার = উপরে, সমান হলে আগে যারা পেয়েছে তারা আগে)
+    const sortedStarShops = [...starShops].sort((a, b) => {
         const starsA = a.stars || 0;
         const starsB = b.stars || 0;
         if (starsA !== starsB) {
@@ -1571,7 +1575,13 @@ window.renderShops = function(shops) {
         return (a.lastStarUpdate || 0) - (b.lastStarUpdate || 0);
     });
     
-    container.innerHTML = sortedShops.map(shop => {
+    // ০ স্টার দোকান এলোমেলো করুন (প্রতিবার রিফ্রেশে পরিবর্তন হবে)
+    const shuffledZeroStarShops = shuffleArray([...zeroStarShops]);
+    
+    // দুইটি লিস্ট একত্রিত করুন
+    const finalShops = [...sortedStarShops, ...shuffledZeroStarShops];
+    
+    container.innerHTML = finalShops.map(shop => {
         let videoId = null;
         if (shop.youtubeVideoId) {
             videoId = shop.youtubeVideoId;
