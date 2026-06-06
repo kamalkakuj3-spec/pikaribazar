@@ -61,10 +61,10 @@
   .back-home-btn:hover { transform: translateY(-2px); }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   
-  /* ========== HEADER ========== */
+  /* ========== HEADER - প্যাডিং ছোট করা হয়েছে ========== */
   .header { 
     background:linear-gradient(135deg,#ffffff,#f3eaff,#d9c8ff); 
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem;  /* আগে 0.8rem ছিল, এখন 0.5rem (ছোট) */
     position:sticky; 
     top:0; 
     z-index:100; 
@@ -72,7 +72,7 @@
     display:flex; 
     flex-direction:column; 
     align-items:center; 
-    gap:0.3rem;
+    gap:0.3rem;  /* আগে 0.5rem ছিল, এখন 0.3rem */
   }
   .store-header-top { display:flex; align-items:center; justify-content:center; position:relative; width:100%; }
   .menu-icon { position:absolute; left:0; background:none; border:none; cursor:pointer; font-size:1.6rem; color:#6a2be2; padding:6px; width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
@@ -106,44 +106,9 @@
   .close-bottom-btn { background:linear-gradient(135deg, #dc2626, #b91c1c); border:none; color:white; width:48px; height:48px; border-radius:50%; cursor:pointer; font-size:22px; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
   .close-bottom-btn:hover { transform:scale(1.05); background:linear-gradient(135deg, #ef4444, #dc2626); }
   
-  /* ========== স্টার ডিসপ্লে স্টাইল ========== */
-  .shop-stars {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin: 8px 0 0 0;
-  }
-  .star-icon {
-    color: #ffd700;
-    font-size: 16px;
-  }
-  .star-count-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    background: transparent;
-    color: #ffd700;
-    font-size: 14px;
-    font-weight: 600;
-    margin-left: 4px;
-  }
-  
-  /* দোকানের নামের স্টাইল */
-  .shop-header-info {
-    text-align: center;
-    margin: 15px 0 5px 0;
-  }
-  .shop-name {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--primary);
-    margin-bottom: 5px;
-  }
-  
-  /* ========== SLIDER ========== */
+  /* ========== SLIDER - সব গ্যাপ অর্ধেক ========== */
   .slider-section { 
-    margin: 10px 16px 10px;
+    margin: 10px 16px 10px;  /* আগে 20px 16px 20px ছিল, এখন 10px 16px 10px (অর্ধেক) */
   }
   .slider-box {
     position: relative;
@@ -164,9 +129,9 @@
   .sl-dot { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; width: 6px; }
   .sl-dot.active { width: 20px; background: white; }
   
-  /* ========== TICKER ========== */
+  /* ========== TICKER - গ্যাপ অর্ধেক এবং স্পিড 8s ========== */
   .ticker-section { 
-    margin: 5px 16px 10px;
+    margin: 5px 16px 10px;  /* আগে 10px 16px 20px ছিল, এখন 5px 16px 10px (উপরের গ্যাপ অর্ধেক, নিচের অর্ধেক) */
   }
   .ticker-wrap {
     background: linear-gradient(90deg, var(--primary), var(--primary-light));
@@ -204,10 +169,10 @@
     color: #666;
   }
   
-  /* ========== PRODUCTS সেকশন ========== */
+  /* ========== PRODUCTS সেকশন - গ্যাপ অর্ধেক ========== */
   .container { 
     max-width:1200px; 
-    margin: 8px auto 30px;
+    margin: 8px auto 30px;  /* আগে 15px auto 30px ছিল, এখন 8px auto 30px (উপরে অর্ধেক) */
     padding:0 15px; 
   }
   .section-title { 
@@ -217,7 +182,7 @@
     -webkit-background-clip:text; 
     background-clip:text; 
     color:transparent; 
-    margin-bottom: 10px;
+    margin-bottom: 10px;  /* আগে 18px ছিল, এখন 10px (অর্ধেক) */
     border-left:5px solid var(--accent); 
     padding-left:15px; 
     display:inline-block; 
@@ -225,7 +190,7 @@
   .grid { 
     display:grid; 
     grid-template-columns:repeat(2,1fr); 
-    gap: 7px;
+    gap: 7px;  /* আগে 14px ছিল, এখন 7px (অর্ধেক) */
   }
   .product { 
     background:white; 
@@ -253,13 +218,7 @@
   .scroll-top.show { opacity:1; }
   .scroll-top:hover { transform:translateY(-3px); }
   
-  @media (max-width:768px) { 
-    .slider-box { height:170px; } 
-    .grid { gap:5px; } 
-    .drawer { width:300px; left:-300px; } 
-    .shop-name { font-size: 22px; }
-    .star-icon { font-size: 14px; }
-  }
+  @media (max-width:768px) { .slider-box { height:170px; } .grid { gap:5px; } .drawer { width:300px; left:-300px; } .drawer-info-value { font-size:15px; } .drawer-info-label { font-size:13px; } }
 </style>
 </head>
 <body>
@@ -314,12 +273,6 @@
     </div>
   </div>
 
-  <!-- SHOP HEADER WITH STARS -->
-  <div class="shop-header-info">
-    <div class="shop-name" id="shopNameDisplay">প্রিমিয়াম স্টোর</div>
-    <div class="shop-stars" id="starsDisplay"></div>
-  </div>
-
   <!-- SLIDER SECTION -->
   <div class="slider-section" id="sliderSection" style="display:none">
     <div class="slider-box">
@@ -366,28 +319,6 @@ if (!shopId) { showNotFoundMessage(); } else { loadShop(); }
 let currentShopData = null;
 let currentSlideIndex = 0, slideInterval = null, slidesData = [];
 
-// ========== স্টার ডিসপ্লে ফাংশন ==========
-function renderStarsDisplay(stars) {
-  const container = document.getElementById('starsDisplay');
-  if (!container) return;
-  
-  if (!stars || stars === 0) {
-    container.innerHTML = '';
-    return;
-  }
-  
-  let html = '';
-  const fullStars = Math.min(stars, 5);
-  for (let i = 0; i < fullStars; i++) {
-    html += '<i class="fas fa-star star-icon"></i>';
-  }
-  if (stars > 5) {
-    html += `<span class="star-count-badge">+${stars - 5}</span>`;
-  }
-  
-  container.innerHTML = html;
-}
-
 async function loadShop() {
   try {
     const snap = await db.ref('shops/' + shopId).get();
@@ -400,13 +331,9 @@ async function loadShop() {
     
     currentShopData = snap.val();
     document.getElementById('storeNameHeader').textContent = currentShopData.shopName || 'প্রিমিয়াম স্টোর';
-    document.getElementById('shopNameDisplay').textContent = currentShopData.shopName || 'প্রিমিয়াম স্টোর';
     document.title = `${currentShopData.shopName} | প্রিমিয়াম স্টোর`;
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('notFound').style.display = 'none';
-    
-    // স্টার ডিসপ্লে রেন্ডার
-    renderStarsDisplay(currentShopData.stars || 0);
     
     renderDrawerContent(currentShopData);
     
@@ -459,24 +386,24 @@ function renderDrawerContent(shop) {
       <span class="drawer-info-value">${escapeHtml(shop.ownerName || '—')}</span>
     </div>
     <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fas fa-phone-alt"></i> কন্টাক্ট নাম্বার</span>
+      <span class="drawer-info-label"><i class="fas fa-phone-alt"></i> 📞 কন্টাক্ট নাম্বার</span>
       <span class="drawer-info-value">${phoneLink}</span>
     </div>
     <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fab fa-whatsapp"></i> WhatsApp নাম্বার</span>
+      <span class="drawer-info-label"><i class="fab fa-whatsapp"></i> 💬 WhatsApp নাম্বার</span>
       <span class="drawer-info-value">${whatsappLink}</span>
     </div>
     <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fab fa-telegram"></i> টেলিগ্রাম নাম্বার</span>
+      <span class="drawer-info-label"><i class="fab fa-telegram"></i> 📡 টেলিগ্রাম নাম্বার</span>
       <span class="drawer-info-value">${telegramLink}</span>
     </div>
     <div class="drawer-divider"></div>
     <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fas fa-map-marker-alt"></i> দোকানের ঠিকানা</span>
+      <span class="drawer-info-label"><i class="fas fa-map-marker-alt"></i> 🏪 দোকানের ঠিকানা</span>
       <span class="drawer-info-value">${escapeHtml(shop.area || shop.district || '—')}</span>
     </div>
     <div class="drawer-info-item">
-      <span class="drawer-info-label"><i class="fas fa-align-left"></i> দোকানের বিবরণ</span>
+      <span class="drawer-info-label"><i class="fas fa-align-left"></i> 📋 দোকানের বিবরণ</span>
       <span class="drawer-info-value">${escapeHtml(shop.description || 'কোনো বিবরণ নেই')}</span>
     </div>
   `;
@@ -503,7 +430,7 @@ document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer)
 document.getElementById('drawerCloseBottomBtn').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 
-// ========== TICKER ==========
+// ========== TICKER - ডাবল আইটেম কৌশল (স্পিড 8s) ==========
 async function loadTicker() {
   const snap = await db.ref(`tickers/${shopId}`).once('value');
   let items = [];
@@ -514,6 +441,8 @@ async function loadTicker() {
   }
   document.getElementById('tickerSection').style.display = 'block';
   const tickerDiv = document.getElementById('tickerContainer');
+  
+  // আইটেমগুলিকে ডাবল করছি যাতে অ্যানিমেশন সঠিকভাবে লুপ হয়
   const doubled = [...items, ...items];
   tickerDiv.innerHTML = doubled.map(text => `<span class="ticker-item">✨ ${escapeHtml(text)}</span>`).join('');
 }
@@ -530,6 +459,7 @@ async function loadSlider() {
       slidesData = Object.values(data);
     }
   }
+  // ফিল্টার করে শুধু স্লাইড যাদের image আছে
   slidesData = slidesData.filter(s => s.image && s.image.trim() !== '');
   
   const sec = document.getElementById('sliderSection');
