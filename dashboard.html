@@ -44,7 +44,7 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
   
-  /* Dashboard Header - 3D Animated Text (Slower Animation) */
+  /* Dashboard Header - 3D Animated Text */
   .dashboard-header {
     display: flex;
     align-items: center;
@@ -58,7 +58,7 @@
     background: linear-gradient(135deg, #ffffff, #faf8ff);
   }
   
-  /* 3D Animated Text Styles - Slower Speed (6s instead of 2s) */
+  /* 3D Animated Text Styles */
   .animated-shop-name {
     font-size: 24px;
     font-weight: 800;
@@ -172,6 +172,85 @@
     margin-top: 10px;
     font-weight: 500;
     line-height: 1.5;
+  }
+  
+  /* প্রিমিয়াম স্ট্যাটাস কার্ড */
+  .premium-status-card {
+    background: linear-gradient(135deg, #fff8e5, #fff4d6);
+    border-radius: 20px;
+    padding: 16px;
+    margin: 16px;
+    border: 1px solid rgba(240,192,64,0.3);
+  }
+  .premium-status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .premium-status-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  .premium-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #ffd700, #ffcc00);
+    color: #1a0a3e;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .premium-stats {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  .premium-stat {
+    flex: 1;
+    text-align: center;
+  }
+  .premium-stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  .premium-stat-label {
+    font-size: 11px;
+    color: var(--text-light);
+  }
+  .renew-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 12px;
+    transition: all 0.2s;
+  }
+  .renew-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108,43,217,0.3);
+  }
+  .expiry-warning {
+    background: #fee8e8;
+    color: #dc2626;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-top: 10px;
+    text-align: center;
   }
   
   /* Glass Button */
@@ -485,6 +564,35 @@
     font-size: 12px;
   }
   
+  /* Status Badge */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .status-badge.approved { background: #e8faf0; color: #2ecc71; }
+  .status-badge.pending { background: #fff8e5; color: #f0c040; }
+  .status-badge.rejected { background: #fee8e8; color: #e74c3c; }
+  
+  /* Payment Status Badge */
+  .payment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .payment-badge.paid { background: #e8faf0; color: #059669; }
+  .payment-badge.pending { background: #fff8e5; color: #d97706; }
+  .payment-badge.expired { background: #fee8e8; color: #dc2626; }
+  
   /* Bottom Navigation */
   .bottom-nav {
     position: fixed;
@@ -638,7 +746,7 @@
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
-<!-- Dashboard Header - 3D Animated Shop Name (Slower) -->
+<!-- Dashboard Header - 3D Animated Shop Name -->
 <div class="dashboard-header">
     <h2><span class="animated-shop-name" id="headerShopName">ড্যাশবোর্ড</span></h2>
 </div>
@@ -658,7 +766,35 @@
             </button>
         </div>
         <div class="shop-id-message">
-            <i class="fas fa-info-circle"></i> আপনার দোকান প্রমোট করানোর ক্ষেত্রে আপনার দোকানের প্রোফাইল আইডি প্রয়োজন হবে।
+            <i class="fas fa-info-circle"></i> আপনার দোকান প্রমোট করানোর ক্ষেত্রে এই আইডি প্রয়োজন হবে।
+        </div>
+    </div>
+
+    <!-- প্রিমিয়াম স্ট্যাটাস কার্ড (স্টার প্যাকেজ) -->
+    <div class="premium-status-card" id="premiumStatusCard">
+        <div class="premium-status-header">
+            <div class="premium-status-title">⭐ স্টার প্যাকেজ স্ট্যাটাস</div>
+            <div class="premium-badge" id="starBadge">⭐ 0 স্টার</div>
+        </div>
+        <div class="premium-stats">
+            <div class="premium-stat">
+                <div class="premium-stat-value" id="starCount">0</div>
+                <div class="premium-stat-label">মোট স্টার</div>
+            </div>
+            <div class="premium-stat">
+                <div class="premium-stat-value" id="starExpiry">--</div>
+                <div class="premium-stat-label">মেয়াদ শেষ</div>
+            </div>
+            <div class="premium-stat">
+                <div class="premium-stat-value" id="starPaymentStatusBadge">⏳ পেন্ডিং</div>
+                <div class="premium-stat-label">পেমেন্ট স্ট্যাটাস</div>
+            </div>
+        </div>
+        <button class="renew-btn" id="renewStarBtn" onclick="requestRenewal()">
+            <i class="fas fa-sync-alt"></i> স্টার প্যাকেজ রিনিউ / আপগ্রেড করুন
+        </button>
+        <div id="expiryWarning" class="expiry-warning" style="display:none;">
+            ⚠️ আপনার স্টার প্যাকেজের মেয়াদ প্রায় শেষ! দ্রুত রিনিউ করুন।
         </div>
     </div>
 
@@ -853,6 +989,65 @@ window.copyShopId = function() {
         showErrorToast('⚠️ Shop ID পাওয়া যায়নি!');
     }
 };
+
+// ========== রিনিউ রিকোয়েস্ট ফাংশন ==========
+function requestRenewal() {
+    // অ্যাডমিনকে WhatsApp এ মেসেজ পাঠানোর জন্য
+    const phoneNumber = "8801XXXXXXXXX"; // আপনার নম্বর দিন
+    const message = `হ্যালো, আমি আমার স্টার প্যাকেজ রিনিউ করতে চাই। আমার Shop ID: ${currentShopId}`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    // অথবা শুধু টোস্ট দেখান
+    showErrorToast('📞 রিনিউ করতে অ্যাডমিনকে ফোন করুন: 01XXXXXXXXX');
+}
+
+// ========== প্রিমিয়াম স্ট্যাটাস আপডেট ফাংশন ==========
+function updatePremiumStatus(shopData) {
+    const stars = shopData.stars || 0;
+    const starEndDate = shopData.starEndDate;
+    const starPaymentStatus = shopData.starPaymentStatus || 'pending';
+    
+    // স্টার সংখ্যা আপডেট
+    document.getElementById('starCount').innerHTML = stars;
+    document.getElementById('starBadge').innerHTML = `⭐ ${stars} স্টার`;
+    
+    // মেয়াদ শেষের তারিখ
+    if (starEndDate) {
+        const endDate = new Date(starEndDate);
+        const today = new Date();
+        const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+        
+        document.getElementById('starExpiry').innerHTML = starEndDate;
+        
+        // সতর্কতা দেখান (৭ দিন বা তার কম বাকি থাকলে)
+        const expiryWarning = document.getElementById('expiryWarning');
+        if (daysLeft <= 7 && daysLeft >= 0 && starPaymentStatus === 'paid') {
+            expiryWarning.style.display = 'block';
+            expiryWarning.innerHTML = `⚠️ আপনার স্টার প্যাকেজের মেয়াদ শেষ হতে ${daysLeft} দিন বাকি! দ্রুত রিনিউ করুন।`;
+        } else if (daysLeft < 0) {
+            expiryWarning.style.display = 'block';
+            expiryWarning.innerHTML = `❌ আপনার স্টার প্যাকেজের মেয়াদ উত্তীর্ণ হয়েছে! পুনরায় সক্রিয় করতে রিনিউ করুন।`;
+        } else {
+            expiryWarning.style.display = 'none';
+        }
+    } else {
+        document.getElementById('starExpiry').innerHTML = 'নির্ধারিত নেই';
+    }
+    
+    // পেমেন্ট স্ট্যাটাস ব্যাজ
+    const statusBadge = document.getElementById('starPaymentStatusBadge');
+    if (starPaymentStatus === 'paid') {
+        statusBadge.innerHTML = '✅ পেইড';
+        statusBadge.className = 'premium-stat-value payment-badge paid';
+    } else if (starPaymentStatus === 'expired') {
+        statusBadge.innerHTML = '❌ মেয়াদ উত্তীর্ণ';
+        statusBadge.className = 'premium-stat-value payment-badge expired';
+    } else {
+        statusBadge.innerHTML = '⏳ পেন্ডিং';
+        statusBadge.className = 'premium-stat-value payment-badge pending';
+    }
+}
 
 function logout(){ 
     auth.signOut().then(()=>{ 
@@ -1060,7 +1255,7 @@ async function loadSlides() {
         }
     }
     if(!slidesData.length){ 
-        slidesData = []; // No default image, empty array
+        slidesData = [];
     }
     renderSliderList();
 }
@@ -1100,7 +1295,6 @@ function renderSliderList() {
     }); 
 }
 
-// Save single slide (update specific index)
 async function saveSingleSlide(index) {
     const inputField = document.getElementById(`slide-input-${index}`);
     if(!inputField) return;
@@ -1117,7 +1311,6 @@ async function saveSingleSlide(index) {
     showErrorToast('✅ স্লাইড আপডেট হয়েছে!');
 }
 
-// Delete single slide
 async function deleteSingleSlide(index) {
     if(slidesData.length === 1) {
         if(confirm('শেষ স্লাইডটি ডিলিট করলে স্লাইডার খালি হয়ে যাবে। আপনি কি নিশ্চিত?')) {
@@ -1137,7 +1330,6 @@ async function deleteSingleSlide(index) {
     }
 }
 
-// Add new slide
 async function addNewSlide() { 
     slidesData.push({ image: "" }); 
     await db.ref(`sliders/${currentShopId}`).set(slidesData); 
@@ -1186,6 +1378,9 @@ auth.onAuthStateChanged(async user=>{
     if(snap.exists()){
         currentShopData=snap.val();
         document.getElementById('headerShopName').innerHTML = currentShopData.shopName || 'দোকানের নাম';
+        
+        // প্রিমিয়াম স্ট্যাটাস আপডেট করুন
+        updatePremiumStatus(currentShopData);
         
         document.getElementById('shopName').value=currentShopData.shopName||'';
         document.getElementById('ownerName').value=currentShopData.ownerName||'';
