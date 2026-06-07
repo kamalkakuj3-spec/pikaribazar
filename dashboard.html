@@ -44,12 +44,12 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { margin-top:15px; font-size:16px; font-weight:500; color:white; }
   
-  /* Dashboard Header - 3D Animated Text */
+  /* Dashboard Header - 3D Animated Text with Menu Icon */
   .dashboard-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 25px 20px;
+    justify-content: space-between;
+    padding: 16px 20px;
     background: white;
     border-bottom: 1px solid var(--border-light);
     position: sticky;
@@ -57,37 +57,165 @@
     z-index: 100;
     background: linear-gradient(135deg, #ffffff, #faf8ff);
   }
-  
-  .animated-shop-name {
+  .menu-icon-btn {
+    background: none;
+    border: none;
     font-size: 24px;
+    color: var(--primary);
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .menu-icon-btn:hover {
+    background: var(--primary-soft);
+  }
+  .animated-shop-name {
+    font-size: 22px;
     font-weight: 800;
     text-align: center;
     background: linear-gradient(135deg, var(--primary-dark), var(--primary-light), var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    position: relative;
-    display: inline-block;
     animation: float3D 6s ease-in-out infinite;
-    text-shadow: 0 2px 5px rgba(108,43,217,0.2);
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
   }
-  
-  .animated-shop-name:hover {
-    animation: float3D 2s ease-in-out infinite;
-    text-shadow: 0 0 15px rgba(108,43,217,0.5);
-  }
-  
   @keyframes float3D {
-    0% { transform: translateY(0px) rotateX(0deg); text-shadow: 0 2px 5px rgba(108,43,217,0.2); }
-    50% { transform: translateY(-8px) rotateX(5deg); text-shadow: 0 8px 15px rgba(108,43,217,0.4), 0 0 10px rgba(162,89,247,0.3); background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--accent)); -webkit-background-clip: text; background-clip: text; }
-    100% { transform: translateY(0px) rotateX(0deg); text-shadow: 0 2px 5px rgba(108,43,217,0.2); }
+    0% { transform: translateY(0px); text-shadow: 0 2px 5px rgba(108,43,217,0.2); }
+    50% { transform: translateY(-6px); text-shadow: 0 8px 15px rgba(108,43,217,0.4); }
+    100% { transform: translateY(0px); text-shadow: 0 2px 5px rgba(108,43,217,0.2); }
+  }
+  .dashboard-header .placeholder { width: 42px; }
+  
+  /* Sidebar Drawer */
+  .drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0);
+    z-index: 1000;
+    display: none;
+    transition: background 0.3s ease;
+  }
+  .drawer-overlay.show {
+    background: rgba(0,0,0,0.5);
+    display: block;
+  }
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 320px;
+    height: 100%;
+    background: white;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    z-index: 1001;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    border-radius: 0 20px 20px 0;
+  }
+  .drawer.open {
+    left: 0;
+  }
+  .drawer-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    padding: 25px 20px;
+    color: white;
+    text-align: center;
+  }
+  .drawer-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .drawer-header p {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 5px;
+  }
+  .drawer-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .drawer-menu {
+    padding: 20px 0;
+  }
+  .drawer-menu-item {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f0ebff;
+  }
+  .drawer-menu-item:hover {
+    background: #f8f6ff;
+  }
+  .drawer-menu-item i {
+    width: 28px;
+    font-size: 18px;
+    color: var(--primary);
+  }
+  .drawer-menu-item span {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .drawer-menu-item.logout {
+    border-top: 1px solid #f0ebff;
+    margin-top: 10px;
+  }
+  .drawer-menu-item.logout span {
+    color: #dc2626;
+  }
+  .drawer-menu-item.logout i {
+    color: #dc2626;
   }
   
-  .dashboard-header h2 { perspective: 500px; transform-style: preserve-3d; }
-  .content { padding:0 16px 100px; }
+  /* Submenu inside drawer */
+  .drawer-submenu {
+    padding-left: 48px;
+    background: #faf8ff;
+    display: none;
+  }
+  .drawer-submenu.show {
+    display: block;
+  }
+  .drawer-submenu-item {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-light);
+    cursor: pointer;
+    border-bottom: 1px solid #ede5ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .drawer-submenu-item:hover {
+    background: #f0ebff;
+    color: var(--primary);
+  }
+  .drawer-submenu-item i {
+    font-size: 14px;
+    width: 24px;
+  }
+  
+  .content { padding:0 16px 80px; }
   
   /* Glass Button */
   .btn-glass {
@@ -131,137 +259,12 @@
     gap: 10px;
     width: 100%;
     transition: var(--transition);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     box-shadow: 0 4px 12px rgba(108,43,217,0.25);
   }
   .btn-gradient-main:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(108,43,217,0.35);
-  }
-  
-  /* ড্রপডাউন মেনু স্টাইল */
-  .dropdown-container {
-    position: relative;
-    margin-bottom: 16px;
-  }
-  .dropdown-btn {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    border: none;
-    border-radius: 50px;
-    padding: 14px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    transition: var(--transition);
-    box-shadow: 0 4px 12px rgba(108,43,217,0.25);
-    position: relative;
-  }
-  .dropdown-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(108,43,217,0.35);
-  }
-  .dropdown-icon-arrow {
-    position: absolute;
-    right: 20px;
-    transition: transform 0.3s ease;
-  }
-  .dropdown-icon-arrow.open {
-    transform: rotate(180deg);
-  }
-  .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    z-index: 100;
-    margin-top: 8px;
-    overflow: hidden;
-    display: none;
-    border: 1px solid var(--border-light);
-  }
-  .dropdown-menu.show {
-    display: block;
-    animation: fadeInDown 0.3s ease;
-  }
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .dropdown-item {
-    padding: 16px;
-    border-bottom: 1px solid #f0ebff;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .dropdown-item:last-child {
-    border-bottom: none;
-  }
-  .dropdown-item:hover {
-    background: #f8f6ff;
-  }
-  .dropdown-item-title {
-    font-weight: 700;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .dropdown-item-status {
-    font-size: 12px;
-    color: var(--text-light);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .status-active { color: #2ecc71; }
-  .status-expired { color: #dc2626; }
-  .status-pending { color: #f0c040; }
-  
-  /* Shop ID inside dropdown */
-  .shop-id-dropdown-item {
-    background: linear-gradient(135deg, var(--primary-soft), #e8e0ff);
-    border-top: 2px solid var(--primary-light);
-  }
-  .shop-id-dropdown-item .dropdown-item-title {
-    color: var(--primary-dark);
-  }
-  .shop-id-value-dropdown {
-    font-family: monospace;
-    font-size: 12px;
-    background: white;
-    padding: 8px 12px;
-    border-radius: 12px;
-    word-break: break-all;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 8px;
-  }
-  .copy-id-dropdown-btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 4px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .copy-id-dropdown-btn:hover {
-    background: var(--primary-dark);
   }
   
   /* Edit Options Container */
@@ -270,7 +273,9 @@
     margin-top: 10px;
     animation: fadeInUp 0.4s ease;
   }
-  .edit-options-container.show { display: block; }
+  .edit-options-container.show {
+    display: block;
+  }
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -474,63 +479,33 @@
     font-size: 12px;
   }
   
-  /* Status Badge */
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 30px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 16px;
+  /* Shop ID inside submenu */
+  .shop-id-submenu-item {
+    background: linear-gradient(135deg, #f0ebff, #e8e0ff);
+    margin-top: 8px;
+    border-radius: 12px;
   }
-  .status-badge.approved { background: #e8faf0; color: #2ecc71; }
-  
-  /* Bottom Navigation */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255,255,255,0.96);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid var(--border-light);
-    padding: 12px 20px;
+  .shop-id-value-menu {
+    font-family: monospace;
+    font-size: 11px;
+    background: white;
+    padding: 8px 10px;
+    border-radius: 10px;
+    word-break: break-all;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    z-index: 100;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 6px;
   }
-  .nav-home {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 50px;
+  .copy-id-menu-btn {
+    background: var(--primary);
     color: white;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .nav-save {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border: none;
-    padding: 12px 28px;
-    border-radius: 50px;
-    color: white;
-    font-weight: 700;
-    font-size: 14px;
+    padding: 4px 10px;
+    border-radius: 20px;
     cursor: pointer;
-  }
-  .nav-logout {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 50px;
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
+    font-size: 10px;
   }
   
   /* Success Toast Message - Popup Style */
@@ -577,24 +552,6 @@
     animation: fadeToast 2.5s ease forwards;
     white-space: nowrap;
   }
-  .logout-toast {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #2ecc71;
-    color: white;
-    padding: 14px 28px;
-    border-radius: 60px;
-    font-weight: 600;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 10001;
-    animation: fadeToast 2.5s ease forwards;
-    white-space: nowrap;
-  }
   @keyframes fadeToast {
     0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
     15% { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -607,9 +564,26 @@
 
 <div id="loadingScreen"><div class="loading-spinner"></div><div class="loading-text">🚀 ড্যাশবোর্ড লোড হচ্ছে...</div></div>
 
-<!-- Dashboard Header - 3D Animated Shop Name -->
+<!-- Dashboard Header with Menu Icon -->
 <div class="dashboard-header">
-    <h2><span class="animated-shop-name" id="headerShopName">ড্যাশবোর্ড</span></h2>
+    <button class="menu-icon-btn" id="menuIconBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="animated-shop-name" id="headerShopName">ড্যাশবোর্ড</div>
+    <div class="placeholder"></div>
+</div>
+
+<!-- Sidebar Drawer -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+        <button class="drawer-close" id="drawerCloseBtn"><i class="fas fa-times"></i></button>
+        <h3><i class="fas fa-store"></i> মেনু</h3>
+        <p id="drawerShopName">দোকানের নাম</p>
+    </div>
+    <div class="drawer-menu" id="drawerMenu">
+        <div style="text-align:center; padding:20px;">🌀 লোড হচ্ছে...</div>
+    </div>
 </div>
 
 <div class="content" id="mainContent" style="display:none">
@@ -619,19 +593,6 @@
     
     <!-- Main Edit Button -->
     <button class="btn-gradient-main" id="mainEditBtn"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
-
-    <!-- ========== ড্রপডাউন মেনু বাটন (সেন্টার বরাবর + ডান পাশে আইকন) ========== -->
-    <div class="dropdown-container">
-        <button class="dropdown-btn" id="adsDropdownBtn" onclick="toggleAdsDropdown()">
-            <span><i class="fas fa-bullhorn"></i> 📢 আমার বিজ্ঞাপন সমূহ</span>
-            <i class="fas fa-chevron-down dropdown-icon-arrow" id="dropdownArrow"></i>
-        </button>
-        <div class="dropdown-menu" id="adsDropdownMenu">
-            <div id="dropdownContent">
-                <div style="text-align:center; padding:20px;">🌀 লোড হচ্ছে...</div>
-            </div>
-        </div>
-    </div>
 
     <!-- Edit Options Container -->
     <div id="editOptionsContainer" class="edit-options-container">
@@ -739,13 +700,6 @@
     </div>
 </div>
 
-<!-- Bottom Navigation Bar -->
-<div class="bottom-nav" id="saveWrap" style="display:none">
-    <button class="nav-home" onclick="goHome()"><i class="fas fa-home"></i> হোম</button>
-    <button class="nav-save" id="saveBtn" onclick="saveShopData()"><i class="fas fa-save"></i> সেভ করুন</button>
-    <button class="nav-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
-</div>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -801,37 +755,30 @@ function showSuccessPopup() {
 function goHome() { window.location.href = 'index.html'; }
 function viewProfile(){ if(currentShopId) window.location.href=`profile.html?id=${currentShopId}`; }
 
-window.copyShopId = function() {
-    const shopId = currentShopId;
-    if (shopId) {
-        navigator.clipboard.writeText(shopId).then(() => { showSuccessPopup(); }).catch(() => { showErrorToast('⚠️ কপি করতে সমস্যা হয়েছে!'); });
-    } else { showErrorToast('⚠️ Shop ID পাওয়া যায়নি!'); }
-};
-
-// ========== ড্রপডাউন মেনু ফাংশন ==========
-function toggleAdsDropdown() {
-    const menu = document.getElementById('adsDropdownMenu');
-    const arrow = document.getElementById('dropdownArrow');
-    menu.classList.toggle('show');
-    arrow.classList.toggle('open');
+// ========== DRAWER FUNCTIONS ==========
+function openDrawer() {
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('show');
+    document.body.style.overflow = '';
 }
 
-// বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হবে
-document.addEventListener('click', function(e) {
-    const container = document.querySelector('.dropdown-container');
-    if (container && !container.contains(e.target)) {
-        document.getElementById('adsDropdownMenu').classList.remove('show');
-        document.getElementById('dropdownArrow').classList.remove('open');
-    }
-});
+// ========== DRAWER MENU RENDER ==========
+let adsDropdownOpen = false;
 
-// ========== ড্রপডাউন কন্টেন্ট লোড (শপ আইডি সহ) ==========
-async function loadAdsDropdown() {
-    const container = document.getElementById('dropdownContent');
+async function renderDrawerMenu() {
+    const container = document.getElementById('drawerMenu');
     if (!container) return;
     
-    let html = '';
-    let hasAnyAd = false;
+    const shopName = currentShopData?.shopName || 'দোকানের নাম';
+    const ownerName = currentShopData?.ownerName || 'মালিকের নাম';
+    document.getElementById('drawerShopName').innerHTML = shopName;
+    
+    let adsHtml = '';
     
     // 1. স্টার প্যাকেজ
     const stars = currentShopData?.stars || 0;
@@ -842,118 +789,120 @@ async function loadAdsDropdown() {
     else if (starStatus === 'expired') { starStatusClass = 'status-expired'; starStatusText = '❌ মেয়াদ উত্তীর্ণ'; }
     else { starStatusClass = 'status-pending'; starStatusText = '⏳ পেন্ডিং'; }
     
-    html += `
-        <div class="dropdown-item" onclick="showAdDetails('star')">
-            <div class="dropdown-item-title">
-                <i class="fas fa-star" style="color:#ffd700;"></i> ⭐ স্টার প্যাকেজ
-            </div>
-            <div class="dropdown-item-status">
-                <span class="${starStatusClass}">${starStatusText}</span>
-                ${stars > 0 ? `<span>⭐ ${stars} স্টার</span>` : ''}
-                ${starEndDate ? `<span>📅 মেয়াদ: ${starEndDate}</span>` : ''}
-            </div>
-        </div>
-    `;
-    if (stars > 0) hasAnyAd = true;
-    
     // 2. ইমেজ স্লাইডার
+    let sliderHtml = '';
     const sliderSnap = await db.ref('slider').once('value');
     let hasSlider = false;
     sliderSnap.forEach(child => {
         const ad = child.val();
         if (ad.shopId === currentShopId) {
             hasSlider = true;
-            hasAnyAd = true;
             const statusClass = ad.paymentStatus === 'paid' ? 'status-active' : (ad.paymentStatus === 'expired' ? 'status-expired' : 'status-pending');
             const statusText = ad.paymentStatus === 'paid' ? '✅ সক্রিয়' : (ad.paymentStatus === 'expired' ? '❌ মেয়াদ উত্তীর্ণ' : '⏳ পেন্ডিং');
-            html += `
-                <div class="dropdown-item" onclick="showAdDetails('slider')">
-                    <div class="dropdown-item-title">
-                        <i class="fas fa-images"></i> 🖼️ ইমেজ স্লাইডার
-                    </div>
-                    <div class="dropdown-item-status">
-                        <span class="${statusClass}">${statusText}</span>
-                        <span>📍 অবস্থান: ${ad.position || '?'}</span>
-                        ${ad.endDate ? `<span>📅 মেয়াদ: ${ad.endDate}</span>` : ''}
+            sliderHtml += `
+                <div class="drawer-submenu-item" onclick="showAdDetails('slider')">
+                    <i class="fas fa-images"></i>
+                    <div>
+                        <div>ইমেজ স্লাইডার</div>
+                        <div style="font-size:11px;">${statusText} | অবস্থান: ${ad.position || '?'} | 📅 ${ad.endDate || 'অনির্দিষ্ট'}</div>
                     </div>
                 </div>
             `;
         }
     });
-    
     if (!hasSlider) {
-        html += `
-            <div class="dropdown-item" onclick="showAdDetails('slider')">
-                <div class="dropdown-item-title">
-                    <i class="fas fa-images"></i> 🖼️ ইমেজ স্লাইডার
-                </div>
-                <div class="dropdown-item-status">
-                    <span class="status-pending">📢 কোনো স্লাইডার বিজ্ঞাপন নেই</span>
-                </div>
-            </div>
-        `;
+        sliderHtml = `<div class="drawer-submenu-item" style="color:#888;"><i class="fas fa-images"></i> কোনো স্লাইডার বিজ্ঞাপন নেই</div>`;
     }
     
     // 3. ভিডিও প্লেয়ার
+    let videoHtml = '';
     const videoSnap = await db.ref('adminVideos').once('value');
     let hasVideo = false;
     videoSnap.forEach(child => {
         const ad = child.val();
         if (ad.shopId === currentShopId) {
             hasVideo = true;
-            hasAnyAd = true;
             const statusClass = ad.paymentStatus === 'paid' ? 'status-active' : (ad.paymentStatus === 'expired' ? 'status-expired' : 'status-pending');
             const statusText = ad.paymentStatus === 'paid' ? '✅ সক্রিয়' : (ad.paymentStatus === 'expired' ? '❌ মেয়াদ উত্তীর্ণ' : '⏳ পেন্ডিং');
-            html += `
-                <div class="dropdown-item" onclick="showAdDetails('video')">
-                    <div class="dropdown-item-title">
-                        <i class="fas fa-video"></i> 🎬 ভিডিও প্লেয়ার
-                    </div>
-                    <div class="dropdown-item-status">
-                        <span class="${statusClass}">${statusText}</span>
-                        <span>📹 ${ad.title || 'ভিডিও'}</span>
-                        ${ad.endDate ? `<span>📅 মেয়াদ: ${ad.endDate}</span>` : ''}
+            videoHtml += `
+                <div class="drawer-submenu-item" onclick="showAdDetails('video')">
+                    <i class="fas fa-video"></i>
+                    <div>
+                        <div>ভিডিও প্লেয়ার</div>
+                        <div style="font-size:11px;">${statusText} | ${ad.title || 'ভিডিও'} | 📅 ${ad.endDate || 'অনির্দিষ্ট'}</div>
                     </div>
                 </div>
             `;
         }
     });
-    
     if (!hasVideo) {
-        html += `
-            <div class="dropdown-item" onclick="showAdDetails('video')">
-                <div class="dropdown-item-title">
-                    <i class="fas fa-video"></i> 🎬 ভিডিও প্লেয়ার
-                </div>
-                <div class="dropdown-item-status">
-                    <span class="status-pending">📢 কোনো ভিডিও বিজ্ঞাপন নেই</span>
-                </div>
-            </div>
-        `;
+        videoHtml = `<div class="drawer-submenu-item" style="color:#888;"><i class="fas fa-video"></i> কোনো ভিডিও বিজ্ঞাপন নেই</div>`;
     }
     
-    // 4. দোকানের প্রোফাইল আইডি (সবার নিচে)
-    html += `
-        <div class="dropdown-item shop-id-dropdown-item" onclick="copyShopIdFromDropdown()">
-            <div class="dropdown-item-title">
-                <i class="fas fa-fingerprint"></i> 🆔 আপনার দোকানের প্রোফাইল আইডি
+    // 4. Shop ID
+    const shopIdHtml = `
+        <div class="drawer-submenu-item shop-id-submenu-item" style="flex-direction:column; align-items:stretch;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                <i class="fas fa-fingerprint"></i>
+                <span style="font-weight:600;">🆔 আপনার দোকানের প্রোফাইল আইডি</span>
             </div>
-            <div class="shop-id-value-dropdown">
-                <span style="font-family:monospace; font-size:12px;">${currentShopId || 'লোড হচ্ছে...'}</span>
-                <button class="copy-id-dropdown-btn" onclick="event.stopPropagation(); copyShopIdFromDropdown();">
+            <div class="shop-id-value-menu">
+                <span style="font-family:monospace; font-size:11px;">${currentShopId || 'লোড হচ্ছে...'}</span>
+                <button class="copy-id-menu-btn" onclick="event.stopPropagation(); copyShopIdFromMenu();">
                     <i class="fas fa-copy"></i> কপি
                 </button>
-            </div>
-            <div style="font-size:11px; color:#666; margin-top:6px;">
-                <i class="fas fa-info-circle"></i> আপনার দোকান প্রমোট করানোর জন্য এই আইডি কপি করে অ্যাডমিনকে পাঠান
             </div>
         </div>
     `;
     
-    container.innerHTML = html;
+    container.innerHTML = `
+        <div class="drawer-menu-item" style="cursor:default; background:#f8f6ff;">
+            <i class="fas fa-store"></i>
+            <span><strong>দোকানের নাম:</strong> ${escapeHtml(shopName)}</span>
+        </div>
+        <div class="drawer-menu-item" style="cursor:default;">
+            <i class="fas fa-user"></i>
+            <span><strong>মালিকের নাম:</strong> ${escapeHtml(ownerName)}</span>
+        </div>
+        
+        <div class="drawer-menu-item" onclick="toggleAdsSubmenu()">
+            <i class="fas fa-bullhorn"></i>
+            <span>📢 আমার বিজ্ঞাপন সমূহ</span>
+            <i class="fas fa-chevron-down" id="adsSubmenuArrow" style="margin-left:auto; transition:transform 0.3s;"></i>
+        </div>
+        <div class="drawer-submenu" id="adsSubmenu">
+            <div class="drawer-submenu-item" style="background:#f0ebff; cursor:default;">
+                <i class="fas fa-star" style="color:#ffd700;"></i>
+                <div>
+                    <div>স্টার প্যাকেজ</div>
+                    <div style="font-size:11px;">${starStatusText} | ⭐ ${stars} স্টার | 📅 ${starEndDate || 'নির্ধারিত নেই'}</div>
+                </div>
+            </div>
+            ${sliderHtml}
+            ${videoHtml}
+            ${shopIdHtml}
+        </div>
+        
+        <div class="drawer-menu-item logout" onclick="logoutFromMenu()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>লগআউট</span>
+        </div>
+    `;
 }
 
-function copyShopIdFromDropdown() {
+function toggleAdsSubmenu() {
+    const submenu = document.getElementById('adsSubmenu');
+    const arrow = document.getElementById('adsSubmenuArrow');
+    if (submenu.classList.contains('show')) {
+        submenu.classList.remove('show');
+        arrow.style.transform = 'rotate(0deg)';
+    } else {
+        submenu.classList.add('show');
+        arrow.style.transform = 'rotate(180deg)';
+    }
+}
+
+function copyShopIdFromMenu() {
     const shopId = currentShopId;
     if (shopId) {
         navigator.clipboard.writeText(shopId).then(() => {
@@ -967,6 +916,7 @@ function copyShopIdFromDropdown() {
 }
 
 function showAdDetails(type) {
+    closeDrawer();
     if (type === 'star') {
         showErrorToast('⭐ স্টার প্যাকেজ রিনিউ করতে অ্যাডমিনকে কল করুন: 01XXXXXXXXX');
     } else if (type === 'slider') {
@@ -976,14 +926,10 @@ function showAdDetails(type) {
     }
 }
 
-function logout(){ 
+function logoutFromMenu() {
+    closeDrawer();
     auth.signOut().then(()=>{ 
-        let toast = document.createElement('div'); 
-        toast.className = 'logout-toast'; 
-        toast.innerHTML = `<i class="fas fa-check-circle"></i> ✅ লগআউট সফল হয়েছে!`; 
-        document.body.appendChild(toast); 
-        setTimeout(() => { if(toast && toast.remove) toast.remove(); }, 2500);
-        setTimeout(()=>{ window.location.href = 'index.html'; }, 1200);
+        window.location.href = 'index.html';
     }).catch((error)=>{ showErrorToast('❌ লগআউট ব্যর্থ হয়েছে!'); });
 }
 
@@ -1113,6 +1059,7 @@ async function saveShopData() {
         await db.ref('shops/'+currentShopId).update({ shopName, ownerName, description: document.getElementById('description').value.trim(), area, phone, whatsapp: document.getElementById('whatsapp').value.trim(), telegram: document.getElementById('telegram').value.trim(), youtube: youtubeUrl, youtubeVideoId: youtubeVideoId, category: selectedCategories, updatedAt: Date.now() });
         document.getElementById('headerShopName').innerHTML = shopName;
         showErrorToast('✅ তথ্য সংরক্ষণ হয়েছে!');
+        await renderDrawerMenu();
     } catch(e) { showErrorToast('সংরক্ষণ ব্যর্থ!'); }
     btn.innerHTML = '<i class="fas fa-save"></i> সেভ করুন'; btn.disabled = false;
 }
@@ -1278,7 +1225,6 @@ auth.onAuthStateChanged(async user=>{
     const snap=await db.ref('shops/'+currentShopId).get();
     document.getElementById('loadingScreen').style.display='none';
     document.getElementById('mainContent').style.display='block';
-    document.getElementById('saveWrap').style.display='flex';
     
     await loadCategoriesForDashboard();
     if(snap.exists()){
@@ -1300,8 +1246,8 @@ auth.onAuthStateChanged(async user=>{
             renderSelectedCategoriesChips(); updateCategoryDisplayText();
         }
         
-        // ড্রপডাউন কন্টেন্ট লোড করুন (শপ আইডি সহ)
-        await loadAdsDropdown();
+        // রেন্ডার ড্রয়ার মেনু
+        await renderDrawerMenu();
     }
     loadProducts(); 
     await loadSlides(); 
@@ -1310,6 +1256,11 @@ auth.onAuthStateChanged(async user=>{
     document.getElementById('addNewSlideBtn').addEventListener('click',addNewSlide);
     document.getElementById('updateTickerBtn').addEventListener('click',saveTicker);
     document.getElementById('resetTickerBtn').addEventListener('click',resetTicker);
+    
+    // Drawer Event Listeners
+    document.getElementById('menuIconBtn').addEventListener('click', openDrawer);
+    document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer);
+    document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 });
 </script>
 </body>
