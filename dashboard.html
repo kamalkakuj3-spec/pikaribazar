@@ -89,55 +89,55 @@
   .dashboard-header h2 { perspective: 500px; transform-style: preserve-3d; }
   .content { padding:0 16px 100px; }
   
-  /* Shop ID Banner - নিচে সরানো হয়েছে */
-  .shop-id-banner {
-    background: linear-gradient(135deg, var(--primary-soft), #e8e0ff);
-    margin: 16px;
-    padding: 16px;
-    border-radius: 20px;
-    text-align: center;
+  /* Glass Button */
+  .btn-glass {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(108,43,217,0.2);
-  }
-  .shop-id-label {
-    font-size: 13px;
-    color: var(--primary-dark);
+    border-radius: 50px;
+    padding: 14px 20px;
+    font-size: 14px;
     font-weight: 600;
-    margin-bottom: 10px;
+    color: var(--primary);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-  }
-  .shop-id-value {
-    font-family: monospace;
-    font-size: 14px;
-    background: white;
-    padding: 12px 16px;
-    border-radius: 14px;
-    word-break: break-all;
-    color: var(--text);
-    border: 1px solid #d9c8ff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 10px;
-    flex-wrap: wrap;
+    width: 100%;
+    transition: var(--transition);
+    margin-bottom: 12px;
   }
-  .copy-id-btn {
+  .btn-glass:hover {
     background: var(--primary);
     color: white;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 40px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108,43,217,0.25);
   }
-  .copy-id-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
+  
+  /* Gradient Button - Main Edit Button */
+  .btn-gradient-main {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border: none;
+    border-radius: 50px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    transition: var(--transition);
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(108,43,217,0.25);
+  }
+  .btn-gradient-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108,43,217,0.35);
+  }
   
   /* ড্রপডাউন মেনু স্টাইল */
   .dropdown-container {
@@ -155,17 +155,20 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 10px;
     width: 100%;
     transition: var(--transition);
     box-shadow: 0 4px 12px rgba(108,43,217,0.25);
+    position: relative;
   }
   .dropdown-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(108,43,217,0.35);
   }
   .dropdown-icon-arrow {
+    position: absolute;
+    right: 20px;
     transition: transform 0.3s ease;
   }
   .dropdown-icon-arrow.open {
@@ -225,54 +228,40 @@
   .status-expired { color: #dc2626; }
   .status-pending { color: #f0c040; }
   
-  /* Glass Button */
-  .btn-glass {
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(108,43,217,0.2);
-    border-radius: 50px;
-    padding: 14px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--primary);
-    cursor: pointer;
+  /* Shop ID inside dropdown */
+  .shop-id-dropdown-item {
+    background: linear-gradient(135deg, var(--primary-soft), #e8e0ff);
+    border-top: 2px solid var(--primary-light);
+  }
+  .shop-id-dropdown-item .dropdown-item-title {
+    color: var(--primary-dark);
+  }
+  .shop-id-value-dropdown {
+    font-family: monospace;
+    font-size: 12px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 12px;
+    word-break: break-all;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 10px;
-    width: 100%;
-    transition: var(--transition);
-    margin-bottom: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
   }
-  .btn-glass:hover {
+  .copy-id-dropdown-btn {
     background: var(--primary);
     color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(108,43,217,0.25);
-  }
-  
-  /* Gradient Button - Main Edit Button */
-  .btn-gradient-main {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border: none;
-    border-radius: 50px;
-    padding: 14px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    transition: var(--transition);
-    margin-bottom: 16px;
-    box-shadow: 0 4px 12px rgba(108,43,217,0.25);
+    font-size: 11px;
+    font-weight: 600;
   }
-  .btn-gradient-main:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(108,43,217,0.35);
+  .copy-id-dropdown-btn:hover {
+    background: var(--primary-dark);
   }
   
   /* Edit Options Container */
@@ -631,7 +620,7 @@
     <!-- Main Edit Button -->
     <button class="btn-gradient-main" id="mainEditBtn"><i class="fas fa-edit"></i> প্রোফাইল এডিট করুন</button>
 
-    <!-- ========== ড্রপডাউন মেনু বাটন ========== -->
+    <!-- ========== ড্রপডাউন মেনু বাটন (সেন্টার বরাবর + ডান পাশে আইকন) ========== -->
     <div class="dropdown-container">
         <button class="dropdown-btn" id="adsDropdownBtn" onclick="toggleAdsDropdown()">
             <span><i class="fas fa-bullhorn"></i> 📢 আমার বিজ্ঞাপন সমূহ</span>
@@ -748,20 +737,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Shop ID Banner - সবার নিচে -->
-    <div class="shop-id-banner">
-        <div class="shop-id-label">
-            <i class="fas fa-fingerprint"></i>
-            <span>🆔 আপনার দোকানের প্রোফাইল আইডি</span>
-        </div>
-        <div class="shop-id-value">
-            <span id="shopIdDisplay">লোড হচ্ছে...</span>
-            <button class="copy-id-btn" onclick="copyShopId()">
-                <i class="fas fa-copy"></i> কপি করুন
-            </button>
-        </div>
-    </div>
 </div>
 
 <!-- Bottom Navigation Bar -->
@@ -850,7 +825,7 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// ========== ড্রপডাউন কন্টেন্ট লোড ==========
+// ========== ড্রপডাউন কন্টেন্ট লোড (শপ আইডি সহ) ==========
 async function loadAdsDropdown() {
     const container = document.getElementById('dropdownContent');
     if (!container) return;
@@ -957,7 +932,38 @@ async function loadAdsDropdown() {
         `;
     }
     
+    // 4. দোকানের প্রোফাইল আইডি (সবার নিচে)
+    html += `
+        <div class="dropdown-item shop-id-dropdown-item" onclick="copyShopIdFromDropdown()">
+            <div class="dropdown-item-title">
+                <i class="fas fa-fingerprint"></i> 🆔 আপনার দোকানের প্রোফাইল আইডি
+            </div>
+            <div class="shop-id-value-dropdown">
+                <span style="font-family:monospace; font-size:12px;">${currentShopId || 'লোড হচ্ছে...'}</span>
+                <button class="copy-id-dropdown-btn" onclick="event.stopPropagation(); copyShopIdFromDropdown();">
+                    <i class="fas fa-copy"></i> কপি
+                </button>
+            </div>
+            <div style="font-size:11px; color:#666; margin-top:6px;">
+                <i class="fas fa-info-circle"></i> আপনার দোকান প্রমোট করানোর জন্য এই আইডি কপি করে অ্যাডমিনকে পাঠান
+            </div>
+        </div>
+    `;
+    
     container.innerHTML = html;
+}
+
+function copyShopIdFromDropdown() {
+    const shopId = currentShopId;
+    if (shopId) {
+        navigator.clipboard.writeText(shopId).then(() => {
+            showSuccessPopup();
+        }).catch(() => {
+            showErrorToast('⚠️ কপি করতে সমস্যা হয়েছে!');
+        });
+    } else {
+        showErrorToast('⚠️ Shop ID পাওয়া যায়নি!');
+    }
 }
 
 function showAdDetails(type) {
@@ -1274,8 +1280,6 @@ auth.onAuthStateChanged(async user=>{
     document.getElementById('mainContent').style.display='block';
     document.getElementById('saveWrap').style.display='flex';
     
-    document.getElementById('shopIdDisplay').innerHTML = currentShopId;
-    
     await loadCategoriesForDashboard();
     if(snap.exists()){
         currentShopData=snap.val();
@@ -1296,7 +1300,7 @@ auth.onAuthStateChanged(async user=>{
             renderSelectedCategoriesChips(); updateCategoryDisplayText();
         }
         
-        // ড্রপডাউন কন্টেন্ট লোড করুন
+        // ড্রপডাউন কন্টেন্ট লোড করুন (শপ আইডি সহ)
         await loadAdsDropdown();
     }
     loadProducts(); 
