@@ -118,47 +118,6 @@ body {
 }
 .search-input::placeholder { color: #aaa; }
 
-/* মেলা বাটন - সার্চ বারের ডানপাশে (খুব গুরুত্বপূর্ণ) */
-.mela-btn-container {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 15;
-}
-.mela-nav-btn {
-    background: linear-gradient(135deg, #6c2bd9, #a259f7);
-    border: none;
-    border-radius: 30px;
-    padding: 4px 12px;
-    color: white;
-    font-size: 10px;
-    font-weight: 600;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    cursor: pointer;
-    min-width: 52px;
-    box-shadow: 0 2px 8px rgba(108,43,217,0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    font-family: 'Hind Siliguri', sans-serif;
-}
-.mela-nav-btn:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(108,43,217,0.4);
-}
-.mela-nav-btn:active {
-    transform: scale(0.98);
-}
-.mela-nav-btn i {
-    font-size: 14px;
-}
-.mela-nav-btn span {
-    font-size: 9px;
-    font-weight: 600;
-}
-
 /* সার্চ সাজেশন ড্রপডাউন */
 .search-suggestions {
     position: absolute;
@@ -795,12 +754,6 @@ marquee {
     <div class="search-section" id="searchSection" style="display: none;">
         <div class="search-wrap">
             <input class="search-input" type="text" id="searchInput" placeholder="দোকান, এলাকা, পণ্য, ক্যাটাগরি, জেলা, উপজেলা, বিবরণী সার্চ করুন..." oninput="window.handleSearchInput()">
-            <div class="mela-btn-container">
-                <button id="melaButton" class="mela-nav-btn">
-                    <i class="fas fa-star"></i>
-                    <span>মেলা</span>
-                </button>
-            </div>
             <div class="search-suggestions" id="searchSuggestions"></div>
         </div>
     </div>
@@ -872,10 +825,14 @@ marquee {
 
 </div>
 
-<!-- নেভিগেশন বার -->
+<!-- নেভিগেশন বার - এখানে মেলা বাটন যুক্ত করা হয়েছে সার্চ বাটনের ডানপাশে -->
 <div class="bottom-nav">
     <button class="nav-item" data-page="category"><span class="icon">📂</span>ক্যাটাগরি</button>
     <button class="nav-item" data-page="searchFocus"><span class="icon">🔍</span>খুঁজুন</button>
+    <button class="nav-item" id="melaNavBtn">
+        <span class="icon">⭐</span>
+        <span>মেলা</span>
+    </button>
     <button class="nav-item" data-page="profile"><span class="icon">👤</span>প্রোফাইল</button>
     <button class="nav-item" data-page="help"><span class="icon">❓</span>সাহায্য</button>
 </div>
@@ -920,12 +877,11 @@ let slData = [];
 
 let videoIntersectionObservers = new Map();
 
-// ========== মেলা বাটন ইভেন্ট (সঠিকভাবে যুক্ত করা হয়েছে) ==========
-const melaButton = document.getElementById('melaButton');
-if (melaButton) {
-    melaButton.addEventListener('click', function(e) {
+// ========== মেলা বাটন ইভেন্ট (নিচের নেভিগেশন বারে) ==========
+const melaNavBtn = document.getElementById('melaNavBtn');
+if (melaNavBtn) {
+    melaNavBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        e.stopPropagation();
         window.location.href = 'mela-index.html';
     });
 }
@@ -2001,6 +1957,15 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         window.navigateTo(page, e);
     });
 });
+
+// মেলা বাটনের জন্য নেভিগেট ফাংশন আলাদাভাবে
+const melaBtn = document.getElementById('melaNavBtn');
+if (melaBtn) {
+    melaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'mela-index.html';
+    });
+}
 
 document.addEventListener('click', function(e) {
     const suggestionsBox = document.getElementById('searchSuggestions');
