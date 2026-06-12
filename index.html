@@ -93,6 +93,7 @@ body {
     transition: transform 0.3s ease, opacity 0.3s ease;
     background: var(--bg);
     padding-top: 10px;
+    position: relative;
 }
 .search-section.hide {
     transform: translateY(-120%);
@@ -115,6 +116,7 @@ body {
     color: var(--text);
     box-shadow: 0 3px 12px rgba(108,43,217,0.15);
     outline: none;
+    padding-right: 70px;
 }
 .search-input::placeholder { color: #aaa; }
 
@@ -159,6 +161,44 @@ body {
 .suggestion-highlight {
     background: #ffeb3b;
     font-weight: bold;
+}
+
+/* মেলা বাটন */
+.mela-nav-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #6c2bd9, #a259f7);
+    border: none;
+    border-radius: 30px;
+    padding: 4px 12px;
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    z-index: 10;
+    min-width: 52px;
+    box-shadow: 0 2px 8px rgba(108,43,217,0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.mela-nav-btn:hover {
+    transform: translateY(-50%) scale(1.02);
+    box-shadow: 0 4px 12px rgba(108,43,217,0.4);
+}
+.mela-nav-btn:active {
+    transform: translateY(-50%) scale(0.98);
+}
+.mela-nav-btn i {
+    font-size: 14px;
+}
+.mela-nav-btn span {
+    font-size: 9px;
+    font-weight: 600;
 }
 
 /* MARQUEE */
@@ -755,6 +795,11 @@ marquee {
         <div class="search-wrap">
             <input class="search-input" type="text" id="searchInput" placeholder="দোকান, এলাকা, পণ্য, ক্যাটাগরি, জেলা, উপজেলা, বিবরণী সার্চ করুন..." oninput="window.handleSearchInput()">
             <div class="search-suggestions" id="searchSuggestions"></div>
+            <!-- মেলা বাটন - স্টার আইকন ও নিচে মেলা লেখা -->
+            <button id="melaButton" class="mela-nav-btn">
+                <i class="fas fa-star"></i>
+                <span>মেলা</span>
+            </button>
         </div>
     </div>
 
@@ -872,6 +917,14 @@ let slTimer = null;
 let slData = [];
 
 let videoIntersectionObservers = new Map();
+
+// ========== মেলা বাটন ইভেন্ট ==========
+const melaButton = document.getElementById('melaButton');
+if (melaButton) {
+    melaButton.addEventListener('click', function() {
+        window.location.href = 'mela-index.html';
+    });
+}
 
 // ========== স্টার ডিসপ্লে হেলপার ফাংশন ==========
 function getStarsHtml(stars) {
