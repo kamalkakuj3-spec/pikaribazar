@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>সাহায্য - বাংলাদেশ মেলা</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+        }
+        
+        body {
+            background: #f0f2f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+        
+        /* ========== হেডার ========== */
+        .help-header {
+            background: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .help-header .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .help-header .logo-area h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1a1a1a, #555);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .help-header .logo-area .subtitle {
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: 500;
+        }
+        .help-header .back-btn {
+            background: linear-gradient(115deg, #d4af37, #c49b2a);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .help-header .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        /* ========== হিরো সেকশন ========== */
+        .help-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+        }
+        .help-hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .help-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .help-hero .help-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        /* ========== কন্টেন্ট ========== */
+        .help-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+        
+        /* সার্চ সেকশন */
+        .help-search {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+        .help-search input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .help-search input:focus {
+            border-color: #d4af37;
+        }
+        .help-search input::placeholder {
+            color: #aaa;
+        }
+        
+        /* ক্যাটাগরি ট্যাব */
+        .help-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .help-tabs button {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .help-tabs button:hover {
+            border-color: #d4af37;
+            background: #fef9e6;
+        }
+        .help-tabs button.active {
+            background: linear-gradient(115deg, #d4af37, #c49b2a);
+            border-color: #d4af37;
+            color: white;
+        }
+        .help-tabs button i {
+            margin-right: 6px;
+        }
+        
+        /* FAQ আইটেম */
+        .faq-section {
+            display: none;
+        }
+        .faq-section.active {
+            display: block;
+        }
+        
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .faq-item:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .faq-question {
+            padding: 18px 22px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1a1a1a;
+            transition: background 0.2s;
+        }
+        .faq-question:hover {
+            background: #f8f9fa;
+        }
+        .faq-question .icon {
+            font-size: 1.2rem;
+            color: #d4af37;
+            transition: transform 0.3s;
+        }
+        .faq-question.open .icon {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 22px;
+        }
+        .faq-answer.open {
+            max-height: 800px;
+            padding: 0 22px 20px 22px;
+        }
+        .faq-answer p {
+            color: #555;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .faq-answer ul {
+            margin: 10px 0 10px 20px;
+            color: #555;
+            line-height: 1.7;
+        }
+        .faq-answer ul li {
+            margin-bottom: 6px;
+        }
+        .faq-answer .highlight {
+            background: #fef9e6;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #d4af37;
+            margin: 10px 0;
+        }
+        .faq-answer .highlight i {
+            color: #d4af37;
+            margin-right: 8px;
+        }
+        .faq-answer a {
+            color: #b8860b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .faq-answer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* ========== কন্টাক্ট সেকশন ========== */
+        .contact-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        .contact-section h3 {
+            color: #b8860b;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        .contact-section p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .contact-section .contact-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .contact-section .contact-buttons a {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .contact-section .contact-buttons a:hover {
+            background: #c8e6c9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+        }
+        .contact-section .contact-buttons a i {
+            font-size: 1.2rem;
+        }
+        
+        /* ========== ফুটার ========== */
+        .help-footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #888;
+            font-size: 0.8rem;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+        .help-footer a {
+            color: #b8860b;
+            text-decoration: none;
+        }
+        .help-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* ========== নো রেজাল্ট ========== */
+        .no-result {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            display: none;
+        }
+        .no-result i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        /* ========== রেসপনসিভ ========== */
+        @media (max-width: 550px) {
+            .help-header .logo-area h1 { font-size: 1.2rem; }
+            .help-header .back-btn { font-size: 0.75rem; padding: 6px 14px; }
+            .help-hero h1 { font-size: 1.6rem; }
+            .help-hero p { font-size: 0.95rem; }
+            .help-tabs button { font-size: 0.75rem; padding: 8px 14px; }
+            .faq-question { font-size: 0.9rem; padding: 14px 16px; }
+            .faq-answer { padding: 0 16px; }
+            .faq-answer.open { padding: 0 16px 16px 16px; }
+            .contact-section .contact-buttons a { font-size: 0.9rem; padding: 10px 20px; }
+        }
+        @media (max-width: 380px) {
+            .help-hero h1 { font-size: 1.3rem; }
+            .help-tabs button { font-size: 0.65rem; padding: 6px 10px; }
+            .help-header .logo-area h1 { font-size: 1rem; }
+            .contact-section .contact-buttons a { font-size: 0.8rem; padding: 8px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== হেডার ========== -->
+<header class="help-header">
+    <div class="logo-area">
+        <div>
+            <h1>🇧🇩 বাংলাদেশ মেলা</h1>
+            <div class="subtitle">দেশের মেলার ঠিকানা</div>
+        </div>
+    </div>
+    <a href="mela-index.html" class="back-btn">
+        <i class="fa-solid fa-house"></i> হোম
+    </a>
+</header>
+
+<!-- ========== হিরো সেকশন ========== -->
+<section class="help-hero">
+    <span class="help-icon"><i class="fa-regular fa-circle-question"></i></span>
+    <h1>আমরা কিভাবে সাহায্য করতে পারি?</h1>
+    <p>বাংলাদেশ মেলা অ্যাপ ব্যবহারের পূর্ণ নির্দেশিকা। নিচের প্রশ্নোত্তর ও টিপস দেখুন অথবা সার্চ করুন।</p>
+</section>
+
+<!-- ========== কন্টেন্ট ========== -->
+<div class="help-container">
+
+    <!-- সার্চ -->
+    <div class="help-search">
+        <input type="text" id="helpSearchInput" placeholder="🔍 সাহায্য খুঁজুন (যেমন: পোস্ট, লগইন, সেভ...)">
+    </div>
+
+    <!-- ট্যাব -->
+    <div class="help-tabs" id="helpTabs">
+        <button class="active" data-tab="general"><i class="fa-regular fa-star"></i> সাধারণ</button>
+        <button data-tab="post"><i class="fa-regular fa-pen-to-square"></i> পোস্ট</button>
+        <button data-tab="account"><i class="fa-regular fa-user"></i> অ্যাকাউন্ট</button>
+        <button data-tab="saved"><i class="fa-regular fa-bookmark"></i> সেভ</button>
+        <button data-tab="slider"><i class="fa-regular fa-image"></i> স্লাইডার</button>
+    </div>
+
+    <!-- ===== সাধারণ ===== -->
+    <div class="faq-section active" id="tab-general">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>📌 বাংলাদেশ মেলা অ্যাপ কি?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>বাংলাদেশ মেলা একটি ওয়েব অ্যাপ্লিকেশন যেখানে আপনি দেশের বিভিন্ন মেলার তথ্য পেতে পারেন। এখানে আপনি:</p>
+                <ul>
+                    <li>📍 চলমান ও আসন্ন মেলার খবর দেখতে পারেন</li>
+                    <li>📝 নিজের মেলা পোস্ট করতে পারেন</li>
+                    <li>⭐ পছন্দের মেলা সেভ করে রাখতে পারেন</li>
+                    <li>🗺️ মেলার লোকেশন গুগল ম্যাপে দেখতে পারেন</li>
+                    <li>💬 পোস্টে কমেন্ট ও লাইক দিতে পারেন</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>📱 অ্যাপটি কিভাবে ব্যবহার করব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>অ্যাপটি ব্যবহার খুবই সহজ। নিচের ধাপগুলো অনুসরণ করুন:</p>
+                <ul>
+                    <li><strong>হোমপেজ</strong> - সব মেলার পোস্ট দেখতে পান।</li>
+                    <li><strong>সার্চ</strong> - মেলার নাম, জেলা বা বিভাগ দিয়ে খুঁজুন।</li>
+                    <li><strong>ফিল্টার</strong> - সময় বা বিষয় অনুযায়ী পোস্ট ফিল্টার করুন।</li>
+                    <li><strong>পোস্ট</strong> - নিজের মেলার তথ্য পোস্ট করুন।</li>
+                    <li><strong>সেভ</strong> - পছন্দের মেলা সেভ করে রাখুন।</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-lightbulb"></i> <strong>টিপ:</strong> লগইন করলে সব ফিচার ব্যবহার করতে পারবেন!
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>🛡️ তথ্য কতটুকু নির্ভরযোগ্য?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>বাংলাদেশ মেলা একটি ইউজার-জেনারেটেড কন্টেন্ট প্ল্যাটফর্ম। তাই:</p>
+                <ul>
+                    <li>✅ পোস্টগুলো সাধারণ ইউজাররা দিয়ে থাকেন</li>
+                    <li>⚠️ তথ্য যাচাই করে নেওয়ার পরামর্শ দেওয়া হয়</li>
+                    <li>🛡️ ম্যানেজমেন্ট কর্তৃপক্ষ নিয়মিত পোস্ট মনিটর করেন</li>
+                    <li>🚫 ভুল বা স্প্যাম পোস্ট রিপোর্ট করা যায়</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-triangle-exclamation" style="color:#f57c00;"></i> <strong>সতর্কতা:</strong> কোনো মেলায় অংশগ্রহণের আগে স্ব-যাচাই করুন।
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== পোস্ট ===== -->
+    <div class="faq-section" id="tab-post">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>✍️ কিভাবে নতুন মেলা পোস্ট করব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>নতুন পোস্ট করতে নিচের ধাপগুলো অনুসরণ করুন:</p>
+                <ul>
+                    <li><strong>ধাপ ১:</strong> প্রথমে <a href="mela-login.html">লগইন</a> করুন</li>
+                    <li><strong>ধাপ ২:</strong> নিচের মেনু থেকে <strong>প্লাস (+)</strong> আইকনে ক্লিক করুন</li>
+                    <li><strong>ধাপ ৩:</strong> ফর্মে মেলার নাম, বিভাগ, জেলা, সময়কাল ও বিবরণ দিন</li>
+                    <li><strong>ধাপ ৪:</strong> চাইলে গুগল ম্যাপ লিংক দিন</li>
+                    <li><strong>ধাপ ৫:</strong> "পোস্ট করুন" বাটনে ক্লিক করুন</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-lock"></i> শুধুমাত্র লগইন করা ইউজাররা পোস্ট করতে পারবেন।
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>✏️ আমার পোস্ট কিভাবে এডিট বা ডিলিট করব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>শুধুমাত্র আপনার নিজের পোস্ট এডিট বা ডিলিট করতে পারবেন:</p>
+                <ul>
+                    <li><strong>এডিট:</strong> আপনার পোস্টের নিচে <strong>"এডিট"</strong> বাটনে ক্লিক করুন</li>
+                    <li><strong>ডিলিট:</strong> আপনার পোস্টের নিচে <strong>"ডিলিট"</strong> বাটনে ক্লিক করুন</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-user"></i> শুধুমাত্র পোস্টের মালিক এডিট/ডিলিট করতে পারেন।
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>🕵️ বেনামে পোস্ট করা যায়?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>হ্যাঁ, আপনি চাইলে বেনামে পোস্ট করতে পারেন:</p>
+                <ul>
+                    <li>পোস্ট ফর্মে <strong>"🕵️ বেনামে পোস্ট করুন"</strong> চেকবক্স টিক দিন</li>
+                    <li>তাহলে আপনার নাম প্রকাশ করা হবে না</li>
+                    <li>শুধু "বেনামে" হিসেবে দেখাবে</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-shield"></i> ম্যানেজমেন্ট কর্তৃপক্ষ আপনার আইডি দেখতে পাবে, কিন্তু সাধারণ ইউজাররা দেখতে পাবে না।
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== অ্যাকাউন্ট ===== -->
+    <div class="faq-section" id="tab-account">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>🔐 কিভাবে অ্যাকাউন্ট তৈরি করব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>অ্যাকাউন্ট তৈরি করতে গুগল অ্যাকাউন্ট ব্যবহার করুন:</p>
+                <ul>
+                    <li><strong>ধাপ ১:</strong> হেডারের <strong>"লগইন"</strong> বাটনে ক্লিক করুন</li>
+                    <li><strong>ধাপ ২:</strong> "গুগল অ্যাকাউন্ট দিয়ে লগইন" বাটনে ক্লিক করুন</li>
+                    <li><strong>ধাপ ৩:</strong> আপনার গুগল অ্যাকাউন্ট নির্বাচন করুন</li>
+                    <li><strong>ধাপ ৪:</strong> লগইন হয়ে গেলে সব ফিচার ব্যবহার করতে পারবেন</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-google"></i> শুধুমাত্র গুগল অ্যাকাউন্ট দিয়ে লগইন করা যায়।
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>🚪 কিভাবে লগআউট করব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>লগআউট করতে:</p>
+                <ul>
+                    <li><strong>ধাপ ১:</strong> হেডারের প্রোফাইল আইকনে ক্লিক করুন</li>
+                    <li><strong>ধাপ ২:</strong> ড্রয়ার থেকে <strong>"লগআউট"</strong> অপশনে ক্লিক করুন</li>
+                    <li>অথবা সরাসরি <a href="mela-login.html">লগইন পেজ</a> থেকে লগআউট করুন</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>👤 আমার প্রোফাইল কোথায় দেখব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>আপনার প্রোফাইল দেখতে:</p>
+                <ul>
+                    <li>হেডারের <strong>প্রোফাইল আইকনে</strong> ক্লিক করুন</li>
+                    <li>ড্রয়ারে আপনার নাম, ইমেইল ও প্রোফাইল ছবি দেখাবে</li>
+                    <li>এখান থেকে <strong>"আমার পোস্ট"</strong> দেখতে পারবেন</li>
+                    <li><strong>"নতুন পোস্ট"</strong> করতে পারবেন</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== সেভ ===== -->
+    <div class="faq-section" id="tab-saved">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>⭐ কিভাবে মেলা সেভ করব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>পছন্দের মেলা সেভ করতে:</p>
+                <ul>
+                    <li>যেকোনো পোস্টের নিচে <strong>বুকমার্ক</strong> আইকনে ক্লিক করুন</li>
+                    <li>সেভ হয়ে গেলে আইকনটি ভরা (সলিড) হবে</li>
+                    <li>আবার ক্লিক করলে সেভ বাতিল হবে</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-bookmark"></i> হেডারের সেভ ব্যাজে ক্লিক করে আপনার সেভ করা সব মেলা দেখতে পারবেন।
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>📂 সেভ করা মেলা কোথায় দেখব?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>সেভ করা মেলা দেখতে দুইভাবে পারেন:</p>
+                <ul>
+                    <li><strong>হেডারের সেভ ব্যাজ:</strong> হেল্প আইকনের পাশের বুকমার্ক ব্যাজে ক্লিক করুন</li>
+                    <li><strong>ড্রয়ার:</strong> প্রোফাইল আইকনে ক্লিক করে ড্রয়ারের "সেভ করা মেলা" অপশনে ক্লিক করুন</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-eye"></i> সেভ করা পোস্টগুলো আলাদা লিস্টে দেখাবে, শুধু আপনার দেখা যায়।
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== স্লাইডার ===== -->
+    <div class="faq-section" id="tab-slider">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>🖼️ স্লাইডার কি এবং কিভাবে কাজ করে?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>স্লাইডারটি হোমপেজের উপরে দেখানো একটি বিশেষ সেকশন:</p>
+                <ul>
+                    <li>📸 ম্যানেজমেন্ট কর্তৃপক্ষ দ্বারা নির্বাচিত বিশেষ মেলা দেখায়</li>
+                    <li>🔄 স্বয়ংক্রিয়ভাবে প্রতি ৪ সেকেন্ডে পরিবর্তন হয়</li>
+                    <li>👆 ইমেজে ক্লিক করলে বিস্তারিত দেখতে পারেন</li>
+                    <li>🗺️ বিস্তারিত পেজে গুগল ম্যাপ লিংক থাকলে দেখাবে</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fa-regular fa-gem"></i> স্লাইডারে শুধুমাত্র ম্যানেজমেন্ট কর্তৃপক্ষ পোস্ট করতে পারেন।
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>📌 স্লাইডারের নিচের চলন্ত লেখা কি?</span>
+                <span class="icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer">
+                <p>স্লাইডারের নিচে একটি চলন্ত লেখা (মার্কি) থাকে:</p>
+                <ul>
+                    <li>📢 গুরুত্বপূর্ণ ঘোষণা বা বার্তা দেখায়</li>
+                    <li>🔄 বাম থেকে ডানে স্বয়ংক্রিয়ভাবে চলে</li>
+                    <li>✏️ শুধুমাত্র ম্যানেজমেন্ট কর্তৃপক্ষ এই লেখা পরিবর্তন করতে পারেন</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== নো রেজাল্ট ===== -->
+    <div class="no-result" id="noResult">
+        <i class="fa-regular fa-face-frown"></i>
+        <p>আপনার সার্চের সাথে মিলে এমন কোনো প্রশ্ন নেই।<br>অন্য কিওয়ার্ড দিয়ে চেষ্টা করুন।</p>
+    </div>
+
+    <!-- ========== কন্টাক্ট সেকশন ========== -->
+    <div class="contact-section">
+        <h3><i class="fa-regular fa-headset"></i> আরও সাহায্য প্রয়োজন?</h3>
+        <p>সরাসরি কল করুন। আমরা সহায়তা করতে প্রস্তুত।</p>
+        <div class="contact-buttons">
+            <a href="tel:01817236767">
+                <i class="fa-solid fa-phone"></i> ০১৮১৭-২৩৬৭৬৭
+            </a>
+        </div>
+        <p style="margin-top:15px; font-size:0.8rem; color:#999;">
+            <i class="fa-regular fa-clock"></i> সাপ্তাহিক ৭ দিন, সকাল ৯টা - রাত ১০টা
+        </p>
+    </div>
+
+</div>
+
+<!-- ========== ফুটার ========== -->
+<footer class="help-footer">
+    <p>© ২০২৬ <a href="mela-index.html">বাংলাদেশ মেলা</a> | সর্বস্বত্ব সংরক্ষিত</p>
+    <p style="margin-top:4px; font-size:0.7rem; color:#aaa;">
+        <i class="fa-regular fa-code"></i> দেশের মেলার ঠিকানা
+    </p>
+</footer>
+
+<script>
+    // ========== FAQ টগল ==========
+    function toggleFaq(element) {
+        const answer = element.nextElementSibling;
+        const icon = element.querySelector('.icon');
+        
+        if (answer.classList.contains('open')) {
+            answer.classList.remove('open');
+            element.classList.remove('open');
+        } else {
+            // অন্য সব FAQ বন্ধ করুন
+            document.querySelectorAll('.faq-answer.open').forEach(el => {
+                el.classList.remove('open');
+                el.previousElementSibling.classList.remove('open');
+            });
+            answer.classList.add('open');
+            element.classList.add('open');
+        }
+    }
+    
+    // ========== ট্যাব সুইচ ==========
+    document.querySelectorAll('#helpTabs button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // অ্যাক্টিভ ক্লাস রিমুভ
+            document.querySelectorAll('#helpTabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // সব সেকশন লুকান
+            document.querySelectorAll('.faq-section').forEach(s => s.classList.remove('active'));
+            
+            // নির্বাচিত সেকশন শো
+            const tabId = this.dataset.tab;
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // নো রেজাল্ট লুকান
+            document.getElementById('noResult').style.display = 'none';
+            
+            // সার্চ রিসেট
+            document.getElementById('helpSearchInput').value = '';
+            
+            // স্ক্রল টপ
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+    
+    // ========== সার্চ ফাংশন ==========
+    document.getElementById('helpSearchInput').addEventListener('input', function() {
+        const searchText = this.value.toLowerCase().trim();
+        const allItems = document.querySelectorAll('.faq-item');
+        let found = false;
+        
+        allItems.forEach(item => {
+            const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+            const answer = item.querySelector('.faq-answer p')?.textContent?.toLowerCase() || '';
+            const listItems = item.querySelectorAll('.faq-answer ul li');
+            let listText = '';
+            listItems.forEach(li => { listText += li.textContent.toLowerCase(); });
+            
+            const matches = question.includes(searchText) || 
+                           answer.includes(searchText) || 
+                           listText.includes(searchText);
+            
+            if (searchText === '') {
+                item.style.display = 'block';
+                // সব FAQ বন্ধ করুন
+                item.querySelector('.faq-answer').classList.remove('open');
+                item.querySelector('.faq-question').classList.remove('open');
+                found = true;
+            } else if (matches) {
+                item.style.display = 'block';
+                // ম্যাচ হলে ওপেন করুন
+                item.querySelector('.faq-answer').classList.add('open');
+                item.querySelector('.faq-question').classList.add('open');
+                found = true;
+            } else {
+                item.style.display = 'none';
+                item.querySelector('.faq-answer').classList.remove('open');
+                item.querySelector('.faq-question').classList.remove('open');
+            }
+        });
+        
+        // নো রেজাল্ট
+        const noResult = document.getElementById('noResult');
+        if (searchText !== '' && !found) {
+            noResult.style.display = 'block';
+        } else {
+            noResult.style.display = 'none';
+        }
+    });
+    
+    // ========== ডিফল্ট প্রথম FAQ ওপেন ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        const firstFaq = document.querySelector('.faq-item');
+        if (firstFaq) {
+            const answer = firstFaq.querySelector('.faq-answer');
+            const question = firstFaq.querySelector('.faq-question');
+            answer.classList.add('open');
+            question.classList.add('open');
+        }
+    });
+</script>
+
+</body>
+</html>
